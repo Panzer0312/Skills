@@ -3,6 +3,7 @@ dist/
 *.tsbuildinfo
 data/app.db
 data/app.db-*
+data/.export-*.db
 data/backups/
 data/media/
 .env

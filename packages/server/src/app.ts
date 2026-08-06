@@ -1,6 +1,7 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import type { AppDatabase } from "./db/client.js";
+import { backupRoutes } from "./routes/backup.js";
 import { progressRoutes } from "./routes/progress.js";
 import { reviewRoutes } from "./routes/reviews.js";
 import { settingsRoutes } from "./routes/settings.js";
@@ -27,6 +28,7 @@ export function createApp(database: AppDatabase): Hono<AppEnv> {
   app.route("/", settingsRoutes);
   app.route("/", progressRoutes);
   app.route("/", statsRoutes);
+  app.route("/", backupRoutes);
 
   app.notFound((c) =>
     c.json({ error: { code: "not_found", message: "Route nicht gefunden." } }, 404),

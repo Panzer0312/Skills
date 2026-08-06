@@ -5,6 +5,8 @@ import * as schema from "./schema.js";
 export interface AppDatabase {
   db: BetterSQLite3Database<typeof schema>;
   raw: Database.Database;
+  path: string;
+  backupTo(target: string): Promise<void>;
   close(): void;
 }
 
@@ -119,6 +121,10 @@ export function openDatabase(path: string): AppDatabase {
   return {
     raw,
     db: drizzle(raw, { schema }),
+    path,
+    backupTo: async (target: string) => {
+      await raw.backup(target);
+    },
     close: () => raw.close(),
   };
 }
