@@ -15,7 +15,7 @@ Dieses Dokument ist die zentrale Stelle für Stand, Probleme und Ideen.
 | C6 Audio-Kit | offen | Plan 3 |
 | C7 Guitar-Skill | offen | Plan 3 |
 | C8 Song-Import | offen | Plan 3 |
-| C9 Japanese-Skill | in Arbeit | Plan 2 Tasks 1-3: Kana-Transliteration (Hepburn), Kana-Daten (Hiragana/Katakana/Sonderfälle), Kana-Schnellzugriff (`KanaGrid`) und Kana-Übung (`KanaDrill`) fertig. Themen-Vokabeln, Grammatik, Lesen und Anki-Import stehen noch aus. |
+| C9 Japanese-Skill | in Arbeit | Plan 2 Tasks 1-7 fertig: Kana-Transliteration (Hepburn), Kana-Daten, `KanaGrid`, `KanaDrill`, acht Themen-Vokabel-Decks (256 Karten), zwölfteiliger Grammatik-Kurs, 40 Kanji mit Lesungsregeln und 60 annotierte Sätze, `ReadingTrainer`. Nur der Anki-Import (Tasks 8+) steht noch aus. |
 | C10 Projekt-Log | fertig | dieses Dokument |
 
 ## Offene Punkte
@@ -37,6 +37,22 @@ Dieses Dokument ist die zentrale Stelle für Stand, Probleme und Ideen.
 - Die Erweiterung von `packages/web/vite.config.ts` um `test.include` für `skills/**/*.test.{ts,tsx}`
   wurde bereits in Task 2 vorgenommen (nicht erst in Task 3), weil `skills/japanese/kana/kana.test.ts`
   aus Task 2 dieselbe Erweiterung braucht, um von vitest gefunden zu werden.
+
+## Abweichungen vom Plan (Plan 2, Tasks 4-7)
+
+- `packages/web/src/renderers/CourseRenderer.tsx` und `packages/web/src/skills/ModuleRoute.tsx`
+  wurden generalisiert: Der MDX-Lektions-Glob war fest auf den Ordnernamen `lessons/*.mdx`
+  verdrahtet (funktionierte nur für den Demo-Skill). Da Plan 2 den Grammatik-Kurs unter
+  `skills/japanese/grammar/*.mdx` vorsieht, liest `CourseRenderer` den Ordnernamen jetzt aus
+  einer `folder`-Prop, die `ModuleRoute` aus dem ersten `data`-Eintrag des Moduls ableitet
+  (`"grammar/*.mdx"` → `"grammar"`, Default bleibt `"lessons"`). Ohne diese Änderung wäre das
+  `grammatik`-Modul in der Oberfläche leer geblieben, obwohl seine Tests grün sind.
+- Die 40-Kanji-Liste aus dem Plantext ergibt bei genauer Zählung nur 37 eindeutige Zeichen
+  (日 kommt in der Aufzählung doppelt vor). Da der Test exakt 40 Einträge verlangt, wurden drei
+  zusätzliche, ebenso gebräuchliche Anfänger-Kanji ergänzt: 女, 子, 見.
+- Reading-Regeln, Kanji und Sätze folgen den Mustern aus dem Plan; die Absatz-Ebene in
+  `saetze.json` verwendet ausschließlich Kanji aus `kanji.json` (auch Wochentagsnamen mit 曜
+  wurden dafür vermieden, da 曜 nicht in der Liste steht).
 
 ## Ideen und Möglichkeiten
 
