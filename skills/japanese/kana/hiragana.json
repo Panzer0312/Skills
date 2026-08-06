@@ -1,0 +1,1286 @@
+{
+  "script": "hiragana",
+  "entries": [
+    {
+      "kana": "あ",
+      "romaji": "a",
+      "strokes": 3,
+      "merksatz": "あ hat ein A im Bauch: erst der Querstrich, dann die Schleife wie beim handgeschriebenen a.",
+      "beispiel": {
+        "wort": "あめ",
+        "lesung": "ame",
+        "bedeutung": "Regen"
+      },
+      "verwechslung": [
+        "お"
+      ]
+    },
+    {
+      "kana": "い",
+      "romaji": "i",
+      "strokes": 2,
+      "merksatz": "Zwei Striche wie zwei i-Punkte, die nebeneinander stehen.",
+      "beispiel": {
+        "wort": "いぬ",
+        "lesung": "inu",
+        "bedeutung": "Hund"
+      },
+      "verwechslung": [
+        "り"
+      ]
+    },
+    {
+      "kana": "う",
+      "romaji": "u",
+      "strokes": 2,
+      "merksatz": "Eine Haube über einem kleinen Haken — wie ein u mit Deckel.",
+      "beispiel": {
+        "wort": "うみ",
+        "lesung": "umi",
+        "bedeutung": "Meer"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "え",
+      "romaji": "e",
+      "strokes": 2,
+      "merksatz": "Ein geschwungener Haken mit Querstrich, der an ein liegendes e erinnert.",
+      "beispiel": {
+        "wort": "えき",
+        "lesung": "eki",
+        "bedeutung": "Bahnhof"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "お",
+      "romaji": "o",
+      "strokes": 3,
+      "merksatz": "Wie あ, aber mit einem zusätzlichen Häkchen oben — ein o mit Krone.",
+      "beispiel": {
+        "wort": "おちゃ",
+        "lesung": "ocha",
+        "bedeutung": "Tee"
+      },
+      "verwechslung": [
+        "あ"
+      ]
+    },
+    {
+      "kana": "か",
+      "romaji": "ka",
+      "strokes": 3,
+      "merksatz": "Ein Haken mit einem kleinen Ableger, der wie ein K mit Serife wirkt.",
+      "beispiel": {
+        "wort": "かみ",
+        "lesung": "kami",
+        "bedeutung": "Papier"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "き",
+      "romaji": "ki",
+      "strokes": 4,
+      "merksatz": "Drei Querstriche und ein Haken, wie ein Schlüsselbund — き wie key.",
+      "beispiel": {
+        "wort": "きた",
+        "lesung": "kita",
+        "bedeutung": "Norden"
+      },
+      "verwechslung": [
+        "さ"
+      ]
+    },
+    {
+      "kana": "く",
+      "romaji": "ku",
+      "strokes": 1,
+      "merksatz": "Ein einzelner spitzer Haken, wie ein aufgeklapptes Buch — kurz und knapp: ku.",
+      "beispiel": {
+        "wort": "くも",
+        "lesung": "kumo",
+        "bedeutung": "Wolke"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "け",
+      "romaji": "ke",
+      "strokes": 3,
+      "merksatz": "Ähnlich wie き, aber mit weniger Strichen — ke klingt wie ein kurzes „keh\".",
+      "beispiel": {
+        "wort": "けさ",
+        "lesung": "kesa",
+        "bedeutung": "heute Morgen"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "こ",
+      "romaji": "ko",
+      "strokes": 2,
+      "merksatz": "Zwei waagerechte Striche wie zwei Regale übereinander — ko wie „Koffer\".",
+      "beispiel": {
+        "wort": "こども",
+        "lesung": "kodomo",
+        "bedeutung": "Kind"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "さ",
+      "romaji": "sa",
+      "strokes": 3,
+      "merksatz": "Ein Haken mit einem Querstrich, der wie ein durchgestrichenes s aussieht.",
+      "beispiel": {
+        "wort": "さかな",
+        "lesung": "sakana",
+        "bedeutung": "Fisch"
+      },
+      "verwechslung": [
+        "き"
+      ]
+    },
+    {
+      "kana": "し",
+      "romaji": "shi",
+      "strokes": 1,
+      "merksatz": "Ein Angelhaken. Wer angelt, sagt „schiii, sei leise\" — shi.",
+      "beispiel": {
+        "wort": "しろ",
+        "lesung": "shiro",
+        "bedeutung": "weiß"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "す",
+      "romaji": "su",
+      "strokes": 2,
+      "merksatz": "Ein Haken mit einer Schleife am Ende, wie eine Rutsche — su wie „Susi rutscht\".",
+      "beispiel": {
+        "wort": "すし",
+        "lesung": "sushi",
+        "bedeutung": "Sushi"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "せ",
+      "romaji": "se",
+      "strokes": 3,
+      "merksatz": "Ein Kreuz mit Haken, komplizierter als さ — se wie „Seil\".",
+      "beispiel": {
+        "wort": "せかい",
+        "lesung": "sekai",
+        "bedeutung": "Welt"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "そ",
+      "romaji": "so",
+      "strokes": 1,
+      "merksatz": "Ein einzelner Zickzack-Strich von oben nach unten — so wie ein Blitz.",
+      "beispiel": {
+        "wort": "そら",
+        "lesung": "sora",
+        "bedeutung": "Himmel"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "た",
+      "romaji": "ta",
+      "strokes": 4,
+      "merksatz": "Ein Kreuz mit zusätzlichem Haken rechts — ta wie „Tanne\".",
+      "beispiel": {
+        "wort": "たべる",
+        "lesung": "taberu",
+        "bedeutung": "essen"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ち",
+      "romaji": "chi",
+      "strokes": 2,
+      "merksatz": "Ein Haken, der aussieht wie ein Vogel im Flug — chi wie „Tschüss\".",
+      "beispiel": {
+        "wort": "ちず",
+        "lesung": "chizu",
+        "bedeutung": "Karte"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "つ",
+      "romaji": "tsu",
+      "strokes": 1,
+      "merksatz": "Ein flacher Schwung wie eine Welle — tsu wie „Tsunami\".",
+      "beispiel": {
+        "wort": "つき",
+        "lesung": "tsuki",
+        "bedeutung": "Mond"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "て",
+      "romaji": "te",
+      "strokes": 1,
+      "merksatz": "Ein einzelner Haken, der wie ein Blitz nach unten schießt — te wie „Teller\".",
+      "beispiel": {
+        "wort": "てがみ",
+        "lesung": "tegami",
+        "bedeutung": "Brief"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "と",
+      "romaji": "to",
+      "strokes": 2,
+      "merksatz": "Ein senkrechter Strich mit Haken — to wie „Tor\".",
+      "beispiel": {
+        "wort": "とり",
+        "lesung": "tori",
+        "bedeutung": "Vogel"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "な",
+      "romaji": "na",
+      "strokes": 4,
+      "merksatz": "Zwei Kreuze nebeneinander — na wie „Nadel und Faden\".",
+      "beispiel": {
+        "wort": "なつ",
+        "lesung": "natsu",
+        "bedeutung": "Sommer"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "に",
+      "romaji": "ni",
+      "strokes": 3,
+      "merksatz": "Zwei Striche mit einem Haken, wie ein Gesicht mit zwei Augen — ni wie „nicken\".",
+      "beispiel": {
+        "wort": "にく",
+        "lesung": "niku",
+        "bedeutung": "Fleisch"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ぬ",
+      "romaji": "nu",
+      "strokes": 2,
+      "merksatz": "Wie め, aber mit einer zusätzlichen Schlaufe — nu wie ein Nudelknoten.",
+      "beispiel": {
+        "wort": "ぬま",
+        "lesung": "numa",
+        "bedeutung": "Sumpf"
+      },
+      "verwechslung": [
+        "め"
+      ]
+    },
+    {
+      "kana": "ね",
+      "romaji": "ne",
+      "strokes": 2,
+      "merksatz": "Ein Haken mit Schlaufe, der wie eine schlafende Katze aussieht — ne wie „Katze schnurrt: nnne\".",
+      "beispiel": {
+        "wort": "ねこ",
+        "lesung": "neko",
+        "bedeutung": "Katze"
+      },
+      "verwechslung": [
+        "れ",
+        "わ"
+      ]
+    },
+    {
+      "kana": "の",
+      "romaji": "no",
+      "strokes": 1,
+      "merksatz": "Eine einzelne Schleife wie ein Wirbel — no wie ein gemaltes Nein-Zeichen.",
+      "beispiel": {
+        "wort": "のみもの",
+        "lesung": "nomimono",
+        "bedeutung": "Getränk"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "は",
+      "romaji": "ha",
+      "strokes": 3,
+      "merksatz": "Ein Strich mit zwei Beinchen, wie ein H mit Rock — ha wie ein Lachen: „ha ha\".",
+      "beispiel": {
+        "wort": "はな",
+        "lesung": "hana",
+        "bedeutung": "Blume"
+      },
+      "verwechslung": [
+        "ほ"
+      ]
+    },
+    {
+      "kana": "ひ",
+      "romaji": "hi",
+      "strokes": 1,
+      "merksatz": "Ein geschwungener Bogen, wie ein Lächeln — hi wie ein Kichern.",
+      "beispiel": {
+        "wort": "ひる",
+        "lesung": "hiru",
+        "bedeutung": "Mittag"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ふ",
+      "romaji": "fu",
+      "strokes": 4,
+      "merksatz": "Zwei Schwünge übereinander, wie ein Berg — fu wie „Fuji\".",
+      "beispiel": {
+        "wort": "ふゆ",
+        "lesung": "fuyu",
+        "bedeutung": "Winter"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "へ",
+      "romaji": "he",
+      "strokes": 1,
+      "merksatz": "Ein einzelner Berggipfel — he sieht aus wie ein spitzes Dach.",
+      "beispiel": {
+        "wort": "へや",
+        "lesung": "heya",
+        "bedeutung": "Zimmer"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ほ",
+      "romaji": "ho",
+      "strokes": 4,
+      "merksatz": "Wie は, aber mit einem zusätzlichen Strich — ho wie „Haus mit Zaun\".",
+      "beispiel": {
+        "wort": "ほし",
+        "lesung": "hoshi",
+        "bedeutung": "Stern"
+      },
+      "verwechslung": [
+        "は"
+      ]
+    },
+    {
+      "kana": "ま",
+      "romaji": "ma",
+      "strokes": 3,
+      "merksatz": "Ein Kreuz mit Schleife — ma wie „Mama\".",
+      "beispiel": {
+        "wort": "まど",
+        "lesung": "mado",
+        "bedeutung": "Fenster"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "み",
+      "romaji": "mi",
+      "strokes": 2,
+      "merksatz": "Zwei Schwünge, die sich kreuzen, wie ein Knoten — mi wie „Miso\".",
+      "beispiel": {
+        "wort": "みず",
+        "lesung": "mizu",
+        "bedeutung": "Wasser"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "む",
+      "romaji": "mu",
+      "strokes": 3,
+      "merksatz": "Ein verschnörkeltes Zeichen mit Haken — mu klingt wie ein Muhen.",
+      "beispiel": {
+        "wort": "むし",
+        "lesung": "mushi",
+        "bedeutung": "Insekt"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "め",
+      "romaji": "me",
+      "strokes": 2,
+      "merksatz": "Eine Schlaufe, die wie ein Auge aussieht — me wie „mein Auge\".",
+      "beispiel": {
+        "wort": "めがね",
+        "lesung": "megane",
+        "bedeutung": "Brille"
+      },
+      "verwechslung": [
+        "ぬ"
+      ]
+    },
+    {
+      "kana": "も",
+      "romaji": "mo",
+      "strokes": 3,
+      "merksatz": "Ein Kreuz mit Haken, ähnlich な — mo wie „Moos\".",
+      "beispiel": {
+        "wort": "もり",
+        "lesung": "mori",
+        "bedeutung": "Wald"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "や",
+      "romaji": "ya",
+      "strokes": 3,
+      "merksatz": "Ein Strich mit Haken, wie ein Pfeil — ya wie „yeah\".",
+      "beispiel": {
+        "wort": "やま",
+        "lesung": "yama",
+        "bedeutung": "Berg"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ゆ",
+      "romaji": "yu",
+      "strokes": 2,
+      "merksatz": "Eine geschwungene Schleife wie ein Fragezeichen — yu wie „you\".",
+      "beispiel": {
+        "wort": "ゆき",
+        "lesung": "yuki",
+        "bedeutung": "Schnee"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "よ",
+      "romaji": "yo",
+      "strokes": 2,
+      "merksatz": "Ein Haken mit Querstrich, ähnlich ゆ — yo wie ein Gruß: „yo!\".",
+      "beispiel": {
+        "wort": "よる",
+        "lesung": "yoru",
+        "bedeutung": "Nacht"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ら",
+      "romaji": "ra",
+      "strokes": 2,
+      "merksatz": "Ein Haken mit kleinem Kringel — ra wie „Rakete\".",
+      "beispiel": {
+        "wort": "らいねん",
+        "lesung": "rainen",
+        "bedeutung": "nächstes Jahr"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "り",
+      "romaji": "ri",
+      "strokes": 2,
+      "merksatz": "Zwei senkrechte Striche nebeneinander — ri wie zwei parallele Linien.",
+      "beispiel": {
+        "wort": "りんご",
+        "lesung": "ringo",
+        "bedeutung": "Apfel"
+      },
+      "verwechslung": [
+        "い"
+      ]
+    },
+    {
+      "kana": "る",
+      "romaji": "ru",
+      "strokes": 1,
+      "merksatz": "Eine große Schleife — ru wie ein rollender Ball.",
+      "beispiel": {
+        "wort": "るす",
+        "lesung": "rusu",
+        "bedeutung": "Abwesenheit"
+      },
+      "verwechslung": [
+        "ろ"
+      ]
+    },
+    {
+      "kana": "れ",
+      "romaji": "re",
+      "strokes": 2,
+      "merksatz": "Ein Haken mit einem Schwung nach rechts unten — re wie „Regen, der fällt\".",
+      "beispiel": {
+        "wort": "れきし",
+        "lesung": "rekishi",
+        "bedeutung": "Geschichte"
+      },
+      "verwechslung": [
+        "わ",
+        "ね"
+      ]
+    },
+    {
+      "kana": "ろ",
+      "romaji": "ro",
+      "strokes": 1,
+      "merksatz": "Ein eckiges Zeichen wie ein kleines Fenster — ro wie ein Rahmen.",
+      "beispiel": {
+        "wort": "ろうそく",
+        "lesung": "rousoku",
+        "bedeutung": "Kerze"
+      },
+      "verwechslung": [
+        "る"
+      ]
+    },
+    {
+      "kana": "わ",
+      "romaji": "wa",
+      "strokes": 2,
+      "merksatz": "Ein Haken mit Schleife, wie ein Fragezeichen ohne Punkt — wa wie „Wasser\".",
+      "beispiel": {
+        "wort": "わたし",
+        "lesung": "watashi",
+        "bedeutung": "ich"
+      },
+      "verwechslung": [
+        "れ",
+        "ね"
+      ]
+    },
+    {
+      "kana": "を",
+      "romaji": "wo",
+      "strokes": 3,
+      "merksatz": "Ein komplexeres Zeichen, das nur als Partikel vorkommt — wo/o markiert das Objekt.",
+      "beispiel": {
+        "wort": "ほんをよむ",
+        "lesung": "honoyomu",
+        "bedeutung": "ein Buch lesen"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ん",
+      "romaji": "n",
+      "strokes": 1,
+      "merksatz": "Ein einzelner geschwungener Strich — n steht immer für sich allein.",
+      "beispiel": {
+        "wort": "ほん",
+        "lesung": "hon",
+        "bedeutung": "Buch"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "が",
+      "romaji": "ga",
+      "strokes": 5,
+      "merksatz": "Wie か, nur mit zwei kleinen Strichen (Dakuten) oben rechts — die Stimme wird stimmhaft, aus dem harten Laut wird ein weicher.",
+      "beispiel": {
+        "wort": "がっこう",
+        "lesung": "gakkou",
+        "bedeutung": "Schule"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ぎ",
+      "romaji": "gi",
+      "strokes": 6,
+      "merksatz": "Wie き, nur mit zwei kleinen Strichen (Dakuten) oben rechts — die Stimme wird stimmhaft, aus dem harten Laut wird ein weicher.",
+      "beispiel": {
+        "wort": "ぎんこう",
+        "lesung": "ginkou",
+        "bedeutung": "Bank"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ぐ",
+      "romaji": "gu",
+      "strokes": 3,
+      "merksatz": "Wie く, nur mit zwei kleinen Strichen (Dakuten) oben rechts — die Stimme wird stimmhaft, aus dem harten Laut wird ein weicher.",
+      "beispiel": {
+        "wort": "ぐあい",
+        "lesung": "guai",
+        "bedeutung": "Zustand"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "げ",
+      "romaji": "ge",
+      "strokes": 5,
+      "merksatz": "Wie け, nur mit zwei kleinen Strichen (Dakuten) oben rechts — die Stimme wird stimmhaft, aus dem harten Laut wird ein weicher.",
+      "beispiel": {
+        "wort": "げんき",
+        "lesung": "genki",
+        "bedeutung": "gesund"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ご",
+      "romaji": "go",
+      "strokes": 4,
+      "merksatz": "Wie こ, nur mit zwei kleinen Strichen (Dakuten) oben rechts — die Stimme wird stimmhaft, aus dem harten Laut wird ein weicher.",
+      "beispiel": {
+        "wort": "ごはん",
+        "lesung": "gohan",
+        "bedeutung": "Reis"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ざ",
+      "romaji": "za",
+      "strokes": 5,
+      "merksatz": "Wie さ, nur mit zwei kleinen Strichen (Dakuten) oben rechts — die Stimme wird stimmhaft, aus dem harten Laut wird ein weicher.",
+      "beispiel": {
+        "wort": "ざっし",
+        "lesung": "zasshi",
+        "bedeutung": "Zeitschrift"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "じ",
+      "romaji": "ji",
+      "strokes": 3,
+      "merksatz": "Wie し, nur mit zwei kleinen Strichen (Dakuten) oben rechts — die Stimme wird stimmhaft, aus dem harten Laut wird ein weicher.",
+      "beispiel": {
+        "wort": "じかん",
+        "lesung": "jikan",
+        "bedeutung": "Zeit"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ず",
+      "romaji": "zu",
+      "strokes": 4,
+      "merksatz": "Wie す, nur mit zwei kleinen Strichen (Dakuten) oben rechts — die Stimme wird stimmhaft, aus dem harten Laut wird ein weicher.",
+      "beispiel": {
+        "wort": "ずが",
+        "lesung": "zuga",
+        "bedeutung": "Zeichnung"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ぜ",
+      "romaji": "ze",
+      "strokes": 5,
+      "merksatz": "Wie せ, nur mit zwei kleinen Strichen (Dakuten) oben rechts — die Stimme wird stimmhaft, aus dem harten Laut wird ein weicher.",
+      "beispiel": {
+        "wort": "ぜんぶ",
+        "lesung": "zenbu",
+        "bedeutung": "alles"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ぞ",
+      "romaji": "zo",
+      "strokes": 3,
+      "merksatz": "Wie そ, nur mit zwei kleinen Strichen (Dakuten) oben rechts — die Stimme wird stimmhaft, aus dem harten Laut wird ein weicher.",
+      "beispiel": {
+        "wort": "ぞう",
+        "lesung": "zou",
+        "bedeutung": "Elefant"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "だ",
+      "romaji": "da",
+      "strokes": 6,
+      "merksatz": "Wie た, nur mit zwei kleinen Strichen (Dakuten) oben rechts — die Stimme wird stimmhaft, aus dem harten Laut wird ein weicher.",
+      "beispiel": {
+        "wort": "だいがく",
+        "lesung": "daigaku",
+        "bedeutung": "Universität"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ぢ",
+      "romaji": "ji",
+      "strokes": 4,
+      "merksatz": "Wie ち, nur mit zwei kleinen Strichen (Dakuten) oben rechts — die Stimme wird stimmhaft, aus dem harten Laut wird ein weicher.",
+      "beispiel": {
+        "wort": "はなぢ",
+        "lesung": "hanaji",
+        "bedeutung": "Nasenbluten"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "づ",
+      "romaji": "zu",
+      "strokes": 3,
+      "merksatz": "Wie つ, nur mit zwei kleinen Strichen (Dakuten) oben rechts — die Stimme wird stimmhaft, aus dem harten Laut wird ein weicher.",
+      "beispiel": {
+        "wort": "つづく",
+        "lesung": "tsuzuku",
+        "bedeutung": "fortsetzen"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "で",
+      "romaji": "de",
+      "strokes": 3,
+      "merksatz": "Wie て, nur mit zwei kleinen Strichen (Dakuten) oben rechts — die Stimme wird stimmhaft, aus dem harten Laut wird ein weicher.",
+      "beispiel": {
+        "wort": "でんわ",
+        "lesung": "denwa",
+        "bedeutung": "Telefon"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ど",
+      "romaji": "do",
+      "strokes": 4,
+      "merksatz": "Wie と, nur mit zwei kleinen Strichen (Dakuten) oben rechts — die Stimme wird stimmhaft, aus dem harten Laut wird ein weicher.",
+      "beispiel": {
+        "wort": "どようび",
+        "lesung": "doyoubi",
+        "bedeutung": "Samstag"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ば",
+      "romaji": "ba",
+      "strokes": 5,
+      "merksatz": "Wie は, nur mit zwei kleinen Strichen (Dakuten) oben rechts — die Stimme wird stimmhaft, aus dem harten Laut wird ein weicher.",
+      "beispiel": {
+        "wort": "ばしょ",
+        "lesung": "basho",
+        "bedeutung": "Ort"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "び",
+      "romaji": "bi",
+      "strokes": 3,
+      "merksatz": "Wie ひ, nur mit zwei kleinen Strichen (Dakuten) oben rechts — die Stimme wird stimmhaft, aus dem harten Laut wird ein weicher.",
+      "beispiel": {
+        "wort": "びじゅつ",
+        "lesung": "bijutsu",
+        "bedeutung": "Kunst"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ぶ",
+      "romaji": "bu",
+      "strokes": 6,
+      "merksatz": "Wie ふ, nur mit zwei kleinen Strichen (Dakuten) oben rechts — die Stimme wird stimmhaft, aus dem harten Laut wird ein weicher.",
+      "beispiel": {
+        "wort": "ぶんか",
+        "lesung": "bunka",
+        "bedeutung": "Kultur"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "べ",
+      "romaji": "be",
+      "strokes": 3,
+      "merksatz": "Wie へ, nur mit zwei kleinen Strichen (Dakuten) oben rechts — die Stimme wird stimmhaft, aus dem harten Laut wird ein weicher.",
+      "beispiel": {
+        "wort": "べんきょう",
+        "lesung": "benkyou",
+        "bedeutung": "Lernen"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ぼ",
+      "romaji": "bo",
+      "strokes": 6,
+      "merksatz": "Wie ほ, nur mit zwei kleinen Strichen (Dakuten) oben rechts — die Stimme wird stimmhaft, aus dem harten Laut wird ein weicher.",
+      "beispiel": {
+        "wort": "ぼうし",
+        "lesung": "boushi",
+        "bedeutung": "Hut"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ぱ",
+      "romaji": "pa",
+      "strokes": 4,
+      "merksatz": "Wie は, nur mit einem kleinen Kreis (Handakuten) oben rechts — aus dem h-Laut wird ein knackiges p.",
+      "beispiel": {
+        "wort": "ぱん",
+        "lesung": "pan",
+        "bedeutung": "Brot"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ぴ",
+      "romaji": "pi",
+      "strokes": 2,
+      "merksatz": "Wie ひ, nur mit einem kleinen Kreis (Handakuten) oben rechts — aus dem h-Laut wird ein knackiges p.",
+      "beispiel": {
+        "wort": "ぴあの",
+        "lesung": "piano",
+        "bedeutung": "Klavier"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ぷ",
+      "romaji": "pu",
+      "strokes": 5,
+      "merksatz": "Wie ふ, nur mit einem kleinen Kreis (Handakuten) oben rechts — aus dem h-Laut wird ein knackiges p.",
+      "beispiel": {
+        "wort": "ぷうる",
+        "lesung": "puuru",
+        "bedeutung": "Schwimmbad"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ぺ",
+      "romaji": "pe",
+      "strokes": 2,
+      "merksatz": "Wie へ, nur mit einem kleinen Kreis (Handakuten) oben rechts — aus dem h-Laut wird ein knackiges p.",
+      "beispiel": {
+        "wort": "ぺえじ",
+        "lesung": "peeji",
+        "bedeutung": "Seite"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ぽ",
+      "romaji": "po",
+      "strokes": 5,
+      "merksatz": "Wie ほ, nur mit einem kleinen Kreis (Handakuten) oben rechts — aus dem h-Laut wird ein knackiges p.",
+      "beispiel": {
+        "wort": "ぽけっと",
+        "lesung": "poketto",
+        "bedeutung": "Tasche"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "きゃ",
+      "romaji": "kya",
+      "strokes": 7,
+      "merksatz": "き plus kleines ゃ: das kleine Zeichen verschluckt das i und verschmilzt zu einer Silbe.",
+      "beispiel": {
+        "wort": "きゃく",
+        "lesung": "kyaku",
+        "bedeutung": "Gast"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "きゅ",
+      "romaji": "kyu",
+      "strokes": 6,
+      "merksatz": "き plus kleines ゅ: das kleine Zeichen verschluckt das i und verschmilzt zu einer Silbe.",
+      "beispiel": {
+        "wort": "きゅうり",
+        "lesung": "kyuuri",
+        "bedeutung": "Gurke"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "きょ",
+      "romaji": "kyo",
+      "strokes": 6,
+      "merksatz": "き plus kleines ょ: das kleine Zeichen verschluckt das i und verschmilzt zu einer Silbe.",
+      "beispiel": {
+        "wort": "きょう",
+        "lesung": "kyou",
+        "bedeutung": "heute"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ぎゃ",
+      "romaji": "gya",
+      "strokes": 9,
+      "merksatz": "ぎ plus kleines ゃ: das kleine Zeichen verschluckt das i und verschmilzt zu einer Silbe.",
+      "beispiel": {
+        "wort": "ぎゃく",
+        "lesung": "gyaku",
+        "bedeutung": "Gegenteil"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ぎゅ",
+      "romaji": "gyu",
+      "strokes": 8,
+      "merksatz": "ぎ plus kleines ゅ: das kleine Zeichen verschluckt das i und verschmilzt zu einer Silbe.",
+      "beispiel": {
+        "wort": "ぎゅうにゅう",
+        "lesung": "gyuunyuu",
+        "bedeutung": "Milch"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ぎょ",
+      "romaji": "gyo",
+      "strokes": 8,
+      "merksatz": "ぎ plus kleines ょ: das kleine Zeichen verschluckt das i und verschmilzt zu einer Silbe.",
+      "beispiel": {
+        "wort": "ぎょうざ",
+        "lesung": "gyouza",
+        "bedeutung": "Teigtasche"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "しゃ",
+      "romaji": "sha",
+      "strokes": 4,
+      "merksatz": "し plus kleines ゃ: das kleine Zeichen verschluckt das i und verschmilzt zu einer Silbe.",
+      "beispiel": {
+        "wort": "しゃしん",
+        "lesung": "shashin",
+        "bedeutung": "Foto"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "しゅ",
+      "romaji": "shu",
+      "strokes": 3,
+      "merksatz": "し plus kleines ゅ: das kleine Zeichen verschluckt das i und verschmilzt zu einer Silbe.",
+      "beispiel": {
+        "wort": "しゅくだい",
+        "lesung": "shukudai",
+        "bedeutung": "Hausaufgabe"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "しょ",
+      "romaji": "sho",
+      "strokes": 3,
+      "merksatz": "し plus kleines ょ: das kleine Zeichen verschluckt das i und verschmilzt zu einer Silbe.",
+      "beispiel": {
+        "wort": "しょくじ",
+        "lesung": "shokuji",
+        "bedeutung": "Mahlzeit"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "じゃ",
+      "romaji": "ja",
+      "strokes": 6,
+      "merksatz": "じ plus kleines ゃ: das kleine Zeichen verschluckt das i und verschmilzt zu einer Silbe.",
+      "beispiel": {
+        "wort": "じゃがいも",
+        "lesung": "jagaimo",
+        "bedeutung": "Kartoffel"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "じゅ",
+      "romaji": "ju",
+      "strokes": 5,
+      "merksatz": "じ plus kleines ゅ: das kleine Zeichen verschluckt das i und verschmilzt zu einer Silbe.",
+      "beispiel": {
+        "wort": "じゅぎょう",
+        "lesung": "jugyou",
+        "bedeutung": "Unterricht"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "じょ",
+      "romaji": "jo",
+      "strokes": 5,
+      "merksatz": "じ plus kleines ょ: das kleine Zeichen verschluckt das i und verschmilzt zu einer Silbe.",
+      "beispiel": {
+        "wort": "じょうず",
+        "lesung": "jouzu",
+        "bedeutung": "geschickt"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ちゃ",
+      "romaji": "cha",
+      "strokes": 5,
+      "merksatz": "ち plus kleines ゃ: das kleine Zeichen verschluckt das i und verschmilzt zu einer Silbe.",
+      "beispiel": {
+        "wort": "おちゃ",
+        "lesung": "ocha",
+        "bedeutung": "Tee"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ちゅ",
+      "romaji": "chu",
+      "strokes": 4,
+      "merksatz": "ち plus kleines ゅ: das kleine Zeichen verschluckt das i und verschmilzt zu einer Silbe.",
+      "beispiel": {
+        "wort": "ちゅうごく",
+        "lesung": "chuugoku",
+        "bedeutung": "China"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ちょ",
+      "romaji": "cho",
+      "strokes": 4,
+      "merksatz": "ち plus kleines ょ: das kleine Zeichen verschluckt das i und verschmilzt zu einer Silbe.",
+      "beispiel": {
+        "wort": "ちょうど",
+        "lesung": "choudo",
+        "bedeutung": "genau"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "にゃ",
+      "romaji": "nya",
+      "strokes": 6,
+      "merksatz": "に plus kleines ゃ: das kleine Zeichen verschluckt das i und verschmilzt zu einer Silbe.",
+      "beispiel": {
+        "wort": "こんにゃく",
+        "lesung": "konnyaku",
+        "bedeutung": "Konjak"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "にゅ",
+      "romaji": "nyu",
+      "strokes": 5,
+      "merksatz": "に plus kleines ゅ: das kleine Zeichen verschluckt das i und verschmilzt zu einer Silbe.",
+      "beispiel": {
+        "wort": "にゅうがく",
+        "lesung": "nyuugaku",
+        "bedeutung": "Einschulung"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "にょ",
+      "romaji": "nyo",
+      "strokes": 5,
+      "merksatz": "に plus kleines ょ: das kleine Zeichen verschluckt das i und verschmilzt zu einer Silbe.",
+      "beispiel": {
+        "wort": "にょろにょろ",
+        "lesung": "nyoronyoro",
+        "bedeutung": "schlängelnd"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ひゃ",
+      "romaji": "hya",
+      "strokes": 4,
+      "merksatz": "ひ plus kleines ゃ: das kleine Zeichen verschluckt das i und verschmilzt zu einer Silbe.",
+      "beispiel": {
+        "wort": "ひゃく",
+        "lesung": "hyaku",
+        "bedeutung": "hundert"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ひゅ",
+      "romaji": "hyu",
+      "strokes": 3,
+      "merksatz": "ひ plus kleines ゅ: das kleine Zeichen verschluckt das i und verschmilzt zu einer Silbe.",
+      "beispiel": {
+        "wort": "ひゅうひゅう",
+        "lesung": "hyuuhyuu",
+        "bedeutung": "Pfeifgeräusch"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ひょ",
+      "romaji": "hyo",
+      "strokes": 3,
+      "merksatz": "ひ plus kleines ょ: das kleine Zeichen verschluckt das i und verschmilzt zu einer Silbe.",
+      "beispiel": {
+        "wort": "ひょう",
+        "lesung": "hyou",
+        "bedeutung": "Tabelle"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "びゃ",
+      "romaji": "bya",
+      "strokes": 6,
+      "merksatz": "び plus kleines ゃ: das kleine Zeichen verschluckt das i und verschmilzt zu einer Silbe.",
+      "beispiel": {
+        "wort": "さんびゃく",
+        "lesung": "sanbyaku",
+        "bedeutung": "dreihundert"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "びゅ",
+      "romaji": "byu",
+      "strokes": 5,
+      "merksatz": "び plus kleines ゅ: das kleine Zeichen verschluckt das i und verschmilzt zu einer Silbe.",
+      "beispiel": {
+        "wort": "びゅう",
+        "lesung": "byuu",
+        "bedeutung": "Fehler"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "びょ",
+      "romaji": "byo",
+      "strokes": 5,
+      "merksatz": "び plus kleines ょ: das kleine Zeichen verschluckt das i und verschmilzt zu einer Silbe.",
+      "beispiel": {
+        "wort": "びょういん",
+        "lesung": "byouin",
+        "bedeutung": "Krankenhaus"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ぴゃ",
+      "romaji": "pya",
+      "strokes": 5,
+      "merksatz": "ぴ plus kleines ゃ: das kleine Zeichen verschluckt das i und verschmilzt zu einer Silbe.",
+      "beispiel": {
+        "wort": "ろっぴゃく",
+        "lesung": "roppyaku",
+        "bedeutung": "sechshundert"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ぴゅ",
+      "romaji": "pyu",
+      "strokes": 4,
+      "merksatz": "ぴ plus kleines ゅ: das kleine Zeichen verschluckt das i und verschmilzt zu einer Silbe.",
+      "beispiel": {
+        "wort": "ぴゅあ",
+        "lesung": "pyua",
+        "bedeutung": "rein"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ぴょ",
+      "romaji": "pyo",
+      "strokes": 4,
+      "merksatz": "ぴ plus kleines ょ: das kleine Zeichen verschluckt das i und verschmilzt zu einer Silbe.",
+      "beispiel": {
+        "wort": "ぴょんぴょん",
+        "lesung": "pyonpyon",
+        "bedeutung": "hüpfend"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "みゃ",
+      "romaji": "mya",
+      "strokes": 5,
+      "merksatz": "み plus kleines ゃ: das kleine Zeichen verschluckt das i und verschmilzt zu einer Silbe.",
+      "beispiel": {
+        "wort": "みゃく",
+        "lesung": "myaku",
+        "bedeutung": "Puls"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "みゅ",
+      "romaji": "myu",
+      "strokes": 4,
+      "merksatz": "み plus kleines ゅ: das kleine Zeichen verschluckt das i und verschmilzt zu einer Silbe.",
+      "beispiel": {
+        "wort": "みゅーじっく",
+        "lesung": "myuujikku",
+        "bedeutung": "Musik"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "みょ",
+      "romaji": "myo",
+      "strokes": 4,
+      "merksatz": "み plus kleines ょ: das kleine Zeichen verschluckt das i und verschmilzt zu einer Silbe.",
+      "beispiel": {
+        "wort": "みょうじ",
+        "lesung": "myouji",
+        "bedeutung": "Familienname"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "りゃ",
+      "romaji": "rya",
+      "strokes": 5,
+      "merksatz": "り plus kleines ゃ: das kleine Zeichen verschluckt das i und verschmilzt zu einer Silbe.",
+      "beispiel": {
+        "wort": "りゃくご",
+        "lesung": "ryakugo",
+        "bedeutung": "Abkürzung"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "りゅ",
+      "romaji": "ryu",
+      "strokes": 4,
+      "merksatz": "り plus kleines ゅ: das kleine Zeichen verschluckt das i und verschmilzt zu einer Silbe.",
+      "beispiel": {
+        "wort": "りゅうがく",
+        "lesung": "ryuugaku",
+        "bedeutung": "Auslandsstudium"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "りょ",
+      "romaji": "ryo",
+      "strokes": 4,
+      "merksatz": "り plus kleines ょ: das kleine Zeichen verschluckt das i und verschmilzt zu einer Silbe.",
+      "beispiel": {
+        "wort": "りょこう",
+        "lesung": "ryokou",
+        "bedeutung": "Reise"
+      },
+      "verwechslung": []
+    }
+  ]
+}

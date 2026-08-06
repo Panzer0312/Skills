@@ -5,3 +5,4 @@ export * from "./srs/types.js";
 export * from "./srs/fsrs.js";
 export * from "./srs/queue.js";
 export * from "./parsers/kana.js";
+export * from "./schema/japanese.js";

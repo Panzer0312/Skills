@@ -1,0 +1,1273 @@
+{
+  "script": "katakana",
+  "entries": [
+    {
+      "kana": "ア",
+      "romaji": "a",
+      "strokes": 2,
+      "merksatz": "Ein Winkel wie ein spitzes Dach — ア für Amerika, das gerade Dach eines Wolkenkratzers.",
+      "beispiel": {
+        "wort": "アメリカ",
+        "lesung": "amerika",
+        "bedeutung": "Amerika"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "イ",
+      "romaji": "i",
+      "strokes": 2,
+      "merksatz": "Zwei schräge Striche, die sich fast berühren — i wie zwei sich neigende Zaunpfähle.",
+      "beispiel": {
+        "wort": "イタリア",
+        "lesung": "itaria",
+        "bedeutung": "Italien"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ウ",
+      "romaji": "u",
+      "strokes": 3,
+      "merksatz": "Ein Dach mit einem Haken darunter — u wie eine kleine Hütte.",
+      "beispiel": {
+        "wort": "ウイスキー",
+        "lesung": "uisukii",
+        "bedeutung": "Whisky"
+      },
+      "verwechslung": [
+        "ワ"
+      ]
+    },
+    {
+      "kana": "エ",
+      "romaji": "e",
+      "strokes": 3,
+      "merksatz": "Drei waagerechte Striche, wie ein liegendes E — daher der Name.",
+      "beispiel": {
+        "wort": "エレベーター",
+        "lesung": "erebeetaa",
+        "bedeutung": "Aufzug"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "オ",
+      "romaji": "o",
+      "strokes": 3,
+      "merksatz": "Ein Kreuz mit einem Haken nach unten — o wie ein Wegweiser.",
+      "beispiel": {
+        "wort": "オレンジ",
+        "lesung": "orenji",
+        "bedeutung": "Orange"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "カ",
+      "romaji": "ka",
+      "strokes": 2,
+      "merksatz": "Ein Haken mit einem kurzen Strich, wirkt wie ein spitzes K.",
+      "beispiel": {
+        "wort": "カメラ",
+        "lesung": "kamera",
+        "bedeutung": "Kamera"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "キ",
+      "romaji": "ki",
+      "strokes": 3,
+      "merksatz": "Drei Striche und ein Haken, kantiger als das runde hiragana き.",
+      "beispiel": {
+        "wort": "キロ",
+        "lesung": "kiro",
+        "bedeutung": "Kilo"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ク",
+      "romaji": "ku",
+      "strokes": 2,
+      "merksatz": "Ein spitzer Winkel, wie ein aufgeschlagenes Buch — ku, kantig und kurz.",
+      "beispiel": {
+        "wort": "クラス",
+        "lesung": "kurasu",
+        "bedeutung": "Klasse"
+      },
+      "verwechslung": [
+        "タ"
+      ]
+    },
+    {
+      "kana": "ケ",
+      "romaji": "ke",
+      "strokes": 3,
+      "merksatz": "Ähnlich wie キ, aber mit einem langen Strich nach unten — ke.",
+      "beispiel": {
+        "wort": "ケーキ",
+        "lesung": "keeki",
+        "bedeutung": "Kuchen"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "コ",
+      "romaji": "ko",
+      "strokes": 2,
+      "merksatz": "Zwei parallele waagerechte Striche, wie ein eckiges こ — ko.",
+      "beispiel": {
+        "wort": "コーヒー",
+        "lesung": "koohii",
+        "bedeutung": "Kaffee"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "サ",
+      "romaji": "sa",
+      "strokes": 3,
+      "merksatz": "Ein Kreuz mit einem Haken nach oben — sa, spitz und kantig.",
+      "beispiel": {
+        "wort": "サラダ",
+        "lesung": "sarada",
+        "bedeutung": "Salat"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "シ",
+      "romaji": "shi",
+      "strokes": 3,
+      "merksatz": "Drei kurze Striche schräg nebeneinander, wie Regentropfen — shi.",
+      "beispiel": {
+        "wort": "シャツ",
+        "lesung": "shatsu",
+        "bedeutung": "Hemd"
+      },
+      "verwechslung": [
+        "ツ"
+      ]
+    },
+    {
+      "kana": "ス",
+      "romaji": "su",
+      "strokes": 2,
+      "merksatz": "Ein Haken mit einer Kurve, kantiger als das runde す — su.",
+      "beispiel": {
+        "wort": "スープ",
+        "lesung": "suupu",
+        "bedeutung": "Suppe"
+      },
+      "verwechslung": [
+        "ヌ"
+      ]
+    },
+    {
+      "kana": "セ",
+      "romaji": "se",
+      "strokes": 2,
+      "merksatz": "Ein waagerechter Strich mit einem Haken, wie ein liegendes T — se.",
+      "beispiel": {
+        "wort": "セーター",
+        "lesung": "seetaa",
+        "bedeutung": "Pullover"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ソ",
+      "romaji": "so",
+      "strokes": 2,
+      "merksatz": "Zwei kurze Striche schräg nebeneinander, ähnlich wie シ, aber spiegelverkehrt — so.",
+      "beispiel": {
+        "wort": "ソファ",
+        "lesung": "sofa",
+        "bedeutung": "Sofa"
+      },
+      "verwechslung": [
+        "ン"
+      ]
+    },
+    {
+      "kana": "タ",
+      "romaji": "ta",
+      "strokes": 3,
+      "merksatz": "Ein Kreuz mit einem zusätzlichen Punkt — ta, wie ein Sternchen.",
+      "beispiel": {
+        "wort": "タクシー",
+        "lesung": "takushii",
+        "bedeutung": "Taxi"
+      },
+      "verwechslung": [
+        "ク"
+      ]
+    },
+    {
+      "kana": "チ",
+      "romaji": "chi",
+      "strokes": 3,
+      "merksatz": "Ein waagerechter Strich mit Haken, kantiger als hiragana ち — chi.",
+      "beispiel": {
+        "wort": "チーズ",
+        "lesung": "chiizu",
+        "bedeutung": "Käse"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ツ",
+      "romaji": "tsu",
+      "strokes": 3,
+      "merksatz": "Drei kurze Striche wie Wellen von oben — tsu wie eine kleine Tsunami-Welle.",
+      "beispiel": {
+        "wort": "ツアー",
+        "lesung": "tsuaa",
+        "bedeutung": "Tour"
+      },
+      "verwechslung": [
+        "シ"
+      ]
+    },
+    {
+      "kana": "テ",
+      "romaji": "te",
+      "strokes": 3,
+      "merksatz": "Ein Kreuz mit Haken nach unten — te, eckig wie ein Fernsehantenne.",
+      "beispiel": {
+        "wort": "テレビ",
+        "lesung": "terebi",
+        "bedeutung": "Fernseher"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ト",
+      "romaji": "to",
+      "strokes": 2,
+      "merksatz": "Ein senkrechter Strich mit einem kurzen Haken — to, wie ein Tor mit einer Klinke.",
+      "beispiel": {
+        "wort": "トマト",
+        "lesung": "tomato",
+        "bedeutung": "Tomate"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ナ",
+      "romaji": "na",
+      "strokes": 2,
+      "merksatz": "Ein Kreuz mit einem langen senkrechten Strich — na, kantiger als hiragana な.",
+      "beispiel": {
+        "wort": "ナイフ",
+        "lesung": "naifu",
+        "bedeutung": "Messer"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ニ",
+      "romaji": "ni",
+      "strokes": 2,
+      "merksatz": "Zwei waagerechte Striche übereinander — ni, wie zwei Balken.",
+      "beispiel": {
+        "wort": "ニュース",
+        "lesung": "nyuusu",
+        "bedeutung": "Nachrichten"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ヌ",
+      "romaji": "nu",
+      "strokes": 2,
+      "merksatz": "Ein Haken mit einem kurzen Querstrich — nu, ähnlich wie ヌードel (Nudel).",
+      "beispiel": {
+        "wort": "ヌードル",
+        "lesung": "nuudoru",
+        "bedeutung": "Nudel"
+      },
+      "verwechslung": [
+        "ス"
+      ]
+    },
+    {
+      "kana": "ネ",
+      "romaji": "ne",
+      "strokes": 4,
+      "merksatz": "Ein Zeichen mit mehreren Strichen, das an einen kleinen Baum erinnert — ne.",
+      "beispiel": {
+        "wort": "ネクタイ",
+        "lesung": "nekutai",
+        "bedeutung": "Krawatte"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ノ",
+      "romaji": "no",
+      "strokes": 1,
+      "merksatz": "Ein einziger schräger Strich — no, der einfachste Katakana-Buchstabe.",
+      "beispiel": {
+        "wort": "ノート",
+        "lesung": "nooto",
+        "bedeutung": "Heft"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ハ",
+      "romaji": "ha",
+      "strokes": 2,
+      "merksatz": "Zwei auseinanderlaufende Striche wie ein Zeltdach — ha, wie zwei ausgestreckte Beine.",
+      "beispiel": {
+        "wort": "ハンバーガー",
+        "lesung": "hanbaagaa",
+        "bedeutung": "Hamburger"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ヒ",
+      "romaji": "hi",
+      "strokes": 2,
+      "merksatz": "Ein Haken mit kurzem Querstrich — hi, kantiger als das runde hiragana ひ.",
+      "beispiel": {
+        "wort": "ヒーター",
+        "lesung": "hiitaa",
+        "bedeutung": "Heizung"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "フ",
+      "romaji": "fu",
+      "strokes": 1,
+      "merksatz": "Ein einzelner Haken, wie ein Angelhaken — fu, kurz und spitz.",
+      "beispiel": {
+        "wort": "フランス",
+        "lesung": "furansu",
+        "bedeutung": "Frankreich"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ヘ",
+      "romaji": "he",
+      "strokes": 1,
+      "merksatz": "Ein einzelner Berggipfel, identisch mit hiragana へ — he.",
+      "beispiel": {
+        "wort": "ヘリコプター",
+        "lesung": "herikoputaa",
+        "bedeutung": "Hubschrauber"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ホ",
+      "romaji": "ho",
+      "strokes": 4,
+      "merksatz": "Ein Kreuz mit zwei zusätzlichen Strichen — ho, wie ein Zaun mit Pfosten.",
+      "beispiel": {
+        "wort": "ホテル",
+        "lesung": "hoteru",
+        "bedeutung": "Hotel"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "マ",
+      "romaji": "ma",
+      "strokes": 2,
+      "merksatz": "Ein Haken mit einem Querstrich — ma, kantiger als das runde hiragana ま.",
+      "beispiel": {
+        "wort": "マスク",
+        "lesung": "masuku",
+        "bedeutung": "Maske"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ミ",
+      "romaji": "mi",
+      "strokes": 3,
+      "merksatz": "Drei kurze parallele Striche — mi, wie drei kleine Wellen.",
+      "beispiel": {
+        "wort": "ミルク",
+        "lesung": "miruku",
+        "bedeutung": "Milch"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ム",
+      "romaji": "mu",
+      "strokes": 2,
+      "merksatz": "Ein Winkel mit einem Haken — mu, wie ein umgedrehtes Dach.",
+      "beispiel": {
+        "wort": "ムード",
+        "lesung": "muudo",
+        "bedeutung": "Stimmung"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "メ",
+      "romaji": "me",
+      "strokes": 2,
+      "merksatz": "Zwei sich kreuzende Striche — me, wie ein X mit Schwung, erinnert an ein Auge.",
+      "beispiel": {
+        "wort": "メニュー",
+        "lesung": "menyuu",
+        "bedeutung": "Speisekarte"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "モ",
+      "romaji": "mo",
+      "strokes": 3,
+      "merksatz": "Ein Kreuz mit zwei Querstrichen — mo, kantiger als hiragana も.",
+      "beispiel": {
+        "wort": "モデル",
+        "lesung": "moderu",
+        "bedeutung": "Modell"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ヤ",
+      "romaji": "ya",
+      "strokes": 2,
+      "merksatz": "Ein Strich mit Haken, wie ein Pfeil nach oben — ya, kantiger als hiragana や.",
+      "beispiel": {
+        "wort": "タイヤ",
+        "lesung": "taiya",
+        "bedeutung": "Reifen"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ユ",
+      "romaji": "yu",
+      "strokes": 2,
+      "merksatz": "Ein Haken mit einem waagerechten Strich — yu, eckiger als das runde hiragana ゆ.",
+      "beispiel": {
+        "wort": "ユーモア",
+        "lesung": "yuumoa",
+        "bedeutung": "Humor"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ヨ",
+      "romaji": "yo",
+      "strokes": 3,
+      "merksatz": "Drei waagerechte Striche mit einem senkrechten Verbindungsstrich — yo, wie ein liegendes E mit Extra-Strich.",
+      "beispiel": {
+        "wort": "ヨーロッパ",
+        "lesung": "yooroppa",
+        "bedeutung": "Europa"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ラ",
+      "romaji": "ra",
+      "strokes": 2,
+      "merksatz": "Ein Haken mit kurzem Querstrich — ra, kantiger als das runde hiragana ら.",
+      "beispiel": {
+        "wort": "ラジオ",
+        "lesung": "rajio",
+        "bedeutung": "Radio"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "リ",
+      "romaji": "ri",
+      "strokes": 2,
+      "merksatz": "Zwei senkrechte Striche, der zweite länger — ri, wie zwei ungleiche Säulen.",
+      "beispiel": {
+        "wort": "リンゴジュース",
+        "lesung": "ringojuusu",
+        "bedeutung": "Apfelsaft"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ル",
+      "romaji": "ru",
+      "strokes": 2,
+      "merksatz": "Ein Haken mit einer kleinen Kurve am Ende — ru, eckiger als das runde る.",
+      "beispiel": {
+        "wort": "ルール",
+        "lesung": "ruuru",
+        "bedeutung": "Regel"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "レ",
+      "romaji": "re",
+      "strokes": 1,
+      "merksatz": "Ein einzelner Haken, der nach unten fällt — re, wie ein fallender Regentropfen.",
+      "beispiel": {
+        "wort": "レストラン",
+        "lesung": "resutoran",
+        "bedeutung": "Restaurant"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ロ",
+      "romaji": "ro",
+      "strokes": 3,
+      "merksatz": "Ein Quadrat — ro sieht aus wie ein kleiner Rahmen oder Raum.",
+      "beispiel": {
+        "wort": "ロボット",
+        "lesung": "robotto",
+        "bedeutung": "Roboter"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ワ",
+      "romaji": "wa",
+      "strokes": 2,
+      "merksatz": "Ein Haken mit kurzem Querstrich oben — wa, kantiger als hiragana わ.",
+      "beispiel": {
+        "wort": "ワイン",
+        "lesung": "wain",
+        "bedeutung": "Wein"
+      },
+      "verwechslung": [
+        "ウ"
+      ]
+    },
+    {
+      "kana": "ヲ",
+      "romaji": "wo",
+      "strokes": 3,
+      "merksatz": "Ein seltenes Zeichen, kaum in Gebrauch, meist nur in alten Texten — wo/o.",
+      "beispiel": {
+        "wort": "ヲ",
+        "lesung": "wo",
+        "bedeutung": "(kaum verwendet)"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ン",
+      "romaji": "n",
+      "strokes": 2,
+      "merksatz": "Zwei kurze schräge Striche — n, leicht mit ソ und ツ zu verwechseln.",
+      "beispiel": {
+        "wort": "パン",
+        "lesung": "pan",
+        "bedeutung": "Brot"
+      },
+      "verwechslung": [
+        "ソ"
+      ]
+    },
+    {
+      "kana": "ガ",
+      "romaji": "ga",
+      "strokes": 4,
+      "merksatz": "Wie カ, nur mit zwei kleinen Strichen (Dakuten) oben rechts — der Laut wird stimmhaft statt stimmlos.",
+      "beispiel": {
+        "wort": "ガム",
+        "lesung": "gamu",
+        "bedeutung": "Kaugummi"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ギ",
+      "romaji": "gi",
+      "strokes": 5,
+      "merksatz": "Wie キ, nur mit zwei kleinen Strichen (Dakuten) oben rechts — der Laut wird stimmhaft statt stimmlos.",
+      "beispiel": {
+        "wort": "ギター",
+        "lesung": "gitaa",
+        "bedeutung": "Gitarre"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "グ",
+      "romaji": "gu",
+      "strokes": 4,
+      "merksatz": "Wie ク, nur mit zwei kleinen Strichen (Dakuten) oben rechts — der Laut wird stimmhaft statt stimmlos.",
+      "beispiel": {
+        "wort": "グラス",
+        "lesung": "gurasu",
+        "bedeutung": "Glas"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ゲ",
+      "romaji": "ge",
+      "strokes": 5,
+      "merksatz": "Wie ケ, nur mit zwei kleinen Strichen (Dakuten) oben rechts — der Laut wird stimmhaft statt stimmlos.",
+      "beispiel": {
+        "wort": "ゲーム",
+        "lesung": "geemu",
+        "bedeutung": "Spiel"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ゴ",
+      "romaji": "go",
+      "strokes": 4,
+      "merksatz": "Wie コ, nur mit zwei kleinen Strichen (Dakuten) oben rechts — der Laut wird stimmhaft statt stimmlos.",
+      "beispiel": {
+        "wort": "ゴルフ",
+        "lesung": "gorufu",
+        "bedeutung": "Golf"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ザ",
+      "romaji": "za",
+      "strokes": 5,
+      "merksatz": "Wie サ, nur mit zwei kleinen Strichen (Dakuten) oben rechts — der Laut wird stimmhaft statt stimmlos.",
+      "beispiel": {
+        "wort": "ザ・ベスト",
+        "lesung": "za besuto",
+        "bedeutung": "das Beste"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ジ",
+      "romaji": "ji",
+      "strokes": 5,
+      "merksatz": "Wie シ, nur mit zwei kleinen Strichen (Dakuten) oben rechts — der Laut wird stimmhaft statt stimmlos.",
+      "beispiel": {
+        "wort": "ジュース",
+        "lesung": "juusu",
+        "bedeutung": "Saft"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ズ",
+      "romaji": "zu",
+      "strokes": 4,
+      "merksatz": "Wie ス, nur mit zwei kleinen Strichen (Dakuten) oben rechts — der Laut wird stimmhaft statt stimmlos.",
+      "beispiel": {
+        "wort": "チーズ",
+        "lesung": "chiizu",
+        "bedeutung": "Käse"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ゼ",
+      "romaji": "ze",
+      "strokes": 4,
+      "merksatz": "Wie セ, nur mit zwei kleinen Strichen (Dakuten) oben rechts — der Laut wird stimmhaft statt stimmlos.",
+      "beispiel": {
+        "wort": "ゼロ",
+        "lesung": "zero",
+        "bedeutung": "Null"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ゾ",
+      "romaji": "zo",
+      "strokes": 4,
+      "merksatz": "Wie ソ, nur mit zwei kleinen Strichen (Dakuten) oben rechts — der Laut wird stimmhaft statt stimmlos.",
+      "beispiel": {
+        "wort": "ゾーン",
+        "lesung": "zoon",
+        "bedeutung": "Zone"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ダ",
+      "romaji": "da",
+      "strokes": 5,
+      "merksatz": "Wie タ, nur mit zwei kleinen Strichen (Dakuten) oben rechts — der Laut wird stimmhaft statt stimmlos.",
+      "beispiel": {
+        "wort": "ダンス",
+        "lesung": "dansu",
+        "bedeutung": "Tanz"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ヂ",
+      "romaji": "ji",
+      "strokes": 5,
+      "merksatz": "Wie チ, nur mit zwei kleinen Strichen (Dakuten) oben rechts — der Laut wird stimmhaft statt stimmlos.",
+      "beispiel": {
+        "wort": "ヂ",
+        "lesung": "ji",
+        "bedeutung": "(selten)"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ヅ",
+      "romaji": "zu",
+      "strokes": 5,
+      "merksatz": "Wie ツ, nur mit zwei kleinen Strichen (Dakuten) oben rechts — der Laut wird stimmhaft statt stimmlos.",
+      "beispiel": {
+        "wort": "ヅ",
+        "lesung": "zu",
+        "bedeutung": "(selten)"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "デ",
+      "romaji": "de",
+      "strokes": 5,
+      "merksatz": "Wie テ, nur mit zwei kleinen Strichen (Dakuten) oben rechts — der Laut wird stimmhaft statt stimmlos.",
+      "beispiel": {
+        "wort": "デザート",
+        "lesung": "dezaato",
+        "bedeutung": "Nachtisch"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ド",
+      "romaji": "do",
+      "strokes": 4,
+      "merksatz": "Wie ト, nur mit zwei kleinen Strichen (Dakuten) oben rechts — der Laut wird stimmhaft statt stimmlos.",
+      "beispiel": {
+        "wort": "ドア",
+        "lesung": "doa",
+        "bedeutung": "Tür"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "バ",
+      "romaji": "ba",
+      "strokes": 4,
+      "merksatz": "Wie ハ, nur mit zwei kleinen Strichen (Dakuten) oben rechts — der Laut wird stimmhaft statt stimmlos.",
+      "beispiel": {
+        "wort": "バス",
+        "lesung": "basu",
+        "bedeutung": "Bus"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ビ",
+      "romaji": "bi",
+      "strokes": 4,
+      "merksatz": "Wie ヒ, nur mit zwei kleinen Strichen (Dakuten) oben rechts — der Laut wird stimmhaft statt stimmlos.",
+      "beispiel": {
+        "wort": "ビール",
+        "lesung": "biiru",
+        "bedeutung": "Bier"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ブ",
+      "romaji": "bu",
+      "strokes": 3,
+      "merksatz": "Wie フ, nur mit zwei kleinen Strichen (Dakuten) oben rechts — der Laut wird stimmhaft statt stimmlos.",
+      "beispiel": {
+        "wort": "ブドウ",
+        "lesung": "budou",
+        "bedeutung": "Traube"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ベ",
+      "romaji": "be",
+      "strokes": 3,
+      "merksatz": "Wie ヘ, nur mit zwei kleinen Strichen (Dakuten) oben rechts — der Laut wird stimmhaft statt stimmlos.",
+      "beispiel": {
+        "wort": "ベッド",
+        "lesung": "beddo",
+        "bedeutung": "Bett"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ボ",
+      "romaji": "bo",
+      "strokes": 6,
+      "merksatz": "Wie ホ, nur mit zwei kleinen Strichen (Dakuten) oben rechts — der Laut wird stimmhaft statt stimmlos.",
+      "beispiel": {
+        "wort": "ボール",
+        "lesung": "booru",
+        "bedeutung": "Ball"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "パ",
+      "romaji": "pa",
+      "strokes": 3,
+      "merksatz": "Wie ハ, nur mit einem kleinen Kreis (Handakuten) oben rechts — aus dem h-Laut wird ein knackiges p.",
+      "beispiel": {
+        "wort": "パン",
+        "lesung": "pan",
+        "bedeutung": "Brot"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ピ",
+      "romaji": "pi",
+      "strokes": 3,
+      "merksatz": "Wie ヒ, nur mit einem kleinen Kreis (Handakuten) oben rechts — aus dem h-Laut wird ein knackiges p.",
+      "beispiel": {
+        "wort": "ピアノ",
+        "lesung": "piano",
+        "bedeutung": "Klavier"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "プ",
+      "romaji": "pu",
+      "strokes": 2,
+      "merksatz": "Wie フ, nur mit einem kleinen Kreis (Handakuten) oben rechts — aus dem h-Laut wird ein knackiges p.",
+      "beispiel": {
+        "wort": "プール",
+        "lesung": "puuru",
+        "bedeutung": "Schwimmbad"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ペ",
+      "romaji": "pe",
+      "strokes": 2,
+      "merksatz": "Wie ヘ, nur mit einem kleinen Kreis (Handakuten) oben rechts — aus dem h-Laut wird ein knackiges p.",
+      "beispiel": {
+        "wort": "ペン",
+        "lesung": "pen",
+        "bedeutung": "Stift"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ポ",
+      "romaji": "po",
+      "strokes": 5,
+      "merksatz": "Wie ホ, nur mit einem kleinen Kreis (Handakuten) oben rechts — aus dem h-Laut wird ein knackiges p.",
+      "beispiel": {
+        "wort": "ポケット",
+        "lesung": "poketto",
+        "bedeutung": "Tasche"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "キャ",
+      "romaji": "kya",
+      "strokes": 5,
+      "merksatz": "キ plus kleines ャ: die beiden Zeichen verschmelzen zu einer einzigen Silbe.",
+      "beispiel": {
+        "wort": "キャンプ",
+        "lesung": "kyanpu",
+        "bedeutung": "Camping"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "キュ",
+      "romaji": "kyu",
+      "strokes": 5,
+      "merksatz": "キ plus kleines ュ: die beiden Zeichen verschmelzen zu einer einzigen Silbe.",
+      "beispiel": {
+        "wort": "キュート",
+        "lesung": "kyuuto",
+        "bedeutung": "niedlich"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "キョ",
+      "romaji": "kyo",
+      "strokes": 6,
+      "merksatz": "キ plus kleines ョ: die beiden Zeichen verschmelzen zu einer einzigen Silbe.",
+      "beispiel": {
+        "wort": "トウキョウ",
+        "lesung": "toukyou",
+        "bedeutung": "Tokio"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ギャ",
+      "romaji": "gya",
+      "strokes": 7,
+      "merksatz": "ギ plus kleines ャ: die beiden Zeichen verschmelzen zu einer einzigen Silbe.",
+      "beispiel": {
+        "wort": "ギャラリー",
+        "lesung": "gyararii",
+        "bedeutung": "Galerie"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ギュ",
+      "romaji": "gyu",
+      "strokes": 7,
+      "merksatz": "ギ plus kleines ュ: die beiden Zeichen verschmelzen zu einer einzigen Silbe.",
+      "beispiel": {
+        "wort": "ギュッと",
+        "lesung": "gyutto",
+        "bedeutung": "fest (drücken)"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ギョ",
+      "romaji": "gyo",
+      "strokes": 8,
+      "merksatz": "ギ plus kleines ョ: die beiden Zeichen verschmelzen zu einer einzigen Silbe.",
+      "beispiel": {
+        "wort": "ギョーザ",
+        "lesung": "gyooza",
+        "bedeutung": "Teigtasche"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "シャ",
+      "romaji": "sha",
+      "strokes": 5,
+      "merksatz": "シ plus kleines ャ: die beiden Zeichen verschmelzen zu einer einzigen Silbe.",
+      "beispiel": {
+        "wort": "シャワー",
+        "lesung": "shawaa",
+        "bedeutung": "Dusche"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "シュ",
+      "romaji": "shu",
+      "strokes": 5,
+      "merksatz": "シ plus kleines ュ: die beiden Zeichen verschmelzen zu einer einzigen Silbe.",
+      "beispiel": {
+        "wort": "シュークリーム",
+        "lesung": "shuukuriimu",
+        "bedeutung": "Windbeutel"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ショ",
+      "romaji": "sho",
+      "strokes": 6,
+      "merksatz": "シ plus kleines ョ: die beiden Zeichen verschmelzen zu einer einzigen Silbe.",
+      "beispiel": {
+        "wort": "ショック",
+        "lesung": "shokku",
+        "bedeutung": "Schock"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ジャ",
+      "romaji": "ja",
+      "strokes": 7,
+      "merksatz": "ジ plus kleines ャ: die beiden Zeichen verschmelzen zu einer einzigen Silbe.",
+      "beispiel": {
+        "wort": "ジャム",
+        "lesung": "jamu",
+        "bedeutung": "Marmelade"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ジュ",
+      "romaji": "ju",
+      "strokes": 7,
+      "merksatz": "ジ plus kleines ュ: die beiden Zeichen verschmelzen zu einer einzigen Silbe.",
+      "beispiel": {
+        "wort": "ジュース",
+        "lesung": "juusu",
+        "bedeutung": "Saft"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ジョ",
+      "romaji": "jo",
+      "strokes": 8,
+      "merksatz": "ジ plus kleines ョ: die beiden Zeichen verschmelzen zu einer einzigen Silbe.",
+      "beispiel": {
+        "wort": "ジョギング",
+        "lesung": "jogingu",
+        "bedeutung": "Joggen"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "チャ",
+      "romaji": "cha",
+      "strokes": 5,
+      "merksatz": "チ plus kleines ャ: die beiden Zeichen verschmelzen zu einer einzigen Silbe.",
+      "beispiel": {
+        "wort": "チャンス",
+        "lesung": "chansu",
+        "bedeutung": "Chance"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "チュ",
+      "romaji": "chu",
+      "strokes": 5,
+      "merksatz": "チ plus kleines ュ: die beiden Zeichen verschmelzen zu einer einzigen Silbe.",
+      "beispiel": {
+        "wort": "チューリップ",
+        "lesung": "chuurippu",
+        "bedeutung": "Tulpe"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "チョ",
+      "romaji": "cho",
+      "strokes": 6,
+      "merksatz": "チ plus kleines ョ: die beiden Zeichen verschmelzen zu einer einzigen Silbe.",
+      "beispiel": {
+        "wort": "チョコレート",
+        "lesung": "chokoreeto",
+        "bedeutung": "Schokolade"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ニャ",
+      "romaji": "nya",
+      "strokes": 4,
+      "merksatz": "ニ plus kleines ャ: die beiden Zeichen verschmelzen zu einer einzigen Silbe.",
+      "beispiel": {
+        "wort": "ニャー",
+        "lesung": "nyaa",
+        "bedeutung": "Miau"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ニュ",
+      "romaji": "nyu",
+      "strokes": 4,
+      "merksatz": "ニ plus kleines ュ: die beiden Zeichen verschmelzen zu einer einzigen Silbe.",
+      "beispiel": {
+        "wort": "ニュース",
+        "lesung": "nyuusu",
+        "bedeutung": "Nachrichten"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ニョ",
+      "romaji": "nyo",
+      "strokes": 5,
+      "merksatz": "ニ plus kleines ョ: die beiden Zeichen verschmelzen zu einer einzigen Silbe.",
+      "beispiel": {
+        "wort": "ニョッキ",
+        "lesung": "nyokki",
+        "bedeutung": "Gnocchi"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ヒャ",
+      "romaji": "hya",
+      "strokes": 4,
+      "merksatz": "ヒ plus kleines ャ: die beiden Zeichen verschmelzen zu einer einzigen Silbe.",
+      "beispiel": {
+        "wort": "ヒャー",
+        "lesung": "hyaa",
+        "bedeutung": "Ausruf des Schreckens"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ヒュ",
+      "romaji": "hyu",
+      "strokes": 4,
+      "merksatz": "ヒ plus kleines ュ: die beiden Zeichen verschmelzen zu einer einzigen Silbe.",
+      "beispiel": {
+        "wort": "ヒューズ",
+        "lesung": "hyuuzu",
+        "bedeutung": "Sicherung"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ヒョ",
+      "romaji": "hyo",
+      "strokes": 5,
+      "merksatz": "ヒ plus kleines ョ: die beiden Zeichen verschmelzen zu einer einzigen Silbe.",
+      "beispiel": {
+        "wort": "ヒョウ",
+        "lesung": "hyou",
+        "bedeutung": "Leopard"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ビャ",
+      "romaji": "bya",
+      "strokes": 6,
+      "merksatz": "ビ plus kleines ャ: die beiden Zeichen verschmelzen zu einer einzigen Silbe.",
+      "beispiel": {
+        "wort": "ビャク",
+        "lesung": "byaku",
+        "bedeutung": "(seltene Silbe)"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ビュ",
+      "romaji": "byu",
+      "strokes": 6,
+      "merksatz": "ビ plus kleines ュ: die beiden Zeichen verschmelzen zu einer einzigen Silbe.",
+      "beispiel": {
+        "wort": "インタビュー",
+        "lesung": "intabyuu",
+        "bedeutung": "Interview"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ビョ",
+      "romaji": "byo",
+      "strokes": 7,
+      "merksatz": "ビ plus kleines ョ: die beiden Zeichen verschmelzen zu einer einzigen Silbe.",
+      "beispiel": {
+        "wort": "ビョウキ",
+        "lesung": "byouki",
+        "bedeutung": "Krankheit (kana)"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ピャ",
+      "romaji": "pya",
+      "strokes": 5,
+      "merksatz": "ピ plus kleines ャ: die beiden Zeichen verschmelzen zu einer einzigen Silbe.",
+      "beispiel": {
+        "wort": "ピャク",
+        "lesung": "pyaku",
+        "bedeutung": "(seltene Silbe)"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ピュ",
+      "romaji": "pyu",
+      "strokes": 5,
+      "merksatz": "ピ plus kleines ュ: die beiden Zeichen verschmelzen zu einer einzigen Silbe.",
+      "beispiel": {
+        "wort": "コンピューター",
+        "lesung": "konpyuutaa",
+        "bedeutung": "Computer"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ピョ",
+      "romaji": "pyo",
+      "strokes": 6,
+      "merksatz": "ピ plus kleines ョ: die beiden Zeichen verschmelzen zu einer einzigen Silbe.",
+      "beispiel": {
+        "wort": "ピョンピョン",
+        "lesung": "pyonpyon",
+        "bedeutung": "hüpfend"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ミャ",
+      "romaji": "mya",
+      "strokes": 5,
+      "merksatz": "ミ plus kleines ャ: die beiden Zeichen verschmelzen zu einer einzigen Silbe.",
+      "beispiel": {
+        "wort": "ミャンマー",
+        "lesung": "myanmaa",
+        "bedeutung": "Myanmar"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ミュ",
+      "romaji": "myu",
+      "strokes": 5,
+      "merksatz": "ミ plus kleines ュ: die beiden Zeichen verschmelzen zu einer einzigen Silbe.",
+      "beispiel": {
+        "wort": "ミュージック",
+        "lesung": "myuujikku",
+        "bedeutung": "Musik"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "ミョ",
+      "romaji": "myo",
+      "strokes": 6,
+      "merksatz": "ミ plus kleines ョ: die beiden Zeichen verschmelzen zu einer einzigen Silbe.",
+      "beispiel": {
+        "wort": "ミョウ",
+        "lesung": "myou",
+        "bedeutung": "seltsam (kana)"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "リャ",
+      "romaji": "rya",
+      "strokes": 4,
+      "merksatz": "リ plus kleines ャ: die beiden Zeichen verschmelzen zu einer einzigen Silbe.",
+      "beispiel": {
+        "wort": "リャク",
+        "lesung": "ryaku",
+        "bedeutung": "Abkürzung (kana)"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "リュ",
+      "romaji": "ryu",
+      "strokes": 4,
+      "merksatz": "リ plus kleines ュ: die beiden Zeichen verschmelzen zu einer einzigen Silbe.",
+      "beispiel": {
+        "wort": "リュック",
+        "lesung": "ryukku",
+        "bedeutung": "Rucksack"
+      },
+      "verwechslung": []
+    },
+    {
+      "kana": "リョ",
+      "romaji": "ryo",
+      "strokes": 5,
+      "merksatz": "リ plus kleines ョ: die beiden Zeichen verschmelzen zu einer einzigen Silbe.",
+      "beispiel": {
+        "wort": "リョカン",
+        "lesung": "ryokan",
+        "bedeutung": "Gasthaus (kana)"
+      },
+      "verwechslung": []
+    }
+  ]
+}

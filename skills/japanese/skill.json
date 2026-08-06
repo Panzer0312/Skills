@@ -1,0 +1,13 @@
+{
+  "id": "japanese",
+  "name": "Japanisch",
+  "icon": "languages",
+  "accent": "#e05263",
+  "description": "Von den Kana bis zum Lesen ganzer Sätze.",
+  "modules": [
+    { "id": "hiragana", "type": "reference", "title": "Hiragana", "pinned": true, "widget": "KanaGrid", "data": ["kana/hiragana.json"] },
+    { "id": "katakana", "type": "reference", "title": "Katakana", "pinned": true, "widget": "KanaGrid", "data": ["kana/katakana.json"] },
+    { "id": "sonderfaelle", "type": "reference", "title": "Sonderfälle beim Lesen", "data": ["kana/sonderfaelle.json"] },
+    { "id": "kana-uebung", "type": "practice", "title": "Kana üben", "widget": "KanaDrill", "data": ["kana/hiragana.json", "kana/katakana.json"] }
+  ]
+}

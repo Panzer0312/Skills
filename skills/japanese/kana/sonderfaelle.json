@@ -1,0 +1,51 @@
+[
+  {
+    "Fall": "は als Partikel",
+    "Geschrieben": "は",
+    "Gesprochen": "wa",
+    "Merksatz": "Wenn は das Thema markiert, zieht es sich das w an: „Was ist das Thema?“ — wa.",
+    "Beispiel": "わたしはドイツ人です — watashi wa doitsujin desu"
+  },
+  {
+    "Fall": "へ als Richtungspartikel",
+    "Geschrieben": "へ",
+    "Gesprochen": "e",
+    "Merksatz": "Richtung braucht kein h — der Weg (e) ist frei.",
+    "Beispiel": "がっこうへいく — gakkou e iku"
+  },
+  {
+    "Fall": "を als Objektpartikel",
+    "Geschrieben": "を",
+    "Gesprochen": "o",
+    "Merksatz": "を kommt nur als Partikel vor und klingt immer wie ein schlichtes o.",
+    "Beispiel": "ほんをよむ — hon o yomu"
+  },
+  {
+    "Fall": "っ (kleines tsu)",
+    "Geschrieben": "っ",
+    "Gesprochen": "Verdopplung des Folgekonsonanten",
+    "Merksatz": "Das kleine tsu ist eine Stolperstufe: der nächste Konsonant wird doppelt genommen.",
+    "Beispiel": "がっこう — gakkou"
+  },
+  {
+    "Fall": "ー (Längungszeichen)",
+    "Geschrieben": "ー",
+    "Gesprochen": "vorheriger Vokal wird lang",
+    "Merksatz": "Ein waagerechter Strich zieht den Vokal in die Länge — wie ein gezogener Ton.",
+    "Beispiel": "コーヒー — koohii"
+  },
+  {
+    "Fall": "Devoicing von す und し",
+    "Geschrieben": "す, し",
+    "Gesprochen": "u bzw. i wird fast stumm",
+    "Merksatz": "Zwischen stimmlosen Konsonanten und am Wortende verschluckt Japanisch das u und das i.",
+    "Beispiel": "です klingt wie „des“, した klingt wie „schta“"
+  },
+  {
+    "Fall": "ん vor Labialen",
+    "Geschrieben": "ん",
+    "Gesprochen": "klingt wie m",
+    "Merksatz": "Vor b, p und m schließen die Lippen — ん wird zum m, geschrieben wird es trotzdem n.",
+    "Beispiel": "しんぶん klingt wie „schimbun“, geschrieben shinbun"
+  }
+]
