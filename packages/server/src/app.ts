@@ -1,6 +1,7 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import type { AppDatabase } from "./db/client.js";
+import { reviewRoutes } from "./routes/reviews.js";
 import { skillsRoutes } from "./routes/skills.js";
 
 export interface AppEnv {
@@ -19,6 +20,7 @@ export function createApp(database: AppDatabase): Hono<AppEnv> {
   app.get("/api/health", (c) => c.json({ ok: true }));
 
   app.route("/", skillsRoutes);
+  app.route("/", reviewRoutes);
 
   app.notFound((c) =>
     c.json({ error: { code: "not_found", message: "Route nicht gefunden." } }, 404),
