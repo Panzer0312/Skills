@@ -1,0 +1,9 @@
+node_modules/
+dist/
+data/app.db
+data/app.db-*
+data/backups/
+data/media/
+.env
+test-results/
+playwright-report/
