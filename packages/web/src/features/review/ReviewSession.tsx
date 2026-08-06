@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCallback, useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { api, ApiError } from "../../api/client.js";
 import type { ReviewCard } from "../../api/types.js";
 import { formatDue } from "./formatDue.js";
@@ -12,7 +13,7 @@ const RATINGS = [
 ];
 
 export function ReviewSession() {
-  const params = new URLSearchParams(window.location.search);
+  const [params] = useSearchParams();
   const skillId = params.get("skillId");
   const moduleId = params.get("moduleId");
   const queryKey = ["queue", skillId, moduleId];
