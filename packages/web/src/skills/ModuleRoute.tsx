@@ -51,8 +51,10 @@ export function ModuleRoute() {
   switch (module.type) {
     case "srs-deck":
       return <DeckRenderer skillId={skill.manifest.id} moduleId={module.id} title={module.title} />;
-    case "course":
-      return <CourseRenderer skillId={skill.manifest.id} title={module.title} />;
+    case "course": {
+      const folder = module.data[0]?.split("/")[0];
+      return <CourseRenderer skillId={skill.manifest.id} title={module.title} folder={folder} />;
+    }
     case "reference":
       return <ReferenceRenderer title={module.title} data={data} />;
     case "library":

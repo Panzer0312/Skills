@@ -5,8 +5,8 @@ import { api } from "../api/client.js";
 import { mdxComponents } from "../mdx/components.js";
 import { isUnlocked, sortLessons, type LessonMeta } from "../mdx/lessons.js";
 
-const lessonModules = import.meta.glob("../../../../skills/*/lessons/*.mdx");
-const lessonMeta = import.meta.glob("../../../../skills/*/lessons/*.mdx", {
+const lessonModules = import.meta.glob("../../../../skills/*/*/*.mdx");
+const lessonMeta = import.meta.glob("../../../../skills/*/*/*.mdx", {
   eager: true,
   import: "meta",
 });
@@ -15,7 +15,15 @@ interface ProgressResponse {
   lessons: { lessonId: string; status: string }[];
 }
 
-export function CourseRenderer({ skillId, title }: { skillId: string; title: string }) {
+export function CourseRenderer({
+  skillId,
+  title,
+  folder = "lessons",
+}: {
+  skillId: string;
+  title: string;
+  folder?: string;
+}) {
   const queryClient = useQueryClient();
   const [openId, setOpenId] = useState<string | null>(null);
 
@@ -25,7 +33,7 @@ export function CourseRenderer({ skillId, title }: { skillId: string; title: str
   });
 
   const lessons = useMemo(() => {
-    const prefix = `/skills/${skillId}/lessons/`;
+    const prefix = `/skills/${skillId}/${folder}/`;
     const entries: { meta: LessonMeta; path: string }[] = [];
     for (const [path, meta] of Object.entries(lessonMeta)) {
       if (!path.includes(prefix)) continue;
@@ -35,7 +43,7 @@ export function CourseRenderer({ skillId, title }: { skillId: string; title: str
       meta,
       path: entries.find((e) => e.meta.id === meta.id)!.path,
     }));
-  }, [skillId]);
+  }, [skillId, folder]);
 
   const done = new Set(
     (progress.data?.lessons ?? []).filter((l) => l.status === "done").map((l) => l.lessonId),

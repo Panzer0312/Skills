@@ -9,6 +9,7 @@
     { "id": "katakana", "type": "reference", "title": "Katakana", "pinned": true, "widget": "KanaGrid", "data": ["kana/katakana.json"] },
     { "id": "sonderfaelle", "type": "reference", "title": "Sonderfälle beim Lesen", "data": ["kana/sonderfaelle.json"] },
     { "id": "kana-uebung", "type": "practice", "title": "Kana üben", "widget": "KanaDrill", "data": ["kana/hiragana.json", "kana/katakana.json"] },
-    { "id": "vokabeln", "type": "srs-deck", "title": "Themen-Vokabeln", "data": ["decks/*.json"] }
+    { "id": "vokabeln", "type": "srs-deck", "title": "Themen-Vokabeln", "data": ["decks/*.json"] },
+    { "id": "grammatik", "type": "course", "title": "Grammatik & Sätze", "data": ["grammar/*.mdx"] }
   ]
 }
