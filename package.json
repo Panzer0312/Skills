@@ -9,12 +9,16 @@
     "node": ">=20"
   },
   "scripts": {
+    "dev": "concurrently -n server,web -c blue,magenta \"npm run dev -w @skills/server\" \"npm run dev -w @skills/web\"",
     "test": "vitest run",
     "test:watch": "vitest",
+    "test:e2e": "playwright test",
     "build": "npm run build --workspaces --if-present",
     "typecheck": "tsc -b"
   },
   "devDependencies": {
+    "@playwright/test": "^1.48.0",
+    "concurrently": "^9.0.1",
     "typescript": "^5.6.0",
     "vitest": "^2.1.0",
     "@types/node": "^22.7.0"

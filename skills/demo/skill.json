@@ -1,0 +1,12 @@
+{
+  "id": "demo",
+  "name": "Demo",
+  "icon": "sparkles",
+  "accent": "#4f46e5",
+  "description": "Beispiel-Lernbereich. Zeigt alle Modultypen und dient als Vorlage.",
+  "modules": [
+    { "id": "karten", "type": "srs-deck", "title": "Beispielkarten", "data": ["decks/demo.json"] },
+    { "id": "kurs", "type": "course", "title": "Kurzeinführung", "data": ["lessons/*.mdx"] },
+    { "id": "tasten", "type": "reference", "title": "Tastenkürzel", "pinned": true, "data": ["reference/tasten.json"] }
+  ]
+}

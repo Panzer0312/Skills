@@ -1,0 +1,8 @@
+{
+  "deck": "Beispielkarten",
+  "cards": [
+    { "key": "srs", "front": "Was heißt SRS?", "back": "Spaced Repetition System", "tags": ["begriff"] },
+    { "key": "fsrs", "front": "Was plant die Wiederholungen?", "back": "Der FSRS-Scheduler", "tags": ["begriff"] },
+    { "key": "manifest", "front": "Welche Datei beschreibt einen Lernbereich?", "back": "skill.json", "tags": ["aufbau"] }
+  ]
+}

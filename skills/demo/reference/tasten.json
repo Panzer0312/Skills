@@ -1,0 +1,7 @@
+[
+  { "Taste": "Leertaste", "Wirkung": "Karte aufdecken" },
+  { "Taste": "1", "Wirkung": "Nochmal" },
+  { "Taste": "2", "Wirkung": "Schwer" },
+  { "Taste": "3", "Wirkung": "Gut" },
+  { "Taste": "4", "Wirkung": "Leicht" }
+]
