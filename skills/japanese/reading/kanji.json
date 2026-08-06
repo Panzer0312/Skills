@@ -1,0 +1,523 @@
+[
+  {
+    "kanji": "一",
+    "bedeutung": "eins",
+    "on": ["いち"],
+    "kun": ["ひと.つ"],
+    "strokes": 1,
+    "radikal": "一",
+    "merksatz": "Ein einzelner waagerechter Strich — die einfachste Zahl, mit der alles anfängt.",
+    "beispiele": [
+      { "wort": "一月", "lesung": "いちがつ", "bedeutung": "Januar", "lesungsart": "on" },
+      { "wort": "一つ", "lesung": "ひとつ", "bedeutung": "eins (Stück)", "lesungsart": "kun" }
+    ]
+  },
+  {
+    "kanji": "二",
+    "bedeutung": "zwei",
+    "on": ["に"],
+    "kun": ["ふた.つ"],
+    "strokes": 2,
+    "radikal": "二",
+    "merksatz": "Zwei Striche übereinander — genau doppelt so viel wie 一.",
+    "beispiele": [
+      { "wort": "二月", "lesung": "にがつ", "bedeutung": "Februar", "lesungsart": "on" },
+      { "wort": "二つ", "lesung": "ふたつ", "bedeutung": "zwei (Stück)", "lesungsart": "kun" }
+    ]
+  },
+  {
+    "kanji": "三",
+    "bedeutung": "drei",
+    "on": ["さん"],
+    "kun": ["みっ.つ"],
+    "strokes": 3,
+    "radikal": "一",
+    "merksatz": "Drei Striche übereinander — konsequent weitergezählt von 一 und 二.",
+    "beispiele": [
+      { "wort": "三月", "lesung": "さんがつ", "bedeutung": "März", "lesungsart": "on" },
+      { "wort": "三つ", "lesung": "みっつ", "bedeutung": "drei (Stück)", "lesungsart": "kun" }
+    ]
+  },
+  {
+    "kanji": "四",
+    "bedeutung": "vier",
+    "on": ["し"],
+    "kun": ["よん", "よっ.つ"],
+    "strokes": 5,
+    "radikal": "囗",
+    "merksatz": "Ein Kasten mit gespreizten Beinen darin — die on-Lesung し klingt wie „Tod\" und wird deshalb oft gemieden.",
+    "beispiele": [
+      { "wort": "四月", "lesung": "しがつ", "bedeutung": "April", "lesungsart": "on" },
+      { "wort": "四つ", "lesung": "よっつ", "bedeutung": "vier (Stück)", "lesungsart": "kun" }
+    ]
+  },
+  {
+    "kanji": "五",
+    "bedeutung": "fünf",
+    "on": ["ご"],
+    "kun": ["いつ.つ"],
+    "strokes": 4,
+    "radikal": "二",
+    "merksatz": "Zwei Striche mit einem X dazwischen — die Mitte der einstelligen Zahlen.",
+    "beispiele": [
+      { "wort": "五月", "lesung": "ごがつ", "bedeutung": "Mai", "lesungsart": "on" },
+      { "wort": "五つ", "lesung": "いつつ", "bedeutung": "fünf (Stück)", "lesungsart": "kun" }
+    ]
+  },
+  {
+    "kanji": "六",
+    "bedeutung": "sechs",
+    "on": ["ろく"],
+    "kun": ["むっ.つ"],
+    "strokes": 4,
+    "radikal": "八",
+    "merksatz": "Ein Dach über einer Gabel — sechs sieht aus wie ein kleines Haus mit zwei Beinen.",
+    "beispiele": [
+      { "wort": "六月", "lesung": "ろくがつ", "bedeutung": "Juni", "lesungsart": "on" },
+      { "wort": "六つ", "lesung": "むっつ", "bedeutung": "sechs (Stück)", "lesungsart": "kun" }
+    ]
+  },
+  {
+    "kanji": "七",
+    "bedeutung": "sieben",
+    "on": ["しち"],
+    "kun": ["なな", "なな.つ"],
+    "strokes": 2,
+    "radikal": "一",
+    "merksatz": "Ein Haken, der einen Strich durchschneidet — heute meist なな gelesen, außer in Monatsnamen.",
+    "beispiele": [
+      { "wort": "七月", "lesung": "しちがつ", "bedeutung": "Juli", "lesungsart": "on" },
+      { "wort": "七つ", "lesung": "ななつ", "bedeutung": "sieben (Stück)", "lesungsart": "kun" }
+    ]
+  },
+  {
+    "kanji": "八",
+    "bedeutung": "acht",
+    "on": ["はち"],
+    "kun": ["やっ.つ"],
+    "strokes": 2,
+    "radikal": "八",
+    "merksatz": "Zwei auseinanderlaufende Striche — wie zwei Beine, die sich spreizen, das Radikal für „teilen\".",
+    "beispiele": [
+      { "wort": "八月", "lesung": "はちがつ", "bedeutung": "August", "lesungsart": "on" },
+      { "wort": "八つ", "lesung": "やっつ", "bedeutung": "acht (Stück)", "lesungsart": "kun" }
+    ]
+  },
+  {
+    "kanji": "九",
+    "bedeutung": "neun",
+    "on": ["きゅう", "く"],
+    "kun": ["ここの.つ"],
+    "strokes": 2,
+    "radikal": "乙",
+    "merksatz": "Ein Haken mit langem Schwanz — kurz vor der zweistelligen Zahl, fast am Ziel.",
+    "beispiele": [
+      { "wort": "九月", "lesung": "くがつ", "bedeutung": "September", "lesungsart": "on" },
+      { "wort": "九つ", "lesung": "ここのつ", "bedeutung": "neun (Stück)", "lesungsart": "kun" }
+    ]
+  },
+  {
+    "kanji": "十",
+    "bedeutung": "zehn",
+    "on": ["じゅう"],
+    "kun": ["とお"],
+    "strokes": 2,
+    "radikal": "十",
+    "merksatz": "Ein Kreuz — senkrecht und waagerecht treffen sich genau in der Mitte, bei der runden Zahl zehn.",
+    "beispiele": [
+      { "wort": "十月", "lesung": "じゅうがつ", "bedeutung": "Oktober", "lesungsart": "on" },
+      { "wort": "十日", "lesung": "とおか", "bedeutung": "der Zehnte, zehn Tage", "lesungsart": "kun" }
+    ]
+  },
+  {
+    "kanji": "日",
+    "bedeutung": "Tag, Sonne",
+    "on": ["にち", "じつ"],
+    "kun": ["ひ", "か"],
+    "strokes": 4,
+    "radikal": "日",
+    "merksatz": "Ein Fenster mit Querbalken, durch das die Sonne scheint. Sonne und Tag sind dasselbe Zeichen.",
+    "beispiele": [
+      { "wort": "日本", "lesung": "にほん", "bedeutung": "Japan", "lesungsart": "on" },
+      { "wort": "日", "lesung": "ひ", "bedeutung": "Tag, Sonne", "lesungsart": "kun" },
+      { "wort": "三日", "lesung": "みっか", "bedeutung": "der dritte, drei Tage", "lesungsart": "kun" }
+    ]
+  },
+  {
+    "kanji": "月",
+    "bedeutung": "Monat, Mond",
+    "on": ["げつ", "がつ"],
+    "kun": ["つき"],
+    "strokes": 4,
+    "radikal": "月",
+    "merksatz": "Eine Mondsichel mit zwei Strichen — Monat und Mond teilen sich dieses Zeichen, weil der Mondlauf den Monat bestimmt.",
+    "beispiele": [
+      { "wort": "月曜日", "lesung": "げつようび", "bedeutung": "Montag", "lesungsart": "on" },
+      { "wort": "月", "lesung": "つき", "bedeutung": "Mond, Monat", "lesungsart": "kun" }
+    ]
+  },
+  {
+    "kanji": "火",
+    "bedeutung": "Feuer",
+    "on": ["か"],
+    "kun": ["ひ"],
+    "strokes": 4,
+    "radikal": "火",
+    "merksatz": "Zwei Flammen, die aus einem Kern nach oben schlagen — ein loderndes Feuer.",
+    "beispiele": [
+      { "wort": "火曜日", "lesung": "かようび", "bedeutung": "Dienstag", "lesungsart": "on" },
+      { "wort": "火", "lesung": "ひ", "bedeutung": "Feuer", "lesungsart": "kun" }
+    ]
+  },
+  {
+    "kanji": "水",
+    "bedeutung": "Wasser",
+    "on": ["すい"],
+    "kun": ["みず"],
+    "strokes": 4,
+    "radikal": "水",
+    "merksatz": "Ein Strom mit Wellen und Spritzern zu beiden Seiten — fließendes Wasser.",
+    "beispiele": [
+      { "wort": "水曜日", "lesung": "すいようび", "bedeutung": "Mittwoch", "lesungsart": "on" },
+      { "wort": "水", "lesung": "みず", "bedeutung": "Wasser", "lesungsart": "kun" }
+    ]
+  },
+  {
+    "kanji": "木",
+    "bedeutung": "Baum, Holz",
+    "on": ["もく", "ぼく"],
+    "kun": ["き"],
+    "strokes": 4,
+    "radikal": "木",
+    "merksatz": "Ein Stamm mit Ästen und Wurzeln — das Bild eines Baumes bleibt in jeder Zusammensetzung erkennbar.",
+    "beispiele": [
+      { "wort": "木曜日", "lesung": "もくようび", "bedeutung": "Donnerstag", "lesungsart": "on" },
+      { "wort": "木", "lesung": "き", "bedeutung": "Baum", "lesungsart": "kun" }
+    ]
+  },
+  {
+    "kanji": "金",
+    "bedeutung": "Gold, Geld",
+    "on": ["きん", "こん"],
+    "kun": ["かね"],
+    "strokes": 8,
+    "radikal": "金",
+    "merksatz": "Ein Dach über zwei Klumpen im Boden — Metall, das man aus der Erde gräbt: Gold und Geld.",
+    "beispiele": [
+      { "wort": "金曜日", "lesung": "きんようび", "bedeutung": "Freitag", "lesungsart": "on" },
+      { "wort": "お金", "lesung": "おかね", "bedeutung": "Geld", "lesungsart": "kun" }
+    ]
+  },
+  {
+    "kanji": "土",
+    "bedeutung": "Erde",
+    "on": ["ど", "と"],
+    "kun": ["つち"],
+    "strokes": 3,
+    "radikal": "土",
+    "merksatz": "Ein Kreuz auf einem Sockel — ein Erdhaufen, aus dem etwas herauswächst.",
+    "beispiele": [
+      { "wort": "土曜日", "lesung": "どようび", "bedeutung": "Samstag", "lesungsart": "on" },
+      { "wort": "土", "lesung": "つち", "bedeutung": "Erde", "lesungsart": "kun" }
+    ]
+  },
+  {
+    "kanji": "人",
+    "bedeutung": "Mensch",
+    "on": ["じん", "にん"],
+    "kun": ["ひと"],
+    "strokes": 2,
+    "radikal": "人",
+    "merksatz": "Zwei Beine, die einen gehenden Menschen von der Seite zeigen.",
+    "beispiele": [
+      { "wort": "日本人", "lesung": "にほんじん", "bedeutung": "Japaner", "lesungsart": "on" },
+      { "wort": "人", "lesung": "ひと", "bedeutung": "Mensch", "lesungsart": "kun" }
+    ]
+  },
+  {
+    "kanji": "大",
+    "bedeutung": "groß",
+    "on": ["だい", "たい"],
+    "kun": ["おお.きい"],
+    "strokes": 3,
+    "radikal": "大",
+    "merksatz": "Ein Mensch mit ausgebreiteten Armen — so groß wie möglich.",
+    "beispiele": [
+      { "wort": "大学", "lesung": "だいがく", "bedeutung": "Universität", "lesungsart": "on" },
+      { "wort": "大きい", "lesung": "おおきい", "bedeutung": "groß", "lesungsart": "kun" }
+    ]
+  },
+  {
+    "kanji": "小",
+    "bedeutung": "klein",
+    "on": ["しょう"],
+    "kun": ["ちい.さい"],
+    "strokes": 3,
+    "radikal": "小",
+    "merksatz": "Ein Haken mit zwei kleinen Punkten daneben — winzig im Vergleich zu 大.",
+    "beispiele": [
+      { "wort": "小学校", "lesung": "しょうがっこう", "bedeutung": "Grundschule", "lesungsart": "on" },
+      { "wort": "小さい", "lesung": "ちいさい", "bedeutung": "klein", "lesungsart": "kun" }
+    ]
+  },
+  {
+    "kanji": "上",
+    "bedeutung": "oben, hoch",
+    "on": ["じょう"],
+    "kun": ["うえ", "あ.げる"],
+    "strokes": 3,
+    "radikal": "一",
+    "merksatz": "Ein Strich über der Grundlinie — alles, was darüber liegt, ist oben.",
+    "beispiele": [
+      { "wort": "上手", "lesung": "じょうず", "bedeutung": "geschickt", "lesungsart": "on" },
+      { "wort": "上", "lesung": "うえ", "bedeutung": "oben", "lesungsart": "kun" }
+    ]
+  },
+  {
+    "kanji": "下",
+    "bedeutung": "unten",
+    "on": ["か", "げ"],
+    "kun": ["した", "さ.げる"],
+    "strokes": 3,
+    "radikal": "一",
+    "merksatz": "Ein Strich unter der Grundlinie — das Spiegelbild von 上.",
+    "beispiele": [
+      { "wort": "地下", "lesung": "ちか", "bedeutung": "unterirdisch, Keller", "lesungsart": "on" },
+      { "wort": "下", "lesung": "した", "bedeutung": "unten", "lesungsart": "kun" }
+    ]
+  },
+  {
+    "kanji": "中",
+    "bedeutung": "Mitte, in",
+    "on": ["ちゅう"],
+    "kun": ["なか"],
+    "strokes": 4,
+    "radikal": "丨",
+    "merksatz": "Ein senkrechter Strich, der ein Rechteck genau in der Mitte durchbohrt.",
+    "beispiele": [
+      { "wort": "中学校", "lesung": "ちゅうがっこう", "bedeutung": "Mittelschule", "lesungsart": "on" },
+      { "wort": "中", "lesung": "なか", "bedeutung": "in, Mitte", "lesungsart": "kun" }
+    ]
+  },
+  {
+    "kanji": "年",
+    "bedeutung": "Jahr",
+    "on": ["ねん"],
+    "kun": ["とし"],
+    "strokes": 6,
+    "radikal": "干",
+    "merksatz": "Eine Ähre, die ein Jahr lang wächst, bevor sie geerntet wird.",
+    "beispiele": [
+      { "wort": "来年", "lesung": "らいねん", "bedeutung": "nächstes Jahr", "lesungsart": "on" },
+      { "wort": "年", "lesung": "とし", "bedeutung": "Jahr", "lesungsart": "kun" }
+    ]
+  },
+  {
+    "kanji": "時",
+    "bedeutung": "Zeit, Uhr",
+    "on": ["じ"],
+    "kun": ["とき"],
+    "strokes": 10,
+    "radikal": "日",
+    "merksatz": "Die Sonne 日 neben einem Tempel-Zeichen — Zeit wird an der Sonne gemessen.",
+    "beispiele": [
+      { "wort": "時間", "lesung": "じかん", "bedeutung": "Zeit", "lesungsart": "on" },
+      { "wort": "時", "lesung": "とき", "bedeutung": "Zeitpunkt", "lesungsart": "kun" }
+    ]
+  },
+  {
+    "kanji": "分",
+    "bedeutung": "Minute, Teil",
+    "on": ["ふん", "ぶん"],
+    "kun": ["わ.ける"],
+    "strokes": 4,
+    "radikal": "刀",
+    "merksatz": "Ein Messer 刀, das etwas in zwei Teile schneidet — daher „teilen\" und „Minute\" als Zeitteil.",
+    "beispiele": [
+      { "wort": "五分", "lesung": "ごふん", "bedeutung": "fünf Minuten", "lesungsart": "on" },
+      { "wort": "分ける", "lesung": "わける", "bedeutung": "teilen", "lesungsart": "kun" }
+    ]
+  },
+  {
+    "kanji": "本",
+    "bedeutung": "Buch, Ursprung",
+    "on": ["ほん"],
+    "kun": ["もと"],
+    "strokes": 5,
+    "radikal": "木",
+    "merksatz": "Ein Baum 木 mit einem Strich an der Wurzel — die Wurzel ist der Ursprung, ein Buch die Quelle des Wissens.",
+    "beispiele": [
+      { "wort": "日本", "lesung": "にほん", "bedeutung": "Japan", "lesungsart": "on" },
+      { "wort": "本", "lesung": "もと", "bedeutung": "Ursprung", "lesungsart": "kun" }
+    ]
+  },
+  {
+    "kanji": "今",
+    "bedeutung": "jetzt",
+    "on": ["こん"],
+    "kun": ["いま"],
+    "strokes": 4,
+    "radikal": "人",
+    "merksatz": "Ein Deckel über einer Person — der Moment, der genau jetzt über einem liegt.",
+    "beispiele": [
+      { "wort": "今週", "lesung": "こんしゅう", "bedeutung": "diese Woche", "lesungsart": "on" },
+      { "wort": "今", "lesung": "いま", "bedeutung": "jetzt", "lesungsart": "kun" }
+    ]
+  },
+  {
+    "kanji": "何",
+    "bedeutung": "was",
+    "on": ["か"],
+    "kun": ["なに", "なん"],
+    "strokes": 7,
+    "radikal": "人",
+    "merksatz": "Ein Mensch, der etwas auf der Schulter trägt und fragt: was ist das eigentlich?",
+    "beispiele": [
+      { "wort": "幾何学", "lesung": "きかがく", "bedeutung": "Geometrie", "lesungsart": "on" },
+      { "wort": "何", "lesung": "なに", "bedeutung": "was", "lesungsart": "kun" }
+    ]
+  },
+  {
+    "kanji": "学",
+    "bedeutung": "lernen, Wissenschaft",
+    "on": ["がく"],
+    "kun": ["まな.ぶ"],
+    "strokes": 8,
+    "radikal": "子",
+    "merksatz": "Ein Kind 子 unter einem Dach, das mit beiden Händen etwas aufnimmt — lernen als Kinderaufgabe.",
+    "beispiele": [
+      { "wort": "学生", "lesung": "がくせい", "bedeutung": "Student", "lesungsart": "on" },
+      { "wort": "学ぶ", "lesung": "まなぶ", "bedeutung": "lernen", "lesungsart": "kun" }
+    ]
+  },
+  {
+    "kanji": "校",
+    "bedeutung": "Schule",
+    "on": ["こう"],
+    "kun": [],
+    "strokes": 10,
+    "radikal": "木",
+    "merksatz": "Holz 木 neben einem Zeichen für „vergleichen\" — an der Schule prüft man Wissen im Vergleich.",
+    "beispiele": [
+      { "wort": "学校", "lesung": "がっこう", "bedeutung": "Schule", "lesungsart": "on" }
+    ]
+  },
+  {
+    "kanji": "先",
+    "bedeutung": "vorher, zuvor",
+    "on": ["せん"],
+    "kun": ["さき"],
+    "strokes": 6,
+    "radikal": "儿",
+    "merksatz": "Ein Bein, das über eine Grundlinie hinausragt — schon einen Schritt voraus, vorher da.",
+    "beispiele": [
+      { "wort": "先生", "lesung": "せんせい", "bedeutung": "Lehrer", "lesungsart": "on" },
+      { "wort": "先", "lesung": "さき", "bedeutung": "vorher, Spitze", "lesungsart": "kun" }
+    ]
+  },
+  {
+    "kanji": "生",
+    "bedeutung": "Leben, roh, geboren werden",
+    "on": ["せい", "しょう"],
+    "kun": ["い.きる", "う.まれる", "なま", "は.える"],
+    "strokes": 5,
+    "radikal": "生",
+    "merksatz": "Ein Halm, der aus der Erde stößt: alles Lebendige wächst nach oben. Kein Kanji hat mehr Lesungen — der Kontext entscheidet.",
+    "beispiele": [
+      { "wort": "先生", "lesung": "せんせい", "bedeutung": "Lehrer", "lesungsart": "on" },
+      { "wort": "学生", "lesung": "がくせい", "bedeutung": "Student", "lesungsart": "on" },
+      { "wort": "生ビール", "lesung": "なまビール", "bedeutung": "Fassbier", "lesungsart": "kun" }
+    ]
+  },
+  {
+    "kanji": "田",
+    "bedeutung": "Reisfeld",
+    "on": ["でん"],
+    "kun": ["た"],
+    "strokes": 5,
+    "radikal": "田",
+    "merksatz": "Ein Feld, von oben gesehen und in Parzellen eingeteilt — ein Reisfeld.",
+    "beispiele": [
+      { "wort": "田園", "lesung": "でんえん", "bedeutung": "ländliche Gegend", "lesungsart": "on" },
+      { "wort": "田んぼ", "lesung": "たんぼ", "bedeutung": "Reisfeld", "lesungsart": "kun" }
+    ]
+  },
+  {
+    "kanji": "山",
+    "bedeutung": "Berg",
+    "on": ["さん"],
+    "kun": ["やま"],
+    "strokes": 3,
+    "radikal": "山",
+    "merksatz": "Drei Gipfel nebeneinander — die einfachste Zeichnung eines Berges.",
+    "beispiele": [
+      { "wort": "富士山", "lesung": "ふじさん", "bedeutung": "Fujisan", "lesungsart": "on" },
+      { "wort": "山", "lesung": "やま", "bedeutung": "Berg", "lesungsart": "kun" }
+    ]
+  },
+  {
+    "kanji": "川",
+    "bedeutung": "Fluss",
+    "on": ["せん"],
+    "kun": ["かわ"],
+    "strokes": 3,
+    "radikal": "巛",
+    "merksatz": "Drei Wellenlinien, die nebeneinander fließen — ein Fluss mit Strömung.",
+    "beispiele": [
+      { "wort": "河川", "lesung": "かせん", "bedeutung": "Flusslauf", "lesungsart": "on" },
+      { "wort": "川", "lesung": "かわ", "bedeutung": "Fluss", "lesungsart": "kun" }
+    ]
+  },
+  {
+    "kanji": "語",
+    "bedeutung": "Sprache, sprechen",
+    "on": ["ご"],
+    "kun": ["かた.る"],
+    "strokes": 14,
+    "radikal": "言",
+    "merksatz": "Worte 言 neben einem Zeichen für „ich\" — wenn ich rede, entsteht Sprache.",
+    "beispiele": [
+      { "wort": "日本語", "lesung": "にほんご", "bedeutung": "Japanisch (Sprache)", "lesungsart": "on" },
+      { "wort": "語る", "lesung": "かたる", "bedeutung": "erzählen", "lesungsart": "kun" }
+    ]
+  },
+  {
+    "kanji": "女",
+    "bedeutung": "Frau",
+    "on": ["じょ"],
+    "kun": ["おんな"],
+    "strokes": 3,
+    "radikal": "女",
+    "merksatz": "Eine kniende Gestalt mit geschwungenen Linien — das alte Bild einer Frau.",
+    "beispiele": [
+      { "wort": "女性", "lesung": "じょせい", "bedeutung": "Frau (formal)", "lesungsart": "on" },
+      { "wort": "女", "lesung": "おんな", "bedeutung": "Frau", "lesungsart": "kun" }
+    ]
+  },
+  {
+    "kanji": "子",
+    "bedeutung": "Kind",
+    "on": ["し"],
+    "kun": ["こ"],
+    "strokes": 3,
+    "radikal": "子",
+    "merksatz": "Ein Kind mit großem Kopf und ausgebreiteten Armen in der Wiege.",
+    "beispiele": [
+      { "wort": "帽子", "lesung": "ぼうし", "bedeutung": "Hut", "lesungsart": "on" },
+      { "wort": "子供", "lesung": "こども", "bedeutung": "Kind", "lesungsart": "kun" }
+    ]
+  },
+  {
+    "kanji": "見",
+    "bedeutung": "sehen",
+    "on": ["けん"],
+    "kun": ["み.る"],
+    "strokes": 7,
+    "radikal": "見",
+    "merksatz": "Ein Auge auf zwei Beinen — sehen ist hier fast wörtlich ein gehendes Auge.",
+    "beispiele": [
+      { "wort": "見学", "lesung": "けんがく", "bedeutung": "Besichtigung", "lesungsart": "on" },
+      { "wort": "見る", "lesung": "みる", "bedeutung": "sehen", "lesungsart": "kun" }
+    ]
+  }
+]

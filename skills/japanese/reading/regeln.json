@@ -1,0 +1,44 @@
+[
+  {
+    "Regel": "on-Lesung in Komposita",
+    "Erklaerung": "Stehen zwei oder mehr Kanji direkt nebeneinander, gilt fast immer die on-Lesung — die aus dem Chinesischen entlehnte.",
+    "Merksatz": "Kanji an Kanji: chinesisch. Kanji allein: japanisch.",
+    "Beispiel": "学生 = がくせい (on), aber 学ぶ = まなぶ (kun)"
+  },
+  {
+    "Regel": "kun-Lesung allein oder mit Okurigana",
+    "Erklaerung": "Steht ein Kanji allein oder folgen ihm Hiragana als Endung, gilt die kun-Lesung.",
+    "Merksatz": "Hiragana am Schwanz heißt: japanisch lesen.",
+    "Beispiel": "食べる = たべる, aber 食事 = しょくじ"
+  },
+  {
+    "Regel": "Rendaku",
+    "Erklaerung": "Im zweiten Teil einer Zusammensetzung wird ein stimmloser Anlaut oft stimmhaft: k→g, s→z, t→d, h→b.",
+    "Merksatz": "Das zweite Wort wird weich, weil es sich an das erste anlehnt.",
+    "Beispiel": "ひと + ひと = ひとびと (Leute), て + かみ = てがみ (Brief)"
+  },
+  {
+    "Regel": "Lymans Gesetz",
+    "Erklaerung": "Rendaku unterbleibt, wenn der zweite Wortteil bereits einen stimmhaften Konsonanten enthält.",
+    "Merksatz": "Ein stimmhafter Laut pro Wortteil reicht — zwei sind Japanisch zu schwer.",
+    "Beispiel": "やま + かぜ bleibt やまかぜ, weil かぜ schon das stimmhafte z trägt."
+  },
+  {
+    "Regel": "Partikeln lesen sich anders",
+    "Erklaerung": "は als Themenpartikel ist wa, へ als Richtungspartikel ist e, を ist immer o.",
+    "Merksatz": "Partikeln sind Funktionswörter — sie behalten die alte Aussprache.",
+    "Beispiel": "わたしは = watashi wa"
+  },
+  {
+    "Regel": "Zahlen und Zählwörter wechseln den Laut",
+    "Erklaerung": "Vor bestimmten Zählwörtern verändern sich Zahl und Zählwort lautlich.",
+    "Merksatz": "Eins, drei, sechs, acht, zehn machen den Zähler hart oder weich.",
+    "Beispiel": "一本 = いっぽん, 三本 = さんぼん, 六本 = ろっぽん"
+  },
+  {
+    "Regel": "Sonderlesungen (Jukujikun)",
+    "Erklaerung": "Manche Wörter haben eine Lesung, die sich nicht aus den Einzelzeichen ableiten lässt. Sie müssen als Ganzes gelernt werden.",
+    "Merksatz": "Das Wort zuerst, die Zeichen danach.",
+    "Beispiel": "今日 = きょう, 明日 = あした, 大人 = おとな"
+  }
+]

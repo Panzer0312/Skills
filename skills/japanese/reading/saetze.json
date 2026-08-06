@@ -1,0 +1,902 @@
+[
+  {
+    "id": "w-001",
+    "stufe": "wort",
+    "japanisch": "学生",
+    "uebersetzung": "Student",
+    "tokens": [
+      { "text": "学生", "lesung": "がくせい", "bedeutung": "Student", "begruendung": "Zwei Kanji nebeneinander: beide on-Lesung, 学 = がく, 生 = せい." }
+    ]
+  },
+  {
+    "id": "w-002",
+    "stufe": "wort",
+    "japanisch": "日本",
+    "uebersetzung": "Japan",
+    "tokens": [
+      { "text": "日本", "lesung": "にほん", "bedeutung": "Japan", "begruendung": "Zwei Kanji nebeneinander: on-Lesung, 日 = に, 本 = ほん." }
+    ]
+  },
+  {
+    "id": "w-003",
+    "stufe": "wort",
+    "japanisch": "先生",
+    "uebersetzung": "Lehrer",
+    "tokens": [
+      { "text": "先生", "lesung": "せんせい", "bedeutung": "Lehrer", "begruendung": "Zwei Kanji nebeneinander: beide on-Lesung, 先 = せん, 生 = せい." }
+    ]
+  },
+  {
+    "id": "w-004",
+    "stufe": "wort",
+    "japanisch": "大学",
+    "uebersetzung": "Universität",
+    "tokens": [
+      { "text": "大学", "lesung": "だいがく", "bedeutung": "Universität", "begruendung": "Kompositum: on-Lesung, 大 = だい, 学 = がく." }
+    ]
+  },
+  {
+    "id": "w-005",
+    "stufe": "wort",
+    "japanisch": "小学校",
+    "uebersetzung": "Grundschule",
+    "tokens": [
+      { "text": "小学校", "lesung": "しょうがっこう", "bedeutung": "Grundschule", "begruendung": "Drei Kanji in Folge: alle on-Lesung; 学校 wird durch die Verdopplung zu がっこう." }
+    ]
+  },
+  {
+    "id": "w-006",
+    "stufe": "wort",
+    "japanisch": "中学校",
+    "uebersetzung": "Mittelschule",
+    "tokens": [
+      { "text": "中学校", "lesung": "ちゅうがっこう", "bedeutung": "Mittelschule", "begruendung": "Drei Kanji in Folge: on-Lesung, wie bei 小学校." }
+    ]
+  },
+  {
+    "id": "w-007",
+    "stufe": "wort",
+    "japanisch": "今年",
+    "uebersetzung": "dieses Jahr",
+    "tokens": [
+      { "text": "今年", "lesung": "ことし", "bedeutung": "dieses Jahr", "begruendung": "Sonderlesung (Jukujikun): 今年 wird als Ganzes ことし gelesen, nicht aus den Einzellesungen zusammengesetzt." }
+    ]
+  },
+  {
+    "id": "w-008",
+    "stufe": "wort",
+    "japanisch": "来年",
+    "uebersetzung": "nächstes Jahr",
+    "tokens": [
+      { "text": "来年", "lesung": "らいねん", "bedeutung": "nächstes Jahr", "begruendung": "Zwei Kanji nebeneinander: on-Lesung, 来 = らい, 年 = ねん." }
+    ]
+  },
+  {
+    "id": "w-009",
+    "stufe": "wort",
+    "japanisch": "時間",
+    "uebersetzung": "Zeit",
+    "tokens": [
+      { "text": "時間", "lesung": "じかん", "bedeutung": "Zeit", "begruendung": "Zwei Kanji nebeneinander: on-Lesung, 時 = じ, 間 = かん." }
+    ]
+  },
+  {
+    "id": "w-010",
+    "stufe": "wort",
+    "japanisch": "一年生",
+    "uebersetzung": "Erstklässler",
+    "tokens": [
+      { "text": "一年生", "lesung": "いちねんせい", "bedeutung": "Erstklässler", "begruendung": "Drei Kanji in Folge: alle on-Lesung, 一 = いち, 年 = ねん, 生 = せい." }
+    ]
+  },
+  {
+    "id": "w-011",
+    "stufe": "wort",
+    "japanisch": "女子",
+    "uebersetzung": "Mädchen, weibliche Person",
+    "tokens": [
+      { "text": "女子", "lesung": "じょし", "bedeutung": "Mädchen, weibliche Person", "begruendung": "Zwei Kanji nebeneinander: on-Lesung, 女 = じょ, 子 = し." }
+    ]
+  },
+  {
+    "id": "w-012",
+    "stufe": "wort",
+    "japanisch": "山川",
+    "uebersetzung": "Berge und Flüsse",
+    "tokens": [
+      { "text": "山川", "lesung": "さんせん", "bedeutung": "Berge und Flüsse", "begruendung": "Zwei Kanji nebeneinander: on-Lesung, 山 = さん, 川 = せん — als Familienname dagegen kun: やまかわ." }
+    ]
+  },
+  {
+    "id": "w-013",
+    "stufe": "wort",
+    "japanisch": "火山",
+    "uebersetzung": "Vulkan",
+    "tokens": [
+      { "text": "火山", "lesung": "かざん", "bedeutung": "Vulkan", "begruendung": "Zwei Kanji nebeneinander: on-Lesung mit Rendaku, 火 = か, 山 = さん→ざん." }
+    ]
+  },
+  {
+    "id": "w-014",
+    "stufe": "wort",
+    "japanisch": "水田",
+    "uebersetzung": "Nassreisfeld",
+    "tokens": [
+      { "text": "水田", "lesung": "すいでん", "bedeutung": "Nassreisfeld", "begruendung": "Zwei Kanji nebeneinander: on-Lesung, 水 = すい, 田 = でん." }
+    ]
+  },
+  {
+    "id": "w-015",
+    "stufe": "wort",
+    "japanisch": "本日",
+    "uebersetzung": "heute (formell)",
+    "tokens": [
+      { "text": "本日", "lesung": "ほんじつ", "bedeutung": "heute (formell)", "begruendung": "Zwei Kanji nebeneinander: on-Lesung, 本 = ほん, 日 = じつ." }
+    ]
+  },
+  {
+    "id": "w-016",
+    "stufe": "wort",
+    "japanisch": "何人",
+    "uebersetzung": "wie viele Personen",
+    "tokens": [
+      { "text": "何人", "lesung": "なんにん", "bedeutung": "wie viele Personen", "begruendung": "Vor dem Zählwort 人 wird なに zu なん verkürzt; für „welche Nationalität\" läse man stattdessen なにじん." }
+    ]
+  },
+  {
+    "id": "w-017",
+    "stufe": "wort",
+    "japanisch": "三月",
+    "uebersetzung": "März",
+    "tokens": [
+      { "text": "三月", "lesung": "さんがつ", "bedeutung": "März", "begruendung": "Zahl plus Monatszeichen: beide on-Lesung, 三 = さん, 月 = がつ." }
+    ]
+  },
+  {
+    "id": "w-018",
+    "stufe": "wort",
+    "japanisch": "上下",
+    "uebersetzung": "oben und unten",
+    "tokens": [
+      { "text": "上下", "lesung": "じょうげ", "bedeutung": "oben und unten", "begruendung": "Zwei Kanji nebeneinander: on-Lesung, 上 = じょう, 下 = げ." }
+    ]
+  },
+  {
+    "id": "w-019",
+    "stufe": "wort",
+    "japanisch": "見学",
+    "uebersetzung": "Besichtigung",
+    "tokens": [
+      { "text": "見学", "lesung": "けんがく", "bedeutung": "Besichtigung", "begruendung": "Zwei Kanji nebeneinander: on-Lesung, 見 = けん, 学 = がく." }
+    ]
+  },
+  {
+    "id": "w-020",
+    "stufe": "wort",
+    "japanisch": "語学",
+    "uebersetzung": "Sprachstudium",
+    "tokens": [
+      { "text": "語学", "lesung": "ごがく", "bedeutung": "Sprachstudium", "begruendung": "Zwei Kanji nebeneinander: on-Lesung, 語 = ご, 学 = がく." }
+    ]
+  },
+  {
+    "id": "s-001",
+    "stufe": "satz",
+    "japanisch": "わたしは日本語を学びます。",
+    "uebersetzung": "Ich lerne Japanisch.",
+    "tokens": [
+      { "text": "わたし", "lesung": "わたし", "bedeutung": "ich" },
+      { "text": "は", "lesung": "わ", "bedeutung": "Themenpartikel", "begruendung": "は als Partikel wird wa gesprochen." },
+      { "text": "日本語", "lesung": "にほんご", "bedeutung": "Japanisch (Sprache)", "begruendung": "Drei Kanji in Folge, alle on-Lesung. 語 = ご markiert die Sprache." },
+      { "text": "を", "lesung": "お", "bedeutung": "Objektpartikel", "begruendung": "を wird immer o gesprochen." },
+      { "text": "学び", "lesung": "まなび", "bedeutung": "lernen (Stamm)", "begruendung": "Okurigana び folgt: kun-Lesung まな." },
+      { "text": "ます", "lesung": "ます", "bedeutung": "Höflichkeitsendung" },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" }
+    ]
+  },
+  {
+    "id": "s-002",
+    "stufe": "satz",
+    "japanisch": "わたしは学生です。",
+    "uebersetzung": "Ich bin Student.",
+    "tokens": [
+      { "text": "わたし", "lesung": "わたし", "bedeutung": "ich" },
+      { "text": "は", "lesung": "わ", "bedeutung": "Themenpartikel", "begruendung": "は als Partikel wird wa gesprochen." },
+      { "text": "学生", "lesung": "がくせい", "bedeutung": "Student", "begruendung": "Zwei Kanji nebeneinander: on-Lesung Kompositum." },
+      { "text": "です", "lesung": "です", "bedeutung": "Kopula" },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" }
+    ]
+  },
+  {
+    "id": "s-003",
+    "stufe": "satz",
+    "japanisch": "かれは先生です。",
+    "uebersetzung": "Er ist Lehrer.",
+    "tokens": [
+      { "text": "かれ", "lesung": "かれ", "bedeutung": "er" },
+      { "text": "は", "lesung": "わ", "bedeutung": "Themenpartikel", "begruendung": "は als Partikel wird wa gesprochen." },
+      { "text": "先生", "lesung": "せんせい", "bedeutung": "Lehrer", "begruendung": "Zwei Kanji nebeneinander: on-Lesung Kompositum." },
+      { "text": "です", "lesung": "です", "bedeutung": "Kopula" },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" }
+    ]
+  },
+  {
+    "id": "s-004",
+    "stufe": "satz",
+    "japanisch": "わたしは日本に行きます。",
+    "uebersetzung": "Ich fahre nach Japan.",
+    "tokens": [
+      { "text": "わたし", "lesung": "わたし", "bedeutung": "ich" },
+      { "text": "は", "lesung": "わ", "bedeutung": "Themenpartikel", "begruendung": "は als Partikel wird wa gesprochen." },
+      { "text": "日本", "lesung": "にほん", "bedeutung": "Japan", "begruendung": "Zwei Kanji nebeneinander: on-Lesung Kompositum." },
+      { "text": "に", "lesung": "に", "bedeutung": "Zielpartikel" },
+      { "text": "行きます", "lesung": "いきます", "bedeutung": "fahren, gehen", "begruendung": "Okurigana きます folgt dem Kanji: kun-Lesung い." },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" }
+    ]
+  },
+  {
+    "id": "s-005",
+    "stufe": "satz",
+    "japanisch": "きょうは月曜日です。",
+    "uebersetzung": "Heute ist Montag.",
+    "tokens": [
+      { "text": "きょう", "lesung": "きょう", "bedeutung": "heute" },
+      { "text": "は", "lesung": "わ", "bedeutung": "Themenpartikel", "begruendung": "は als Partikel wird wa gesprochen." },
+      { "text": "月曜日", "lesung": "げつようび", "bedeutung": "Montag", "begruendung": "Drei Kanji in Folge, alle on-Lesung; feste Bezeichnung für den Wochentag." },
+      { "text": "です", "lesung": "です", "bedeutung": "Kopula" },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" }
+    ]
+  },
+  {
+    "id": "s-006",
+    "stufe": "satz",
+    "japanisch": "あしたは火曜日です。",
+    "uebersetzung": "Morgen ist Dienstag.",
+    "tokens": [
+      { "text": "あした", "lesung": "あした", "bedeutung": "morgen" },
+      { "text": "は", "lesung": "わ", "bedeutung": "Themenpartikel", "begruendung": "は als Partikel wird wa gesprochen." },
+      { "text": "火曜日", "lesung": "かようび", "bedeutung": "Dienstag", "begruendung": "Drei Kanji in Folge, alle on-Lesung; feste Bezeichnung für den Wochentag." },
+      { "text": "です", "lesung": "です", "bedeutung": "Kopula" },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" }
+    ]
+  },
+  {
+    "id": "s-007",
+    "stufe": "satz",
+    "japanisch": "わたしは水をのみます。",
+    "uebersetzung": "Ich trinke Wasser.",
+    "tokens": [
+      { "text": "わたし", "lesung": "わたし", "bedeutung": "ich" },
+      { "text": "は", "lesung": "わ", "bedeutung": "Themenpartikel", "begruendung": "は als Partikel wird wa gesprochen." },
+      { "text": "水", "lesung": "みず", "bedeutung": "Wasser", "begruendung": "Kanji steht allein: kun-Lesung." },
+      { "text": "を", "lesung": "お", "bedeutung": "Objektpartikel", "begruendung": "を wird immer o gesprochen." },
+      { "text": "のみます", "lesung": "のみます", "bedeutung": "trinken" },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" }
+    ]
+  },
+  {
+    "id": "s-008",
+    "stufe": "satz",
+    "japanisch": "木がおおきいです。",
+    "uebersetzung": "Der Baum ist groß.",
+    "tokens": [
+      { "text": "木", "lesung": "き", "bedeutung": "Baum", "begruendung": "Kanji steht allein: kun-Lesung." },
+      { "text": "が", "lesung": "が", "bedeutung": "Subjektpartikel" },
+      { "text": "おおきい", "lesung": "おおきい", "bedeutung": "groß" },
+      { "text": "です", "lesung": "です", "bedeutung": "Kopula" },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" }
+    ]
+  },
+  {
+    "id": "s-009",
+    "stufe": "satz",
+    "japanisch": "金曜日はやすみです。",
+    "uebersetzung": "Freitag ist frei.",
+    "tokens": [
+      { "text": "金曜日", "lesung": "きんようび", "bedeutung": "Freitag", "begruendung": "Drei Kanji in Folge, alle on-Lesung; feste Bezeichnung für den Wochentag." },
+      { "text": "は", "lesung": "わ", "bedeutung": "Themenpartikel", "begruendung": "は als Partikel wird wa gesprochen." },
+      { "text": "やすみ", "lesung": "やすみ", "bedeutung": "frei, Urlaub" },
+      { "text": "です", "lesung": "です", "bedeutung": "Kopula" },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" }
+    ]
+  },
+  {
+    "id": "s-010",
+    "stufe": "satz",
+    "japanisch": "土曜日にかいものします。",
+    "uebersetzung": "Samstags gehe ich einkaufen.",
+    "tokens": [
+      { "text": "土曜日", "lesung": "どようび", "bedeutung": "Samstag", "begruendung": "Drei Kanji in Folge, alle on-Lesung; feste Bezeichnung für den Wochentag." },
+      { "text": "に", "lesung": "に", "bedeutung": "Zeitpunktpartikel" },
+      { "text": "かいものします", "lesung": "かいものします", "bedeutung": "einkaufen" },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" }
+    ]
+  },
+  {
+    "id": "s-011",
+    "stufe": "satz",
+    "japanisch": "その人は日本人です。",
+    "uebersetzung": "Diese Person ist Japaner.",
+    "tokens": [
+      { "text": "その", "lesung": "その", "bedeutung": "dieser, jener" },
+      { "text": "人", "lesung": "ひと", "bedeutung": "Person", "begruendung": "Kanji steht allein: kun-Lesung." },
+      { "text": "は", "lesung": "わ", "bedeutung": "Themenpartikel", "begruendung": "は als Partikel wird wa gesprochen." },
+      { "text": "日本人", "lesung": "にほんじん", "bedeutung": "Japaner", "begruendung": "Drei Kanji in Folge: alle on-Lesung." },
+      { "text": "です", "lesung": "です", "bedeutung": "Kopula" },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" }
+    ]
+  },
+  {
+    "id": "s-012",
+    "stufe": "satz",
+    "japanisch": "わたしの大学は大きいです。",
+    "uebersetzung": "Meine Universität ist groß.",
+    "tokens": [
+      { "text": "わたしの", "lesung": "わたしの", "bedeutung": "mein" },
+      { "text": "大学", "lesung": "だいがく", "bedeutung": "Universität", "begruendung": "Zwei Kanji nebeneinander: on-Lesung Kompositum." },
+      { "text": "は", "lesung": "わ", "bedeutung": "Themenpartikel", "begruendung": "は als Partikel wird wa gesprochen." },
+      { "text": "大きい", "lesung": "おおきい", "bedeutung": "groß", "begruendung": "Okurigana きい folgt: kun-Lesung おお." },
+      { "text": "です", "lesung": "です", "bedeutung": "Kopula" },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" }
+    ]
+  },
+  {
+    "id": "s-013",
+    "stufe": "satz",
+    "japanisch": "この子はまだ小さいです。",
+    "uebersetzung": "Dieses Kind ist noch klein.",
+    "tokens": [
+      { "text": "この", "lesung": "この", "bedeutung": "dieser" },
+      { "text": "子", "lesung": "こ", "bedeutung": "Kind", "begruendung": "Kanji steht allein: kun-Lesung." },
+      { "text": "は", "lesung": "わ", "bedeutung": "Themenpartikel", "begruendung": "は als Partikel wird wa gesprochen." },
+      { "text": "まだ", "lesung": "まだ", "bedeutung": "noch" },
+      { "text": "小さい", "lesung": "ちいさい", "bedeutung": "klein", "begruendung": "Okurigana さい folgt: kun-Lesung ちい." },
+      { "text": "です", "lesung": "です", "bedeutung": "Kopula" },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" }
+    ]
+  },
+  {
+    "id": "s-014",
+    "stufe": "satz",
+    "japanisch": "本は上にあります。",
+    "uebersetzung": "Das Buch ist oben.",
+    "tokens": [
+      { "text": "本", "lesung": "ほん", "bedeutung": "Buch", "begruendung": "本 wird auch allein mit der on-Lesung ほん gelesen — eine Ausnahme von der Regel „allein heißt kun\"." },
+      { "text": "は", "lesung": "わ", "bedeutung": "Themenpartikel", "begruendung": "は als Partikel wird wa gesprochen." },
+      { "text": "上", "lesung": "うえ", "bedeutung": "oben", "begruendung": "Kanji steht allein: kun-Lesung." },
+      { "text": "に", "lesung": "に", "bedeutung": "Zielpartikel" },
+      { "text": "あります", "lesung": "あります", "bedeutung": "es gibt, ist vorhanden" },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" }
+    ]
+  },
+  {
+    "id": "s-015",
+    "stufe": "satz",
+    "japanisch": "かばんは下にあります。",
+    "uebersetzung": "Die Tasche ist unten.",
+    "tokens": [
+      { "text": "かばん", "lesung": "かばん", "bedeutung": "Tasche" },
+      { "text": "は", "lesung": "わ", "bedeutung": "Themenpartikel", "begruendung": "は als Partikel wird wa gesprochen." },
+      { "text": "下", "lesung": "した", "bedeutung": "unten", "begruendung": "Kanji steht allein: kun-Lesung." },
+      { "text": "に", "lesung": "に", "bedeutung": "Zielpartikel" },
+      { "text": "あります", "lesung": "あります", "bedeutung": "es gibt, ist vorhanden" },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" }
+    ]
+  },
+  {
+    "id": "s-016",
+    "stufe": "satz",
+    "japanisch": "へやの中はきれいです。",
+    "uebersetzung": "Das Innere des Zimmers ist sauber.",
+    "tokens": [
+      { "text": "へやの", "lesung": "へやの", "bedeutung": "des Zimmers" },
+      { "text": "中", "lesung": "なか", "bedeutung": "in, Mitte", "begruendung": "Kanji steht allein: kun-Lesung." },
+      { "text": "は", "lesung": "わ", "bedeutung": "Themenpartikel", "begruendung": "は als Partikel wird wa gesprochen." },
+      { "text": "きれい", "lesung": "きれい", "bedeutung": "sauber, schön" },
+      { "text": "です", "lesung": "です", "bedeutung": "Kopula" },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" }
+    ]
+  },
+  {
+    "id": "s-017",
+    "stufe": "satz",
+    "japanisch": "来年、日本へ行きます。",
+    "uebersetzung": "Nächstes Jahr fahre ich nach Japan.",
+    "tokens": [
+      { "text": "来年", "lesung": "らいねん", "bedeutung": "nächstes Jahr", "begruendung": "Zwei Kanji nebeneinander: on-Lesung Kompositum." },
+      { "text": "、", "lesung": "、", "bedeutung": "Komma" },
+      { "text": "日本", "lesung": "にほん", "bedeutung": "Japan", "begruendung": "Zwei Kanji nebeneinander: on-Lesung Kompositum." },
+      { "text": "へ", "lesung": "え", "bedeutung": "Richtungspartikel", "begruendung": "へ als Partikel wird e gesprochen." },
+      { "text": "行きます", "lesung": "いきます", "bedeutung": "fahren, gehen", "begruendung": "Okurigana きます folgt dem Kanji: kun-Lesung い." },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" }
+    ]
+  },
+  {
+    "id": "s-018",
+    "stufe": "satz",
+    "japanisch": "一時に会いましょう。",
+    "uebersetzung": "Lass uns um eins treffen.",
+    "tokens": [
+      { "text": "一時", "lesung": "いちじ", "bedeutung": "ein Uhr", "begruendung": "Zahl plus Zeitzeichen: beide on-Lesung." },
+      { "text": "に", "lesung": "に", "bedeutung": "Zeitpunktpartikel" },
+      { "text": "会いましょう", "lesung": "あいましょう", "bedeutung": "lass uns treffen", "begruendung": "Okurigana いましょう folgt dem Kanji: kun-Lesung あ." },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" }
+    ]
+  },
+  {
+    "id": "s-019",
+    "stufe": "satz",
+    "japanisch": "十分待ってください。",
+    "uebersetzung": "Warte bitte zehn Minuten.",
+    "tokens": [
+      { "text": "十分", "lesung": "じゅっぷん", "bedeutung": "zehn Minuten", "begruendung": "Zahl plus Zeiteinheit: on-Lesung mit Lautwechsel ふん→ぷん." },
+      { "text": "待ってください", "lesung": "まってください", "bedeutung": "bitte warten", "begruendung": "Okurigana ってください folgt dem Kanji: kun-Lesung ま." },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" }
+    ]
+  },
+  {
+    "id": "s-020",
+    "stufe": "satz",
+    "japanisch": "今、なんじですか。",
+    "uebersetzung": "Wie spät ist es jetzt?",
+    "tokens": [
+      { "text": "今", "lesung": "いま", "bedeutung": "jetzt", "begruendung": "Kanji steht allein: kun-Lesung." },
+      { "text": "、", "lesung": "、", "bedeutung": "Komma" },
+      { "text": "なんじですか", "lesung": "なんじですか", "bedeutung": "wie viel Uhr ist es?" },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" }
+    ]
+  },
+  {
+    "id": "s-021",
+    "stufe": "satz",
+    "japanisch": "何がすきですか。",
+    "uebersetzung": "Was magst du?",
+    "tokens": [
+      { "text": "何", "lesung": "なに", "bedeutung": "was", "begruendung": "Kanji steht allein: kun-Lesung." },
+      { "text": "が", "lesung": "が", "bedeutung": "Subjektpartikel" },
+      { "text": "すきですか", "lesung": "すきですか", "bedeutung": "magst du?" },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" }
+    ]
+  },
+  {
+    "id": "s-022",
+    "stufe": "satz",
+    "japanisch": "学校で日本語を学びます。",
+    "uebersetzung": "In der Schule lerne ich Japanisch.",
+    "tokens": [
+      { "text": "学校", "lesung": "がっこう", "bedeutung": "Schule", "begruendung": "Zwei Kanji nebeneinander: on-Lesung mit Verdopplung." },
+      { "text": "で", "lesung": "で", "bedeutung": "Ortspartikel" },
+      { "text": "日本語", "lesung": "にほんご", "bedeutung": "Japanisch", "begruendung": "Drei Kanji in Folge: on-Lesung." },
+      { "text": "を", "lesung": "お", "bedeutung": "Objektpartikel", "begruendung": "を wird immer o gesprochen." },
+      { "text": "学びます", "lesung": "まなびます", "bedeutung": "lernen", "begruendung": "Okurigana びます folgt dem Kanji: kun-Lesung まな." },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" }
+    ]
+  },
+  {
+    "id": "s-023",
+    "stufe": "satz",
+    "japanisch": "先生は学校にいます。",
+    "uebersetzung": "Der Lehrer ist in der Schule.",
+    "tokens": [
+      { "text": "先生", "lesung": "せんせい", "bedeutung": "Lehrer", "begruendung": "Zwei Kanji nebeneinander: on-Lesung Kompositum." },
+      { "text": "は", "lesung": "わ", "bedeutung": "Themenpartikel", "begruendung": "は als Partikel wird wa gesprochen." },
+      { "text": "学校", "lesung": "がっこう", "bedeutung": "Schule", "begruendung": "Zwei Kanji nebeneinander: on-Lesung mit Verdopplung." },
+      { "text": "に", "lesung": "に", "bedeutung": "Zielpartikel" },
+      { "text": "います", "lesung": "います", "bedeutung": "ist (belebt)" },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" }
+    ]
+  },
+  {
+    "id": "s-024",
+    "stufe": "satz",
+    "japanisch": "田んぼに水があります。",
+    "uebersetzung": "Im Reisfeld ist Wasser.",
+    "tokens": [
+      { "text": "田んぼ", "lesung": "たんぼ", "bedeutung": "Reisfeld", "begruendung": "Okurigana んぼ folgt dem Kanji: kun-Lesung た." },
+      { "text": "に", "lesung": "に", "bedeutung": "Zielpartikel" },
+      { "text": "水", "lesung": "みず", "bedeutung": "Wasser", "begruendung": "Kanji steht allein: kun-Lesung." },
+      { "text": "が", "lesung": "が", "bedeutung": "Subjektpartikel" },
+      { "text": "あります", "lesung": "あります", "bedeutung": "es gibt, ist vorhanden" },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" }
+    ]
+  },
+  {
+    "id": "s-025",
+    "stufe": "satz",
+    "japanisch": "山と川がきれいです。",
+    "uebersetzung": "Der Berg und der Fluss sind schön.",
+    "tokens": [
+      { "text": "山", "lesung": "やま", "bedeutung": "Berg", "begruendung": "Kanji steht allein: kun-Lesung." },
+      { "text": "と", "lesung": "と", "bedeutung": "Aufzählungspartikel" },
+      { "text": "川", "lesung": "かわ", "bedeutung": "Fluss", "begruendung": "Kanji steht allein: kun-Lesung." },
+      { "text": "が", "lesung": "が", "bedeutung": "Subjektpartikel" },
+      { "text": "きれい", "lesung": "きれい", "bedeutung": "schön" },
+      { "text": "です", "lesung": "です", "bedeutung": "Kopula" },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" }
+    ]
+  },
+  {
+    "id": "s-026",
+    "stufe": "satz",
+    "japanisch": "わたしは本を見ます。",
+    "uebersetzung": "Ich schaue mir ein Buch an.",
+    "tokens": [
+      { "text": "わたし", "lesung": "わたし", "bedeutung": "ich" },
+      { "text": "は", "lesung": "わ", "bedeutung": "Themenpartikel", "begruendung": "は als Partikel wird wa gesprochen." },
+      { "text": "本", "lesung": "ほん", "bedeutung": "Buch", "begruendung": "本 wird auch allein mit der on-Lesung ほん gelesen." },
+      { "text": "を", "lesung": "お", "bedeutung": "Objektpartikel", "begruendung": "を wird immer o gesprochen." },
+      { "text": "見ます", "lesung": "みます", "bedeutung": "ansehen", "begruendung": "Okurigana ます folgt dem Kanji: kun-Lesung み." },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" }
+    ]
+  },
+  {
+    "id": "s-027",
+    "stufe": "satz",
+    "japanisch": "女の子が公園にいます。",
+    "uebersetzung": "Ein Mädchen ist im Park.",
+    "tokens": [
+      { "text": "女の子", "lesung": "おんなのこ", "bedeutung": "Mädchen", "begruendung": "女 (kun おんな) und 子 (kun こ), verbunden durch die Partikel の — zwei kun-Lesungen und keine Kompositum-on-Lesung." },
+      { "text": "が", "lesung": "が", "bedeutung": "Subjektpartikel" },
+      { "text": "公園", "lesung": "こうえん", "bedeutung": "Park", "begruendung": "Zwei Kanji nebeneinander: on-Lesung Kompositum." },
+      { "text": "に", "lesung": "に", "bedeutung": "Zielpartikel" },
+      { "text": "います", "lesung": "います", "bedeutung": "ist (belebt)" },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" }
+    ]
+  },
+  {
+    "id": "s-028",
+    "stufe": "satz",
+    "japanisch": "火はあついです。",
+    "uebersetzung": "Feuer ist heiß.",
+    "tokens": [
+      { "text": "火", "lesung": "ひ", "bedeutung": "Feuer", "begruendung": "Kanji steht allein: kun-Lesung." },
+      { "text": "は", "lesung": "わ", "bedeutung": "Themenpartikel", "begruendung": "は als Partikel wird wa gesprochen." },
+      { "text": "あつい", "lesung": "あつい", "bedeutung": "heiß" },
+      { "text": "です", "lesung": "です", "bedeutung": "Kopula" },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" }
+    ]
+  },
+  {
+    "id": "s-029",
+    "stufe": "satz",
+    "japanisch": "中学校で英語も学びます。",
+    "uebersetzung": "In der Mittelschule lerne ich auch Englisch.",
+    "tokens": [
+      { "text": "中学校", "lesung": "ちゅうがっこう", "bedeutung": "Mittelschule", "begruendung": "Drei Kanji in Folge: on-Lesung." },
+      { "text": "で", "lesung": "で", "bedeutung": "Ortspartikel" },
+      { "text": "英語", "lesung": "えいご", "bedeutung": "Englisch", "begruendung": "Zwei Kanji nebeneinander: on-Lesung Kompositum." },
+      { "text": "も", "lesung": "も", "bedeutung": "auch" },
+      { "text": "学びます", "lesung": "まなびます", "bedeutung": "lernen", "begruendung": "Okurigana びます folgt dem Kanji: kun-Lesung まな." },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" }
+    ]
+  },
+  {
+    "id": "s-030",
+    "stufe": "satz",
+    "japanisch": "大きい山を見学しました。",
+    "uebersetzung": "Wir haben einen großen Berg besichtigt.",
+    "tokens": [
+      { "text": "大きい", "lesung": "おおきい", "bedeutung": "groß", "begruendung": "Okurigana きい folgt dem Kanji: kun-Lesung おお." },
+      { "text": "山", "lesung": "やま", "bedeutung": "Berg", "begruendung": "Kanji steht allein: kun-Lesung." },
+      { "text": "を", "lesung": "お", "bedeutung": "Objektpartikel", "begruendung": "を wird immer o gesprochen." },
+      { "text": "見学しました", "lesung": "けんがくしました", "bedeutung": "besichtigt (Vergangenheit)", "begruendung": "見学 sind zwei Kanji nebeneinander: on-Lesung; しました ist die Vergangenheitsform von します." },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" }
+    ]
+  },
+  {
+    "id": "a-001",
+    "stufe": "absatz",
+    "japanisch": "学校に先生が三人います。一年生から六年生までいます。学校はとても大きいです。女子もたくさんいます。",
+    "uebersetzung": "In der Schule sind drei Lehrer. Es gibt Schüler von der ersten bis zur sechsten Klasse. Die Schule ist sehr groß. Es gibt auch viele Mädchen.",
+    "tokens": [
+      { "text": "学校", "lesung": "がっこう", "bedeutung": "Schule", "begruendung": "Zwei Kanji nebeneinander: on-Lesung mit Verdopplung." },
+      { "text": "に", "lesung": "に", "bedeutung": "Zielpartikel" },
+      { "text": "先生", "lesung": "せんせい", "bedeutung": "Lehrer", "begruendung": "Zwei Kanji nebeneinander: on-Lesung Kompositum." },
+      { "text": "が", "lesung": "が", "bedeutung": "Subjektpartikel" },
+      { "text": "三人", "lesung": "さんにん", "bedeutung": "drei Personen", "begruendung": "Zahl plus Zählwort 人: on-Lesung." },
+      { "text": "います", "lesung": "います", "bedeutung": "es gibt (belebt)" },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" },
+      { "text": "一年生", "lesung": "いちねんせい", "bedeutung": "Erstklässler", "begruendung": "Drei Kanji in Folge: on-Lesung." },
+      { "text": "から", "lesung": "から", "bedeutung": "von … an" },
+      { "text": "六年生", "lesung": "ろくねんせい", "bedeutung": "Sechstklässler", "begruendung": "Drei Kanji in Folge: on-Lesung." },
+      { "text": "まで", "lesung": "まで", "bedeutung": "bis" },
+      { "text": "います", "lesung": "います", "bedeutung": "es gibt (belebt)" },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" },
+      { "text": "学校", "lesung": "がっこう", "bedeutung": "Schule", "begruendung": "Zwei Kanji nebeneinander: on-Lesung mit Verdopplung." },
+      { "text": "は", "lesung": "わ", "bedeutung": "Themenpartikel", "begruendung": "は als Partikel wird wa gesprochen." },
+      { "text": "とても", "lesung": "とても", "bedeutung": "sehr" },
+      { "text": "大きい", "lesung": "おおきい", "bedeutung": "groß", "begruendung": "Okurigana きい folgt: kun-Lesung おお." },
+      { "text": "です", "lesung": "です", "bedeutung": "Kopula" },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" },
+      { "text": "女子", "lesung": "じょし", "bedeutung": "Mädchen", "begruendung": "Zwei Kanji nebeneinander: on-Lesung Kompositum." },
+      { "text": "も", "lesung": "も", "bedeutung": "auch" },
+      { "text": "たくさん", "lesung": "たくさん", "bedeutung": "viele" },
+      { "text": "います", "lesung": "います", "bedeutung": "es gibt (belebt)" },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" }
+    ]
+  },
+  {
+    "id": "a-002",
+    "stufe": "absatz",
+    "japanisch": "日本には山がたくさんあります。大きい山と小さい川があります。山の上に木があります。川の水はきれいです。",
+    "uebersetzung": "In Japan gibt es viele Berge. Es gibt große Berge und kleine Flüsse. Auf dem Berg steht ein Baum. Das Wasser des Flusses ist klar.",
+    "tokens": [
+      { "text": "日本", "lesung": "にほん", "bedeutung": "Japan", "begruendung": "Zwei Kanji nebeneinander: on-Lesung Kompositum." },
+      { "text": "には", "lesung": "には", "bedeutung": "in (Themenmarkierung)" },
+      { "text": "山", "lesung": "やま", "bedeutung": "Berg", "begruendung": "Kanji steht allein: kun-Lesung." },
+      { "text": "が", "lesung": "が", "bedeutung": "Subjektpartikel" },
+      { "text": "たくさん", "lesung": "たくさん", "bedeutung": "viele" },
+      { "text": "あります", "lesung": "あります", "bedeutung": "es gibt" },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" },
+      { "text": "大きい", "lesung": "おおきい", "bedeutung": "groß", "begruendung": "Okurigana きい folgt: kun-Lesung おお." },
+      { "text": "山", "lesung": "やま", "bedeutung": "Berg", "begruendung": "Kanji steht allein: kun-Lesung." },
+      { "text": "と", "lesung": "と", "bedeutung": "Aufzählungspartikel" },
+      { "text": "小さい", "lesung": "ちいさい", "bedeutung": "klein", "begruendung": "Okurigana さい folgt: kun-Lesung ちい." },
+      { "text": "川", "lesung": "かわ", "bedeutung": "Fluss", "begruendung": "Kanji steht allein: kun-Lesung." },
+      { "text": "が", "lesung": "が", "bedeutung": "Subjektpartikel" },
+      { "text": "あります", "lesung": "あります", "bedeutung": "es gibt" },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" },
+      { "text": "山", "lesung": "やま", "bedeutung": "Berg", "begruendung": "Kanji steht allein: kun-Lesung." },
+      { "text": "の", "lesung": "の", "bedeutung": "Zugehörigkeitspartikel" },
+      { "text": "上", "lesung": "うえ", "bedeutung": "oben", "begruendung": "Kanji steht allein: kun-Lesung." },
+      { "text": "に", "lesung": "に", "bedeutung": "Zielpartikel" },
+      { "text": "木", "lesung": "き", "bedeutung": "Baum", "begruendung": "Kanji steht allein: kun-Lesung." },
+      { "text": "が", "lesung": "が", "bedeutung": "Subjektpartikel" },
+      { "text": "あります", "lesung": "あります", "bedeutung": "es gibt" },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" },
+      { "text": "川", "lesung": "かわ", "bedeutung": "Fluss", "begruendung": "Kanji steht allein: kun-Lesung." },
+      { "text": "の", "lesung": "の", "bedeutung": "Zugehörigkeitspartikel" },
+      { "text": "水", "lesung": "みず", "bedeutung": "Wasser", "begruendung": "Kanji steht allein: kun-Lesung." },
+      { "text": "は", "lesung": "わ", "bedeutung": "Themenpartikel", "begruendung": "は als Partikel wird wa gesprochen." },
+      { "text": "きれい", "lesung": "きれい", "bedeutung": "klar, schön" },
+      { "text": "です", "lesung": "です", "bedeutung": "Kopula" },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" }
+    ]
+  },
+  {
+    "id": "a-003",
+    "stufe": "absatz",
+    "japanisch": "学校に先生が三人います。一人は大学の先生です。学生の中には女子もいます。学生はみんな日本語を学びます。",
+    "uebersetzung": "In der Schule sind drei Lehrer. Einer ist Universitätsprofessor. Unter den Studenten sind auch Mädchen. Alle Studenten lernen Japanisch.",
+    "tokens": [
+      { "text": "学校", "lesung": "がっこう", "bedeutung": "Schule", "begruendung": "Zwei Kanji nebeneinander: on-Lesung mit Verdopplung." },
+      { "text": "に", "lesung": "に", "bedeutung": "Zielpartikel" },
+      { "text": "先生", "lesung": "せんせい", "bedeutung": "Lehrer", "begruendung": "Zwei Kanji nebeneinander: on-Lesung Kompositum." },
+      { "text": "が", "lesung": "が", "bedeutung": "Subjektpartikel" },
+      { "text": "三人", "lesung": "さんにん", "bedeutung": "drei Personen", "begruendung": "Zahl plus Zählwort 人: on-Lesung." },
+      { "text": "います", "lesung": "います", "bedeutung": "es gibt (belebt)" },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" },
+      { "text": "一人", "lesung": "ひとり", "bedeutung": "eine Person", "begruendung": "Zahl plus Zählwort 人: kun-Lesung, Ausnahme von der on-Regel bei kleinen Zahlen." },
+      { "text": "は", "lesung": "わ", "bedeutung": "Themenpartikel", "begruendung": "は als Partikel wird wa gesprochen." },
+      { "text": "大学", "lesung": "だいがく", "bedeutung": "Universität", "begruendung": "Zwei Kanji nebeneinander: on-Lesung Kompositum." },
+      { "text": "の", "lesung": "の", "bedeutung": "Zugehörigkeitspartikel" },
+      { "text": "先生", "lesung": "せんせい", "bedeutung": "Lehrer", "begruendung": "Zwei Kanji nebeneinander: on-Lesung Kompositum." },
+      { "text": "です", "lesung": "です", "bedeutung": "Kopula" },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" },
+      { "text": "学生", "lesung": "がくせい", "bedeutung": "Student", "begruendung": "Zwei Kanji nebeneinander: on-Lesung Kompositum." },
+      { "text": "の", "lesung": "の", "bedeutung": "Zugehörigkeitspartikel" },
+      { "text": "中", "lesung": "なか", "bedeutung": "in, Mitte", "begruendung": "Kanji steht allein: kun-Lesung." },
+      { "text": "には", "lesung": "には", "bedeutung": "darunter (Themenmarkierung)" },
+      { "text": "女子", "lesung": "じょし", "bedeutung": "Mädchen", "begruendung": "Zwei Kanji nebeneinander: on-Lesung Kompositum." },
+      { "text": "も", "lesung": "も", "bedeutung": "auch" },
+      { "text": "います", "lesung": "います", "bedeutung": "es gibt (belebt)" },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" },
+      { "text": "学生", "lesung": "がくせい", "bedeutung": "Student", "begruendung": "Zwei Kanji nebeneinander: on-Lesung Kompositum." },
+      { "text": "は", "lesung": "わ", "bedeutung": "Themenpartikel", "begruendung": "は als Partikel wird wa gesprochen." },
+      { "text": "みんな", "lesung": "みんな", "bedeutung": "alle" },
+      { "text": "日本語", "lesung": "にほんご", "bedeutung": "Japanisch", "begruendung": "Drei Kanji in Folge: on-Lesung." },
+      { "text": "を", "lesung": "お", "bedeutung": "Objektpartikel", "begruendung": "を wird immer o gesprochen." },
+      { "text": "学び", "lesung": "まなび", "bedeutung": "lernen (Stamm)", "begruendung": "Okurigana び folgt: kun-Lesung まな." },
+      { "text": "ます", "lesung": "ます", "bedeutung": "Höflichkeitsendung" },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" }
+    ]
+  },
+  {
+    "id": "a-004",
+    "stufe": "absatz",
+    "japanisch": "今、何時ですか。三時十分です。今年、大学の学生です。",
+    "uebersetzung": "Wie spät ist es jetzt? Es ist 3:10 Uhr. Dieses Jahr bin ich Universitätsstudent.",
+    "tokens": [
+      { "text": "今", "lesung": "いま", "bedeutung": "jetzt", "begruendung": "Kanji steht allein: kun-Lesung." },
+      { "text": "、", "lesung": "、", "bedeutung": "Komma" },
+      { "text": "何時", "lesung": "なんじ", "bedeutung": "wie viel Uhr", "begruendung": "何 wird vor dem Zählwort 時 zu なん verkürzt." },
+      { "text": "です", "lesung": "です", "bedeutung": "Kopula" },
+      { "text": "か", "lesung": "か", "bedeutung": "Fragepartikel" },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" },
+      { "text": "三時", "lesung": "さんじ", "bedeutung": "drei Uhr", "begruendung": "Zahl plus Zeitzeichen: on-Lesung." },
+      { "text": "十分", "lesung": "じゅっぷん", "bedeutung": "zehn Minuten", "begruendung": "Zahl plus Zeiteinheit: on-Lesung mit Lautwechsel ふん→ぷん." },
+      { "text": "です", "lesung": "です", "bedeutung": "Kopula" },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" },
+      { "text": "今年", "lesung": "ことし", "bedeutung": "dieses Jahr", "begruendung": "Sonderlesung (Jukujikun): 今年 wird als Ganzes ことし gelesen." },
+      { "text": "、", "lesung": "、", "bedeutung": "Komma" },
+      { "text": "大学", "lesung": "だいがく", "bedeutung": "Universität", "begruendung": "Zwei Kanji nebeneinander: on-Lesung Kompositum." },
+      { "text": "の", "lesung": "の", "bedeutung": "Zugehörigkeitspartikel" },
+      { "text": "学生", "lesung": "がくせい", "bedeutung": "Student", "begruendung": "Zwei Kanji nebeneinander: on-Lesung Kompositum." },
+      { "text": "です", "lesung": "です", "bedeutung": "Kopula" },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" }
+    ]
+  },
+  {
+    "id": "a-005",
+    "stufe": "absatz",
+    "japanisch": "子が三人います。一人は女の子です。二人は小さいです。一人は九さいです。",
+    "uebersetzung": "Es gibt drei Kinder. Eines ist ein Mädchen. Zwei sind klein. Eines ist neun Jahre alt.",
+    "tokens": [
+      { "text": "子", "lesung": "こ", "bedeutung": "Kind", "begruendung": "Kanji steht allein: kun-Lesung." },
+      { "text": "が", "lesung": "が", "bedeutung": "Subjektpartikel" },
+      { "text": "三人", "lesung": "さんにん", "bedeutung": "drei Personen", "begruendung": "Zahl plus Zählwort 人: on-Lesung." },
+      { "text": "います", "lesung": "います", "bedeutung": "es gibt (belebt)" },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" },
+      { "text": "一人", "lesung": "ひとり", "bedeutung": "eine Person", "begruendung": "Zahl plus Zählwort 人: kun-Lesung, Ausnahme von der on-Regel." },
+      { "text": "は", "lesung": "わ", "bedeutung": "Themenpartikel", "begruendung": "は als Partikel wird wa gesprochen." },
+      { "text": "女", "lesung": "おんな", "bedeutung": "Frau", "begruendung": "Kanji steht allein: kun-Lesung." },
+      { "text": "の", "lesung": "の", "bedeutung": "Zugehörigkeitspartikel" },
+      { "text": "子", "lesung": "こ", "bedeutung": "Kind", "begruendung": "Kanji steht allein: kun-Lesung." },
+      { "text": "です", "lesung": "です", "bedeutung": "Kopula" },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" },
+      { "text": "二人", "lesung": "ふたり", "bedeutung": "zwei Personen", "begruendung": "Zahl plus Zählwort 人: kun-Lesung, Ausnahme von der on-Regel." },
+      { "text": "は", "lesung": "わ", "bedeutung": "Themenpartikel", "begruendung": "は als Partikel wird wa gesprochen." },
+      { "text": "小さい", "lesung": "ちいさい", "bedeutung": "klein", "begruendung": "Okurigana さい folgt: kun-Lesung ちい." },
+      { "text": "です", "lesung": "です", "bedeutung": "Kopula" },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" },
+      { "text": "一人", "lesung": "ひとり", "bedeutung": "eine Person", "begruendung": "Zahl plus Zählwort 人: kun-Lesung, Ausnahme von der on-Regel." },
+      { "text": "は", "lesung": "わ", "bedeutung": "Themenpartikel", "begruendung": "は als Partikel wird wa gesprochen." },
+      { "text": "九", "lesung": "きゅう", "bedeutung": "neun", "begruendung": "Kanji hier als Zahl vor der Alterseinheit さい: on-Lesung." },
+      { "text": "さい", "lesung": "さい", "bedeutung": "Jahre (Alter)" },
+      { "text": "です", "lesung": "です", "bedeutung": "Kopula" },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" }
+    ]
+  },
+  {
+    "id": "a-006",
+    "stufe": "absatz",
+    "japanisch": "日本には火山がたくさんあります。山のそばに川があります。田には水があります。",
+    "uebersetzung": "In Japan gibt es viele Vulkane. Neben dem Berg ist ein Fluss. Im Reisfeld ist Wasser.",
+    "tokens": [
+      { "text": "日本", "lesung": "にほん", "bedeutung": "Japan", "begruendung": "Zwei Kanji nebeneinander: on-Lesung Kompositum." },
+      { "text": "には", "lesung": "には", "bedeutung": "in (Themenmarkierung)" },
+      { "text": "火山", "lesung": "かざん", "bedeutung": "Vulkan", "begruendung": "Zwei Kanji nebeneinander: on-Lesung mit Rendaku, 山 さん→ざん." },
+      { "text": "が", "lesung": "が", "bedeutung": "Subjektpartikel" },
+      { "text": "たくさん", "lesung": "たくさん", "bedeutung": "viele" },
+      { "text": "あります", "lesung": "あります", "bedeutung": "es gibt" },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" },
+      { "text": "山", "lesung": "やま", "bedeutung": "Berg", "begruendung": "Kanji steht allein: kun-Lesung." },
+      { "text": "の", "lesung": "の", "bedeutung": "Zugehörigkeitspartikel" },
+      { "text": "そばに", "lesung": "そばに", "bedeutung": "neben" },
+      { "text": "川", "lesung": "かわ", "bedeutung": "Fluss", "begruendung": "Kanji steht allein: kun-Lesung." },
+      { "text": "が", "lesung": "が", "bedeutung": "Subjektpartikel" },
+      { "text": "あります", "lesung": "あります", "bedeutung": "es gibt" },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" },
+      { "text": "田", "lesung": "た", "bedeutung": "Reisfeld", "begruendung": "Kanji steht allein: kun-Lesung." },
+      { "text": "には", "lesung": "には", "bedeutung": "in (Themenmarkierung)" },
+      { "text": "水", "lesung": "みず", "bedeutung": "Wasser", "begruendung": "Kanji steht allein: kun-Lesung." },
+      { "text": "が", "lesung": "が", "bedeutung": "Subjektpartikel" },
+      { "text": "あります", "lesung": "あります", "bedeutung": "es gibt" },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" }
+    ]
+  },
+  {
+    "id": "a-007",
+    "stufe": "absatz",
+    "japanisch": "この大学は大きいです。学生がたくさんいます。先生もたくさんいます。学生は日本語を学びます。",
+    "uebersetzung": "Diese Universität ist groß. Es gibt viele Studenten. Es gibt auch viele Lehrer. Die Studenten lernen Japanisch.",
+    "tokens": [
+      { "text": "この", "lesung": "この", "bedeutung": "diese" },
+      { "text": "大学", "lesung": "だいがく", "bedeutung": "Universität", "begruendung": "Zwei Kanji nebeneinander: on-Lesung Kompositum." },
+      { "text": "は", "lesung": "わ", "bedeutung": "Themenpartikel", "begruendung": "は als Partikel wird wa gesprochen." },
+      { "text": "大きい", "lesung": "おおきい", "bedeutung": "groß", "begruendung": "Okurigana きい folgt: kun-Lesung おお." },
+      { "text": "です", "lesung": "です", "bedeutung": "Kopula" },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" },
+      { "text": "学生", "lesung": "がくせい", "bedeutung": "Student", "begruendung": "Zwei Kanji nebeneinander: on-Lesung Kompositum." },
+      { "text": "が", "lesung": "が", "bedeutung": "Subjektpartikel" },
+      { "text": "たくさん", "lesung": "たくさん", "bedeutung": "viele" },
+      { "text": "います", "lesung": "います", "bedeutung": "es gibt (belebt)" },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" },
+      { "text": "先生", "lesung": "せんせい", "bedeutung": "Lehrer", "begruendung": "Zwei Kanji nebeneinander: on-Lesung Kompositum." },
+      { "text": "も", "lesung": "も", "bedeutung": "auch" },
+      { "text": "たくさん", "lesung": "たくさん", "bedeutung": "viele" },
+      { "text": "います", "lesung": "います", "bedeutung": "es gibt (belebt)" },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" },
+      { "text": "学生", "lesung": "がくせい", "bedeutung": "Student", "begruendung": "Zwei Kanji nebeneinander: on-Lesung Kompositum." },
+      { "text": "は", "lesung": "わ", "bedeutung": "Themenpartikel", "begruendung": "は als Partikel wird wa gesprochen." },
+      { "text": "日本語", "lesung": "にほんご", "bedeutung": "Japanisch", "begruendung": "Drei Kanji in Folge: on-Lesung." },
+      { "text": "を", "lesung": "お", "bedeutung": "Objektpartikel", "begruendung": "を wird immer o gesprochen." },
+      { "text": "学び", "lesung": "まなび", "bedeutung": "lernen (Stamm)", "begruendung": "Okurigana び folgt: kun-Lesung まな." },
+      { "text": "ます", "lesung": "ます", "bedeutung": "Höflichkeitsendung" },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" }
+    ]
+  },
+  {
+    "id": "a-008",
+    "stufe": "absatz",
+    "japanisch": "月は上にあります。日はとても大きいです。月と日を見ます。",
+    "uebersetzung": "Der Mond ist oben. Die Sonne ist sehr groß. Ich schaue mir Mond und Sonne an.",
+    "tokens": [
+      { "text": "月", "lesung": "つき", "bedeutung": "Mond", "begruendung": "Kanji steht allein: kun-Lesung." },
+      { "text": "は", "lesung": "わ", "bedeutung": "Themenpartikel", "begruendung": "は als Partikel wird wa gesprochen." },
+      { "text": "上", "lesung": "うえ", "bedeutung": "oben", "begruendung": "Kanji steht allein: kun-Lesung." },
+      { "text": "に", "lesung": "に", "bedeutung": "Zielpartikel" },
+      { "text": "あります", "lesung": "あります", "bedeutung": "es gibt, ist vorhanden" },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" },
+      { "text": "日", "lesung": "ひ", "bedeutung": "Sonne", "begruendung": "Kanji steht allein: kun-Lesung." },
+      { "text": "は", "lesung": "わ", "bedeutung": "Themenpartikel", "begruendung": "は als Partikel wird wa gesprochen." },
+      { "text": "とても", "lesung": "とても", "bedeutung": "sehr" },
+      { "text": "大きい", "lesung": "おおきい", "bedeutung": "groß", "begruendung": "Okurigana きい folgt: kun-Lesung おお." },
+      { "text": "です", "lesung": "です", "bedeutung": "Kopula" },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" },
+      { "text": "月", "lesung": "つき", "bedeutung": "Mond", "begruendung": "Kanji steht allein: kun-Lesung." },
+      { "text": "と", "lesung": "と", "bedeutung": "Aufzählungspartikel" },
+      { "text": "日", "lesung": "ひ", "bedeutung": "Sonne", "begruendung": "Kanji steht allein: kun-Lesung." },
+      { "text": "を", "lesung": "お", "bedeutung": "Objektpartikel", "begruendung": "を wird immer o gesprochen." },
+      { "text": "見ます", "lesung": "みます", "bedeutung": "ansehen", "begruendung": "Okurigana ます folgt dem Kanji: kun-Lesung み." },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" }
+    ]
+  },
+  {
+    "id": "a-009",
+    "stufe": "absatz",
+    "japanisch": "小さい子は日本語を学びます。学校で先生と日本語を学びます。一年生も六年生も学校がすきです。",
+    "uebersetzung": "Ein kleines Kind lernt Japanisch. In der Schule lernt es mit dem Lehrer Japanisch. Sowohl Erstklässler als auch Sechstklässler mögen die Schule.",
+    "tokens": [
+      { "text": "小さい", "lesung": "ちいさい", "bedeutung": "klein", "begruendung": "Okurigana さい folgt: kun-Lesung ちい." },
+      { "text": "子", "lesung": "こ", "bedeutung": "Kind", "begruendung": "Kanji steht allein: kun-Lesung." },
+      { "text": "は", "lesung": "わ", "bedeutung": "Themenpartikel", "begruendung": "は als Partikel wird wa gesprochen." },
+      { "text": "日本語", "lesung": "にほんご", "bedeutung": "Japanisch", "begruendung": "Drei Kanji in Folge: on-Lesung." },
+      { "text": "を", "lesung": "お", "bedeutung": "Objektpartikel", "begruendung": "を wird immer o gesprochen." },
+      { "text": "学び", "lesung": "まなび", "bedeutung": "lernen (Stamm)", "begruendung": "Okurigana び folgt: kun-Lesung まな." },
+      { "text": "ます", "lesung": "ます", "bedeutung": "Höflichkeitsendung" },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" },
+      { "text": "学校", "lesung": "がっこう", "bedeutung": "Schule", "begruendung": "Zwei Kanji nebeneinander: on-Lesung mit Verdopplung." },
+      { "text": "で", "lesung": "で", "bedeutung": "Ortspartikel" },
+      { "text": "先生", "lesung": "せんせい", "bedeutung": "Lehrer", "begruendung": "Zwei Kanji nebeneinander: on-Lesung Kompositum." },
+      { "text": "と", "lesung": "と", "bedeutung": "Begleitungspartikel" },
+      { "text": "日本語", "lesung": "にほんご", "bedeutung": "Japanisch", "begruendung": "Drei Kanji in Folge: on-Lesung." },
+      { "text": "を", "lesung": "お", "bedeutung": "Objektpartikel", "begruendung": "を wird immer o gesprochen." },
+      { "text": "学び", "lesung": "まなび", "bedeutung": "lernen (Stamm)", "begruendung": "Okurigana び folgt: kun-Lesung まな." },
+      { "text": "ます", "lesung": "ます", "bedeutung": "Höflichkeitsendung" },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" },
+      { "text": "一年生", "lesung": "いちねんせい", "bedeutung": "Erstklässler", "begruendung": "Drei Kanji in Folge: on-Lesung." },
+      { "text": "も", "lesung": "も", "bedeutung": "auch" },
+      { "text": "六年生", "lesung": "ろくねんせい", "bedeutung": "Sechstklässler", "begruendung": "Drei Kanji in Folge: on-Lesung." },
+      { "text": "も", "lesung": "も", "bedeutung": "auch" },
+      { "text": "学校", "lesung": "がっこう", "bedeutung": "Schule", "begruendung": "Zwei Kanji nebeneinander: on-Lesung mit Verdopplung." },
+      { "text": "が", "lesung": "が", "bedeutung": "Subjektpartikel" },
+      { "text": "すき", "lesung": "すき", "bedeutung": "mögen" },
+      { "text": "です", "lesung": "です", "bedeutung": "Kopula" },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" }
+    ]
+  },
+  {
+    "id": "a-010",
+    "stufe": "absatz",
+    "japanisch": "日本語は学校で学びます。今、何時ですか。三時十分です。山と川と田を見ます。",
+    "uebersetzung": "Japanisch lernt man in der Schule. Wie spät ist es jetzt? Es ist 3:10 Uhr. Ich sehe Berg, Fluss und Reisfeld.",
+    "tokens": [
+      { "text": "日本語", "lesung": "にほんご", "bedeutung": "Japanisch", "begruendung": "Drei Kanji in Folge: on-Lesung." },
+      { "text": "は", "lesung": "わ", "bedeutung": "Themenpartikel", "begruendung": "は als Partikel wird wa gesprochen." },
+      { "text": "学校", "lesung": "がっこう", "bedeutung": "Schule", "begruendung": "Zwei Kanji nebeneinander: on-Lesung mit Verdopplung." },
+      { "text": "で", "lesung": "で", "bedeutung": "Ortspartikel" },
+      { "text": "学び", "lesung": "まなび", "bedeutung": "lernen (Stamm)", "begruendung": "Okurigana び folgt: kun-Lesung まな." },
+      { "text": "ます", "lesung": "ます", "bedeutung": "Höflichkeitsendung" },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" },
+      { "text": "今", "lesung": "いま", "bedeutung": "jetzt", "begruendung": "Kanji steht allein: kun-Lesung." },
+      { "text": "、", "lesung": "、", "bedeutung": "Komma" },
+      { "text": "何時", "lesung": "なんじ", "bedeutung": "wie viel Uhr", "begruendung": "何 wird vor dem Zählwort 時 zu なん verkürzt." },
+      { "text": "です", "lesung": "です", "bedeutung": "Kopula" },
+      { "text": "か", "lesung": "か", "bedeutung": "Fragepartikel" },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" },
+      { "text": "三時", "lesung": "さんじ", "bedeutung": "drei Uhr", "begruendung": "Zahl plus Zeitzeichen: on-Lesung." },
+      { "text": "十分", "lesung": "じゅっぷん", "bedeutung": "zehn Minuten", "begruendung": "Zahl plus Zeiteinheit: on-Lesung mit Lautwechsel ふん→ぷん." },
+      { "text": "です", "lesung": "です", "bedeutung": "Kopula" },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" },
+      { "text": "山", "lesung": "やま", "bedeutung": "Berg", "begruendung": "Kanji steht allein: kun-Lesung." },
+      { "text": "と", "lesung": "と", "bedeutung": "Aufzählungspartikel" },
+      { "text": "川", "lesung": "かわ", "bedeutung": "Fluss", "begruendung": "Kanji steht allein: kun-Lesung." },
+      { "text": "と", "lesung": "と", "bedeutung": "Aufzählungspartikel" },
+      { "text": "田", "lesung": "た", "bedeutung": "Reisfeld", "begruendung": "Kanji steht allein: kun-Lesung." },
+      { "text": "を", "lesung": "お", "bedeutung": "Objektpartikel", "begruendung": "を wird immer o gesprochen." },
+      { "text": "見ます", "lesung": "みます", "bedeutung": "ansehen", "begruendung": "Okurigana ます folgt dem Kanji: kun-Lesung み." },
+      { "text": "。", "lesung": "。", "bedeutung": "Satzende" }
+    ]
+  }
+]
