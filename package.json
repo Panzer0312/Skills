@@ -2,8 +2,12 @@
   "name": "skillsapp",
   "private": true,
   "type": "module",
-  "workspaces": ["packages/*"],
-  "engines": { "node": ">=20" },
+  "workspaces": [
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "test": "vitest run",
     "test:watch": "vitest",
@@ -14,5 +18,10 @@
     "typescript": "^5.6.0",
     "vitest": "^2.1.0",
     "@types/node": "^22.7.0"
+  },
+  "allowScripts": {
+    "better-sqlite3@11.10.0": true,
+    "esbuild@0.21.5": true,
+    "esbuild@0.28.1": true
   }
 }

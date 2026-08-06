@@ -1,5 +1,6 @@
 node_modules/
 dist/
+*.tsbuildinfo
 data/app.db
 data/app.db-*
 data/backups/
