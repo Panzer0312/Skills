@@ -6,5 +6,4 @@ export * from "./srs/fsrs.js";
 export * from "./srs/queue.js";
 export * from "./parsers/kana.js";
 export * from "./schema/japanese.js";
-export * from "./music/notes.js";
-export * from "./music/chords.js";
+export * from "./music/index.js";

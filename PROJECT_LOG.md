@@ -13,7 +13,7 @@ Dieses Dokument ist die zentrale Stelle für Stand, Probleme und Ideen.
 | C4 Anki-Import | fertig | `.apkg`-Reader (`readApkg`) entpackt Zip, liest `collection.anki21`/`collection.anki2`, unterstützt altes (`col.models`-JSON) und neues Schema (`notetypes`/`fields`/`templates`), Medienzuordnung, klare Fehlermeldung bei zstd-komprimiertem `collection.anki21b`. Dazu `guessMapping` (Feld-Rateheuristik für Vorder-/Rückseite, Lesung, Notiz auf Deutsch und Englisch) und `importApkg`: Import von Notizen, Karten und Medien (SHA-256-dedupliziert nach `data/media/`) in **einer** Transaktion, wahlweise mit übernommenem Anki-Scheduling (`ivl`/`factor`/`due` → FSRS-Zustand) oder komplett neuem Zustand. Routen `POST /api/anki/preview` (schreibt nichts), `POST /api/anki/import` und `GET /api/anki/export/:skillId/:moduleId` (schreibt das alte Schema, `ver = 11`) unter `packages/server/src/routes/anki.ts`. Import-Oberfläche unter `/import` (`packages/web/src/features/anki/AnkiImport.tsx`): Datei wählen, Vorschau mit Feldzuordnung, Ziel wählen, importieren. Export-Link im `DeckRenderer`. |
 | C5 Content-Renderer | fertig | MDX mit Ziel, Handhaltung, Fehlerbild, Übung, Checkpoint, Merksatz, Hinweis |
 | C6 Audio-Kit | offen | Plan 3 |
-| C7 Guitar-Skill | in Arbeit | Plan 3, Tasks 1-2: `packages/core/src/music/notes.ts` (Notennamen, Stimmungen, Griffbrett, Frequenzen, Intervalle) und `chords.ts` (Akkord-Parsing, Transponieren, Akkordtöne, offene Griffe, Barré-Formen, Stufenakkorde). Rest (Songformat, Parser, Server-Routen, Widgets, Lektionen) offen. |
+| C7 Guitar-Skill | in Arbeit | Plan 3, Tasks 1-3: `packages/core/src/music/notes.ts` (Notennamen, Stimmungen, Griffbrett, Frequenzen, Intervalle), `chords.ts` (Akkord-Parsing, Transponieren, Akkordtöne, offene Griffe, Barré-Formen, Stufenakkorde) und das interne Songformat: `song.ts` (Zod-Schema `Song`/`SongSection`/`SongLine`/`TabLine`, `transposeSong`), `detectFormat.ts`, `parseChordPro.ts`, `parseChordSheet.ts`, `parseTab.ts` sowie `parseSong` als Format-Dispatcher in `packages/core/src/music/index.ts`. Rest (Server-Routen, Widgets, Lektionen) offen. |
 | C8 Song-Import | offen | Plan 3 |
 | C9 Japanese-Skill | fertig | Kana-Transliteration (Hepburn), Kana-Daten, `KanaGrid`, `KanaDrill`, acht Themen-Vokabel-Decks (256 Karten), zwölfteiliger Grammatik-Kurs, 40 Kanji mit Lesungsregeln und 60 annotierte Sätze, `ReadingTrainer`. Rauchtest in `e2e/japanese.spec.ts`. |
 | C10 Projekt-Log | fertig | dieses Dokument |
@@ -88,6 +88,19 @@ Dieses Dokument ist die zentrale Stelle für Stand, Probleme und Ideen.
 - Beim Export-Routing (`packages/server/src/routes/anki.ts`) musste `writeApkg(...)` in `Buffer.from(...)`
   gewickelt werden, bevor es an `c.body(...)` geht: TypeScript lehnte den rohen `Uint8Array<ArrayBufferLike>`
   von `fflate.zipSync` ab (Hono erwartet `Uint8Array<ArrayBuffer>`). Verhalten unverändert.
+
+## Abweichungen vom Plan (Plan 3, Task 3)
+
+- `packages/core/src/music/parsers.test.ts`: Die im Plan vorgegebene Test-Fixture für `parseChordPro`
+  erwartete für den `Am`-Akkord in `"[Em]Erste Zeile mit [Am]zwei Akkorden"` die Position 17. Mit dem
+  im Plan ebenfalls verbatim vorgegebenen `parseChordPro` ergibt sich für diese Zeile aber rechnerisch
+  Position 16 (`raw.indexOf("[Am]") === 20`, Cursor nach `[Em]` bei 4, also `20 - 4 = 16` Zeichen
+  Lyrics-Text davor). Nachgerechnet mit Node, die Fixture selbst war also inkonsistent mit der
+  mitgelieferten Referenzimplementierung. Die Testerwartung wurde auf 16 korrigiert; alle anderen
+  Positionsprüfungen (z. B. im Chord-Sheet-Test) stimmten bereits mit der Referenzimplementierung
+  überein.
+- 15 erwartete Tests laut Plan (Step 5) vs. 13 tatsächliche `it`-Blöcke in der vorgegebenen
+  `parsers.test.ts` — reine Falschzählung im Plantext, keine fehlenden Tests.
 
 ## Ideen und Möglichkeiten
 
