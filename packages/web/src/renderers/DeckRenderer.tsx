@@ -30,6 +30,12 @@ export function DeckRenderer({
       >
         Wiederholen
       </Link>
+      <a
+        href={`/api/anki/export/${skillId}/${moduleId}`}
+        className="ml-2 inline-block rounded border border-slate-300 px-4 py-2 text-sm dark:border-slate-700"
+      >
+        Als Anki-Deck exportieren
+      </a>
     </div>
   );
 }

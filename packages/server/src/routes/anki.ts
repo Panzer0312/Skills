@@ -5,6 +5,7 @@ import type { AppEnv } from "../app.js";
 import { importApkg } from "../services/apkg/importDeck.js";
 import { guessMapping } from "../services/apkg/map.js";
 import { ApkgError, readApkg } from "../services/apkg/read.js";
+import { writeApkg } from "../services/apkg/writeApkg.js";
 
 const mappingSchema = z.object({
   front: z.number().int().nonnegative(),
@@ -91,6 +92,30 @@ ankiRoutes.post("/api/anki/import", async (c) => {
   } catch (error) {
     if (error instanceof ApkgError) {
       return c.json({ error: { code: "apkg_invalid", message: error.message } }, 400);
+    }
+    throw error;
+  }
+});
+
+ankiRoutes.get("/api/anki/export/:skillId/:moduleId", (c) => {
+  const database = c.get("database");
+  const skillId = c.req.param("skillId");
+  const moduleId = c.req.param("moduleId");
+
+  const row = database.raw
+    .prepare("SELECT title FROM modules WHERE skill_id = ? AND id = ?")
+    .get(skillId, moduleId) as { title: string } | undefined;
+  const deckName = row?.title ?? moduleId;
+
+  try {
+    const bytes = Buffer.from(writeApkg(database, skillId, moduleId, deckName));
+    return c.body(bytes, 200, {
+      "content-type": "application/octet-stream",
+      "content-disposition": `attachment; filename="${moduleId}.apkg"`,
+    });
+  } catch (error) {
+    if (error instanceof ApkgError) {
+      return c.json({ error: { code: "apkg_empty", message: error.message } }, 400);
     }
     throw error;
   }
