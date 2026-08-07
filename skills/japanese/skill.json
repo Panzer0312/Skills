@@ -5,6 +5,7 @@
   "accent": "#e05263",
   "description": "Von den Kana bis zum Lesen ganzer Sätze.",
   "modules": [
+    { "id": "kurs", "type": "course", "title": "Kurs", "subtitle": "30 Lektionen, aufeinander aufbauend", "data": ["lessons/*.mdx"] },
     { "id": "hiragana", "type": "reference", "title": "Hiragana", "pinned": true, "widget": "KanaGrid", "data": ["kana/hiragana.json"] },
     { "id": "katakana", "type": "reference", "title": "Katakana", "pinned": true, "widget": "KanaGrid", "data": ["kana/katakana.json"] },
     { "id": "sonderfaelle", "type": "reference", "title": "Sonderfälle beim Lesen", "data": ["kana/sonderfaelle.json"] },
