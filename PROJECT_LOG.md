@@ -10,7 +10,7 @@ Dieses Dokument ist die zentrale Stelle für Stand, Probleme und Ideen.
 | C1 Shell und Skill-Runtime | fertig | Registry, Routing, Theme, Schnellzugriffe |
 | C2 Data Layer | fertig | SQLite, Seed-Abgleich, Export und Sicherung |
 | C3 SRS-Engine | fertig | FSRS-5-Gewichte, Warteschlange mit Tageslimits |
-| C4 Anki-Import | in Arbeit | Plan 2 Task 8 fertig: `.apkg`-Reader (`readApkg`) entpackt Zip, liest `collection.anki21`/`collection.anki2`, unterstützt altes (`col.models`-JSON) und neues Schema (`notetypes`/`fields`/`templates`), Medienzuordnung, klare Fehlermeldung bei zstd-komprimiertem `collection.anki21b`. |
+| C4 Anki-Import | in Arbeit | Plan 2 Tasks 8-9 fertig: `.apkg`-Reader (`readApkg`) entpackt Zip, liest `collection.anki21`/`collection.anki2`, unterstützt altes (`col.models`-JSON) und neues Schema (`notetypes`/`fields`/`templates`), Medienzuordnung, klare Fehlermeldung bei zstd-komprimiertem `collection.anki21b`. Dazu jetzt `guessMapping` (Feld-Rateheuristik für Vorder-/Rückseite, Lesung, Notiz auf Deutsch und Englisch) und `importApkg`: Import von Notizen, Karten und Medien (SHA-256-dedupliziert nach `data/media/`) in **einer** Transaktion, wahlweise mit übernommenem Anki-Scheduling (`ivl`/`factor`/`due` → FSRS-Zustand) oder komplett neuem Zustand. Routen `POST /api/anki/preview` (schreibt nichts) und `POST /api/anki/import` unter `packages/server/src/routes/anki.ts`. |
 | C5 Content-Renderer | fertig | MDX mit Ziel, Handhaltung, Fehlerbild, Übung, Checkpoint, Merksatz, Hinweis |
 | C6 Audio-Kit | offen | Plan 3 |
 | C7 Guitar-Skill | offen | Plan 3 |
@@ -53,6 +53,19 @@ Dieses Dokument ist die zentrale Stelle für Stand, Probleme und Ideen.
 - Reading-Regeln, Kanji und Sätze folgen den Mustern aus dem Plan; die Absatz-Ebene in
   `saetze.json` verwendet ausschließlich Kanji aus `kanji.json` (auch Wochentagsnamen mit 曜
   wurden dafür vermieden, da 曜 nicht in der Liste steht).
+
+## Abweichungen vom Plan (Plan 2, Task 9)
+
+- `packages/server/src/routes/anki.test.ts`: `new Blob([bytes])` mit TypeScript 5.9 ergab einen
+  Typfehler (`Uint8Array<ArrayBufferLike>` nicht zuweisbar an `BlobPart`, wegen `SharedArrayBuffer`
+  im Unionstyp von `ArrayBufferLike`). Behoben mit einem `as BlobPart`-Cast an der Aufrufstelle,
+  Verhalten unverändert.
+- Zusätzlich zum geplanten Test „archive is broken" (der nur zeigt, dass ein ungültiges Zip vor
+  Transaktionsbeginn abgelehnt wird) wurde `packages/server/src/services/apkg/importDeck.test.ts`
+  ergänzt: Ein Test lässt den Medien-Schreibschritt *innerhalb* der Transaktion fehlschlagen
+  (Dateiname mit NUL-Byte), nachdem Notizen, Karten und Scheduling bereits eingefügt wurden, und
+  prüft, dass danach `notes`, `cards`, `scheduling`, `skills` und `modules` alle leer sind. Das
+  ist der eigentliche Beweis für die Rollback-Eigenschaft der SQLite-Transaktion.
 
 ## Ideen und Möglichkeiten
 
