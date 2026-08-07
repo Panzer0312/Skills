@@ -147,16 +147,19 @@ Pufferdaten an die reine Funktion `readTuning` (`@skills/core`) zu geben, und ze
 ## Eigene Akkord-Griffbilder
 
 `ChordDiagramSingle` (verwendet in `SongView` und im `ChordDiagram`-Widget) zeigt zu jedem
-Akkordsymbol ein Griffbild. Woher das Griffbild kommt, entscheidet diese Reihenfolge:
+Akkordsymbol ein Griffbild. Ein Akkordsymbol wird in dieser Reihenfolge aufgelöst:
 
-1. **Eigene JSON-Datei** unter `skills/<skill>/chords/*.json` (siehe unten) — überschreibt alles
-   andere für dieses Symbol.
-2. Die eingebaute Tabelle offener Akkorde (`OPEN_CHORDS` in `packages/core/src/music/chords.ts`).
-3. Ein automatisch abgeleitetes, verschiebbares Barré-Griffbild (E- oder A-Form), falls das Symbol
-   dazu passt (siehe `chordShape()`).
-4. Andernfalls die Meldung „Für diesen Akkord ist kein Griffbild hinterlegt."
+1. Griff, den du in der Oberfläche für genau diesen Song gespeichert hast
+2. Griff, den du in der Oberfläche für alle Songs gespeichert hast
+3. `skills/<skill>/chords/*.json`
+4. mitgelieferte offene Akkorde
+5. abgeleitetes Barré-Griffbild
+6. kein Griffbild — die Kachel bleibt klickbar und legt beim Bearbeiten einen neuen Griff an
 
-Eine `chords/*.json`-Datei ist **optional** — fehlt sie, greifen einfach die Stufen 2–4. Sie enthält
+Die Stufen 1 und 2 liegen in `data/app.db` und werden von der Sicherung erfasst. Der Server
+schreibt nie in `chords/*.json` — diese Dateien bleiben der von Hand gepflegte Weg.
+
+Eine `chords/*.json`-Datei ist **optional** — fehlt sie, greifen einfach die Stufen 3–5. Sie enthält
 ein Array von Einträgen:
 
 ```json

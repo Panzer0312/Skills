@@ -36,3 +36,20 @@ test("the tuner explains itself before touching the microphone", async ({ page }
   await expect(page.getByRole("button", { name: /Stimmgerät starten/ })).toBeVisible();
   await expect(page.getByLabel("Stimmung")).toBeVisible();
 });
+
+test("a chord shape edited for one song survives reopening it", async ({ page }) => {
+  await page.goto("/skill/guitar/songs");
+  await page.getByRole("button", { name: /Zwei Akkorde, eine Wiege/ }).click();
+
+  await page.getByRole("button", { name: "Griff bearbeiten" }).first().click();
+  await expect(page.getByRole("heading", { name: /Griffbild für/ })).toBeVisible();
+
+  await page.getByLabel("Anzeigename").fill("Em nach meiner Art");
+  await page.getByRole("button", { name: "Nur in diesem Song" }).click();
+
+  await expect(page.getByText("Em nach meiner Art").first()).toBeVisible();
+
+  await page.getByRole("button", { name: /Zurück zur Bibliothek/ }).click();
+  await page.getByRole("button", { name: /Zwei Akkorde, eine Wiege/ }).click();
+  await expect(page.getByText("Em nach meiner Art").first()).toBeVisible();
+});
