@@ -1,0 +1,16 @@
+[
+  {
+    "symbol": "G",
+    "name": "G (alternativer Fingersatz)",
+    "frets": [3, 2, 0, 0, 3, 3],
+    "fingers": [2, 1, null, null, 3, 4],
+    "baseFret": 1
+  },
+  {
+    "symbol": "Cadd9",
+    "name": "Cadd9",
+    "frets": [null, 3, 2, 0, 3, 0],
+    "fingers": [null, 3, 2, null, 4, null],
+    "baseFret": 1
+  }
+]

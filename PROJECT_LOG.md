@@ -222,6 +222,33 @@ Dieses Dokument ist die zentrale Stelle für Stand, Probleme und Ideen.
   `getBrokenSkills()`/`getSkills()` gegen alle drei Skills: vorher `broken: [{ dir: "guitar", ... }]`,
   danach `broken: []` und alle drei (`demo`, `guitar`, `japanese`) in `skills`.
 
+## Abweichungen vom Plan (Barré-Folgearbeit, UNIT 2: eigene Akkord-Griffbilder)
+
+- Ein zuvor durch Auth-Ablauf abgebrochener Agent hatte bereits `chordFileEntrySchema` /
+  `parseChordFile` in `packages/core/src/schema/content.ts` samt Tests hinterlassen. Geprüft und für
+  korrekt befunden (6er-Arrays, `null` für gedämpft, Bundgrenzen 0–24, Fingergrenzen 1–4, Symbol
+  Pflicht) — unverändert übernommen, nur darauf aufgebaut statt neu geschrieben.
+- Neu: `packages/web/src/music/userChords.ts` lädt `skills/<skill>/chords/*.json` per
+  `import.meta.glob`, genau wie `registry.ts` Manifeste und Moduldaten lädt. Eine ungültige Datei
+  wird übersprungen und landet als `console.warn` — dieselbe Ausfallphilosophie wie bei einem
+  kaputten Manifest. `resolveChordShape(symbol)` setzt die Reihenfolge eigene JSON → `OPEN_CHORDS` →
+  abgeleitetes Barré-Griffbild → `null` um; `ChordDiagramSingle` nutzt das jetzt statt direkt
+  `OPEN_CHORDS`.
+- `ChordDiagramSingle` zeigt jetzt den Startbund („n. Bund") sobald `baseFret > 1` ist, und markiert
+  einen Barré (mehrere Saiten, ein Finger, gleicher Bund) mit einem durchgehenden Balken statt
+  sechs optisch unabhängigen Punkten.
+- `skills/guitar/chords/eigene.json` als lauffähiges Beispiel ergänzt: ein alternativer Fingersatz
+  für das offene `G` (überschreibt `OPEN_CHORDS`) und ein `Cadd9`-Griffbild, das es sonst nirgends
+  gäbe (weder offene Tabelle noch Barré-Ableitung decken `add9` ab) — belegt beide Vorrangfälle.
+- `packages/server/data/` war ein nicht ignoriertes Artefaktverzeichnis (nur `e2e.db*` war per
+  `.gitignore` erfasst, `app.db*` nicht, da die ältere Regel `data/app.db*` nur auf das Repo-Wurzel-
+  `data/` zeigte). Verzeichnis gelöscht und `.gitignore`-Zeile auf `packages/server/data/` verallgemeinert
+  (deckt jetzt jede Datei darin ab, nicht nur die bekannten Namen); mit `git check-ignore -v` gegen
+  `app.db`, `whatever.db-shm` und das Verzeichnis selbst verifiziert.
+- `e2e/guitar.spec.ts` um einen Test ergänzt, der „Barré in F-Dur" öffnet und prüft, dass „kein
+  Griffbild" nirgends auf der Seite steht — vorher fiele das exakt so aus, wenn die Ableitung für F
+  je bräche.
+
 ## Ideen und Möglichkeiten
 
 - Tastaturkürzel `/` für eine globale Suche über alle Karten und Lektionen.

@@ -39,3 +39,33 @@ export function parseDeckFile(input: unknown, source: string): ParseDeckResult {
   }
   return { ok: true, deck: parsed.data };
 }
+
+const fretSchema = z.number().int().min(0).max(24).nullable();
+const fingerSchema = z.number().int().min(1).max(4).nullable();
+
+export const chordFileEntrySchema = z.object({
+  symbol: z.string().min(1),
+  name: z.string().min(1).optional(),
+  frets: z.array(fretSchema).length(6),
+  fingers: z.array(fingerSchema).length(6),
+  baseFret: z.number().int().min(1).max(24),
+});
+
+export const chordFileSchema = z.array(chordFileEntrySchema).min(1);
+
+export type ChordFileEntry = z.infer<typeof chordFileEntrySchema>;
+
+export type ParseChordFileResult =
+  | { ok: true; entries: ChordFileEntry[] }
+  | { ok: false; error: string };
+
+export function parseChordFile(input: unknown, source: string): ParseChordFileResult {
+  const parsed = chordFileSchema.safeParse(input);
+  if (!parsed.success) {
+    const detail = parsed.error.issues
+      .map((issue) => `${issue.path.join(".") || "(wurzel)"}: ${issue.message}`)
+      .join("; ");
+    return { ok: false, error: `${source} — ${detail}` };
+  }
+  return { ok: true, entries: parsed.data };
+}

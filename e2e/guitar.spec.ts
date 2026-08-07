@@ -24,6 +24,13 @@ test("pasting a song shows a preview before saving", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "Testlied" })).toBeVisible();
 });
 
+test("a barre chord song shows chord diagrams instead of the missing-shape fallback", async ({ page }) => {
+  await page.goto("/skill/guitar/songs");
+  await page.getByRole("button", { name: /Barré in F-Dur/ }).click();
+  await expect(page.getByRole("heading", { name: "Barré in F-Dur" })).toBeVisible();
+  await expect(page.getByText("kein Griffbild")).toHaveCount(0);
+});
+
 test("the tuner explains itself before touching the microphone", async ({ page }) => {
   await page.goto("/skill/guitar/stimmgeraet");
   await expect(page.getByRole("button", { name: /Stimmgerät starten/ })).toBeVisible();

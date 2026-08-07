@@ -143,3 +143,49 @@ Beispiel für das eigene Skill `skills/guitar`: `widgets/Tuner.tsx` verwendet `u
 Pufferdaten an die reine Funktion `readTuning` (`@skills/core`) zu geben, und zeigt bei
 `mic.state === "denied"` eine deutsche Erklärung statt eines Absturzes. `SongView.tsx` nutzt
 `useMetronome` fürs Mitspielen zum Song.
+
+## Eigene Akkord-Griffbilder
+
+`ChordDiagramSingle` (verwendet in `SongView` und im `ChordDiagram`-Widget) zeigt zu jedem
+Akkordsymbol ein Griffbild. Woher das Griffbild kommt, entscheidet diese Reihenfolge:
+
+1. **Eigene JSON-Datei** unter `skills/<skill>/chords/*.json` (siehe unten) — überschreibt alles
+   andere für dieses Symbol.
+2. Die eingebaute Tabelle offener Akkorde (`OPEN_CHORDS` in `packages/core/src/music/chords.ts`).
+3. Ein automatisch abgeleitetes, verschiebbares Barré-Griffbild (E- oder A-Form), falls das Symbol
+   dazu passt (siehe `chordShape()`).
+4. Andernfalls die Meldung „Für diesen Akkord ist kein Griffbild hinterlegt."
+
+Eine `chords/*.json`-Datei ist **optional** — fehlt sie, greifen einfach die Stufen 2–4. Sie enthält
+ein Array von Einträgen:
+
+```json
+[
+  {
+    "symbol": "Cadd9",
+    "name": "Cadd9",
+    "frets": [null, 3, 2, 0, 3, 0],
+    "fingers": [null, 3, 2, null, 4, null],
+    "baseFret": 1
+  }
+]
+```
+
+| Feld | Pflicht | Bedeutung |
+| --- | --- | --- |
+| `symbol` | ja | Das Akkordsymbol, wie es im Song vorkommt, z. B. `F`, `Bm`, `Cadd9`. |
+| `name` | nein | Anzeigename über dem Griffbild. Fehlt er, wird `symbol` verwendet. |
+| `frets` | ja | Genau 6 Werte, tiefe E-Saite zuerst. `null` = nicht anschlagen, `0` = leere Saite, sonst der Bund (1–24). |
+| `fingers` | ja | Genau 6 Werte, gleiche Reihenfolge. `null` = keine Fingerangabe, sonst 1–4. |
+| `baseFret` | ja | Bund, an dem die vier angezeigten Bundreihen beginnen (1–24). |
+
+Eine ungültige Datei (falsche Länge, Bund außerhalb des Bereichs, fehlendes Symbol, …) wird beim
+Laden übersprungen und landet als Warnung in der Konsole — genau wie bei einem fehlerhaften
+Manifest stürzt die App dabei nicht ab.
+
+`packages/web/src/music/userChords.ts` sammelt alle `chords/*.json`-Dateien über `import.meta.glob`
+(wie die Registry das mit Manifesten und Modul-Daten tut), validiert sie mit `parseChordFile`
+(`@skills/core`) und stellt `resolveChordShape(symbol)` bereit, das die obige Reihenfolge umsetzt.
+
+Beispiel: `skills/guitar/chords/eigene.json` liefert einen alternativen Fingersatz für `G` und ein
+zusätzliches `Cadd9`-Griffbild, das es sonst nirgends gäbe.
