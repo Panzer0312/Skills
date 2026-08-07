@@ -24,7 +24,13 @@ export function useChordOverrides(songKey?: string) {
       api.get<ChordListResponse>(songKey ? `/api/chords?songKey=${encodeURIComponent(songKey)}` : "/api/chords"),
   });
 
-  const invalidate = () => client.invalidateQueries({ queryKey: ["chords"] });
+  // Invalidate the query this song is reading plus the global-only list: a global save
+  // or reset also affects every other song's overrides, but only one `SongView` is
+  // mounted at a time in this app, so a broader prefix invalidation isn't needed.
+  const invalidate = () => {
+    client.invalidateQueries({ queryKey: key, exact: true });
+    client.invalidateQueries({ queryKey: ["chords", null], exact: true });
+  };
 
   const saveMutation = useMutation({
     mutationFn: (input: { symbol: string; shape: ChordShape; scope: "song" | "global" }) =>

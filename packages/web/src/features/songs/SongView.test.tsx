@@ -1,6 +1,6 @@
 import { parseSong } from "@skills/core";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { SongView } from "./SongView.js";
@@ -97,5 +97,58 @@ describe("SongView", () => {
     const buttons = await screen.findAllByRole("button", { name: "Griff bearbeiten" });
     await userEvent.click(buttons[0]!);
     expect(screen.getByRole("heading", { name: /Griffbild für/ })).toBeInTheDocument();
+  });
+
+  it("shows a German error and keeps the editor open when saving fails", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async (_url: string, init?: RequestInit) => {
+        if (init?.method === "PUT") {
+          return new Response(
+            JSON.stringify({ error: { code: "invalid", message: "Ein globaler Akkord darf keinen Song-Schlüssel haben." } }),
+            { status: 400, headers: { "content-type": "application/json" } },
+          );
+        }
+        return new Response(JSON.stringify({ global: [], song: [] }), {
+          status: 200,
+          headers: { "content-type": "application/json" },
+        });
+      }),
+    );
+
+    renderSong({ songKey: "song:1" });
+    const buttons = await screen.findAllByRole("button", { name: "Griff bearbeiten" });
+    await userEvent.click(buttons[0]!);
+    await userEvent.click(screen.getByRole("button", { name: "In allen Songs" }));
+
+    expect(await screen.findByText("Ein globaler Akkord darf keinen Song-Schlüssel haben.")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /Griffbild für/ })).toBeInTheDocument();
+  });
+
+  it("closes the editor after a successful save", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async (_url: string, init?: RequestInit) => {
+        if (init?.method === "PUT") {
+          return new Response(JSON.stringify({ ok: true }), {
+            status: 200,
+            headers: { "content-type": "application/json" },
+          });
+        }
+        return new Response(JSON.stringify({ global: [], song: [] }), {
+          status: 200,
+          headers: { "content-type": "application/json" },
+        });
+      }),
+    );
+
+    renderSong({ songKey: "song:1" });
+    const buttons = await screen.findAllByRole("button", { name: "Griff bearbeiten" });
+    await userEvent.click(buttons[0]!);
+    await userEvent.click(screen.getByRole("button", { name: "In allen Songs" }));
+
+    await waitFor(() =>
+      expect(screen.queryByRole("heading", { name: /Griffbild für/ })).not.toBeInTheDocument(),
+    );
   });
 });

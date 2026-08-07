@@ -1,10 +1,13 @@
 import { transposeSong, type Song } from "@skills/core";
 import { useEffect, useRef, useState } from "react";
+import { ApiError } from "../../api/client.js";
 import { useMetronome } from "../../audio/useMetronome.js";
 import { ChordDiagramSingle } from "../../music/ChordDiagramSingle.js";
 import { ChordEditor } from "../../music/ChordEditor.js";
 import { useChordOverrides } from "../../music/useChordOverrides.js";
 import { resolveChordShape } from "../../music/userChords.js";
+
+const CHORD_SAVE_FALLBACK_ERROR = "Der Griff konnte nicht gespeichert werden. Bitte später erneut versuchen.";
 
 function LineWithChords({ line }: { line: Song["sections"][number]["lines"][number] }) {
   if (line.chords.length === 0) {
@@ -30,6 +33,7 @@ export function SongView({ song, songKey }: { song: Song; songKey?: string }) {
   const [scrolling, setScrolling] = useState(false);
   const [scrollSpeed, setScrollSpeed] = useState(30);
   const [editing, setEditing] = useState<string | null>(null);
+  const [editError, setEditError] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const metronome = useMetronome();
   const { overrides, entries, save, reset } = useChordOverrides(songKey);
@@ -104,7 +108,10 @@ export function SongView({ song, songKey }: { song: Song; songKey?: string }) {
               key={chord}
               name={chord}
               overrides={overrides}
-              onEdit={() => setEditing(chord)}
+              onEdit={() => {
+                setEditError(null);
+                setEditing(chord);
+              }}
             />
           ))}
         </div>
@@ -120,15 +127,33 @@ export function SongView({ song, songKey }: { song: Song; songKey?: string }) {
             global: entries.global.some((entry) => entry.symbol === editing),
           }}
           onSave={async (shape, scope) => {
-            await save(editing, shape, scope);
-            setEditing(null);
+            try {
+              await save(editing, shape, scope);
+              setEditError(null);
+              setEditing(null);
+            } catch (err) {
+              setEditError(err instanceof ApiError ? err.message : CHORD_SAVE_FALLBACK_ERROR);
+            }
           }}
           onReset={async (scope) => {
-            await reset(editing, scope);
+            try {
+              await reset(editing, scope);
+              setEditError(null);
+              setEditing(null);
+            } catch (err) {
+              setEditError(err instanceof ApiError ? err.message : CHORD_SAVE_FALLBACK_ERROR);
+            }
+          }}
+          onCancel={() => {
+            setEditError(null);
             setEditing(null);
           }}
-          onCancel={() => setEditing(null)}
         />
+      ) : null}
+      {editing && editError ? (
+        <p className="rounded border border-amber-300 bg-amber-50 p-3 text-sm text-amber-800 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-200">
+          {editError}
+        </p>
       ) : null}
 
       <div ref={containerRef} className="max-h-[60vh] overflow-y-auto rounded border border-slate-200 p-4 dark:border-slate-800">
