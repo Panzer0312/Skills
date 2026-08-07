@@ -10,7 +10,7 @@
     { "id": "griffbrett", "type": "practice", "title": "Griffbrett", "widget": "Fretboard", "data": [] },
     { "id": "akkorde", "type": "practice", "title": "Akkordgriffe", "widget": "ChordDiagram", "data": [] },
     { "id": "uebungsplan", "type": "practice", "title": "Übungsplan", "widget": "PracticePlan", "data": ["practice/plan.json"] },
-    { "id": "songs", "type": "library", "title": "Songs", "data": ["songs/uebungsstuecke.json"] },
+    { "id": "songs", "type": "library", "title": "Songs", "widget": "SongLibrary", "data": ["songs/uebungsstuecke.json"] },
     { "id": "nice-to-know", "type": "course", "title": "Nice to know", "data": ["reference/nice-to-know.mdx"] }
   ]
 }

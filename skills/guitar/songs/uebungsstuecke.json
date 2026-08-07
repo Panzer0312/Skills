@@ -1,0 +1,110 @@
+[
+  {
+    "id": "em-am-wiege",
+    "titel": "Zwei Akkorde, eine Wiege",
+    "stufe": 1,
+    "benoetigteAkkorde": ["Em", "Am"],
+    "bpm": 70,
+    "format": "chordpro",
+    "quelle": "{title: Zwei Akkorde, eine Wiege}\n{artist: Übungsstück}\n{start_of_verse}\n[Em]Wechsle ruhig, [Am]zähle mit\n[Em]Vier auf Em, [Am]vier auf Am\n{end_of_verse}"
+  },
+  {
+    "id": "am-c-wanderung",
+    "titel": "Wanderung zu zweit",
+    "stufe": 1,
+    "benoetigteAkkorde": ["Am", "C"],
+    "bpm": 75,
+    "format": "chordpro",
+    "quelle": "{title: Wanderung zu zweit}\n{artist: Übungsstück}\n{start_of_verse}\n[Am]Schritt für Schritt den Weg entlang\n[C]Wechsle sacht, so wird's kein Zwang\n[Am]Zähl die Schläge, halte Ruh\n[C]Dann fällt der Wechsel leichter zu\n{end_of_verse}"
+  },
+  {
+    "id": "g-d-strassenlied",
+    "titel": "Straßenlied",
+    "stufe": 1,
+    "benoetigteAkkorde": ["G", "D"],
+    "bpm": 85,
+    "format": "chordpro",
+    "quelle": "{title: Straßenlied}\n{artist: Übungsstück}\n{start_of_verse}\n[G]Zwei Akkorde, ein Refrain\n[D]Wechsle sauber, bleib im Takt\n[G]Übe langsam, ganz allein\n[D]Bis der Wechsel dir gut gelingt\n{end_of_verse}"
+  },
+  {
+    "id": "em-g-abendlicht",
+    "titel": "Abendlicht",
+    "stufe": 1,
+    "benoetigteAkkorde": ["Em", "G"],
+    "bpm": 65,
+    "format": "chordpro",
+    "quelle": "{title: Abendlicht}\n{artist: Übungsstück}\n{start_of_verse}\n[Em]Der Abend fällt, die Saite klingt\n[G]Ein Wechsel nur, der ruhig schwingt\n[Em]Zähl die Viertel, halte Zeit\n[G]So wird der Wechsel bald bereit\n{end_of_verse}"
+  },
+  {
+    "id": "vier-akkorde-standard",
+    "titel": "Die vier Akkorde",
+    "stufe": 2,
+    "benoetigteAkkorde": ["G", "D", "Em", "C"],
+    "bpm": 80,
+    "format": "chordpro",
+    "quelle": "{title: Die vier Akkorde}\n{artist: Übungsstück}\n{start_of_verse}\n[G]Diese Folge [D]trägt halbe [Em]Popmusik, [C]hör sie überall\n{end_of_verse}"
+  },
+  {
+    "id": "fuenfziger-jahre-folge",
+    "titel": "Fünfziger-Jahre-Folge",
+    "stufe": 2,
+    "benoetigteAkkorde": ["C", "Am", "Dm", "G"],
+    "bpm": 90,
+    "format": "chordpro",
+    "quelle": "{title: Fünfziger-Jahre-Folge}\n{artist: Übungsstück}\n{start_of_verse}\n[C]Vier Akkorde, [Am]alter Klang\n[Dm]Wechsle ruhig, [G]Zeile lang\n{end_of_verse}"
+  },
+  {
+    "id": "moll-pop-runde",
+    "titel": "Moll-Pop-Runde",
+    "stufe": 2,
+    "benoetigteAkkorde": ["Em", "C", "G", "D"],
+    "bpm": 95,
+    "format": "chordpro",
+    "quelle": "{title: Moll-Pop-Runde}\n{artist: Übungsstück}\n{start_of_verse}\n[Em]Diese Runde [C]klingt vertraut\n[G]Vier Akkorde, [D]fest gebaut\n{end_of_verse}"
+  },
+  {
+    "id": "am-blues-wiege",
+    "titel": "Am-Wiege im Kreis",
+    "stufe": 2,
+    "benoetigteAkkorde": ["Am", "Dm", "C", "G"],
+    "bpm": 88,
+    "format": "chordpro",
+    "quelle": "{title: Am-Wiege im Kreis}\n{artist: Übungsstück}\n{start_of_verse}\n[Am]Kreise ruhig, [Dm]bleib im Fluss\n[C]Vier Akkorde, [G]das ist der Schluss\n{end_of_verse}"
+  },
+  {
+    "id": "powerchord-riff-e",
+    "titel": "Riff auf E",
+    "stufe": 3,
+    "benoetigteAkkorde": ["E5", "G5", "A5"],
+    "bpm": 100,
+    "format": "tab",
+    "quelle": "Riff auf E\nÜbungsstück\n\ne|-----------------|\nB|-----------------|\nG|-----------------|\nD|--2--2--5--5--7--|\nA|--2--2--5--5--7--|\nE|--0--0--3--3--5--|"
+  },
+  {
+    "id": "powerchord-riff-a",
+    "titel": "Riff auf A",
+    "stufe": 3,
+    "benoetigteAkkorde": ["A5", "C5", "D5"],
+    "bpm": 110,
+    "format": "tab",
+    "quelle": "Riff auf A\nÜbungsstück\n\ne|-----------------|\nB|-----------------|\nG|-----------------|\nD|--2--2--5--5--7--|\nA|--0--0--3--3--5--|\nE|-----------------|"
+  },
+  {
+    "id": "barre-f-dur-uebung",
+    "titel": "Barré in F-Dur",
+    "stufe": 4,
+    "benoetigteAkkorde": ["F", "Dm", "Bb", "C"],
+    "bpm": 90,
+    "format": "chordpro",
+    "quelle": "{title: Barré in F-Dur}\n{artist: Übungsstück}\n{start_of_verse}\n[F]Der erste Barré [Dm]braucht Geduld und Kraft\n[Bb]Finger flach, der [C]Ton wird klar gemacht\n{end_of_verse}"
+  },
+  {
+    "id": "barre-bm-uebung",
+    "titel": "Barré in Bm",
+    "stufe": 4,
+    "benoetigteAkkorde": ["Bm", "G", "D", "A"],
+    "bpm": 100,
+    "format": "chordpro",
+    "quelle": "{title: Barré in Bm}\n{artist: Übungsstück}\n{start_of_verse}\n[Bm]Kleiner Barré, [G]schon nicht mehr schwer\n[D]Übe ihn oft, [A]dann klappt es sehr\n{end_of_verse}"
+  }
+]
