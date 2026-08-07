@@ -38,6 +38,9 @@ export function Layout() {
           <NavLink to="/import" className={linkClass}>
             Anki-Import
           </NavLink>
+          <NavLink to="/songs/neu" className={linkClass}>
+            Song hinzufügen
+          </NavLink>
           <NavLink to="/einstellungen" className={linkClass}>
             Einstellungen
           </NavLink>

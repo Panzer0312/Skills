@@ -13,8 +13,8 @@ Dieses Dokument ist die zentrale Stelle für Stand, Probleme und Ideen.
 | C4 Anki-Import | fertig | `.apkg`-Reader (`readApkg`) entpackt Zip, liest `collection.anki21`/`collection.anki2`, unterstützt altes (`col.models`-JSON) und neues Schema (`notetypes`/`fields`/`templates`), Medienzuordnung, klare Fehlermeldung bei zstd-komprimiertem `collection.anki21b`. Dazu `guessMapping` (Feld-Rateheuristik für Vorder-/Rückseite, Lesung, Notiz auf Deutsch und Englisch) und `importApkg`: Import von Notizen, Karten und Medien (SHA-256-dedupliziert nach `data/media/`) in **einer** Transaktion, wahlweise mit übernommenem Anki-Scheduling (`ivl`/`factor`/`due` → FSRS-Zustand) oder komplett neuem Zustand. Routen `POST /api/anki/preview` (schreibt nichts), `POST /api/anki/import` und `GET /api/anki/export/:skillId/:moduleId` (schreibt das alte Schema, `ver = 11`) unter `packages/server/src/routes/anki.ts`. Import-Oberfläche unter `/import` (`packages/web/src/features/anki/AnkiImport.tsx`): Datei wählen, Vorschau mit Feldzuordnung, Ziel wählen, importieren. Export-Link im `DeckRenderer`. |
 | C5 Content-Renderer | fertig | MDX mit Ziel, Handhaltung, Fehlerbild, Übung, Checkpoint, Merksatz, Hinweis |
 | C6 Audio-Kit | in Arbeit | Plan 3, Task 4: `packages/core/src/audio/pitch.ts` (YIN-Tonhöhenerkennung `detectPitch`, `readTuning` mit nächstgelegener Saite). Task 5: `packages/web/src/audio/useMicrophone.ts` (Mikrofonzugriff über `getUserMedia`/`AnalyserNode`, degradiert bei Ablehnung sauber zu `state: "denied"` mit deutscher Erklärung), `useMetronome.ts` (Taktgeber über `AudioContext.currentTime`-Vorausplanung, Tap-Tempo, Akzent auf Zählzeit 1). Task 6: `packages/web/src/audio/referenceTone.ts` (`playReferenceTone`, Sinuston zum Nachstimmen nach Gehör). |
-| C7 Guitar-Skill | in Arbeit | Plan 3, Tasks 1-3: `packages/core/src/music/notes.ts` (Notennamen, Stimmungen, Griffbrett, Frequenzen, Intervalle), `chords.ts` (Akkord-Parsing, Transponieren, Akkordtöne, offene Griffe, Barré-Formen, Stufenakkorde) und das interne Songformat: `song.ts` (Zod-Schema `Song`/`SongSection`/`SongLine`/`TabLine`, `transposeSong`), `detectFormat.ts`, `parseChordPro.ts`, `parseChordSheet.ts`, `parseTab.ts` sowie `parseSong` als Format-Dispatcher in `packages/core/src/music/index.ts`. Task 6: `skills/guitar/skill.json` sowie die Widgets `Fretboard` (Griffbrett bis Bund 15, umschaltbar zwischen Notennamen/Intervallen/Dur-Tonleiter, Stimmung wählbar), `ChordDiagram` (Raster aller offenen Akkorde) mit `packages/web/src/music/ChordDiagramSingle.tsx` (einzelnes Griffbild, auch von der künftigen Songansicht nutzbar) und `Tuner` (Cent-Anzeige, Saitenerkennung, Referenzton, einstellbare Rauschschwelle `minRms`). Tasks 7-8: 13 Lektionen, Nice-to-know-Referenz, `PracticePlan`-Widget. Task 9: `skills/guitar/songs/uebungsstuecke.json` (zwölf selbst geschriebene Übungsstücke, gestaffelt nach Stufe), `skills/guitar/widgets/SongLibrary.tsx` (Bibliotheksansicht, gefiltert nach Stufe, plus importierte Songs aus `/api/songs`), `packages/web/src/features/songs/SongView.tsx` (Songanzeige mit Transponieren, Auto-Scroll, Metronom, Griffbildern). Song-Import-Routen (`/api/songs`, URL-Abruf) folgen erst in einem späteren Task — bis dahin liefert `SongLibrary` für „Eigene Songs" schlicht eine leere Liste. |
-| C8 Song-Import | offen | Plan 3 |
+| C7 Guitar-Skill | fertig | Plan 3, Tasks 1-3: `packages/core/src/music/notes.ts` (Notennamen, Stimmungen, Griffbrett, Frequenzen, Intervalle), `chords.ts` (Akkord-Parsing, Transponieren, Akkordtöne, offene Griffe, Barré-Formen, Stufenakkorde) und das interne Songformat: `song.ts` (Zod-Schema `Song`/`SongSection`/`SongLine`/`TabLine`, `transposeSong`), `detectFormat.ts`, `parseChordPro.ts`, `parseChordSheet.ts`, `parseTab.ts` sowie `parseSong` als Format-Dispatcher in `packages/core/src/music/index.ts`. Task 6: `skills/guitar/skill.json` sowie die Widgets `Fretboard` (Griffbrett bis Bund 15, umschaltbar zwischen Notennamen/Intervallen/Dur-Tonleiter, Stimmung wählbar), `ChordDiagram` (Raster aller offenen Akkorde) mit `packages/web/src/music/ChordDiagramSingle.tsx` (einzelnes Griffbild, auch von der künftigen Songansicht nutzbar) und `Tuner` (Cent-Anzeige, Saitenerkennung, Referenzton, einstellbare Rauschschwelle `minRms`). Tasks 7-8: 13 Lektionen, Nice-to-know-Referenz, `PracticePlan`-Widget. Task 9: `skills/guitar/songs/uebungsstuecke.json` (zwölf selbst geschriebene Übungsstücke, gestaffelt nach Stufe), `skills/guitar/widgets/SongLibrary.tsx` (Bibliotheksansicht, gefiltert nach Stufe, plus importierte Songs aus `/api/songs`), `packages/web/src/features/songs/SongView.tsx` (Songanzeige mit Transponieren, Auto-Scroll, Metronom, Griffbildern). Task 11: `packages/web/src/features/songs/SongImport.tsx` unter `/songs/neu`, Navigationseintrag „Song hinzufügen" in `Layout.tsx`. |
+| C8 Song-Import | fertig | Plan 3, Task 10: `packages/server/src/services/songFetch.ts` (`assertPublicUrl`, `extractSongText` mit `cheerio`, `fetchSongFromUrl` mit manueller Redirect-Verfolgung), `packages/server/src/routes/songs.ts` (`GET/POST /api/songs`, `GET/DELETE /api/songs/:id`, `POST /api/songs/fetch`), eingehängt in `app.ts`. Siehe „Abweichungen vom Plan (Plan 3, Task 10)" für die SSRF-Absicherung im Detail. |
 | C9 Japanese-Skill | fertig | Kana-Transliteration (Hepburn), Kana-Daten, `KanaGrid`, `KanaDrill`, acht Themen-Vokabel-Decks (256 Karten), zwölfteiliger Grammatik-Kurs, 40 Kanji mit Lesungsregeln und 60 annotierte Sätze, `ReadingTrainer`. Rauchtest in `e2e/japanese.spec.ts`. |
 | C10 Projekt-Log | fertig | dieses Dokument |
 
@@ -170,6 +170,33 @@ Dieses Dokument ist die zentrale Stelle für Stand, Probleme und Ideen.
   Griffe bis Stufe 2, Barré erst ab Stufe 4). Alle übrigen Vorgaben (Em/Am, Am/C, G/D, Em/G;
   G-D-Em-C, Em-C-G-D; zwei Power-Chord-Riffs, zwei Barré-Stücke) 1:1 übernommen. Alle zwölf Texte
   sind eigens für dieses Projekt geschriebene Übungszeilen, keine fremden Songtexte oder Tabulaturen.
+
+## Abweichungen vom Plan (Plan 3, Task 10)
+
+- SSRF-Schutz beim URL-Abruf (`packages/server/src/services/songFetch.ts`) geht an zwei Stellen
+  über den Plantext hinaus: `isBlockedHost` blockt zusätzlich IPv4-mapped-IPv6-Adressen
+  (`::ffff:127.0.0.1` u.ä. — sonst triviale Umgehung der v4-Bereichsprüfung) und den CGNAT-Bereich
+  `100.64.0.0/10`. Die Test-Datei enthält zwei zusätzliche Fälle über die Plan-Vorgabe hinaus: einen
+  expliziten Timeout-Test (prüft `code: "timeout"` und die deutsche Ausweich-Meldung) und einen Test
+  für zu viele Weiterleitungen. Bekannte Grenze, bewusst nicht behoben: Die Host-Prüfung arbeitet auf
+  dem Hostnamen aus der URL, nicht auf der tatsächlich aufgelösten IP-Adresse — ein Angreifer, dessen
+  DNS-Eintrag zur Abrufzeit auf eine private Adresse zeigt (DNS-Rebinding), würde die Prüfung
+  passieren. Eine vollständige Absicherung bräuchte eine eigene DNS-Auflösung mit IP-Pinning der
+  Verbindung (z. B. über `undici` mit eigenem `lookup`/`connect`), was über den im Plan beschriebenen
+  Umfang hinausgeht.
+- Testtext-Bug im Plan korrigiert: Die im Plan wörtlich vorgegebenen Tests „reports an unreachable
+  host with a helpful message" und (neu) der Timeout-Test prüfen die Fehlermeldung mit
+  `toMatch(/einfügen/i)`. Die im selben Plan-Abschnitt vorgegebenen Fehlermeldungen enthalten aber
+  nirgends das zusammenhängende Wort „einfügen", sondern z. B. „…füge ihn stattdessen ein.“ — die
+  Regex hätte nie gepasst. Regex auf `/stattdessen ein/i` geändert, Meldungstexte unverändert
+  übernommen.
+- `SongImport.test.tsx`: `userEvent.type()` scheitert an `@testing-library/user-event@14` beim
+  ChordPro-Text, weil `{title: …}` und `{start_of_verse}` als Tastenkombinations-Syntax geparst
+  werden (`{` muss dort escaped werden). Für die beiden betroffenen Tests auf `userEvent.paste()`
+  umgestellt (semantisch ohnehin näher am „Text einfügen"-Feature), restliches Tippen unverändert.
+  Zusätzlich einen expliziten Parametertyp für den `fetchMock` in „saves the song with the edited
+  title" ergänzt (`vi.fn(async (_url: string, _init?: RequestInit) => …)`), da TypeScript die
+  Tupel-Länge sonst als `[]` inferierte und `call![1]!.body` nicht typprüfte.
 
 ## Ideen und Möglichkeiten
 
