@@ -10,3 +10,4 @@ data/media/
 test-results/
 playwright-report/
 data/e2e.db*
+packages/server/data/e2e.db*
