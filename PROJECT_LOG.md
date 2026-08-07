@@ -12,8 +12,8 @@ Dieses Dokument ist die zentrale Stelle für Stand, Probleme und Ideen.
 | C3 SRS-Engine | fertig | FSRS-5-Gewichte, Warteschlange mit Tageslimits |
 | C4 Anki-Import | fertig | `.apkg`-Reader (`readApkg`) entpackt Zip, liest `collection.anki21`/`collection.anki2`, unterstützt altes (`col.models`-JSON) und neues Schema (`notetypes`/`fields`/`templates`), Medienzuordnung, klare Fehlermeldung bei zstd-komprimiertem `collection.anki21b`. Dazu `guessMapping` (Feld-Rateheuristik für Vorder-/Rückseite, Lesung, Notiz auf Deutsch und Englisch) und `importApkg`: Import von Notizen, Karten und Medien (SHA-256-dedupliziert nach `data/media/`) in **einer** Transaktion, wahlweise mit übernommenem Anki-Scheduling (`ivl`/`factor`/`due` → FSRS-Zustand) oder komplett neuem Zustand. Routen `POST /api/anki/preview` (schreibt nichts), `POST /api/anki/import` und `GET /api/anki/export/:skillId/:moduleId` (schreibt das alte Schema, `ver = 11`) unter `packages/server/src/routes/anki.ts`. Import-Oberfläche unter `/import` (`packages/web/src/features/anki/AnkiImport.tsx`): Datei wählen, Vorschau mit Feldzuordnung, Ziel wählen, importieren. Export-Link im `DeckRenderer`. |
 | C5 Content-Renderer | fertig | MDX mit Ziel, Handhaltung, Fehlerbild, Übung, Checkpoint, Merksatz, Hinweis |
-| C6 Audio-Kit | in Arbeit | Plan 3, Task 4: `packages/core/src/audio/pitch.ts` (YIN-Tonhöhenerkennung `detectPitch`, `readTuning` mit nächstgelegener Saite). Task 5: `packages/web/src/audio/useMicrophone.ts` (Mikrofonzugriff über `getUserMedia`/`AnalyserNode`, degradiert bei Ablehnung sauber zu `state: "denied"` mit deutscher Erklärung), `useMetronome.ts` (Taktgeber über `AudioContext.currentTime`-Vorausplanung, Tap-Tempo, Akzent auf Zählzeit 1). Referenzton (`referenceTone.ts`) noch offen (folgender Task). |
-| C7 Guitar-Skill | in Arbeit | Plan 3, Tasks 1-3: `packages/core/src/music/notes.ts` (Notennamen, Stimmungen, Griffbrett, Frequenzen, Intervalle), `chords.ts` (Akkord-Parsing, Transponieren, Akkordtöne, offene Griffe, Barré-Formen, Stufenakkorde) und das interne Songformat: `song.ts` (Zod-Schema `Song`/`SongSection`/`SongLine`/`TabLine`, `transposeSong`), `detectFormat.ts`, `parseChordPro.ts`, `parseChordSheet.ts`, `parseTab.ts` sowie `parseSong` als Format-Dispatcher in `packages/core/src/music/index.ts`. Rest (Server-Routen, Widgets, Lektionen) offen. |
+| C6 Audio-Kit | in Arbeit | Plan 3, Task 4: `packages/core/src/audio/pitch.ts` (YIN-Tonhöhenerkennung `detectPitch`, `readTuning` mit nächstgelegener Saite). Task 5: `packages/web/src/audio/useMicrophone.ts` (Mikrofonzugriff über `getUserMedia`/`AnalyserNode`, degradiert bei Ablehnung sauber zu `state: "denied"` mit deutscher Erklärung), `useMetronome.ts` (Taktgeber über `AudioContext.currentTime`-Vorausplanung, Tap-Tempo, Akzent auf Zählzeit 1). Task 6: `packages/web/src/audio/referenceTone.ts` (`playReferenceTone`, Sinuston zum Nachstimmen nach Gehör). |
+| C7 Guitar-Skill | in Arbeit | Plan 3, Tasks 1-3: `packages/core/src/music/notes.ts` (Notennamen, Stimmungen, Griffbrett, Frequenzen, Intervalle), `chords.ts` (Akkord-Parsing, Transponieren, Akkordtöne, offene Griffe, Barré-Formen, Stufenakkorde) und das interne Songformat: `song.ts` (Zod-Schema `Song`/`SongSection`/`SongLine`/`TabLine`, `transposeSong`), `detectFormat.ts`, `parseChordPro.ts`, `parseChordSheet.ts`, `parseTab.ts` sowie `parseSong` als Format-Dispatcher in `packages/core/src/music/index.ts`. Task 6: `skills/guitar/skill.json` sowie die Widgets `Fretboard` (Griffbrett bis Bund 15, umschaltbar zwischen Notennamen/Intervallen/Dur-Tonleiter, Stimmung wählbar), `ChordDiagram` (Raster aller offenen Akkorde) mit `packages/web/src/music/ChordDiagramSingle.tsx` (einzelnes Griffbild, auch von der künftigen Songansicht nutzbar) und `Tuner` (Cent-Anzeige, Saitenerkennung, Referenzton, einstellbare Rauschschwelle `minRms`). Server-Routen für Songs und die restlichen Lektionen/Daten (`lessons/`, `practice/plan.json`, `songs/uebungsstuecke.json`, `reference/nice-to-know.mdx`, Widgets `PracticePlan`/`SongLibrary`) offen — bis dahin meldet die Registry den Skill als "broken" (fehlende Datendateien), was erwartet ist. |
 | C8 Song-Import | offen | Plan 3 |
 | C9 Japanese-Skill | fertig | Kana-Transliteration (Hepburn), Kana-Daten, `KanaGrid`, `KanaDrill`, acht Themen-Vokabel-Decks (256 Karten), zwölfteiliger Grammatik-Kurs, 40 Kanji mit Lesungsregeln und 60 annotierte Sätze, `ReadingTrainer`. Rauchtest in `e2e/japanese.spec.ts`. |
 | C10 Projekt-Log | fertig | dieses Dokument |
@@ -124,6 +124,18 @@ Dieses Dokument ist die zentrale Stelle für Stand, Probleme und Ideen.
 
 - Keine: `useMicrophone.ts` und `useMetronome.ts` wurden wie im Plan vorgegeben übernommen, alle
   8 mitgelieferten Tests sind ohne Anpassung grün.
+
+## Abweichungen vom Plan (Plan 3, Task 6)
+
+- Keine: `Fretboard.tsx`, `ChordDiagramSingle.tsx`, `ChordDiagram.tsx`, `Tuner.tsx`,
+  `referenceTone.ts` und `skills/guitar/skill.json` wurden wörtlich aus dem Plan übernommen.
+  Alle 13 mitgelieferten Tests sind ohne Anpassung grün (der Plantext nennt an einer Stelle
+  „10 Tests"; tatsächlich sind es 4 + 4 + 5 = 13, da `ChordDiagramSingle` und das `ChordDiagram`-
+  Widget in derselben Datei getestet werden).
+- `skills/guitar/skill.json` verweist bereits jetzt auf die Module `uebungsplan`, `songs` und
+  `nice-to-know`, deren Daten und Widgets erst in späteren Tasks entstehen. Bis dahin markiert
+  die Registry (`loadSkills`) den ganzen Skill als „broken", weil ein nicht-Glob-Dateiverweis im
+  Manifest fehlt — das ist erwartetes Verhalten bei einem mehrteiligen Plan und kein Bug.
 
 ## Ideen und Möglichkeiten
 

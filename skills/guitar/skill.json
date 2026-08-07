@@ -1,0 +1,16 @@
+{
+  "id": "guitar",
+  "name": "E-Gitarre",
+  "icon": "guitar",
+  "accent": "#b45309",
+  "description": "Von der Haltung bis zur Pentatonik — mit Stimmgerät, Metronom und Songs.",
+  "modules": [
+    { "id": "kurs", "type": "course", "title": "Kurs", "subtitle": "13 Lektionen, aufeinander aufbauend", "data": ["lessons/*.mdx"] },
+    { "id": "stimmgeraet", "type": "practice", "title": "Stimmgerät", "pinned": true, "widget": "Tuner", "data": [] },
+    { "id": "griffbrett", "type": "practice", "title": "Griffbrett", "widget": "Fretboard", "data": [] },
+    { "id": "akkorde", "type": "practice", "title": "Akkordgriffe", "widget": "ChordDiagram", "data": [] },
+    { "id": "uebungsplan", "type": "practice", "title": "Übungsplan", "widget": "PracticePlan", "data": ["practice/plan.json"] },
+    { "id": "songs", "type": "library", "title": "Songs", "data": ["songs/uebungsstuecke.json"] },
+    { "id": "nice-to-know", "type": "course", "title": "Nice to know", "data": ["reference/nice-to-know.mdx"] }
+  ]
+}
