@@ -26,6 +26,14 @@ Oberfläche: http://localhost:5173 — Server: http://localhost:5174
 Alles liegt in `data/app.db`. Sicherung: Datei kopieren, oder in den Einstellungen
 „Sicherung anlegen" — dann landet eine datierte Kopie in `data/backups/`.
 
+Eigene Songs liegen ebenfalls in `data/app.db`. Der URL-Abruf ist ein Werkzeug für den persönlichen
+Gebrauch: er holt eine einzelne Seite, prüft die Adresse gegen private Netze und wertet nur Text aus.
+
+## Mitgelieferte Lernbereiche
+
+`skills/demo` (Vorlage und alle Modultypen), `skills/japanese` (Kana, Vokabeln, Grammatik, Lesen)
+und `skills/guitar` (13 Lektionen, Stimmgerät, Metronom, Songbibliothek mit Import).
+
 ## Neuen Lernbereich hinzufügen
 
 Siehe `docs/skills-authoring.md`. Kurzfassung: Ordner unter `skills/` anlegen, `skill.json`

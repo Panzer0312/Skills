@@ -12,9 +12,9 @@ Dieses Dokument ist die zentrale Stelle für Stand, Probleme und Ideen.
 | C3 SRS-Engine | fertig | FSRS-5-Gewichte, Warteschlange mit Tageslimits |
 | C4 Anki-Import | fertig | `.apkg`-Reader (`readApkg`) entpackt Zip, liest `collection.anki21`/`collection.anki2`, unterstützt altes (`col.models`-JSON) und neues Schema (`notetypes`/`fields`/`templates`), Medienzuordnung, klare Fehlermeldung bei zstd-komprimiertem `collection.anki21b`. Dazu `guessMapping` (Feld-Rateheuristik für Vorder-/Rückseite, Lesung, Notiz auf Deutsch und Englisch) und `importApkg`: Import von Notizen, Karten und Medien (SHA-256-dedupliziert nach `data/media/`) in **einer** Transaktion, wahlweise mit übernommenem Anki-Scheduling (`ivl`/`factor`/`due` → FSRS-Zustand) oder komplett neuem Zustand. Routen `POST /api/anki/preview` (schreibt nichts), `POST /api/anki/import` und `GET /api/anki/export/:skillId/:moduleId` (schreibt das alte Schema, `ver = 11`) unter `packages/server/src/routes/anki.ts`. Import-Oberfläche unter `/import` (`packages/web/src/features/anki/AnkiImport.tsx`): Datei wählen, Vorschau mit Feldzuordnung, Ziel wählen, importieren. Export-Link im `DeckRenderer`. |
 | C5 Content-Renderer | fertig | MDX mit Ziel, Handhaltung, Fehlerbild, Übung, Checkpoint, Merksatz, Hinweis |
-| C6 Audio-Kit | in Arbeit | Plan 3, Task 4: `packages/core/src/audio/pitch.ts` (YIN-Tonhöhenerkennung `detectPitch`, `readTuning` mit nächstgelegener Saite). Task 5: `packages/web/src/audio/useMicrophone.ts` (Mikrofonzugriff über `getUserMedia`/`AnalyserNode`, degradiert bei Ablehnung sauber zu `state: "denied"` mit deutscher Erklärung), `useMetronome.ts` (Taktgeber über `AudioContext.currentTime`-Vorausplanung, Tap-Tempo, Akzent auf Zählzeit 1). Task 6: `packages/web/src/audio/referenceTone.ts` (`playReferenceTone`, Sinuston zum Nachstimmen nach Gehör). |
-| C7 Guitar-Skill | fertig | Plan 3, Tasks 1-3: `packages/core/src/music/notes.ts` (Notennamen, Stimmungen, Griffbrett, Frequenzen, Intervalle), `chords.ts` (Akkord-Parsing, Transponieren, Akkordtöne, offene Griffe, Barré-Formen, Stufenakkorde) und das interne Songformat: `song.ts` (Zod-Schema `Song`/`SongSection`/`SongLine`/`TabLine`, `transposeSong`), `detectFormat.ts`, `parseChordPro.ts`, `parseChordSheet.ts`, `parseTab.ts` sowie `parseSong` als Format-Dispatcher in `packages/core/src/music/index.ts`. Task 6: `skills/guitar/skill.json` sowie die Widgets `Fretboard` (Griffbrett bis Bund 15, umschaltbar zwischen Notennamen/Intervallen/Dur-Tonleiter, Stimmung wählbar), `ChordDiagram` (Raster aller offenen Akkorde) mit `packages/web/src/music/ChordDiagramSingle.tsx` (einzelnes Griffbild, auch von der künftigen Songansicht nutzbar) und `Tuner` (Cent-Anzeige, Saitenerkennung, Referenzton, einstellbare Rauschschwelle `minRms`). Tasks 7-8: 13 Lektionen, Nice-to-know-Referenz, `PracticePlan`-Widget. Task 9: `skills/guitar/songs/uebungsstuecke.json` (zwölf selbst geschriebene Übungsstücke, gestaffelt nach Stufe), `skills/guitar/widgets/SongLibrary.tsx` (Bibliotheksansicht, gefiltert nach Stufe, plus importierte Songs aus `/api/songs`), `packages/web/src/features/songs/SongView.tsx` (Songanzeige mit Transponieren, Auto-Scroll, Metronom, Griffbildern). Task 11: `packages/web/src/features/songs/SongImport.tsx` unter `/songs/neu`, Navigationseintrag „Song hinzufügen" in `Layout.tsx`. |
-| C8 Song-Import | fertig | Plan 3, Task 10: `packages/server/src/services/songFetch.ts` (`assertPublicUrl`, `extractSongText` mit `cheerio`, `fetchSongFromUrl` mit manueller Redirect-Verfolgung), `packages/server/src/routes/songs.ts` (`GET/POST /api/songs`, `GET/DELETE /api/songs/:id`, `POST /api/songs/fetch`), eingehängt in `app.ts`. Siehe „Abweichungen vom Plan (Plan 3, Task 10)" für die SSRF-Absicherung im Detail. |
+| C6 Audio-Kit | fertig | Plan 3, Task 4: `packages/core/src/audio/pitch.ts` (YIN-Tonhöhenerkennung `detectPitch`, `readTuning` mit nächstgelegener Saite). Task 5: `packages/web/src/audio/useMicrophone.ts` (Mikrofonzugriff über `getUserMedia`/`AnalyserNode`, degradiert bei Ablehnung sauber zu `state: "denied"` mit deutscher Erklärung), `useMetronome.ts` (Taktgeber über `AudioContext.currentTime`-Vorausplanung, Tap-Tempo, Akzent auf Zählzeit 1). Task 6: `packages/web/src/audio/referenceTone.ts` (`playReferenceTone`, Sinuston zum Nachstimmen nach Gehör). |
+| C7 Guitar-Skill | fertig | Plan 3, Tasks 1-3: `packages/core/src/music/notes.ts` (Notennamen, Stimmungen, Griffbrett, Frequenzen, Intervalle), `chords.ts` (Akkord-Parsing, Transponieren, Akkordtöne, offene Griffe, Barré-Formen, Stufenakkorde) und das interne Songformat: `song.ts` (Zod-Schema `Song`/`SongSection`/`SongLine`/`TabLine`, `transposeSong`), `detectFormat.ts`, `parseChordPro.ts`, `parseChordSheet.ts`, `parseTab.ts` sowie `parseSong` als Format-Dispatcher in `packages/core/src/music/index.ts`. Task 6: `skills/guitar/skill.json` sowie die Widgets `Fretboard` (Griffbrett bis Bund 15, umschaltbar zwischen Notennamen/Intervallen/Dur-Tonleiter, Stimmung wählbar), `ChordDiagram` (Raster aller offenen Akkorde) mit `packages/web/src/music/ChordDiagramSingle.tsx` (einzelnes Griffbild, auch von der künftigen Songansicht nutzbar) und `Tuner` (Cent-Anzeige, Saitenerkennung, Referenzton, einstellbare Rauschschwelle `minRms`). Tasks 7-8: 13 Lektionen, Nice-to-know-Referenz, `PracticePlan`-Widget. Task 9: `skills/guitar/songs/uebungsstuecke.json` (zwölf selbst geschriebene Übungsstücke, gestaffelt nach Stufe), `skills/guitar/widgets/SongLibrary.tsx` (Bibliotheksansicht, gefiltert nach Stufe, plus importierte Songs aus `/api/songs`), `packages/web/src/features/songs/SongView.tsx` (Songanzeige mit Transponieren, Auto-Scroll, Metronom, Griffbildern). Task 11: `packages/web/src/features/songs/SongImport.tsx` unter `/songs/neu`, Navigationseintrag „Song hinzufügen" in `Layout.tsx`. Task 12: `nice-to-know`-Modul in `skills/guitar/skill.json` von einem festen Dateinamen auf das Muster `reference/*.mdx` umgestellt (siehe „Abweichungen vom Plan (Plan 3, Task 12)") — das Registry-Manifest verlangte sonst eine Datei, die als JSON-Daten nie geladen wurde, und meldete den Skill fälschlich als kaputt. Rauchtest in `e2e/guitar.spec.ts`. |
+| C8 Song-Import | fertig | Plan 3, Task 10: `packages/server/src/services/songFetch.ts` (`assertPublicUrl`, `extractSongText` mit `cheerio`, `fetchSongFromUrl` mit manueller Redirect-Verfolgung), `packages/server/src/routes/songs.ts` (`GET/POST /api/songs`, `GET/DELETE /api/songs/:id`, `POST /api/songs/fetch`), eingehängt in `app.ts`. Siehe „Abweichungen vom Plan (Plan 3, Task 10)" für die SSRF-Absicherung und ihre bekannte Grenze (DNS-Rebinding) im Detail. |
 | C9 Japanese-Skill | fertig | Kana-Transliteration (Hepburn), Kana-Daten, `KanaGrid`, `KanaDrill`, acht Themen-Vokabel-Decks (256 Karten), zwölfteiliger Grammatik-Kurs, 40 Kanji mit Lesungsregeln und 60 annotierte Sätze, `ReadingTrainer`. Rauchtest in `e2e/japanese.spec.ts`. |
 | C10 Projekt-Log | fertig | dieses Dokument |
 
@@ -29,6 +29,15 @@ Dieses Dokument ist die zentrale Stelle für Stand, Probleme und Ideen.
 - `.apkg`-Dateien im neuen Format `collection.anki21b` (zstd-komprimiert) werden nicht gelesen.
   Abhilfe: in Anki mit der Option „Unterstützung für ältere Anki-Versionen" exportieren.
   Dauerhafte Lösung wäre eine zstd-Abhängigkeit im Server.
+- Der URL-Abruf funktioniert nur bei Seiten, die den Tab im HTML ausliefern. Seiten, die ihn per
+  JavaScript nachladen, liefern nichts Verwertbares — dort bleibt das Einfügen des Textes der Weg.
+- Die Tonhöhenerkennung braucht ein sauberes Signal. Bei starker Verzerrung im Signalweg schwankt
+  die Anzeige; dann direkt in die Mikrofonbuchse spielen oder clean stimmen.
+- Der URL-Abruf prüft den Hostnamen aus der URL gegen die Sperrliste, nicht die tatsächlich
+  aufgelöste IP-Adresse (siehe „Abweichungen vom Plan (Plan 3, Task 10)"). DNS-Rebinding — ein
+  Hostname, dessen DNS-Eintrag zwischen Prüfung und Abruf auf eine private Adresse wechselt —
+  würde die Sperre umgehen. Für den vorgesehenen Gebrauch (eigene, bekannte Song-Seiten) ist das
+  hinnehmbar; eine vollständige Absicherung bräuchte IP-Pinning der Verbindung.
 
 ## Abweichungen vom Plan (Plan 2, Tasks 1-3)
 
@@ -198,6 +207,21 @@ Dieses Dokument ist die zentrale Stelle für Stand, Probleme und Ideen.
   title" ergänzt (`vi.fn(async (_url: string, _init?: RequestInit) => …)`), da TypeScript die
   Tupel-Länge sonst als `[]` inferierte und `call![1]!.body` nicht typprüfte.
 
+## Abweichungen vom Plan (Plan 3, Task 12)
+
+- Die Registry (`packages/web/src/skills/registry.ts`) lädt Modul-Daten ausschließlich über einen
+  `import.meta.glob` auf `**/*.json` und markiert einen Skill als kaputt, wenn ein nicht-Wildcard-
+  Eintrag im Manifest nicht in dieser Datenmenge auftaucht. `skills/guitar/skill.json` deklarierte
+  für das `nice-to-know`-Modul `"data": ["reference/nice-to-know.mdx"]` — eine `.mdx`-Datei kommt
+  im JSON-Glob nie vor, also meldete `getBrokenSkills()` den gesamten Gitarre-Skill als kaputt,
+  obwohl die Datei existiert und `CourseRenderer` sie über einen eigenen, unabhängigen MDX-Glob
+  korrekt rendert (die Registry-Daten werden für `course`-Module gar nicht zur Anzeige benutzt).
+  Fix: Eintrag auf das Muster `"reference/*.mdx"` umgestellt, analog zum bestehenden
+  `"lessons/*.mdx"` des `kurs`-Moduls — Wildcard-Einträge lösen nie einen „fehlt"-Fehler aus, auch
+  wenn (wie hier) keine passende JSON-Datei existiert. Verifiziert mit einem temporären Testlauf von
+  `getBrokenSkills()`/`getSkills()` gegen alle drei Skills: vorher `broken: [{ dir: "guitar", ... }]`,
+  danach `broken: []` und alle drei (`demo`, `guitar`, `japanese`) in `skills`.
+
 ## Ideen und Möglichkeiten
 
 - Tastaturkürzel `/` für eine globale Suche über alle Karten und Lektionen.
@@ -212,3 +236,9 @@ Dieses Dokument ist die zentrale Stelle für Stand, Probleme und Ideen.
   Kana selbst sind lautlich eindeutig und brauchen keine Kontextregeln.
 - 2026-08-06 — Anki-Export schreibt das alte Schema (ver 11), damit jede Anki-Version die Datei öffnet.
 - 2026-08-06 — Kein Datenbank-Import über das Netz. Wiederherstellung läuft über den Dateiaustausch bei gestopptem Server.
+- 2026-08-06 — Kein Ausliefern kommerzieller Tabs oder Songtexte. Mitgeliefert werden Akkordfolgen
+  und eigene Übungsriffs; fremdes Material kommt ausschließlich über den Import des Nutzers.
+- 2026-08-06 — Der URL-Abruf prüft jeden Weiterleitungssprung erneut gegen die Sperrliste privater
+  Adressen. Ohne diese Prüfung wäre der Server ein offener Proxy ins eigene Netz.
+- 2026-08-06 — Das Metronom plant Klicks über AudioContext.currentTime voraus statt über setInterval,
+  weil setInterval im Browser um zweistellige Millisekunden driftet.

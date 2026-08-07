@@ -127,3 +127,19 @@ Ein importiertes oder mitgeliefertes `srs-deck`-Modul lässt sich über den Link
 exportieren" (`GET /api/anki/export/:skillId/:moduleId`) wieder als `.apkg` herunterladen. Der Export
 schreibt bewusst das alte Anki-Schema (`ver = 11`), damit die Datei sich in jeder Anki-Version öffnen
 lässt.
+
+## Audio in einem Widget
+
+Zwei Hooks stehen bereit und kapseln allen Gerätezugriff:
+
+- `useMicrophone({ onBuffer })` liefert Audiopuffer und meldet Zustände `idle`, `requesting`,
+  `running`, `denied`, `unsupported`, `error`. Ein Widget muss `denied` selbst darstellen — die
+  restliche App darf davon nicht betroffen sein.
+- `useMetronome()` liefert einen driftfreien Taktgeber mit Tap-Tempo.
+
+Rechnende Audiologik gehört nach `packages/core/src/audio` und ist dort ohne Browser testbar.
+
+Beispiel für das eigene Skill `skills/guitar`: `widgets/Tuner.tsx` verwendet `useMicrophone`, um
+Pufferdaten an die reine Funktion `readTuning` (`@skills/core`) zu geben, und zeigt bei
+`mic.state === "denied"` eine deutsche Erklärung statt eines Absturzes. `SongView.tsx` nutzt
+`useMetronome` fürs Mitspielen zum Song.
