@@ -1,4 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
+import { AnkiImport } from "../features/anki/AnkiImport.js";
 import { Dashboard } from "../features/dashboard/Dashboard.js";
 import { ReviewSession } from "../features/review/ReviewSession.js";
 import { Settings } from "../features/settings/Settings.js";
@@ -16,6 +17,7 @@ export const router = createBrowserRouter([
       { path: "review", element: <ReviewSession /> },
       { path: "stats", element: <Stats /> },
       { path: "einstellungen", element: <Settings /> },
+      { path: "import", element: <AnkiImport /> },
       { path: "skill/:skillId", element: <SkillOverview /> },
       { path: "skill/:skillId/:moduleId", element: <ModuleRoute /> },
     ],

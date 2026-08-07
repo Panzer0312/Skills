@@ -35,6 +35,9 @@ export function Layout() {
               {skill.manifest.name}
             </NavLink>
           ))}
+          <NavLink to="/import" className={linkClass}>
+            Anki-Import
+          </NavLink>
           <NavLink to="/einstellungen" className={linkClass}>
             Einstellungen
           </NavLink>
