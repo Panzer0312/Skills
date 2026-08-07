@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { chordNotes, keyChords, OPEN_CHORDS, parseChord, transposeChord } from "./chords.js";
+import { chordNotes, chordShape, keyChords, OPEN_CHORDS, parseChord, transposeChord } from "./chords.js";
 
 describe("parseChord", () => {
   it("splits root, quality and bass note", () => {
@@ -72,6 +72,51 @@ describe("OPEN_CHORDS", () => {
         } else {
           expect(finger, `${name}: Saite ${i} braucht einen Finger`).not.toBeNull();
         }
+      }
+    }
+  });
+});
+
+describe("chordShape", () => {
+  it("derives F as an E-form barre at fret 1", () => {
+    const shape = chordShape("F");
+    expect(shape).not.toBeNull();
+    expect(shape!.baseFret).toBe(1);
+    expect(shape!.frets[0]).toBe(1);
+    expect(shape!.name).toMatch(/E-Form/);
+  });
+
+  it("derives Bb as an A-form barre at fret 1", () => {
+    const shape = chordShape("Bb");
+    expect(shape).not.toBeNull();
+    expect(shape!.baseFret).toBe(1);
+    expect(shape!.frets[0]).toBeNull();
+    expect(shape!.name).toMatch(/A-Form/);
+  });
+
+  it("derives Bm as an A-form minor barre at fret 2", () => {
+    const shape = chordShape("Bm");
+    expect(shape).not.toBeNull();
+    expect(shape!.baseFret).toBe(2);
+    expect(shape!.name).toMatch(/A-Form/);
+  });
+
+  it("prefers an open chord over a derived shape", () => {
+    const shape = chordShape("C");
+    expect(shape).toEqual(OPEN_CHORDS.C);
+  });
+
+  it("returns null for a nonsense symbol", () => {
+    expect(chordShape("Strophe")).toBeNull();
+  });
+
+  it("never derives a shape above fret 12", () => {
+    for (const root of ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]) {
+      for (const quality of ["", "m", "7", "m7"]) {
+        const shape = chordShape(`${root}${quality}`);
+        if (!shape) continue;
+        const maxFret = Math.max(...shape.frets.filter((f): f is number => f !== null));
+        expect(maxFret).toBeLessThanOrEqual(12);
       }
     }
   });

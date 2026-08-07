@@ -104,6 +104,80 @@ export const BARRE_A_SHAPE: ChordShape = {
   baseFret: 1,
 };
 
+/**
+ * Movable barre shape templates. `offsets` is relative to the barre fret (0 = the barre
+ * itself); `null` means muted. Sliding the template up by `rootOffset` frets and adding
+ * `rootOffset` to every fretted offset yields the absolute shape (see `chordShape`).
+ */
+interface BarreTemplate {
+  offsets: (number | null)[];
+  fingers: (number | null)[];
+}
+
+const E_FORM_TEMPLATES: Record<string, BarreTemplate> = {
+  "": { offsets: [0, 2, 2, 1, 0, 0], fingers: [1, 3, 4, 2, 1, 1] },
+  m: { offsets: [0, 2, 2, 0, 0, 0], fingers: [1, 3, 4, 1, 1, 1] },
+  "7": { offsets: [0, 2, 0, 1, 0, 0], fingers: [1, 3, 1, 2, 1, 1] },
+  m7: { offsets: [0, 2, 0, 0, 0, 0], fingers: [1, 3, 1, 1, 1, 1] },
+};
+
+const A_FORM_TEMPLATES: Record<string, BarreTemplate> = {
+  "": { offsets: [null, 0, 2, 2, 2, 0], fingers: [null, 1, 2, 3, 4, 1] },
+  m: { offsets: [null, 0, 2, 2, 1, 0], fingers: [null, 1, 3, 4, 2, 1] },
+  "7": { offsets: [null, 0, 2, 0, 2, 0], fingers: [null, 1, 3, 1, 4, 1] },
+  m7: { offsets: [null, 0, 2, 0, 1, 0], fingers: [null, 1, 3, 1, 2, 1] },
+};
+
+const QUALITY_LABELS: Record<string, string> = {
+  "": "", m: "m", "7": "7", m7: "m7",
+};
+
+const MAX_DERIVED_FRET = 12;
+
+function buildBarreShape(
+  root: string,
+  quality: string,
+  openStringNote: string,
+  templates: Record<string, BarreTemplate>,
+  formLabel: string,
+): ChordShape | null {
+  const template = templates[quality];
+  if (!template) return null;
+
+  const rootOffset = ((noteToSemitone(root) - noteToSemitone(openStringNote)) % 12 + 12) % 12;
+  const frets = template.offsets.map((offset) => (offset === null ? null : offset + rootOffset));
+  const maxFret = Math.max(...frets.filter((f): f is number => f !== null));
+  if (maxFret > MAX_DERIVED_FRET) return null;
+
+  return {
+    name: `${root}${QUALITY_LABELS[quality] ?? quality} (Barré, ${formLabel})`,
+    frets,
+    fingers: template.fingers,
+    baseFret: rootOffset,
+  };
+}
+
+/**
+ * Resolves a chord to a diagram shape: an exact open-chord voicing first, then a derived
+ * movable barre shape (E-form or A-form, whichever sits lower on the neck), or `null` when
+ * neither is available.
+ */
+export function chordShape(symbol: string): ChordShape | null {
+  const open = OPEN_CHORDS[symbol];
+  if (open) return open;
+
+  const parsed = parseChord(symbol);
+  if (!parsed) return null;
+
+  const eForm = buildBarreShape(parsed.root, parsed.quality, "E", E_FORM_TEMPLATES, "E-Form");
+  const aForm = buildBarreShape(parsed.root, parsed.quality, "A", A_FORM_TEMPLATES, "A-Form");
+
+  const candidates = [eForm, aForm].filter((s): s is ChordShape => s !== null);
+  if (candidates.length === 0) return null;
+
+  return candidates.reduce((lowest, candidate) => (candidate.baseFret < lowest.baseFret ? candidate : lowest));
+}
+
 const MAJOR_SCALE = [0, 2, 4, 5, 7, 9, 11];
 const DEGREES = ["I", "ii", "iii", "IV", "V", "vi", "vii°"];
 const QUALITIES = ["", "m", "m", "", "", "m", "dim"];
