@@ -1,4 +1,5 @@
 import { chordShape, parseChordFile, type ChordShape } from "@skills/core";
+import type { ChordOverrides } from "./chordOverrides.js";
 
 export interface ResolveUserChordsResult {
   chords: Record<string, ChordShape>;
@@ -55,9 +56,16 @@ function userChords(): Record<string, ChordShape> {
 
 /**
  * Resolves a chord symbol to a diagram shape with the documented precedence:
- * user-supplied JSON first, then the open-chord table, then a derived movable barre
- * shape, or `null` when none of those apply (see `docs/skills-authoring.md`).
+ * song override, global override, user-supplied JSON, the open-chord table,
+ * a derived movable barre shape, or `null` when none of those apply
+ * (see `docs/skills-authoring.md`).
  */
-export function resolveChordShape(symbol: string): ChordShape | null {
-  return userChords()[symbol] ?? chordShape(symbol);
+export function resolveChordShape(symbol: string, overrides?: ChordOverrides): ChordShape | null {
+  return (
+    overrides?.song?.[symbol] ??
+    overrides?.global?.[symbol] ??
+    userChords()[symbol] ??
+    chordShape(symbol) ??
+    null
+  );
 }

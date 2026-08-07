@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { resolveUserChords } from "./userChords.js";
+import { resolveChordShape, resolveUserChords } from "./userChords.js";
 
 const validEntry = {
   symbol: "Cadd9",
@@ -44,5 +44,36 @@ describe("resolveUserChords", () => {
       "/skills/guitar/chords/eigene.json": { default: [{ ...validEntry, name: undefined }] },
     });
     expect(chords.Cadd9?.name).toBe("Cadd9");
+  });
+});
+
+const barreShape = {
+  name: "F#m eigen",
+  frets: [2, 4, 4, 2, 2, 2],
+  fingers: [1, 3, 4, 1, 1, 1],
+  baseFret: 1,
+};
+
+describe("resolveChordShape", () => {
+  it("prefers a song override over a global one", () => {
+    const shape = resolveChordShape("Em", {
+      song: { Em: { ...barreShape, name: "nur hier" } },
+      global: { Em: { ...barreShape, name: "überall" } },
+    });
+    expect(shape?.name).toBe("nur hier");
+  });
+
+  it("uses the global override when the song has none", () => {
+    const shape = resolveChordShape("Em", { global: { Em: { ...barreShape, name: "überall" } } });
+    expect(shape?.name).toBe("überall");
+  });
+
+  it("keeps the shipped resolution when no override applies", () => {
+    expect(resolveChordShape("Em", { song: {}, global: {} })).toEqual(resolveChordShape("Em"));
+    expect(resolveChordShape("Em")?.frets).toHaveLength(6);
+  });
+
+  it("returns null for a symbol nothing can resolve", () => {
+    expect(resolveChordShape("Hglurb", {})).toBeNull();
   });
 });
