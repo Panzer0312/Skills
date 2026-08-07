@@ -32,7 +32,7 @@ const LEVEL_LABELS: Record<number, string> = {
 export default function SongLibrary({ data }: WidgetProps) {
   const shipped = (data.flat() as Uebungsstueck[]).filter((s) => s && typeof s.id === "string");
   const [level, setLevel] = useState<number | null>(null);
-  const [open, setOpen] = useState<Song | null>(null);
+  const [open, setOpen] = useState<{ song: Song; key: string } | null>(null);
 
   const imported = useQuery({
     queryKey: ["songs"],
@@ -45,7 +45,7 @@ export default function SongLibrary({ data }: WidgetProps) {
         <button type="button" onClick={() => setOpen(null)} className="mb-4 text-sm text-slate-500">
           ← Zurück zur Bibliothek
         </button>
-        <SongView song={open} />
+        <SongView song={open.song} songKey={open.key} />
       </div>
     );
   }
@@ -83,7 +83,7 @@ export default function SongLibrary({ data }: WidgetProps) {
             <li key={stueck.id}>
               <button
                 type="button"
-                onClick={() => setOpen(parseSong(stueck.quelle))}
+                onClick={() => setOpen({ song: parseSong(stueck.quelle), key: `uebung:${stueck.id}` })}
                 className="w-full rounded border border-slate-200 p-4 text-left hover:border-slate-400 dark:border-slate-800 dark:hover:border-slate-600"
               >
                 <div className="font-medium">{stueck.titel}</div>
@@ -104,7 +104,7 @@ export default function SongLibrary({ data }: WidgetProps) {
               <li key={song.id}>
                 <button
                   type="button"
-                  onClick={() => setOpen(parseSong(song.content))}
+                  onClick={() => setOpen({ song: parseSong(song.content), key: `song:${song.id}` })}
                   className="w-full rounded border border-slate-200 p-4 text-left hover:border-slate-400 dark:border-slate-800 dark:hover:border-slate-600"
                 >
                   <div className="font-medium">{song.title}</div>
