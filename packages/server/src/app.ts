@@ -3,6 +3,7 @@ import { cors } from "hono/cors";
 import type { AppDatabase } from "./db/client.js";
 import { ankiRoutes } from "./routes/anki.js";
 import { backupRoutes } from "./routes/backup.js";
+import { chordRoutes } from "./routes/chords.js";
 import { progressRoutes } from "./routes/progress.js";
 import { reviewRoutes } from "./routes/reviews.js";
 import { settingsRoutes } from "./routes/settings.js";
@@ -33,6 +34,7 @@ export function createApp(database: AppDatabase): Hono<AppEnv> {
   app.route("/", backupRoutes);
   app.route("/", ankiRoutes);
   app.route("/", songRoutes);
+  app.route("/", chordRoutes);
 
   app.notFound((c) =>
     c.json({ error: { code: "not_found", message: "Route nicht gefunden." } }, 404),

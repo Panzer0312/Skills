@@ -104,6 +104,19 @@ CREATE TABLE IF NOT EXISTS settings (
   key TEXT PRIMARY KEY,
   value TEXT NOT NULL
 );
+CREATE TABLE IF NOT EXISTS chord_overrides (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  scope TEXT NOT NULL,
+  song_key TEXT NOT NULL DEFAULT '',
+  symbol TEXT NOT NULL,
+  name TEXT,
+  frets_json TEXT NOT NULL,
+  fingers_json TEXT NOT NULL,
+  base_fret INTEGER NOT NULL,
+  updated_at INTEGER NOT NULL
+);
+CREATE UNIQUE INDEX IF NOT EXISTS chord_overrides_identity
+  ON chord_overrides (scope, song_key, symbol);
 `;
 
 export function openDatabase(path: string): AppDatabase {

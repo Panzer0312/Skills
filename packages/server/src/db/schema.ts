@@ -123,3 +123,21 @@ export const settings = sqliteTable("settings", {
   key: text("key").primaryKey(),
   value: text("value").notNull(),
 });
+
+export const chordOverrides = sqliteTable(
+  "chord_overrides",
+  {
+    id: integer("id").primaryKey({ autoIncrement: true }),
+    scope: text("scope").notNull(),
+    songKey: text("song_key").notNull().default(""),
+    symbol: text("symbol").notNull(),
+    name: text("name"),
+    fretsJson: text("frets_json").notNull(),
+    fingersJson: text("fingers_json").notNull(),
+    baseFret: integer("base_fret").notNull(),
+    updatedAt: integer("updated_at").notNull(),
+  },
+  (t) => ({
+    identity: uniqueIndex("chord_overrides_identity").on(t.scope, t.songKey, t.symbol),
+  }),
+);
