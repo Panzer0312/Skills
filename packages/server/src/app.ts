@@ -7,6 +7,7 @@ import { progressRoutes } from "./routes/progress.js";
 import { reviewRoutes } from "./routes/reviews.js";
 import { settingsRoutes } from "./routes/settings.js";
 import { skillsRoutes } from "./routes/skills.js";
+import { songRoutes } from "./routes/songs.js";
 import { statsRoutes } from "./routes/stats.js";
 
 export interface AppEnv {
@@ -31,6 +32,7 @@ export function createApp(database: AppDatabase): Hono<AppEnv> {
   app.route("/", statsRoutes);
   app.route("/", backupRoutes);
   app.route("/", ankiRoutes);
+  app.route("/", songRoutes);
 
   app.notFound((c) =>
     c.json({ error: { code: "not_found", message: "Route nicht gefunden." } }, 404),

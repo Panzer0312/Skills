@@ -12,6 +12,7 @@
     "@hono/node-server": "^1.13.0",
     "@skills/core": "*",
     "better-sqlite3": "^11.3.0",
+    "cheerio": "^1.0.0",
     "drizzle-orm": "^0.36.0",
     "fflate": "^0.8.2",
     "hono": "^4.6.0",
