@@ -7,3 +7,4 @@ export * from "./srs/queue.js";
 export * from "./parsers/kana.js";
 export * from "./schema/japanese.js";
 export * from "./music/index.js";
+export * from "./audio/pitch.js";
