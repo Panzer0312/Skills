@@ -50,7 +50,7 @@ describe("japanese lessons", () => {
 
   it("keeps the guitar-only block out of the japanese course", () => {
     for (const file of files) {
-      expect(readFileSync(join(here, file), "utf8")).not.toContain("<Handhaltung>");
+      expect(readFileSync(join(here, file), "utf8")).not.toContain("<Handhaltung");
     }
   });
 });
