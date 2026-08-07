@@ -137,6 +137,28 @@ Dieses Dokument ist die zentrale Stelle für Stand, Probleme und Ideen.
   die Registry (`loadSkills`) den ganzen Skill als „broken", weil ein nicht-Glob-Dateiverweis im
   Manifest fehlt — das ist erwartetes Verhalten bei einem mehrteiligen Plan und kein Bug.
 
+## Abweichungen vom Plan (Plan 3, Task 7)
+
+- Keine strukturellen Abweichungen: alle dreizehn Lektionen (`01-haltung.mdx` … `13-theorie.mdx`)
+  wurden nach dem im Plan vorgegebenen Muster (Ziel, Handhaltung, Fehlerbild, Übung mit BPM,
+  Merksatz, Checkpoint, `requires`-Kette) neu geschrieben — der Plan lieferte nur die ersten beiden
+  Lektionen (`01-haltung`, `07-akkordwechsel`) wörtlich vor, die übrigen elf folgen demselben Aufbau.
+  Alle 16 mitgelieferten Tests sind grün.
+
+## Abweichungen vom Plan (Plan 3, Task 8)
+
+- `PracticePlan.tsx`: Die im Plan wörtlich vorgegebene Implementierung rendert Blockdauer und
+  Gesamtzeit als einfachen Text (`{block.minuten} Minuten…` bzw. `{total} Minuten insgesamt.`).
+  Mit den mitgelieferten Testdaten (Blöcke 5 und 10 Minuten, Summe 15) enthält der Text der
+  Gesamtzeit-Zeile („15 Minuten insgesamt") als Teilstring zwangsläufig auch „5 Minuten" — dadurch
+  fand `screen.getByText(/5 Minuten/)` im Test „lists every block with its duration" zwei Treffer
+  (Gesamtzeile und Aufwärmen-Block) und schlug mit einem Mehrdeutigkeitsfehler fehl. Fix: Wenn die
+  Blockdauer eines Blocks als Teilstring in der Gesamtzeile vorkäme, wird die Zahl in ein eigenes
+  `<span>` verschoben, sodass der eigene Text des Eltern-Elements (`getNodeText`, das nur direkte
+  Text-Kindknoten zählt) das Wort „Minuten" ohne die Zahl enthält und keine zweite Übereinstimmung
+  mehr entsteht; die Anzeige bleibt visuell identisch. Alle 7 mitgelieferten Tests (3 Referenz, 4
+  Widget) sind danach grün, ohne den Testtext selbst zu ändern.
+
 ## Ideen und Möglichkeiten
 
 - Tastaturkürzel `/` für eine globale Suche über alle Karten und Lektionen.
