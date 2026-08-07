@@ -2,6 +2,9 @@ import { transposeSong, type Song } from "@skills/core";
 import { useEffect, useRef, useState } from "react";
 import { useMetronome } from "../../audio/useMetronome.js";
 import { ChordDiagramSingle } from "../../music/ChordDiagramSingle.js";
+import { ChordEditor } from "../../music/ChordEditor.js";
+import { useChordOverrides } from "../../music/useChordOverrides.js";
+import { resolveChordShape } from "../../music/userChords.js";
 
 function LineWithChords({ line }: { line: Song["sections"][number]["lines"][number] }) {
   if (line.chords.length === 0) {
@@ -22,12 +25,14 @@ function LineWithChords({ line }: { line: Song["sections"][number]["lines"][numb
   );
 }
 
-export function SongView({ song }: { song: Song }) {
+export function SongView({ song, songKey }: { song: Song; songKey?: string }) {
   const [steps, setSteps] = useState(0);
   const [scrolling, setScrolling] = useState(false);
   const [scrollSpeed, setScrollSpeed] = useState(30);
+  const [editing, setEditing] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const metronome = useMetronome();
+  const { overrides, entries, save, reset } = useChordOverrides(songKey);
 
   const shown = steps === 0 ? song : transposeSong(song, steps);
 
@@ -95,9 +100,35 @@ export function SongView({ song }: { song: Song }) {
       {shown.chordsUsed.length > 0 ? (
         <div className="grid gap-3 sm:grid-cols-4 lg:grid-cols-6">
           {shown.chordsUsed.map((chord) => (
-            <ChordDiagramSingle key={chord} name={chord} />
+            <ChordDiagramSingle
+              key={chord}
+              name={chord}
+              overrides={overrides}
+              onEdit={() => setEditing(chord)}
+            />
           ))}
         </div>
+      ) : null}
+
+      {editing ? (
+        <ChordEditor
+          symbol={editing}
+          initial={resolveChordShape(editing, overrides)}
+          allowSongScope={Boolean(songKey)}
+          canReset={{
+            song: entries.song.some((entry) => entry.symbol === editing),
+            global: entries.global.some((entry) => entry.symbol === editing),
+          }}
+          onSave={async (shape, scope) => {
+            await save(editing, shape, scope);
+            setEditing(null);
+          }}
+          onReset={async (scope) => {
+            await reset(editing, scope);
+            setEditing(null);
+          }}
+          onCancel={() => setEditing(null)}
+        />
       ) : null}
 
       <div ref={containerRef} className="max-h-[60vh] overflow-y-auto rounded border border-slate-200 p-4 dark:border-slate-800">

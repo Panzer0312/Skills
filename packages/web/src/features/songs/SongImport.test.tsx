@@ -40,7 +40,15 @@ describe("SongImport", () => {
   it("fills the text field from a fetched url", async () => {
     vi.stubGlobal(
       "fetch",
-      vi.fn(async () => new Response(JSON.stringify({ text: chordPro, title: "Von der Seite" }), { status: 200 })),
+      vi.fn(async (url: string) => {
+        if (String(url).startsWith("/api/chords")) {
+          return new Response(JSON.stringify({ global: [], song: [] }), {
+            status: 200,
+            headers: { "content-type": "application/json" },
+          });
+        }
+        return new Response(JSON.stringify({ text: chordPro, title: "Von der Seite" }), { status: 200 });
+      }),
     );
     renderImport();
     await userEvent.click(screen.getByLabelText(/URL abrufen/));
@@ -75,7 +83,15 @@ describe("SongImport", () => {
   });
 
   it("saves the song with the edited title", async () => {
-    const fetchMock = vi.fn(async (_url: string, _init?: RequestInit) => new Response(JSON.stringify({ song: { id: 1 } }), { status: 200 }));
+    const fetchMock = vi.fn(async (url: string, _init?: RequestInit) => {
+      if (String(url).startsWith("/api/chords")) {
+        return new Response(JSON.stringify({ global: [], song: [] }), {
+          status: 200,
+          headers: { "content-type": "application/json" },
+        });
+      }
+      return new Response(JSON.stringify({ song: { id: 1 } }), { status: 200 });
+    });
     vi.stubGlobal("fetch", fetchMock);
 
     renderImport();
