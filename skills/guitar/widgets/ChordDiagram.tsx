@@ -1,7 +1,7 @@
 import { OPEN_CHORDS } from "@skills/core";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { api } from "../../../packages/web/src/api/client.js";
+import { api, ApiError } from "../../../packages/web/src/api/client.js";
 import type { ChordOverrideEntry } from "../../../packages/web/src/music/chordOverrides.js";
 import { ChordDiagramSingle } from "../../../packages/web/src/music/ChordDiagramSingle.js";
 import { ChordEditor } from "../../../packages/web/src/music/ChordEditor.js";
@@ -12,10 +12,35 @@ interface StoredSong {
   title: string;
 }
 
-function OwnShapes() {
+interface Uebungsstueck {
+  id: string;
+  titel: string;
+}
+
+const REMOVE_FALLBACK_ERROR = "Der Eintrag konnte nicht gelöscht werden. Bitte später erneut versuchen.";
+const SAVE_FALLBACK_ERROR = "Der Griff konnte nicht gespeichert werden. Bitte später erneut versuchen.";
+
+function scopeLabel(entry: ChordOverrideEntry, shipped: Uebungsstueck[], songs: StoredSong[]) {
+  if (entry.scope === "global") return "Alle Songs";
+  const key = entry.songKey;
+  if (key.startsWith("uebung:")) {
+    const id = key.slice("uebung:".length);
+    const song = shipped.find((s) => s.id === id);
+    return song ? `Nur „${song.titel}"` : `Nur ${key}`;
+  }
+  if (key.startsWith("song:")) {
+    const id = Number(key.slice("song:".length));
+    const song = songs.find((s) => s.id === id);
+    return song ? `Nur „${song.title}"` : `Nur ${key}`;
+  }
+  return `Nur ${key}`;
+}
+
+function OwnShapes({ shipped }: { shipped: Uebungsstueck[] }) {
   const client = useQueryClient();
   const [editing, setEditing] = useState<{ symbol: string; entry: ChordOverrideEntry | null } | null>(null);
   const [newSymbol, setNewSymbol] = useState("");
+  const [error, setError] = useState<string | null>(null);
 
   const overrides = useQuery({
     queryKey: ["chords", "all"],
@@ -28,49 +53,62 @@ function OwnShapes() {
 
   const entries = overrides.data?.entries ?? [];
 
-  function scopeLabel(entry: ChordOverrideEntry) {
-    if (entry.scope === "global") return "Alle Songs";
-    const id = Number(entry.songKey.replace(/^song:/, ""));
-    const song = songs.data?.songs.find((s) => s.id === id);
-    return song ? `Nur „${song.title}"` : `Nur ${entry.songKey}`;
-  }
-
   async function remove(entry: ChordOverrideEntry) {
     const params = new URLSearchParams({ scope: entry.scope, symbol: entry.symbol });
     if (entry.scope === "song") params.set("songKey", entry.songKey);
-    await api.del(`/api/chords?${params.toString()}`);
-    await client.invalidateQueries({ queryKey: ["chords"] });
+    try {
+      await api.del(`/api/chords?${params.toString()}`);
+      setError(null);
+      await client.invalidateQueries({ queryKey: ["chords"] });
+    } catch (err) {
+      setError(err instanceof ApiError ? err.message : REMOVE_FALLBACK_ERROR);
+    }
   }
 
   if (editing) {
     return (
-      <ChordEditor
-        symbol={editing.symbol}
-        initial={
-          editing.entry
-            ? {
-                name: editing.entry.name ?? editing.entry.symbol,
-                frets: editing.entry.frets,
-                fingers: editing.entry.fingers,
-                baseFret: editing.entry.baseFret,
-              }
-            : null
-        }
-        allowSongScope={false}
-        onSave={async (shape) => {
-          await api.put("/api/chords", {
-            scope: "global",
-            symbol: editing.symbol,
-            name: shape.name || undefined,
-            frets: shape.frets,
-            fingers: shape.fingers,
-            baseFret: shape.baseFret,
-          });
-          await client.invalidateQueries({ queryKey: ["chords"] });
-          setEditing(null);
-        }}
-        onCancel={() => setEditing(null)}
-      />
+      <div className="space-y-3">
+        <ChordEditor
+          symbol={editing.symbol}
+          initial={
+            editing.entry
+              ? {
+                  name: editing.entry.name ?? editing.entry.symbol,
+                  frets: editing.entry.frets,
+                  fingers: editing.entry.fingers,
+                  baseFret: editing.entry.baseFret,
+                }
+              : null
+          }
+          allowSongScope={false}
+          onSave={async (shape) => {
+            try {
+              await api.put("/api/chords", {
+                scope: "global",
+                symbol: editing.symbol,
+                name: shape.name || undefined,
+                frets: shape.frets,
+                fingers: shape.fingers,
+                baseFret: shape.baseFret,
+              });
+              setError(null);
+              await client.invalidateQueries({ queryKey: ["chords"] });
+              setEditing(null);
+            } catch (err) {
+              setError(err instanceof ApiError ? err.message : SAVE_FALLBACK_ERROR);
+            }
+          }}
+          onCancel={() => {
+            setError(null);
+            setEditing(null);
+          }}
+        />
+        {error ? (
+          <p className="rounded border border-amber-300 bg-amber-50 p-3 text-sm text-amber-800 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-200">
+            {error}
+          </p>
+        ) : null}
+      </div>
     );
   }
 
@@ -96,6 +134,12 @@ function OwnShapes() {
         </button>
       </div>
 
+      {error ? (
+        <p className="rounded border border-amber-300 bg-amber-50 p-3 text-sm text-amber-800 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-200">
+          {error}
+        </p>
+      ) : null}
+
       {entries.length === 0 ? (
         <p className="text-sm text-slate-600 dark:text-slate-400">
           Noch keine eigenen Griffe. Lege hier einen an oder bearbeite ein Griffbild direkt in einem Song.
@@ -109,7 +153,7 @@ function OwnShapes() {
             >
               <span>
                 <span className="font-medium">{entry.name ?? entry.symbol}</span>
-                <span className="ml-2 text-slate-500">{scopeLabel(entry)}</span>
+                <span className="ml-2 text-slate-500">{scopeLabel(entry, shipped, songs.data?.songs ?? [])}</span>
               </span>
               <span className="flex gap-2">
                 {entry.scope === "global" ? (
@@ -137,8 +181,9 @@ function OwnShapes() {
   );
 }
 
-export default function ChordDiagram(_: WidgetProps) {
+export default function ChordDiagram({ data }: WidgetProps) {
   const [tab, setTab] = useState<"offen" | "eigene">("offen");
+  const shipped = (data.flat() as Uebungsstueck[]).filter((s) => s && typeof s.id === "string");
 
   return (
     <div className="space-y-5">
@@ -172,7 +217,7 @@ export default function ChordDiagram(_: WidgetProps) {
           </div>
         </>
       ) : (
-        <OwnShapes />
+        <OwnShapes shipped={shipped} />
       )}
     </div>
   );
