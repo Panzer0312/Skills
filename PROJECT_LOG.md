@@ -10,7 +10,7 @@ Dieses Dokument ist die zentrale Stelle für Stand, Probleme und Ideen.
 | C1 Shell und Skill-Runtime | fertig | Registry, Routing, Theme, Schnellzugriffe |
 | C2 Data Layer | fertig | SQLite, Seed-Abgleich, Export und Sicherung |
 | C3 SRS-Engine | fertig | FSRS-5-Gewichte, Warteschlange mit Tageslimits |
-| C4 Anki-Import | offen | Plan 2 |
+| C4 Anki-Import | in Arbeit | Plan 2 Task 8 fertig: `.apkg`-Reader (`readApkg`) entpackt Zip, liest `collection.anki21`/`collection.anki2`, unterstützt altes (`col.models`-JSON) und neues Schema (`notetypes`/`fields`/`templates`), Medienzuordnung, klare Fehlermeldung bei zstd-komprimiertem `collection.anki21b`. |
 | C5 Content-Renderer | fertig | MDX mit Ziel, Handhaltung, Fehlerbild, Übung, Checkpoint, Merksatz, Hinweis |
 | C6 Audio-Kit | offen | Plan 3 |
 | C7 Guitar-Skill | offen | Plan 3 |
