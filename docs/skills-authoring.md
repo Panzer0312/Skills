@@ -101,7 +101,29 @@ export default function MeinWidget({ data, progress }: WidgetProps) {
 Ein Widget spricht **nie** direkt mit der Datenbank. Es bekommt `data`, `progress` und `settings` —
 mehr braucht es nicht, und mehr darf es nicht nutzen.
 
+**Wichtig für `data`:** `ModuleRoute` sammelt die Dateien aus dem Manifest-Eintrag `data`, und wenn eine
+Datei ein Array ist, spreadet es deren Einträge einzeln in die flache `data`-Liste des Widgets (nötig,
+damit generische Renderer wie `ReferenceRenderer` flache Tabellenzeilen bekommen). Ein Widget bekommt
+also nie „die ganze Datei X als ein Element" — bei array-förmigen Dateien muss es die passenden Einträge
+selbst aus der flachen Liste herausfiltern (z. B. per Zod-Schema, siehe `skills/japanese/widgets/ReadingTrainer.tsx`).
+Objektförmige Dateien (wie eine `{ script, entries }`-Kana-Datei) landen dagegen unverändert als ein
+Element in `data`.
+
 ## Fortschritt und Inhaltsänderungen
 
 Der Seed-Abgleich läuft bei jedem App-Start. Karten hinzufügen ist gefahrlos. Karten entfernen
 archiviert sie, löscht sie aber nicht — kommen sie zurück, kommt der alte Lernstand mit.
+
+## Anki-Decks als Modul
+
+Über „Anki-Import" in der Seitenleiste lässt sich eine `.apkg`-Datei in einen bestehenden Lernbereich
+importieren. Sie wird zu einem `srs-deck`-Modul und nutzt denselben Scheduler wie die mitgelieferten
+Inhalte. Importierte Module stehen **nicht** im Manifest — sie leben nur in der Datenbank.
+
+Kartenschlüssel importierter Karten haben die Form `apkg-<anki-note-id>-<template-ord>`. Ein erneuter
+Import derselben Datei aktualisiert die Karten, statt sie zu verdoppeln.
+
+Ein importiertes oder mitgeliefertes `srs-deck`-Modul lässt sich über den Link „Als Anki-Deck
+exportieren" (`GET /api/anki/export/:skillId/:moduleId`) wieder als `.apkg` herunterladen. Der Export
+schreibt bewusst das alte Anki-Schema (`ver = 11`), damit die Datei sich in jeder Anki-Version öffnen
+lässt.

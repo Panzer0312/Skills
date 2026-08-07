@@ -10,12 +10,12 @@ Dieses Dokument ist die zentrale Stelle für Stand, Probleme und Ideen.
 | C1 Shell und Skill-Runtime | fertig | Registry, Routing, Theme, Schnellzugriffe |
 | C2 Data Layer | fertig | SQLite, Seed-Abgleich, Export und Sicherung |
 | C3 SRS-Engine | fertig | FSRS-5-Gewichte, Warteschlange mit Tageslimits |
-| C4 Anki-Import | in Arbeit | Plan 2 Tasks 8-9 fertig: `.apkg`-Reader (`readApkg`) entpackt Zip, liest `collection.anki21`/`collection.anki2`, unterstützt altes (`col.models`-JSON) und neues Schema (`notetypes`/`fields`/`templates`), Medienzuordnung, klare Fehlermeldung bei zstd-komprimiertem `collection.anki21b`. Dazu jetzt `guessMapping` (Feld-Rateheuristik für Vorder-/Rückseite, Lesung, Notiz auf Deutsch und Englisch) und `importApkg`: Import von Notizen, Karten und Medien (SHA-256-dedupliziert nach `data/media/`) in **einer** Transaktion, wahlweise mit übernommenem Anki-Scheduling (`ivl`/`factor`/`due` → FSRS-Zustand) oder komplett neuem Zustand. Routen `POST /api/anki/preview` (schreibt nichts) und `POST /api/anki/import` unter `packages/server/src/routes/anki.ts`. |
+| C4 Anki-Import | fertig | `.apkg`-Reader (`readApkg`) entpackt Zip, liest `collection.anki21`/`collection.anki2`, unterstützt altes (`col.models`-JSON) und neues Schema (`notetypes`/`fields`/`templates`), Medienzuordnung, klare Fehlermeldung bei zstd-komprimiertem `collection.anki21b`. Dazu `guessMapping` (Feld-Rateheuristik für Vorder-/Rückseite, Lesung, Notiz auf Deutsch und Englisch) und `importApkg`: Import von Notizen, Karten und Medien (SHA-256-dedupliziert nach `data/media/`) in **einer** Transaktion, wahlweise mit übernommenem Anki-Scheduling (`ivl`/`factor`/`due` → FSRS-Zustand) oder komplett neuem Zustand. Routen `POST /api/anki/preview` (schreibt nichts), `POST /api/anki/import` und `GET /api/anki/export/:skillId/:moduleId` (schreibt das alte Schema, `ver = 11`) unter `packages/server/src/routes/anki.ts`. Import-Oberfläche unter `/import` (`packages/web/src/features/anki/AnkiImport.tsx`): Datei wählen, Vorschau mit Feldzuordnung, Ziel wählen, importieren. Export-Link im `DeckRenderer`. |
 | C5 Content-Renderer | fertig | MDX mit Ziel, Handhaltung, Fehlerbild, Übung, Checkpoint, Merksatz, Hinweis |
 | C6 Audio-Kit | offen | Plan 3 |
 | C7 Guitar-Skill | offen | Plan 3 |
 | C8 Song-Import | offen | Plan 3 |
-| C9 Japanese-Skill | in Arbeit | Plan 2 Tasks 1-7 fertig: Kana-Transliteration (Hepburn), Kana-Daten, `KanaGrid`, `KanaDrill`, acht Themen-Vokabel-Decks (256 Karten), zwölfteiliger Grammatik-Kurs, 40 Kanji mit Lesungsregeln und 60 annotierte Sätze, `ReadingTrainer`. Nur der Anki-Import (Tasks 8+) steht noch aus. |
+| C9 Japanese-Skill | fertig | Kana-Transliteration (Hepburn), Kana-Daten, `KanaGrid`, `KanaDrill`, acht Themen-Vokabel-Decks (256 Karten), zwölfteiliger Grammatik-Kurs, 40 Kanji mit Lesungsregeln und 60 annotierte Sätze, `ReadingTrainer`. Rauchtest in `e2e/japanese.spec.ts`. |
 | C10 Projekt-Log | fertig | dieses Dokument |
 
 ## Offene Punkte
@@ -26,7 +26,9 @@ Dieses Dokument ist die zentrale Stelle für Stand, Probleme und Ideen.
 
 ## Bekannte Probleme
 
-- Noch keine.
+- `.apkg`-Dateien im neuen Format `collection.anki21b` (zstd-komprimiert) werden nicht gelesen.
+  Abhilfe: in Anki mit der Option „Unterstützung für ältere Anki-Versionen" exportieren.
+  Dauerhafte Lösung wäre eine zstd-Abhängigkeit im Server.
 
 ## Abweichungen vom Plan (Plan 2, Tasks 1-3)
 
@@ -67,13 +69,37 @@ Dieses Dokument ist die zentrale Stelle für Stand, Probleme und Ideen.
   prüft, dass danach `notes`, `cards`, `scheduling`, `skills` und `modules` alle leer sind. Das
   ist der eigentliche Beweis für die Rollback-Eigenschaft der SQLite-Transaktion.
 
+## Abweichungen vom Plan (Plan 2, Tasks 10-12)
+
+- `packages/web/src/features/anki/AnkiImport.tsx`: Die Beispielzeile in der Vorschau (`{sample.front} →
+  {sample.back}`) wurde in zwei `<span>` aufgeteilt. Als reiner Text in einem `<li>` bildete Playwright
+  Testing Library sonst einen einzigen Textknoten „日本 → Japan", sodass `getByText("日本")` fehlschlug.
+- Der geplante Rauchtest `e2e/japanese.spec.ts` deckte einen echten Bug auf: `ModuleRoute.collect()`
+  spreadet jeden array-wertigen Datei-Inhalt in Einzeleinträge (nötig, damit `ReferenceRenderer` flache
+  Tabellenzeilen bekommt, z. B. für `sonderfaelle.json`). `ReadingTrainer` erwartete dagegen, dass
+  `kanji.json`/`saetze.json`/`regeln.json` als ganze Arrays im `data`-Array ankommen — dadurch blieb das
+  Lesetraining in der echten Anwendung leer, obwohl der isolierte Widget-Test (der `data` direkt mit
+  Arrays befüllte) grün war. Fix: `ReadingTrainer` filtert jetzt den flachen `data`-Eintrag anhand von
+  `kanjiEntrySchema`/`satzSchema` (aus `@skills/core`) bzw. einer Formprüfung für Regeln, statt ein
+  ganzes Array zu suchen. `ReadingTrainer.test.tsx` wurde entsprechend auf ein geflachtes `data`-Array
+  umgestellt, damit der Test dieselbe Form erhält wie `ModuleRoute` sie liefert. `ModuleRoute.collect()`
+  selbst blieb unverändert, da andere Verbraucher (`ReferenceRenderer`, das bestehende `ModuleRoute.test.tsx`)
+  auf dem Spread-Verhalten aufbauen.
+- Beim Export-Routing (`packages/server/src/routes/anki.ts`) musste `writeApkg(...)` in `Buffer.from(...)`
+  gewickelt werden, bevor es an `c.body(...)` geht: TypeScript lehnte den rohen `Uint8Array<ArrayBufferLike>`
+  von `fflate.zipSync` ab (Hono erwartet `Uint8Array<ArrayBuffer>`). Verhalten unverändert.
+
 ## Ideen und Möglichkeiten
 
-- Export eines Skill-Decks nach `.apkg` (in Plan 2 vorgesehen).
 - Tastaturkürzel `/` für eine globale Suche über alle Karten und Lektionen.
 
 ## Entscheidungsprotokoll
 
 - 2026-08-06 — Hybrides Skill-Modell: Manifest plus Inhaltsdateien als Regelfall, eigene React-Widgets als Ausweg.
 - 2026-08-06 — Tabellen per Roh-DDL statt drizzle-kit-Migrationen: eine lokale Datei, kein Team, keine Migrationshistorie nötig.
+- 2026-08-06 — Kana-Merksätze sind deutsch und bildhaft, keine Übersetzungen englischer Eselsbrücken:
+  englische Merksätze funktionieren im Deutschen lautlich oft nicht.
+- 2026-08-06 — Das Lese-Modul behandelt Kanji-Lesungen, Rendaku und Partikel-Sonderfälle.
+  Kana selbst sind lautlich eindeutig und brauchen keine Kontextregeln.
+- 2026-08-06 — Anki-Export schreibt das alte Schema (ver 11), damit jede Anki-Version die Datei öffnet.
 - 2026-08-06 — Kein Datenbank-Import über das Netz. Wiederherstellung läuft über den Dateiaustausch bei gestopptem Server.

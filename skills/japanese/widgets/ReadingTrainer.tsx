@@ -1,4 +1,4 @@
-import { parseKanjiFile, parseSatzFile, type KanjiEntry, type Satz } from "@skills/core";
+import { kanjiEntrySchema, satzSchema, type KanjiEntry, type Satz } from "@skills/core";
 import { useMemo, useState } from "react";
 import type { WidgetProps } from "../../../packages/web/src/skills/widgets.js";
 
@@ -11,34 +11,38 @@ interface Regel {
   Beispiel: string;
 }
 
+function isRegel(entry: unknown): entry is Regel {
+  return (
+    typeof entry === "object" &&
+    entry !== null &&
+    !Array.isArray(entry) &&
+    "Regel" in entry &&
+    "Erklaerung" in entry &&
+    "Merksatz" in entry &&
+    "Beispiel" in entry
+  );
+}
+
+/**
+ * `ModuleRoute` flattens every array-shaped data file into individual entries
+ * (needed so `ReferenceRenderer` gets flat table rows), so this widget receives
+ * kanji, sentences and rules interleaved in a single list rather than as three
+ * whole-file arrays. Each entry is matched against its shape to sort it back out.
+ */
 export default function ReadingTrainer({ data, progress }: WidgetProps) {
   const [tab, setTab] = useState<Tab>("kanji");
 
-  const kanji = useMemo<KanjiEntry[]>(() => {
-    for (const entry of data) {
-      const parsed = parseKanjiFile(entry, "kanji");
-      if (parsed.ok) return parsed.entries;
-    }
-    return [];
-  }, [data]);
-
-  const saetze = useMemo<Satz[]>(() => {
-    for (const entry of data) {
-      const parsed = parseSatzFile(entry, "saetze");
-      if (parsed.ok) return parsed.saetze;
-    }
-    return [];
-  }, [data]);
-
-  const regeln = useMemo<Regel[]>(
-    () =>
-      (data.find(
-        (entry): entry is Regel[] =>
-          Array.isArray(entry) && entry.length > 0 && typeof entry[0] === "object" &&
-          entry[0] !== null && "Regel" in (entry[0] as object),
-      ) ?? []) as Regel[],
+  const kanji = useMemo<KanjiEntry[]>(
+    () => data.flatMap((entry) => (kanjiEntrySchema.safeParse(entry).success ? [entry as KanjiEntry] : [])),
     [data],
   );
+
+  const saetze = useMemo<Satz[]>(
+    () => data.flatMap((entry) => (satzSchema.safeParse(entry).success ? [entry as Satz] : [])),
+    [data],
+  );
+
+  const regeln = useMemo<Regel[]>(() => data.filter(isRegel), [data]);
 
   return (
     <div className="space-y-6">
