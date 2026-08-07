@@ -47,4 +47,28 @@ describe("ChordDiagramSingle", () => {
     render(<ChordDiagramSingle name="Xdim7" />);
     expect(screen.getByText(/kein Griffbild/)).toBeInTheDocument();
   });
+
+  it("shows a differing display name underneath the symbol", () => {
+    render(
+      <ChordDiagramSingle
+        name="Em"
+        overrides={{ song: { Em: { name: "Em eigen", frets: [0, 2, 2, 0, 0, 0], fingers: [null, 2, 3, null, null, null], baseFret: 1 } } }}
+      />,
+    );
+    expect(screen.getByRole("heading", { name: "Em" })).toBeInTheDocument();
+    expect(screen.getByTestId("shape-name")).toHaveTextContent("Em eigen");
+  });
+
+  it("offers an edit button only when an edit handler is given", () => {
+    const { rerender } = render(<ChordDiagramSingle name="Em" />);
+    expect(screen.queryByRole("button", { name: "Griff bearbeiten" })).not.toBeInTheDocument();
+    rerender(<ChordDiagramSingle name="Em" onEdit={() => {}} />);
+    expect(screen.getByRole("button", { name: "Griff bearbeiten" })).toBeInTheDocument();
+  });
+
+  it("keeps the fallback tile editable so a missing shape can be created", () => {
+    render(<ChordDiagramSingle name="Xdim7" onEdit={() => {}} />);
+    expect(screen.getByText(/kein Griffbild/)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Griff bearbeiten" })).toBeInTheDocument();
+  });
 });

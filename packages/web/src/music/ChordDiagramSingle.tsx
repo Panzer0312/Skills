@@ -1,4 +1,5 @@
 import { chordNotes, type ChordShape } from "@skills/core";
+import type { ChordOverrides } from "./chordOverrides.js";
 import { resolveChordShape } from "./userChords.js";
 
 const VISIBLE_FRETS = 4;
@@ -25,8 +26,16 @@ function findBarre(shape: ChordShape, fretNumber: number): { start: number; end:
   return null;
 }
 
-export function ChordDiagramSingle({ name }: { name: string }) {
-  const shape = resolveChordShape(name);
+export function ChordDiagramSingle({
+  name,
+  overrides,
+  onEdit,
+}: {
+  name: string;
+  overrides?: ChordOverrides;
+  onEdit?: () => void;
+}) {
+  const shape = resolveChordShape(name, overrides);
 
   if (!shape) {
     return (
@@ -35,6 +44,15 @@ export function ChordDiagramSingle({ name }: { name: string }) {
         <p className="mt-1 text-slate-600 dark:text-slate-400">
           Für diesen Akkord ist kein Griffbild hinterlegt.
         </p>
+        {onEdit ? (
+          <button
+            type="button"
+            onClick={onEdit}
+            className="mt-2 text-xs text-slate-500 underline dark:text-slate-400"
+          >
+            Griff bearbeiten
+          </button>
+        ) : null}
       </div>
     );
   }
@@ -49,6 +67,12 @@ export function ChordDiagramSingle({ name }: { name: string }) {
           </span>
         ) : null}
       </div>
+
+      {shape.name !== name ? (
+        <p data-testid="shape-name" className="text-xs text-slate-500 dark:text-slate-400">
+          {shape.name}
+        </p>
+      ) : null}
 
       <div className="mt-3 flex gap-1 text-center text-xs">
         {shape.frets.map((fret, stringIndex) => (
@@ -95,6 +119,16 @@ export function ChordDiagramSingle({ name }: { name: string }) {
       <p className="mt-3 text-xs text-slate-600 dark:text-slate-400">
         Töne: {chordNotes(name).join(", ")}
       </p>
+
+      {onEdit ? (
+        <button
+          type="button"
+          onClick={onEdit}
+          className="mt-2 text-xs text-slate-500 underline dark:text-slate-400"
+        >
+          Griff bearbeiten
+        </button>
+      ) : null}
     </div>
   );
 }
