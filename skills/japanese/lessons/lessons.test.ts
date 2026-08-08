@@ -20,8 +20,8 @@ function meta(file: string) {
 }
 
 describe("japanese lessons", () => {
-  it("ships at least the writing block", () => {
-    expect(files.length).toBeGreaterThanOrEqual(7);
+  it("ships thirty lessons", () => {
+    expect(files).toHaveLength(30);
   });
 
   it("orders them continuously and chains the prerequisites", () => {

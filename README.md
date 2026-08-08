@@ -31,9 +31,10 @@ Gebrauch: er holt eine einzelne Seite, prüft die Adresse gegen private Netze un
 
 ## Mitgelieferte Lernbereiche
 
-`skills/demo` (Vorlage und alle Modultypen), `skills/japanese` (Kana, Vokabeln, Grammatik, Lesen)
-und `skills/guitar` (13 Lektionen, Stimmgerät, Metronom, Songbibliothek mit Import). Griffbilder
-lassen sich direkt im Song ändern — wahlweise nur für diesen Song oder für alle.
+`skills/demo` (Vorlage und alle Modultypen), `skills/japanese` (30-Lektionen-Kurs, Kana, Vokabeln,
+Grammatik, Lesen) und `skills/guitar` (13 Lektionen, Stimmgerät, Metronom, Songbibliothek mit
+Import). Griffbilder lassen sich direkt im Song ändern — wahlweise nur für diesen Song oder für
+alle.
 
 ## Neuen Lernbereich hinzufügen
 

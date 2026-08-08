@@ -249,6 +249,32 @@ Dieses Dokument ist die zentrale Stelle für Stand, Probleme und Ideen.
   Griffbild" nirgends auf der Seite steht — vorher fiele das exakt so aus, wenn die Ableitung für F
   je bräche.
 
+## Abweichungen vom Plan (Akkord-Editor und Japanisch-Kurs)
+
+- Griffbild-Overrides liegen in SQLite (`packages/server/src/db/schema.ts`, `chords`-Route in
+  `packages/server/src/routes/chords.ts`, aufgelöst über `packages/web/src/music/chordOverrides.ts`
+  und `useChordOverrides.ts`), nicht als Dateien unter `skills/<skill>/chords/*.json` wie die
+  eigenen Griffbilder aus der Barré-Folgearbeit (siehe „Abweichungen vom Plan (Barré-Folgearbeit,
+  UNIT 2: eigene Akkord-Griffbilder)"): Der Vite-Glob, der `chords/*.json` einliest, arbeitet zur
+  Buildzeit und kann keinen Song-bezogenen Geltungsbereich (nur für diesen Song, nicht für alle)
+  abbilden — das JSON-Dateiformat kennt keinen solchen Scope. Overrides mit Song-Scope brauchen
+  deshalb eine zur Laufzeit veränderliche Ablage; `chords/*.json` bleibt daneben bestehen als die
+  vom Skill mitgelieferte, unveränderliche Grundlage.
+- Der Japanisch-Kurs (`skills/japanese/lessons/01-aussprache.mdx` … `30-hoeflichkeit.mdx`) verweist
+  durchgehend auf das bestehende Grammatikmodul „Grammatik & Sätze" und die Themen-Vokabel-Decks,
+  statt deren Inhalt zu wiederholen: Der Kurs ist der rote Faden mit fester Lektionsreihenfolge und
+  Sperrung, die beiden anderen Module bleiben eigenständige Nachschlagewerke.
+- Block „Alltag" (Lektionen 24–30, Task 11): Lektion 24 korrigiert unterwegs eine eigene erste
+  Fassung der ふん-Lautwechsel — 4 Minuten heißt よんぷん, nicht よんふん, weil die は-Reihe bei diesem
+  Zählwort nach jeder Zahl auf ん oder kleinem っ zur ぱ-Reihe wechselt (いち, さん, ろく, はち, じゅう,
+  よん), nicht nur nach dem bei ほん/ひき bekannten Fünferset. Das unterscheidet sich vom Muster aus
+  Lektion 23 und wird in Lektion 24 explizit als eigenes Muster benannt, um keine falsche Analogie
+  zu suggerieren.
+- Lektion 28 (Bitten und Erlauben) benutzt いただけませんか als feste, besonders höfliche Bittform,
+  bevor die zugrundeliegende Potentialform in Lektion 29 (Wollen und Können) allgemein erklärt wird.
+  Das ist eine bewusste Vorwegnahme mit Verweis auf die nächste Lektion, keine unbelegte Ausnahme:
+  いただきます aus Lektion 27 hat den Wortstamm いただく bereits eingeführt.
+
 ## Ideen und Möglichkeiten
 
 - Tastaturkürzel `/` für eine globale Suche über alle Karten und Lektionen.
@@ -269,3 +295,7 @@ Dieses Dokument ist die zentrale Stelle für Stand, Probleme und Ideen.
   Adressen. Ohne diese Prüfung wäre der Server ein offener Proxy ins eigene Netz.
 - 2026-08-06 — Das Metronom plant Klicks über AudioContext.currentTime voraus statt über setInterval,
   weil setInterval im Browser um zweistellige Millisekunden driftet.
+- 2026-08-07 — Griffbild-Overrides liegen in SQLite, nicht in `chords/*.json`: der Vite-Glob liest
+  die Dateien zur Buildzeit, und ein songbezogener Geltungsbereich hat im Dateiformat keine Entsprechung.
+- 2026-08-07 — Der Japanisch-Kurs verweist auf das Grammatikmodul, statt es zu ersetzen: der Kurs ist
+  der rote Faden, das Grammatikmodul bleibt Nachschlagewerk.
