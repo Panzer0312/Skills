@@ -5,6 +5,7 @@ import { api, ApiError } from "../../../packages/web/src/api/client.js";
 import type { ChordOverrideEntry } from "../../../packages/web/src/music/chordOverrides.js";
 import { ChordDiagramSingle } from "../../../packages/web/src/music/ChordDiagramSingle.js";
 import { ChordEditor } from "../../../packages/web/src/music/ChordEditor.js";
+import { useChordOverrides } from "../../../packages/web/src/music/useChordOverrides.js";
 import type { WidgetProps } from "../../../packages/web/src/skills/widgets.js";
 
 interface StoredSong {
@@ -184,6 +185,10 @@ function OwnShapes({ shipped }: { shipped: Uebungsstueck[] }) {
 export default function ChordDiagram({ data }: WidgetProps) {
   const [tab, setTab] = useState<"offen" | "eigene">("offen");
   const shipped = (data.flat() as Uebungsstueck[]).filter((s) => s && typeof s.id === "string");
+  // Without a song key the hook loads exactly the globally saved shapes, so a griff the
+  // user stored for all songs shows here too — the precedence documented in
+  // `docs/skills-authoring.md`. Song-scoped shapes stay out: this tab belongs to no song.
+  const { overrides } = useChordOverrides();
 
   return (
     <div className="space-y-5">
@@ -212,7 +217,7 @@ export default function ChordDiagram({ data }: WidgetProps) {
           </p>
           <div className="grid gap-4 sm:grid-cols-3 lg:grid-cols-5">
             {Object.keys(OPEN_CHORDS).map((name) => (
-              <ChordDiagramSingle key={name} name={name} />
+              <ChordDiagramSingle key={name} name={name} overrides={{ global: overrides.global }} />
             ))}
           </div>
         </>

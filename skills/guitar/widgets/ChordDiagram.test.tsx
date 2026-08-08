@@ -20,12 +20,20 @@ function renderWidget(data: unknown[] = []) {
   );
 }
 
-function stubFetch(chordsBody: unknown, songsBody: unknown = { songs: [] }) {
+/**
+ * `?all=1` serves the "Eigene Griffe" list, the bare path the global shapes the first
+ * tab renders — the widget asks for both.
+ */
+function stubFetch(entries: unknown[], songsBody: unknown = { songs: [] }) {
   vi.stubGlobal(
     "fetch",
     vi.fn(async (input: RequestInfo | URL) => {
       const url = String(input);
-      const body = url.includes("/api/chords") ? chordsBody : songsBody;
+      const body = url.includes("/api/chords?all=1")
+        ? { entries }
+        : url.includes("/api/chords")
+          ? { global: entries.filter((e) => (e as { scope: string }).scope === "global"), song: [] }
+          : songsBody;
       return new Response(JSON.stringify(body), {
         status: 200,
         headers: { "content-type": "application/json" },
@@ -55,22 +63,36 @@ describe("ChordDiagramSingle", () => {
 
 describe("ChordDiagram widget", () => {
   it("renders every open chord shape", () => {
+    stubFetch([]);
     renderWidget();
     for (const name of ["Em", "Am", "E", "A", "D", "G", "C", "Dm"]) {
       expect(screen.getByRole("heading", { name })).toBeInTheDocument();
     }
   });
 
+  it("shows a globally saved shape on the open-chord tab", async () => {
+    stubFetch([
+      {
+        id: 1, scope: "global", songKey: "", symbol: "Am", name: "Am eigen",
+        frets: [null, 0, 2, 2, 4, 0], fingers: [null, null, 2, 3, 4, null],
+        baseFret: 1, updatedAt: 0,
+      },
+    ]);
+
+    renderWidget();
+    expect(await screen.findByText("Am eigen")).toBeInTheDocument();
+    // No shipped open chord reaches the fourth fret, so this dot can only come from the override.
+    expect(screen.getByTestId("dot-4-4")).toHaveTextContent("4");
+  });
+
   it("lists the stored overrides on the second tab", async () => {
-    stubFetch({
-      entries: [
-        {
-          id: 1, scope: "global", songKey: "", symbol: "Cadd9", name: "Cadd9 eigen",
-          frets: [null, 3, 2, 0, 3, 0], fingers: [null, 3, 2, null, 4, null],
-          baseFret: 1, updatedAt: 0,
-        },
-      ],
-    });
+    stubFetch([
+      {
+        id: 1, scope: "global", songKey: "", symbol: "Cadd9", name: "Cadd9 eigen",
+        frets: [null, 3, 2, 0, 3, 0], fingers: [null, 3, 2, null, 4, null],
+        baseFret: 1, updatedAt: 0,
+      },
+    ]);
 
     renderWidget();
     await userEvent.click(screen.getByRole("button", { name: "Eigene Griffe" }));
@@ -79,15 +101,13 @@ describe("ChordDiagram widget", () => {
   });
 
   it("shows the shipped practice song's title for a uebung-scoped entry", async () => {
-    stubFetch({
-      entries: [
-        {
-          id: 2, scope: "song", songKey: "uebung:em-am-wiege", symbol: "Em", name: "Em eigen",
-          frets: [0, 2, 2, 0, 0, 0], fingers: [null, 2, 3, null, null, null],
-          baseFret: 1, updatedAt: 0,
-        },
-      ],
-    });
+    stubFetch([
+      {
+        id: 2, scope: "song", songKey: "uebung:em-am-wiege", symbol: "Em", name: "Em eigen",
+        frets: [0, 2, 2, 0, 0, 0], fingers: [null, 2, 3, null, null, null],
+        baseFret: 1, updatedAt: 0,
+      },
+    ]);
 
     renderWidget([UEBUNGSSTUECKE]);
     await userEvent.click(screen.getByRole("button", { name: "Eigene Griffe" }));
@@ -114,7 +134,11 @@ describe("ChordDiagram widget", () => {
             { status: 404, headers: { "content-type": "application/json" } },
           );
         }
-        const body = url.includes("/api/chords") ? { entries } : { songs: [] };
+        const body = url.includes("/api/chords?all=1")
+          ? { entries }
+          : url.includes("/api/chords")
+            ? { global: entries, song: [] }
+            : { songs: [] };
         return new Response(JSON.stringify(body), {
           status: 200,
           headers: { "content-type": "application/json" },

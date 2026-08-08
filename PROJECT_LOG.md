@@ -274,6 +274,16 @@ Dieses Dokument ist die zentrale Stelle für Stand, Probleme und Ideen.
   bevor die zugrundeliegende Potentialform in Lektion 29 (Wollen und Können) allgemein erklärt wird.
   Das ist eine bewusste Vorwegnahme mit Verweis auf die nächste Lektion, keine unbelegte Ausnahme:
   いただきます aus Lektion 27 hat den Wortstamm いただく bereits eingeführt.
+- Das Modul `akkorde` in `skills/guitar/skill.json` bekommt `data: ["songs/uebungsstuecke.json"]`,
+  während der Plan (Task 5) das Widget als `ChordDiagram(_: WidgetProps)` ohne Daten zeigte: Die Liste
+  „Eigene Griffe" muss einen Song-Schlüssel wie `uebung:em-am-wiege` zu einem Titel auflösen
+  (`scopeLabel` in `skills/guitar/widgets/ChordDiagram.tsx`), sonst stünde dort der rohe Schlüssel.
+- Der Reiter „Offene Akkorde" desselben Widgets gibt die global gespeicherten Griffe an
+  `ChordDiagramSingle` weiter (`useChordOverrides()` ohne Song-Schlüssel), obwohl der Plan-Ausschnitt
+  aus Task 5 den Reiter ohne Overrides rendert: `docs/skills-authoring.md` sagt die Auflösungsreihenfolge
+  ausdrücklich für „`ChordDiagramSingle` (verwendet in `SongView` und im `ChordDiagram`-Widget)" zu, und
+  ein Griff, den man „in allen Songs" gespeichert hat, wäre sonst genau in dem Modul unsichtbar, dessen
+  Aufgabe das Zeigen von Griffbildern ist.
 
 ## Ideen und Möglichkeiten
 

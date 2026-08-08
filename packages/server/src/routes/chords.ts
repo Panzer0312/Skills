@@ -22,6 +22,17 @@ const putSchema = chordFileEntrySchema
     message: "Ein globaler Griff darf keinen Song tragen.",
   });
 
+const INVALID_BODY_MESSAGE = "Das Griffbild ist ungültig.";
+
+/**
+ * Only the two `.refine` messages above are German; every other issue of the shared
+ * `chordFileEntrySchema` (wrong array length, fret out of range, finger outside 1–4)
+ * carries Zod's English default text, which must never reach the German interface.
+ */
+function invalidBodyMessage(error: z.ZodError): string {
+  return error.issues.find((issue) => issue.code === z.ZodIssueCode.custom)?.message ?? INVALID_BODY_MESSAGE;
+}
+
 interface Row {
   id: number;
   scope: string;
@@ -81,7 +92,7 @@ chordRoutes.put("/api/chords", async (c) => {
       {
         error: {
           code: "invalid_body",
-          message: parsed.error.issues[0]?.message ?? "Das Griffbild ist ungültig.",
+          message: invalidBodyMessage(parsed.error),
         },
       },
       400,

@@ -80,14 +80,38 @@ describe("chord override routes", () => {
     expect(body.error.code).toBe("invalid_body");
   });
 
+  it("answers a wrong array length with a German message", async () => {
+    const res = await put({ scope: "global", ...shape, frets: [1, 2, 3] });
+    const body = await res.json();
+    expect(body.error.message).toBe("Das Griffbild ist ungültig.");
+  });
+
+  it("answers a fret above the highest one with a German message", async () => {
+    const res = await put({ scope: "global", ...shape, frets: [26, 4, 4, 2, 2, 2] });
+    expect(res.status).toBe(400);
+    const body = await res.json();
+    expect(body.error.message).toBe("Das Griffbild ist ungültig.");
+  });
+
+  it("answers a finger outside one to four with a German message", async () => {
+    const res = await put({ scope: "global", ...shape, fingers: [7, 3, 4, 1, 1, 1] });
+    expect(res.status).toBe(400);
+    const body = await res.json();
+    expect(body.error.message).toBe("Das Griffbild ist ungültig.");
+  });
+
   it("rejects a song scope without a song key", async () => {
     const res = await put({ scope: "song", ...shape });
     expect(res.status).toBe(400);
+    const body = await res.json();
+    expect(body.error.message).toBe("Für einen songbezogenen Griff fehlt der Song.");
   });
 
   it("rejects a song key on a global scope", async () => {
     const res = await put({ scope: "global", songKey: "song:3", ...shape });
     expect(res.status).toBe(400);
+    const body = await res.json();
+    expect(body.error.message).toBe("Ein globaler Griff darf keinen Song tragen.");
   });
 
   it("deletes idempotently", async () => {

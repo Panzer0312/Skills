@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { ChordEditor } from "./ChordEditor.js";
@@ -66,6 +66,71 @@ describe("ChordEditor", () => {
     );
     expect(screen.queryByRole("button", { name: "Nur in diesem Song" })).not.toBeInTheDocument();
     expect(screen.getByRole("button", { name: "In allen Songs" })).toBeInTheDocument();
+  });
+
+  it("offers no cell beyond the four frets the diagram draws", () => {
+    render(
+      <ChordEditor symbol="Em" initial={initial} allowSongScope onSave={vi.fn()} onCancel={vi.fn()} />,
+    );
+    expect(screen.getByTestId("cell-0-4")).toBeInTheDocument();
+    expect(screen.queryByTestId("cell-0-5")).not.toBeInTheDocument();
+  });
+
+  it("offers no cell beyond the highest fret of the neck", () => {
+    render(
+      <ChordEditor symbol="Em" initial={initial} allowSongScope onSave={vi.fn()} onCancel={vi.fn()} />,
+    );
+    fireEvent.change(screen.getByLabelText("Startbund"), { target: { value: "24" } });
+    expect(screen.getByTestId("cell-0-24")).toBeInTheDocument();
+    expect(screen.queryByTestId("cell-0-25")).not.toBeInTheDocument();
+  });
+
+  it("pulls a dot into the window when the start fret is raised", async () => {
+    const onSave = vi.fn();
+    render(
+      <ChordEditor symbol="Em" initial={initial} allowSongScope onSave={onSave} onCancel={vi.fn()} />,
+    );
+    fireEvent.change(screen.getByLabelText("Startbund"), { target: { value: "5" } });
+    await userEvent.click(screen.getByRole("button", { name: "In allen Songs" }));
+
+    const saved = onSave.mock.calls[0]![0];
+    expect(saved.baseFret).toBe(5);
+    // The two dots stood at fret 2, below the new window — they move to its first row
+    // instead of being stored where the diagram never draws them.
+    expect(saved.frets).toEqual([0, 5, 5, 0, 0, 0]);
+    expect(screen.getByTestId("cell-1-5")).toHaveTextContent("2");
+  });
+
+  it("keeps open and muted strings when the start fret is raised", async () => {
+    const onSave = vi.fn();
+    render(
+      <ChordEditor
+        symbol="Em"
+        initial={{ ...initial, frets: [null, 2, 2, 0, 0, 0] }}
+        allowSongScope
+        onSave={onSave}
+        onCancel={vi.fn()}
+      />,
+    );
+    fireEvent.change(screen.getByLabelText("Startbund"), { target: { value: "7" } });
+    await userEvent.click(screen.getByRole("button", { name: "In allen Songs" }));
+    expect(onSave.mock.calls[0]![0].frets).toEqual([null, 7, 7, 0, 0, 0]);
+  });
+
+  it("pulls a stored dot outside the window in before it is shown", async () => {
+    const onSave = vi.fn();
+    render(
+      <ChordEditor
+        symbol="Em"
+        initial={{ name: "Em", frets: [0, 2, 9, 0, 0, 0], fingers: [null, 2, 3, null, null, null], baseFret: 1 }}
+        allowSongScope
+        onSave={onSave}
+        onCancel={vi.fn()}
+      />,
+    );
+    expect(screen.getByTestId("cell-2-4")).toHaveTextContent("3");
+    await userEvent.click(screen.getByRole("button", { name: "In allen Songs" }));
+    expect(onSave.mock.calls[0]![0].frets).toEqual([0, 2, 4, 0, 0, 0]);
   });
 
   it("offers a reset only for a scope that has something stored", async () => {

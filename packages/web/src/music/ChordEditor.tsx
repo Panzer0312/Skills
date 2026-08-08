@@ -3,8 +3,31 @@ import { useState } from "react";
 import { ChordDiagramSingle } from "./ChordDiagramSingle.js";
 
 const STRINGS = [0, 1, 2, 3, 4, 5];
-const VISIBLE_FRETS = 5;
+/** Must match `ChordDiagramSingle`: a dot outside the drawn window would be saved but never shown. */
+const VISIBLE_FRETS = 4;
+const HIGHEST_FRET = 24;
 const STRING_LABELS = ["E", "A", "D", "G", "H", "e"];
+
+/** The fret rows the grid offers for a start fret, never beyond the highest fret of the neck. */
+function windowFrets(baseFret: number): number[] {
+  return Array.from({ length: VISIBLE_FRETS }, (_, row) => baseFret + row).filter(
+    (fret) => fret <= HIGHEST_FRET,
+  );
+}
+
+/**
+ * Pulls every dot into the window the diagram draws. Without this, raising the start
+ * fret would leave a dot below the window: stored, but rendered nowhere — the string
+ * would then show neither `x`, `0` nor a dot and silently disappear.
+ */
+function clampToWindow(frets: (number | null)[], baseFret: number): (number | null)[] {
+  const rows = windowFrets(baseFret);
+  const lowest = rows[0]!;
+  const highest = rows[rows.length - 1]!;
+  return frets.map((fret) =>
+    typeof fret === "number" && fret > 0 ? Math.min(highest, Math.max(lowest, fret)) : fret,
+  );
+}
 
 const EMPTY: ChordShape = {
   name: "",
@@ -33,7 +56,9 @@ export function ChordEditor({
   onCancel,
 }: ChordEditorProps) {
   const start = initial ?? EMPTY;
-  const [frets, setFrets] = useState<(number | null)[]>([...start.frets]);
+  const [frets, setFrets] = useState<(number | null)[]>(() =>
+    clampToWindow([...start.frets], start.baseFret),
+  );
   const [fingers, setFingers] = useState<(number | null)[]>([...start.fingers]);
   const [baseFret, setBaseFret] = useState(start.baseFret);
   const [name, setName] = useState(initial?.name ?? "");
@@ -73,9 +98,13 @@ export function ChordEditor({
           <input
             type="number"
             min={1}
-            max={24}
+            max={HIGHEST_FRET}
             value={baseFret}
-            onChange={(e) => setBaseFret(Math.min(24, Math.max(1, Number(e.target.value) || 1)))}
+            onChange={(e) => {
+              const next = Math.min(HIGHEST_FRET, Math.max(1, Number(e.target.value) || 1));
+              setBaseFret(next);
+              setFrets((current) => clampToWindow(current, next));
+            }}
             className="mt-1 w-20 rounded border border-slate-300 px-2 py-1 dark:border-slate-700 dark:bg-slate-900"
           />
         </label>
@@ -98,32 +127,29 @@ export function ChordEditor({
         </div>
 
         <div className="mt-1 space-y-1">
-          {Array.from({ length: VISIBLE_FRETS }, (_, row) => {
-            const fretNumber = baseFret + row;
-            return (
-              <div key={fretNumber} className="flex gap-1">
-                {STRINGS.map((stringIndex) => {
-                  const set = frets[stringIndex] === fretNumber;
-                  return (
-                    <button
-                      key={stringIndex}
-                      type="button"
-                      data-testid={`cell-${stringIndex}-${fretNumber}`}
-                      onClick={() => toggleCell(stringIndex, fretNumber)}
-                      aria-label={`Saite ${STRING_LABELS[stringIndex]}, Bund ${fretNumber}`}
-                      className={`h-8 w-8 rounded-full border text-xs ${
-                        set
-                          ? "border-slate-900 bg-slate-900 text-white dark:border-slate-100 dark:bg-slate-100 dark:text-slate-900"
-                          : "border-slate-200 dark:border-slate-800"
-                      }`}
-                    >
-                      {set ? (fingers[stringIndex] ?? "") : ""}
-                    </button>
-                  );
-                })}
-              </div>
-            );
-          })}
+          {windowFrets(baseFret).map((fretNumber) => (
+            <div key={fretNumber} className="flex gap-1">
+              {STRINGS.map((stringIndex) => {
+                const set = frets[stringIndex] === fretNumber;
+                return (
+                  <button
+                    key={stringIndex}
+                    type="button"
+                    data-testid={`cell-${stringIndex}-${fretNumber}`}
+                    onClick={() => toggleCell(stringIndex, fretNumber)}
+                    aria-label={`Saite ${STRING_LABELS[stringIndex]}, Bund ${fretNumber}`}
+                    className={`h-8 w-8 rounded-full border text-xs ${
+                      set
+                        ? "border-slate-900 bg-slate-900 text-white dark:border-slate-100 dark:bg-slate-100 dark:text-slate-900"
+                        : "border-slate-200 dark:border-slate-800"
+                    }`}
+                  >
+                    {set ? (fingers[stringIndex] ?? "") : ""}
+                  </button>
+                );
+              })}
+            </div>
+          ))}
         </div>
       </div>
 
