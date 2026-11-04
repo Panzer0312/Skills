@@ -4,13 +4,15 @@
   "icon": "guitar",
   "accent": "#b45309",
   "description": "Von der Haltung bis zur Pentatonik — mit Stimmgerät, Metronom und Songs.",
+  "entry": "/vollbild/guitar/spiel",
   "modules": [
-    { "id": "kurs", "type": "course", "title": "Kurs", "subtitle": "13 Lektionen, aufeinander aufbauend", "data": ["lessons/*.mdx"] },
-    { "id": "stimmgeraet", "type": "practice", "title": "Stimmgerät", "pinned": true, "widget": "Tuner", "data": [] },
-    { "id": "griffbrett", "type": "practice", "title": "Griffbrett", "widget": "Fretboard", "data": [] },
-    { "id": "akkorde", "type": "practice", "title": "Akkordgriffe", "widget": "ChordDiagram", "data": ["songs/uebungsstuecke.json"] },
-    { "id": "uebungsplan", "type": "practice", "title": "Übungsplan", "widget": "PracticePlan", "data": ["practice/plan.json"] },
-    { "id": "songs", "type": "library", "title": "Songs", "widget": "SongLibrary", "data": ["songs/uebungsstuecke.json"] },
-    { "id": "nice-to-know", "type": "course", "title": "Nice to know", "data": ["reference/*.mdx"] }
+    { "id": "spiel", "type": "practice", "title": "Spiel", "fullscreen": true, "widget": "GameApp", "data": ["songs/uebungsstuecke.json"] },
+    { "id": "kurs", "type": "course", "title": "Kurs", "subtitle": "13 Lektionen, aufeinander aufbauend", "redirect": "/vollbild/guitar/spiel/bibliothek", "data": ["lessons/*.mdx"] },
+    { "id": "stimmgeraet", "type": "practice", "title": "Stimmgerät", "pinned": true, "redirect": "/vollbild/guitar/spiel/schrein", "data": [] },
+    { "id": "griffbrett", "type": "practice", "title": "Griffbrett", "redirect": "/vollbild/guitar/spiel/griffbrett", "data": [] },
+    { "id": "akkorde", "type": "practice", "title": "Akkordgriffe", "redirect": "/vollbild/guitar/spiel/schmiede", "data": ["songs/uebungsstuecke.json"] },
+    { "id": "uebungsplan", "type": "practice", "title": "Übungsplan", "redirect": "/vollbild/guitar/spiel/quests", "data": [] },
+    { "id": "songs", "type": "library", "title": "Songs", "redirect": "/vollbild/guitar/spiel/taverne", "data": ["songs/uebungsstuecke.json"] },
+    { "id": "nice-to-know", "type": "course", "title": "Nice to know", "redirect": "/vollbild/guitar/spiel/bibliothek", "data": ["reference/*.mdx"] }
   ]
 }

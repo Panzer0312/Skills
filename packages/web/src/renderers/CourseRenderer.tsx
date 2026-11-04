@@ -15,22 +15,29 @@ interface ProgressResponse {
   lessons: { lessonId: string; status: string }[];
 }
 
+const FINISHED = new Set(["done", "gelernt", "gemeistert"]);
+
 export function CourseRenderer({
   skillId,
   title,
   folder = "lessons",
+  ignoreLocks = false,
+  initialLessonId,
 }: {
   skillId: string;
   title: string;
   folder?: string;
+  ignoreLocks?: boolean;
+  initialLessonId?: string;
 }) {
   const queryClient = useQueryClient();
-  const [openId, setOpenId] = useState<string | null>(null);
+  const [openId, setOpenId] = useState<string | null>(initialLessonId ?? null);
 
-  const progress = useQuery({
+  const progressQuery = {
     queryKey: ["progress", skillId],
     queryFn: () => api.get<ProgressResponse>(`/api/progress/${skillId}`),
-  });
+  };
+  const progress = useQuery(progressQuery);
 
   const lessons = useMemo(() => {
     const prefix = `/skills/${skillId}/${folder}/`;
@@ -46,7 +53,7 @@ export function CourseRenderer({
   }, [skillId, folder]);
 
   const done = new Set(
-    (progress.data?.lessons ?? []).filter((l) => l.status === "done").map((l) => l.lessonId),
+    (progress.data?.lessons ?? []).filter((l) => FINISHED.has(l.status)).map((l) => l.lessonId),
   );
 
   const openEntry = lessons.find((l) => l.meta.id === openId);
@@ -55,8 +62,12 @@ export function CourseRenderer({
     : null;
 
   async function markDone(lessonId: string) {
+    // Read fresh: a quest may have mastered this lesson since the progress was cached.
+    const current = await queryClient.fetchQuery({ ...progressQuery, staleTime: 0 });
+    if (current.lessons.some((l) => l.lessonId === lessonId && l.status === "gemeistert")) return;
     await api.put(`/api/progress/${skillId}/${lessonId}`, { status: "done", checkpoint: {} });
     await queryClient.invalidateQueries({ queryKey: ["progress", skillId] });
+    await queryClient.invalidateQueries({ queryKey: ["game", skillId] });
   }
 
   if (Lesson && openEntry) {
@@ -86,7 +97,7 @@ export function CourseRenderer({
       <h1 className="text-2xl font-semibold">{title}</h1>
       <ol className="space-y-2">
         {lessons.map(({ meta }) => {
-          const unlocked = isUnlocked(meta, done);
+          const unlocked = ignoreLocks || isUnlocked(meta, done);
           return (
             <li key={meta.id}>
               <button

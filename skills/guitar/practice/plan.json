@@ -1,7 +1,0 @@
-[
-  { "id": "aufwaermen", "titel": "Aufwärmen", "minuten": 5, "beschreibung": "Chromatik 1-2-3-4 über alle Saiten, langsam und gleichmäßig.", "bpm": 60 },
-  { "id": "technik", "titel": "Technik", "minuten": 10, "beschreibung": "Die Übung aus der aktuellen Lektion, im Ziel-BPM der Lektion.", "bpm": 80 },
-  { "id": "akkordwechsel", "titel": "Akkordwechsel", "minuten": 5, "beschreibung": "Ein Akkordpaar, Zielwechsel pro Minute zählen.", "bpm": 70 },
-  { "id": "song", "titel": "Song", "minuten": 10, "beschreibung": "Ein Stück aus der Songbibliothek, erst langsam, dann im Originaltempo." },
-  { "id": "theorie", "titel": "Theorie", "minuten": 5, "beschreibung": "Notennamen auf einer Saite abfragen oder Stufenakkorde einer Tonart aufsagen." }
-]
