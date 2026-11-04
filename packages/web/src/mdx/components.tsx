@@ -35,7 +35,15 @@ export const Hinweis = ({ children }: { children: ReactNode }) => (
   <Box label="Hinweis" tone="border-slate-400 bg-slate-50 dark:bg-slate-900">{children}</Box>
 );
 
-export function Checkpoint({ children, onDone }: { children: ReactNode; onDone?: () => void }) {
+export function Checkpoint({
+  children,
+  onDone,
+  confirmed = false,
+}: {
+  children: ReactNode;
+  onDone?: () => void;
+  confirmed?: boolean;
+}) {
   return (
     <div className="my-6 rounded-lg border border-slate-300 p-4 dark:border-slate-700">
       <div className="mb-2 text-xs font-semibold uppercase tracking-wide">Checkpoint</div>
@@ -47,6 +55,11 @@ export function Checkpoint({ children, onDone }: { children: ReactNode; onDone?:
       >
         Geschafft
       </button>
+      {confirmed ? (
+        <p role="status" className="mt-2 text-sm font-semibold">
+          Lektion abgeschlossen.
+        </p>
+      ) : null}
     </div>
   );
 }

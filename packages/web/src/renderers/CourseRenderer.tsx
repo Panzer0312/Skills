@@ -32,6 +32,7 @@ export function CourseRenderer({
 }) {
   const queryClient = useQueryClient();
   const [openId, setOpenId] = useState<string | null>(initialLessonId ?? null);
+  const [confirmedId, setConfirmedId] = useState<string | null>(null);
 
   const progressQuery = {
     queryKey: ["progress", skillId],
@@ -57,9 +58,14 @@ export function CourseRenderer({
   );
 
   const openEntry = lessons.find((l) => l.meta.id === openId);
-  const Lesson = openEntry
-    ? (lazy(lessonModules[openEntry.path] as () => Promise<{ default: ComponentType }>) as ComponentType)
-    : null;
+  // Kept stable: a new lazy would remount the lesson and scroll the confirmation out of view.
+  const Lesson = useMemo(
+    () =>
+      openEntry
+        ? (lazy(lessonModules[openEntry.path] as () => Promise<{ default: ComponentType }>) as ComponentType)
+        : null,
+    [openEntry],
+  );
 
   async function markDone(lessonId: string) {
     // Read fresh: a quest may have mastered this lesson since the progress was cached.
@@ -70,6 +76,11 @@ export function CourseRenderer({
     await queryClient.invalidateQueries({ queryKey: ["game", skillId] });
   }
 
+  async function confirm(lessonId: string) {
+    await markDone(lessonId);
+    setConfirmedId(lessonId);
+  }
+
   if (Lesson && openEntry) {
     return (
       <div className="mx-auto max-w-3xl">
@@ -78,7 +89,10 @@ export function CourseRenderer({
         </button>
         <h1 className="text-2xl font-semibold">{openEntry.meta.title}</h1>
         <MDXProvider components={{ ...mdxComponents, Checkpoint: (props: { children: React.ReactNode }) => (
-          <mdxComponents.Checkpoint onDone={() => void markDone(openEntry.meta.id)}>
+          <mdxComponents.Checkpoint
+            onDone={() => void confirm(openEntry.meta.id)}
+            confirmed={confirmedId === openEntry.meta.id}
+          >
             {props.children}
           </mdxComponents.Checkpoint>
         ) }}>

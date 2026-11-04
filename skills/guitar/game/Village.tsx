@@ -1,8 +1,9 @@
 import type { GameState, QuestDefinition } from "@skills/core";
 import type { CSSProperties } from "react";
 import { Link } from "react-router-dom";
-import { GAME_BASE, todaysQuests, useGameState } from "./api.js";
+import { GAME_BASE, useGameState } from "./api.js";
 import { spriteUrl, type SpriteName } from "./assets.js";
+import { useTodaySet } from "./useTodaySet.js";
 
 export const QUEST_SPRITE: Record<QuestDefinition["kind"], SpriteName> = {
   wechsel: "sword",
@@ -19,16 +20,30 @@ const MENU: { path: string; label: string; hint: string; sprite: SpriteName }[] 
   { path: "chronik", label: "Chronicle", hint: "dein Fortschritt", sprite: "parchment" },
 ];
 
-function TodayPanel({ state }: { state: GameState }) {
-  const quests = todaysQuests(state);
+function TodayPanel({
+  state,
+  quests,
+  failure,
+}: {
+  state: GameState;
+  quests: QuestDefinition[];
+  failure: string | null;
+}) {
   return (
     <section className="village-today game-panel" aria-label="Heutige Quests">
       <h2>Heute{state.today && quests.length > 0 ? ` · ${state.today.minutes} min` : ""}</h2>
-      {quests.length === 0 ? (
-        <Link to={`${GAME_BASE}/quests`} className="game-quest">
-          <img src={spriteUrl("scroll")} alt="" />
-          <span>Heutige Quests zusammenstellen</span>
-        </Link>
+      {failure !== null ? (
+        <>
+          <p role="alert" className="game-error">
+            {failure}
+          </p>
+          <Link to={`${GAME_BASE}/quests`} className="game-quest">
+            <img src={spriteUrl("scroll")} alt="" />
+            <span>Heutige Quests zusammenstellen</span>
+          </Link>
+        </>
+      ) : quests.length === 0 ? (
+        <p>Wird zusammengestellt…</p>
       ) : (
         quests.map((quest) => (
           <Link key={quest.id} to={`${GAME_BASE}/quest/${quest.id}`} className="game-quest">
@@ -57,15 +72,13 @@ function Sign({ path, x, y, label, hint }: { path: string; x: number; y: number;
   );
 }
 
-export function Village() {
-  const { data: state } = useGameState();
-  if (!state) return null;
-  const quests = todaysQuests(state);
+function VillageView({ state, fetching }: { state: GameState; fetching: boolean }) {
+  const { quests, failed } = useTodaySet(state, fetching);
   const open = quests.filter((quest) => !state.doneToday.includes(quest.id)).length;
 
   return (
     <div className="village">
-      <TodayPanel state={state} />
+      <TodayPanel state={state} quests={quests} failure={quests.length === 0 ? (failed?.message ?? null) : null} />
       <nav className="village-map" aria-label="Dorf">
         <img src={spriteUrl("village")} alt="" />
         <Sign
@@ -93,4 +106,10 @@ export function Village() {
       </nav>
     </div>
   );
+}
+
+export function Village() {
+  const { data: state, isFetching } = useGameState();
+  if (!state) return null;
+  return <VillageView state={state} fetching={isFetching} />;
 }

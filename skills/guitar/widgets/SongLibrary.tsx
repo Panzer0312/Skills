@@ -117,7 +117,7 @@ export default function SongLibrary({ data }: WidgetProps) {
           </ul>
         ) : (
           <p className="text-sm text-slate-600 dark:text-slate-400">
-            Noch keine eigenen Songs. Füge welche über „Song hinzufügen" in der Seitenleiste ein.
+            Noch keine eigenen Songs. Füge welche über „Song hinzufügen" ein.
           </p>
         )}
       </section>

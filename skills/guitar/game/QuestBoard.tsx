@@ -1,19 +1,13 @@
-import { bestNext, buildDailyQuests, type GameState, type QuestDefinition } from "@skills/core";
-import { useEffect, useRef, useState } from "react";
+import { bestNext, type GameState, type QuestDefinition } from "@skills/core";
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { GAME_BASE, gameApi, gameContent, questLevel, todaysQuests, useGameState } from "./api.js";
+import { GAME_BASE, gameContent, questLevel, useGameState } from "./api.js";
 import { spriteUrl } from "./assets.js";
 import { LevelPicker } from "./ResultDialog.js";
+import { SESSION_LENGTHS, useTodaySet } from "./useTodaySet.js";
 import { QUEST_SPRITE } from "./Village.js";
 
-const SESSION_LENGTHS = [10, 20, 30, 45];
-const DEFAULT_MINUTES = 30;
-
-interface FailedSave {
-  message: string;
-  minutes: number;
-  questIds: string[];
-}
+const ROAD_DONE_REASON = "Die Hauptstraße ist geschafft. Flüssige Wechsel bleiben dein bester täglicher Schritt.";
 
 function LevelDots({ level }: { level: number }) {
   return (
@@ -81,53 +75,10 @@ function QuestRow({
 }
 
 function Board({ state, fetching }: { state: GameState; fetching: boolean }) {
-  const quests = todaysQuests(state);
-  const missing = quests.length === 0;
-  const minutes =
-    state.today && SESSION_LENGTHS.includes(state.today.minutes) ? state.today.minutes : DEFAULT_MINUTES;
-  const [saving, setSaving] = useState(false);
-  const [failed, setFailed] = useState<FailedSave | null>(null);
-  const savingRef = useRef(false);
-  const built = useRef(false);
-
-  async function save(length: number, questIds: string[]) {
-    if (savingRef.current) return;
-    savingRef.current = true;
-    setSaving(true);
-    setFailed(null);
-    try {
-      await gameApi.setToday(length, questIds);
-    } catch (e) {
-      const message = e instanceof Error ? e.message : "Speichern fehlgeschlagen.";
-      setFailed({ message, minutes: length, questIds });
-    } finally {
-      savingRef.current = false;
-      setSaving(false);
-    }
-  }
-
-  function build(length: number) {
-    return save(
-      length,
-      buildDailyQuests({
-        minutes: length,
-        content: gameContent,
-        statuses: state.lessons,
-        hasTargetSong: state.targetSongId !== null,
-        recentQuestIds: state.recentQuestIds,
-      }),
-    );
-  }
-
-  useEffect(() => {
-    // A cached state may be from yesterday, so only a finished fetch can decide.
-    if (!missing || fetching || built.current) return;
-    built.current = true;
-    void build(minutes);
-  });
+  const { quests, missing, minutes, saving, failed, save, build } = useTodaySet(state, fetching);
 
   const next = bestNext(gameContent.road, state.lessons);
-  const nextQuest = next ? gameContent.quests.find((quest) => quest.id === next.questId) : undefined;
+  const nextQuest = gameContent.quests.find((quest) => (next ? quest.id === next.questId : quest.kind === "wechsel"));
   const chosen = new Set(quests.map((quest) => quest.id));
   const others = gameContent.quests.filter((quest) => !chosen.has(quest.id));
   const ids = quests.map((quest) => quest.id);
@@ -165,13 +116,16 @@ function Board({ state, fetching }: { state: GameState; fetching: boolean }) {
         </div>
       ) : null}
 
-      {next ? (
-        <div className="quest-next">
-          <h2>Bester nächster Schritt</h2>
-          {nextQuest ? <p>{nextQuest.title}</p> : null}
-          <p>{next.reason}</p>
-        </div>
-      ) : null}
+      <div className="quest-next">
+        <h2>Bester nächster Schritt</h2>
+        {nextQuest ? <p>{nextQuest.title}</p> : null}
+        <p>{next ? next.reason : ROAD_DONE_REASON}</p>
+        {next && state.lessons[next.lessonId] === "aktiv" ? (
+          <Link to={`${GAME_BASE}/bibliothek/${next.lessonId}`} className="underline">
+            Checkpoint bestätigen
+          </Link>
+        ) : null}
+      </div>
 
       {missing && !failed ? <p>Wird zusammengestellt…</p> : null}
       <ul className="quest-list">
@@ -192,7 +146,7 @@ function Board({ state, fetching }: { state: GameState; fetching: boolean }) {
       </ul>
 
       <details className="quest-swap">
-        <summary>Quest tauschen</summary>
+        <summary>Quest hinzufügen</summary>
         <ul>
           {others.map((quest) => (
             <li key={quest.id}>

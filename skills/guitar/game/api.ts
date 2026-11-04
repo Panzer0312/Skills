@@ -35,6 +35,7 @@ export function useGameState(): UseQueryResult<GameState> {
   return useQuery({
     queryKey: GAME_KEY,
     queryFn: () => api.get<GameState>(`/api/game/${SKILL}/state`),
+    refetchOnWindowFocus: "always",
   });
 }
 

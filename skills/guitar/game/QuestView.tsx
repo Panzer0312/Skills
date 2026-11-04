@@ -182,6 +182,7 @@ function QuestRun({ quest, state, data }: { quest: QuestDefinition; state: GameS
           seconds={finished.seconds}
           metricKey={finished.metricKey}
           metricPrefill={trainerValue}
+          lessons={state.lessons}
           onSaved={clearQuest}
           onCancel={cancel}
           onClose={backToBoard}
@@ -208,7 +209,12 @@ function QuestRun({ quest, state, data }: { quest: QuestDefinition; state: GameS
         {quest.kind === "song" ? (
           <SongPanel targetSongId={state.targetSongId} tempoPercent={scaled.tempoPercent} data={data} />
         ) : null}
-        {pair ? <ChordTrainer pair={pair} onResult={setTrainerValue} /> : null}
+        {pair ? (
+          <ChordTrainer pair={pair} onResult={(n) => setTrainerValue((v) => Math.max(v ?? 0, n))} />
+        ) : null}
+        {trainerValue !== null ? (
+          <p>Beste Runde: {trainerValue}. Starte noch eine Runde oder tippe auf Fertig.</p>
+        ) : null}
         <Metronome metronome={metronome} />
         <div className="quest-buttons">
           <button type="button" className="game-button" onClick={finish}>

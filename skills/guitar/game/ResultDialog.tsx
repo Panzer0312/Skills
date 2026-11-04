@@ -1,6 +1,13 @@
-import type { PracticeRating, QuestDefinition } from "@skills/core";
+import {
+  bestNext,
+  lessonMasteryTarget,
+  type GameState,
+  type PracticeRating,
+  type QuestDefinition,
+} from "@skills/core";
 import { useRef, useState } from "react";
-import { gameApi, type LogResult } from "./api.js";
+import { Link } from "react-router-dom";
+import { GAME_BASE, gameApi, gameContent, type LogResult } from "./api.js";
 
 const RATINGS: { value: PracticeRating; label: string }[] = [
   { value: "zu-leicht", label: "Zu leicht" },
@@ -73,6 +80,7 @@ export function ResultDialog({
   seconds,
   metricKey,
   metricPrefill,
+  lessons,
   onSaved,
   onCancel,
   onClose,
@@ -82,6 +90,7 @@ export function ResultDialog({
   seconds: number;
   metricKey: string | undefined;
   metricPrefill: number | null;
+  lessons: GameState["lessons"];
   onSaved: () => void;
   onCancel: () => void;
   onClose: () => void;
@@ -113,6 +122,9 @@ export function ResultDialog({
       return;
     }
 
+    const masteryTarget =
+      quest.lessonId !== null ? lessonMasteryTarget(gameContent.quests, quest.lessonId) : undefined;
+
     savingRef.current = true;
     setSaving(true);
     setError(null);
@@ -126,7 +138,7 @@ export function ResultDialog({
         level,
         rating,
         ...(value !== null && metricKey !== undefined ? { metricKey, metricValue: value } : {}),
-        ...(quest.masteryTarget !== undefined ? { masteryTarget: quest.masteryTarget } : {}),
+        ...(masteryTarget !== undefined ? { masteryTarget } : {}),
       });
       onSaved();
       setResult(logged);
@@ -139,6 +151,7 @@ export function ResultDialog({
   }
 
   if (result) {
+    const atCheckpoint = bestNext(gameContent.road, lessons)?.lessonId === quest.lessonId;
     return (
       <section role="dialog" aria-label="Ergebnis" className="quest-result">
         {result.isRecord ? <p className="font-bold">Neuer Rekord!</p> : null}
@@ -148,6 +161,11 @@ export function ResultDialog({
             <p>Nächstes Mal Stufe {result.suggestion}?</p>
             <LevelPicker techniqueId={quest.techniqueId} initial={result.suggestion} onSaved={onClose} />
           </>
+        ) : null}
+        {atCheckpoint ? (
+          <Link to={`${GAME_BASE}/bibliothek/${quest.lessonId}`} className="underline">
+            Checkpoint bestätigen
+          </Link>
         ) : null}
         <button type="button" className="game-button" onClick={onClose}>
           Zurück zum Board

@@ -1,9 +1,11 @@
 import type { GameState } from "@skills/core";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { act, fireEvent, render, screen } from "@testing-library/react";
+import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { queryClient } from "../../../packages/web/src/app/queryClient.js";
 import { playSignal } from "../../../packages/web/src/audio/signalTone.js";
+import GameApp from "../widgets/GameApp.js";
 import { changeMetricKey, ChordTrainer } from "./ChordTrainer.js";
 
 vi.mock("../../../packages/web/src/audio/signalTone.js", () => ({
@@ -37,7 +39,7 @@ function json(body: unknown) {
 }
 
 function serve(records: Record<string, number> = {}, isRecord = false) {
-  const fetchMock = vi.fn(async (url: string) => {
+  const fetchMock = vi.fn(async (url: string, _init?: RequestInit) => {
     if (String(url).includes("/state")) return json({ ...base, records });
     if (String(url).includes("/log"))
       return json({ xpGained: 5, suggestion: null, isRecord });
@@ -126,7 +128,7 @@ describe("ChordTrainer", () => {
     await tick(0);
     const calls = logCalls(fetchMock);
     expect(calls).toHaveLength(1);
-    expect(JSON.parse(calls[0]![1].body)).toEqual({
+    expect(JSON.parse(String(calls[0]![1]?.body))).toEqual({
       kind: "frei",
       seconds: 60,
       level: 1,
@@ -251,5 +253,64 @@ describe("ChordTrainer", () => {
       screen.getByLabelText("Wie viele saubere Wechsel?"),
     ).toBeInTheDocument();
     vi.mocked(playSignal).mockReset();
+  });
+});
+
+describe("ChordTrainer in a quest", () => {
+  const progress = { record: vi.fn(), get: () => null, complete: vi.fn() };
+
+  async function renderQuest() {
+    render(
+      <QueryClientProvider client={queryClient}>
+        <MemoryRouter initialEntries={["/vollbild/guitar/spiel/quest/wechsel-minute"]}>
+          <Routes>
+            <Route
+              path="/vollbild/:skillId/:moduleId/*"
+              element={<GameApp data={[]} progress={progress} settings={{}} />}
+            />
+          </Routes>
+        </MemoryRouter>
+      </QueryClientProvider>,
+    );
+    await tick(0);
+  }
+
+  async function playRound(changes: number) {
+    await runRound();
+    fireEvent.change(screen.getByLabelText("Wie viele saubere Wechsel?"), {
+      target: { value: String(changes) },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "Speichern" }));
+    await tick(0);
+  }
+
+  it("keeps the best of two rounds for the log", async () => {
+    const fetchMock = serve();
+    await renderQuest();
+    expect(screen.queryByText(/Beste Runde/)).not.toBeInTheDocument();
+
+    await playRound(14);
+    expect(screen.getByText(/Beste Runde: 14/)).toHaveTextContent("Fertig");
+
+    await playRound(9);
+    expect(screen.getByText(/Beste Runde: 14/)).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Fertig" }));
+    await tick(0);
+    expect(screen.getByLabelText("Wechsel pro Minute")).toHaveValue(14);
+    fireEvent.click(screen.getByRole("button", { name: "Passt" }));
+    fireEvent.click(screen.getByRole("button", { name: "Speichern" }));
+    await tick(0);
+    const calls = logCalls(fetchMock);
+    expect(calls).toHaveLength(1);
+    expect(JSON.parse(String(calls[0]![1]?.body))).toMatchObject({ metricValue: 14 });
+  });
+
+  it("raises the best round when a later one beats it", async () => {
+    serve();
+    await renderQuest();
+    await playRound(9);
+    await playRound(14);
+    expect(screen.getByText(/Beste Runde: 14/)).toBeInTheDocument();
   });
 });

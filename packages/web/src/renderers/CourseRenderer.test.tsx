@@ -88,6 +88,37 @@ describe("CourseRenderer", () => {
     expect(JSON.parse(String(init?.body))).toEqual({ status: "done", checkpoint: {} });
   });
 
+  it("confirms the checkpoint visibly, also once the progress has refreshed", async () => {
+    const fetchMock = serve([]);
+    const client = renderCourse({ initialLessonId: SECOND });
+    const button = await checkpointButton(client);
+    expect(screen.queryByRole("status")).not.toBeInTheDocument();
+    await userEvent.click(button);
+    await waitFor(() => expect(puts(fetchMock)).toHaveLength(1));
+    expect(await screen.findByRole("status")).toHaveTextContent("Lektion abgeschlossen");
+    await waitFor(() => expect(client.isFetching()).toBe(0));
+    expect(screen.getByRole("status")).toBeInTheDocument();
+  });
+
+  it("confirms nothing when the checkpoint cannot be saved", async () => {
+    const quiet = () => undefined;
+    process.on("unhandledRejection", quiet);
+    serve([]);
+    const client = renderCourse({ initialLessonId: SECOND });
+    const button = await checkpointButton(client);
+    const fetchMock = vi.fn(async (_url: string, init?: RequestInit) =>
+      init?.method === "PUT"
+        ? new Response(JSON.stringify({ error: { code: "x", message: "kaputt" } }), { status: 500 })
+        : new Response(JSON.stringify({ lessons: [] }), { status: 200 }),
+    );
+    vi.stubGlobal("fetch", fetchMock);
+    await userEvent.click(button);
+    await waitFor(() => expect(puts(fetchMock as never)).toHaveLength(1));
+    await waitFor(() => expect(client.isFetching()).toBe(0));
+    expect(screen.queryByRole("status")).not.toBeInTheDocument();
+    process.off("unhandledRejection", quiet);
+  });
+
   it("does not lower a mastered lesson from the checkpoint", async () => {
     const fetchMock = serve([{ lessonId: SECOND, status: "gemeistert" }]);
     const client = renderCourse({ initialLessonId: SECOND });

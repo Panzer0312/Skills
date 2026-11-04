@@ -152,13 +152,11 @@ describe("GameShell", () => {
     expect(await screen.findByRole("link", { name: new RegExp(quest.title) })).toHaveTextContent("erledigt");
   });
 
-  it("links to the Quest Board while today's set is not built", async () => {
+  it("says the set is on its way while today's set is not built", async () => {
     serve({ today: null });
     renderGame();
-    expect(await screen.findByRole("link", { name: /Heutige Quests zusammenstellen/ })).toHaveAttribute(
-      "href",
-      "/vollbild/guitar/spiel/quests",
-    );
+    expect(await screen.findByText("Wird zusammengestellt…")).toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: /Heutige Quests zusammenstellen/ })).not.toBeInTheDocument();
   });
 
   it("shows an error with retry when the server is down", async () => {
@@ -192,6 +190,7 @@ describe("game places", () => {
     serve({});
     renderGame("/taverne");
     expect(await screen.findByRole("link", { name: /Song hinzufügen/ })).toHaveAttribute("href", "/songs/neu");
+    expect(await screen.findByText(/Noch keine eigenen Songs/)).not.toHaveTextContent("Seitenleiste");
   });
 
   it("highlights the best next step in the harbor", async () => {
@@ -201,6 +200,15 @@ describe("game places", () => {
     const current = await screen.findByText(second!.reason);
     expect(current.closest("li")).toHaveAttribute("aria-current", "step");
     expect(screen.getByText("Die Karte öffnet bald")).toBeInTheDocument();
+  });
+
+  it("shows no road in the harbor without a state", async () => {
+    vi.stubGlobal("fetch", vi.fn(async () => json({}, 500)));
+    renderGame("/hafen");
+    expect(await screen.findByRole("button", { name: /Erneut versuchen/ })).toBeInTheDocument();
+    expect(screen.getByText("Die Karte öffnet bald")).toBeInTheDocument();
+    expect(screen.queryByRole("list")).not.toBeInTheDocument();
+    expect(screen.queryByText("Bester nächster Schritt")).not.toBeInTheDocument();
   });
 
   it("promises the market", async () => {
@@ -219,6 +227,17 @@ describe("game places", () => {
       "href",
       "/vollbild/guitar/spiel/einstufung",
     );
+  });
+});
+
+describe("chronicle without a state", () => {
+  it("shows no records but keeps the placement link", async () => {
+    vi.stubGlobal("fetch", vi.fn(async () => json({}, 500)));
+    renderGame("/chronik");
+    expect(await screen.findByRole("button", { name: /Erneut versuchen/ })).toBeInTheDocument();
+    expect(screen.queryByText("Noch keine Rekorde.")).not.toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: "Rekorde" })).not.toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Einstufung wiederholen" })).toBeInTheDocument();
   });
 });
 
