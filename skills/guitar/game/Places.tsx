@@ -166,23 +166,3 @@ export function Chronicle() {
     </ToolFrame>
   );
 }
-
-/* Temporary stubs, replaced in Task 9. */
-
-export function QuestBoard() {
-  return (
-    <ToolFrame title="Quest Board">
-      <p>Das Quest Board öffnet bald.</p>
-    </ToolFrame>
-  );
-}
-
-export function QuestView() {
-  const { questId } = useParams();
-  const quest = gameContent.quests.find((q) => q.id === questId);
-  return (
-    <ToolFrame title={quest?.title ?? "Quest"}>
-      <p>{quest?.description ?? "Diese Quest gibt es nicht."}</p>
-    </ToolFrame>
-  );
-}

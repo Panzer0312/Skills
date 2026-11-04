@@ -5,13 +5,12 @@ import { useNavigate } from "react-router-dom";
 import { api } from "../../../packages/web/src/api/client.js";
 import { sortLessons, type LessonMeta } from "../../../packages/web/src/mdx/lessons.js";
 import type { WidgetProps } from "../../../packages/web/src/skills/widgets.js";
-import { GAME_BASE, gameApi, gameContent, useGameState } from "./api.js";
+import { DEFAULT_LEVEL, GAME_BASE, gameApi, gameContent, useGameState } from "./api.js";
 import { ToolFrame } from "./Places.js";
 
 const lessonMeta = import.meta.glob("../lessons/*.mdx", { eager: true, import: "meta" });
 const lessons = sortLessons(Object.values(lessonMeta) as LessonMeta[]);
 
-const DEFAULT_LEVEL = 3;
 const KNOWN = new Set(["gelernt", "gemeistert"]);
 
 interface SongOption {

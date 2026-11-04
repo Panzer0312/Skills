@@ -256,3 +256,160 @@
 .game-home + .game-home {
   margin-left: 8px;
 }
+
+.game-button:disabled {
+  opacity: 0.5;
+}
+
+.game-button[aria-pressed="true"] {
+  background: var(--wood);
+  color: var(--gold);
+}
+
+.quest-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.quest-board {
+  display: grid;
+  gap: 10px;
+}
+
+.quest-board h1 {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.quest-next {
+  padding: 6px 8px;
+  background: var(--parch);
+  border: 2px solid var(--gold);
+}
+
+/* Pixelify's capital B reads as a G at this size. */
+.game-root .quest-next h2 {
+  font-family: inherit;
+  font-size: 21px;
+  font-weight: 400;
+}
+
+.quest-list {
+  display: grid;
+  gap: 6px;
+}
+
+.quest-row {
+  background: var(--parch);
+  border: 2px solid #8a6a3d;
+}
+
+.quest-row-main {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 12px;
+  padding-right: 8px;
+}
+
+.quest-row .game-quest {
+  flex: 1 1 200px;
+  min-width: 0;
+  background: none;
+  border: 0;
+}
+
+.quest-row .quest-buttons {
+  padding: 0 0 6px 8px;
+}
+
+.quest-dots {
+  display: inline-flex;
+  gap: 3px;
+  margin-left: 8px;
+}
+
+.quest-dots i {
+  width: 10px;
+  height: 10px;
+  border: 2px solid var(--wood);
+}
+
+.quest-dots i.on {
+  background: var(--wood);
+}
+
+.quest-level {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+  padding: 6px 8px;
+}
+
+.quest-swap summary {
+  cursor: pointer;
+}
+
+.quest-swap li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px 10px;
+  padding: 4px 0;
+}
+
+.quest-view,
+.quest-result {
+  display: grid;
+  gap: 12px;
+  justify-items: start;
+}
+
+.quest-view > *,
+.quest-result > * {
+  max-width: 100%;
+}
+
+.quest-timer {
+  font-size: 36px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.quest-values {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  font-weight: 600;
+}
+
+.quest-metronome,
+.quest-bpm {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.quest-field {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.quest-field input {
+  width: 6em;
+  padding: 2px 6px;
+  border: 2px solid #8a6a3d;
+  background: transparent;
+}
+
+.quest-xp {
+  color: #a8720f;
+  font-size: 28px;
+  font-weight: 700;
+}

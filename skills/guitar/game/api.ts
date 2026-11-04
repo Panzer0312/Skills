@@ -1,4 +1,10 @@
-import { parseGameContent, type GameContent, type GameState, type LogBody } from "@skills/core";
+import {
+  parseGameContent,
+  type GameContent,
+  type GameState,
+  type LogBody,
+  type QuestDefinition,
+} from "@skills/core";
 import { useQuery, type UseQueryResult } from "@tanstack/react-query";
 import { api } from "../../../packages/web/src/api/client.js";
 import { queryClient } from "../../../packages/web/src/app/queryClient.js";
@@ -11,7 +17,19 @@ const PROGRESS_KEY = ["progress", SKILL];
 
 export const GAME_BASE = "/vollbild/guitar/spiel";
 
+export const DEFAULT_LEVEL = 3;
+
 export const gameContent: GameContent = parseGameContent({ ...quests, road });
+
+export function questLevel(state: GameState, quest: QuestDefinition): number {
+  return state.levels[quest.techniqueId] ?? DEFAULT_LEVEL;
+}
+
+/** Today's saved quests that still exist in the content. */
+export function todaysQuests(state: GameState): QuestDefinition[] {
+  const ids = state.today?.questIds ?? [];
+  return ids.flatMap((id) => gameContent.quests.find((quest) => quest.id === id) ?? []);
+}
 
 export function useGameState(): UseQueryResult<GameState> {
   return useQuery({

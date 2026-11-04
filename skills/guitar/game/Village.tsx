@@ -1,10 +1,10 @@
 import type { GameState, QuestDefinition } from "@skills/core";
 import type { CSSProperties } from "react";
 import { Link } from "react-router-dom";
-import { GAME_BASE, gameContent, useGameState } from "./api.js";
+import { GAME_BASE, todaysQuests, useGameState } from "./api.js";
 import { spriteUrl, type SpriteName } from "./assets.js";
 
-const QUEST_SPRITE: Record<QuestDefinition["kind"], SpriteName> = {
+export const QUEST_SPRITE: Record<QuestDefinition["kind"], SpriteName> = {
   wechsel: "sword",
   technik: "shield",
   song: "chest",
@@ -19,17 +19,12 @@ const MENU: { path: string; label: string; hint: string; sprite: SpriteName }[] 
   { path: "chronik", label: "Chronicle", hint: "dein Fortschritt", sprite: "parchment" },
 ];
 
-function todaysQuests(state: GameState): QuestDefinition[] {
-  const ids = state.today?.questIds ?? [];
-  return ids.flatMap((id) => gameContent.quests.find((quest) => quest.id === id) ?? []);
-}
-
 function TodayPanel({ state }: { state: GameState }) {
   const quests = todaysQuests(state);
   return (
     <section className="village-today game-panel" aria-label="Heutige Quests">
-      <h2>Heute{state.today ? ` · ${state.today.minutes} min` : ""}</h2>
-      {state.today === null ? (
+      <h2>Heute{state.today && quests.length > 0 ? ` · ${state.today.minutes} min` : ""}</h2>
+      {quests.length === 0 ? (
         <Link to={`${GAME_BASE}/quests`} className="game-quest">
           <img src={spriteUrl("scroll")} alt="" />
           <span>Heutige Quests zusammenstellen</span>
@@ -65,7 +60,8 @@ function Sign({ path, x, y, label, hint }: { path: string; x: number; y: number;
 export function Village() {
   const { data: state } = useGameState();
   if (!state) return null;
-  const open = todaysQuests(state).filter((quest) => !state.doneToday.includes(quest.id)).length;
+  const quests = todaysQuests(state);
+  const open = quests.filter((quest) => !state.doneToday.includes(quest.id)).length;
 
   return (
     <div className="village">
@@ -77,7 +73,7 @@ export function Village() {
           x={22}
           y={24}
           label="Quest Board"
-          hint={state.today ? `${open} offen heute` : "Quests wählen"}
+          hint={quests.length > 0 ? `${open} offen heute` : "Quests wählen"}
         />
         <Sign path="taverne" x={57} y={20} label="Tavern" hint="deine Songs" />
         <Sign path="bibliothek" x={87} y={14} label="Library" hint="Lektionen" />
