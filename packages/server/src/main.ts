@@ -10,6 +10,8 @@ mkdirSync(dirname(dbPath), { recursive: true });
 const database = openDatabase(dbPath);
 const app = createApp(database);
 
-serve({ fetch: app.fetch, port: 5174 }, (info) => {
-  console.log(`Skills-Server läuft auf http://localhost:${info.port} (DB: ${dbPath})`);
+const hostname = process.env.SKILLS_HOST ?? "127.0.0.1";
+
+serve({ fetch: app.fetch, port: 5174, hostname }, (info) => {
+  console.log(`Skills-Server läuft auf http://${hostname}:${info.port} (DB: ${dbPath})`);
 });

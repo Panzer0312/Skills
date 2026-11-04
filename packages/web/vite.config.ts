@@ -34,7 +34,7 @@ export default defineConfig({
   },
   server: {
     port: 5173,
-    proxy: { "/api": "http://localhost:5174" },
+    proxy: { "/api": "http://127.0.0.1:5174" },
   },
   test: {
     environment: "jsdom",

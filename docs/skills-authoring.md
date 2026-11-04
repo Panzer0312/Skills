@@ -47,6 +47,7 @@ Neu laden — der Bereich erscheint in der Seitenleiste, die Karten sind in der 
 | `icon` | ja | Name eines lucide-Icons |
 | `accent` | ja | Hex-Farbe, z. B. `#4f46e5` |
 | `description` | nein | Ein Satz für die Übersicht |
+| `entry` | nein | Pfad, zu dem `/skill/<id>` statt zur Bereichsübersicht weiterleitet |
 | `modules` | ja | Mindestens ein Modul |
 
 Pro Modul:
@@ -62,6 +63,30 @@ Pro Modul:
 | `data` | nein | Pfade relativ zum Bereichsordner, `*` erlaubt |
 | `dailyNewLimit` | nein | Überschreibt das globale Limit |
 | `dailyReviewLimit` | nein | Überschreibt das globale Limit |
+| `fullscreen` | nein | `true` macht das Modul zusätzlich unter `/vollbild/<skill>/<modul>/*` erreichbar, ohne Seitenleiste |
+| `redirect` | nein | Pfad, zu dem die normale Modulseite weiterleitet |
+
+## Einstieg, Weiterleitung und Vollbild
+
+Mit diesen drei Feldern kann ein Lernbereich als eigene Vollbild-App laufen. `skills/guitar/skill.json`
+macht es vor:
+
+```json
+{
+  "entry": "/vollbild/guitar/spiel",
+  "modules": [
+    { "id": "spiel", "type": "practice", "title": "Spiel", "fullscreen": true, "widget": "GameApp" },
+    { "id": "stimmgeraet", "type": "practice", "title": "Stimmgerät", "redirect": "/vollbild/guitar/spiel/schrein" }
+  ]
+}
+```
+
+- **`entry`** ersetzt die Bereichsübersicht: Wer den Lernbereich öffnet, landet direkt dort.
+- **`fullscreen`** gibt dem Modul die Route `/vollbild/<skill>/<modul>/*`. Alles hinter dem Modul gehört
+  dem Widget, es kann darin eigene Routen anlegen. Module ohne `fullscreen` gibt es unter diesem Pfad nicht.
+- **`redirect`** leitet die normale Modulseite weiter, das Modul bleibt aber in der Navigation sichtbar.
+  So führt ein alter Link oder ein Schnellzugriff (`pinned`) zum passenden Ort in der Vollbild-App.
+  Die Vollbild-Route selbst folgt `redirect` nicht.
 
 ## Modultypen
 
