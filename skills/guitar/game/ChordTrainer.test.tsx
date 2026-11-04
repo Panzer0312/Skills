@@ -6,7 +6,9 @@ import { queryClient } from "../../../packages/web/src/app/queryClient.js";
 import { playSignal } from "../../../packages/web/src/audio/signalTone.js";
 import { changeMetricKey, ChordTrainer } from "./ChordTrainer.js";
 
-vi.mock("../../../packages/web/src/audio/signalTone.js", () => ({ playSignal: vi.fn() }));
+vi.mock("../../../packages/web/src/audio/signalTone.js", () => ({
+  playSignal: vi.fn(),
+}));
 
 const base: GameState = {
   placed: true,
@@ -28,14 +30,19 @@ const base: GameState = {
 };
 
 function json(body: unknown) {
-  return new Response(JSON.stringify(body), { status: 200, headers: { "content-type": "application/json" } });
+  return new Response(JSON.stringify(body), {
+    status: 200,
+    headers: { "content-type": "application/json" },
+  });
 }
 
 function serve(records: Record<string, number> = {}, isRecord = false) {
   const fetchMock = vi.fn(async (url: string) => {
     if (String(url).includes("/state")) return json({ ...base, records });
-    if (String(url).includes("/log")) return json({ xpGained: 5, suggestion: null, isRecord });
-    if (String(url).startsWith("/api/chords")) return json({ global: [], song: [], entries: [] });
+    if (String(url).includes("/log"))
+      return json({ xpGained: 5, suggestion: null, isRecord });
+    if (String(url).startsWith("/api/chords"))
+      return json({ global: [], song: [], entries: [] });
     return json({ ok: true });
   });
   vi.stubGlobal("fetch", fetchMock);
@@ -95,18 +102,26 @@ describe("ChordTrainer", () => {
     expect(screen.getByRole("timer")).toHaveTextContent("60");
     await tick(30_000);
     expect(screen.getByRole("timer")).toHaveTextContent("30");
-    expect(screen.queryByLabelText("Wie viele saubere Wechsel?")).not.toBeInTheDocument();
+    expect(
+      screen.queryByLabelText("Wie viele saubere Wechsel?"),
+    ).not.toBeInTheDocument();
     await tick(30_000);
     expect(playSignal).toHaveBeenLastCalledWith("ende");
-    expect(screen.getByLabelText("Wie viele saubere Wechsel?")).toBeInTheDocument();
+    expect(
+      screen.getByLabelText("Wie viele saubere Wechsel?"),
+    ).toBeInTheDocument();
   });
 
   it("logs a free result with a normalised metric key", async () => {
     const fetchMock = serve();
     renderTrainer();
-    fireEvent.change(screen.getByLabelText("Akkordpaar"), { target: { value: "0" } }); // Em, Am
+    fireEvent.change(screen.getByLabelText("Akkordpaar"), {
+      target: { value: "0" },
+    }); // Em, Am
     await runRound();
-    fireEvent.change(screen.getByLabelText("Wie viele saubere Wechsel?"), { target: { value: "32" } });
+    fireEvent.change(screen.getByLabelText("Wie viele saubere Wechsel?"), {
+      target: { value: "32" },
+    });
     fireEvent.click(screen.getByRole("button", { name: "Speichern" }));
     await tick(0);
     const calls = logCalls(fetchMock);
@@ -132,7 +147,9 @@ describe("ChordTrainer", () => {
     serve({}, true);
     renderTrainer({ pair: ["Am", "Em"] });
     await runRound();
-    fireEvent.change(screen.getByLabelText("Wie viele saubere Wechsel?"), { target: { value: "40" } });
+    fireEvent.change(screen.getByLabelText("Wie viele saubere Wechsel?"), {
+      target: { value: "40" },
+    });
     fireEvent.click(screen.getByRole("button", { name: "Speichern" }));
     await tick(0);
     expect(screen.getByText("Neuer Rekord!")).toBeInTheDocument();
@@ -143,7 +160,9 @@ describe("ChordTrainer", () => {
     const onResult = vi.fn();
     renderTrainer({ pair: ["Am", "Em"], onResult });
     await runRound();
-    fireEvent.change(screen.getByLabelText("Wie viele saubere Wechsel?"), { target: { value: "27" } });
+    fireEvent.change(screen.getByLabelText("Wie viele saubere Wechsel?"), {
+      target: { value: "27" },
+    });
     fireEvent.click(screen.getByRole("button", { name: "Speichern" }));
     await tick(0);
     expect(onResult).toHaveBeenCalledWith(27);
@@ -155,8 +174,12 @@ describe("ChordTrainer", () => {
     renderTrainer({ pair: ["Am", "Em"] });
     await runRound();
     fireEvent.click(screen.getByRole("button", { name: "Speichern" }));
-    expect(screen.getByRole("alert")).toHaveTextContent("Gib eine Zahl ab 0 ein.");
-    fireEvent.change(screen.getByLabelText("Wie viele saubere Wechsel?"), { target: { value: "-3" } });
+    expect(screen.getByRole("alert")).toHaveTextContent(
+      "Gib eine Zahl ab 0 ein.",
+    );
+    fireEvent.change(screen.getByLabelText("Wie viele saubere Wechsel?"), {
+      target: { value: "-3" },
+    });
     fireEvent.click(screen.getByRole("button", { name: "Speichern" }));
     expect(screen.getByRole("alert")).toBeInTheDocument();
     await tick(0);
@@ -174,5 +197,59 @@ describe("ChordTrainer", () => {
     await tick(60_000);
     expect(playSignal).not.toHaveBeenCalledWith("ende");
     expect(logCalls(fetchMock)).toHaveLength(0);
+  });
+
+  it("logs only once on a double submit", async () => {
+    const fetchMock = serve();
+    renderTrainer({ pair: ["Am", "Em"] });
+    await runRound();
+    fireEvent.change(screen.getByLabelText("Wie viele saubere Wechsel?"), {
+      target: { value: "30" },
+    });
+    const button = screen.getByRole("button", { name: "Speichern" });
+    fireEvent.click(button);
+    fireEvent.click(button);
+    expect(button).toBeDisabled();
+    await tick(0);
+    expect(logCalls(fetchMock)).toHaveLength(1);
+  });
+
+  it("shows an error and allows a retry when saving fails", async () => {
+    const fetchMock = serve();
+    renderTrainer({ pair: ["Am", "Em"] });
+    await runRound();
+    fireEvent.change(screen.getByLabelText("Wie viele saubere Wechsel?"), {
+      target: { value: "30" },
+    });
+    fetchMock.mockImplementationOnce(
+      async () =>
+        new Response("{}", {
+          status: 500,
+          headers: { "content-type": "application/json" },
+        }),
+    );
+    // first fetch after this point is the log call
+    fireEvent.click(screen.getByRole("button", { name: "Speichern" }));
+    await tick(0);
+    expect(screen.getByRole("alert")).toHaveTextContent(
+      "konnte nicht gespeichert",
+    );
+    expect(screen.getByRole("button", { name: "Speichern" })).toBeEnabled();
+    fireEvent.click(screen.getByRole("button", { name: "Speichern" }));
+    await tick(0);
+    expect(screen.getByText(/XP/)).toBeInTheDocument();
+  });
+
+  it("still reaches the question when the signal throws", async () => {
+    serve();
+    vi.mocked(playSignal).mockImplementation(() => {
+      throw new Error("no audio");
+    });
+    renderTrainer({ pair: ["Am", "Em"] });
+    await runRound();
+    expect(
+      screen.getByLabelText("Wie viele saubere Wechsel?"),
+    ).toBeInTheDocument();
+    vi.mocked(playSignal).mockReset();
   });
 });

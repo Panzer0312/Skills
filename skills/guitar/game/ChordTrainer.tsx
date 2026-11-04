@@ -8,6 +8,14 @@ const COUNT_IN_MS = 3000;
 const ROUND_MS = 60_000;
 const TICK_MS = 100;
 
+function beep(kind: "start" | "ende") {
+  try {
+    playSignal(kind);
+  } catch {
+    // A failed beep must not stop the round.
+  }
+}
+
 type Pair = [string, string];
 type Phase = "pick" | "countin" | "run" | "ask" | "done";
 
@@ -37,6 +45,8 @@ export function ChordTrainer({
   const [count, setCount] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<LogResult | null>(null);
+  const [saving, setSaving] = useState(false);
+  const savingRef = useRef(false);
   const deadline = useRef(0);
   const { overrides } = useChordOverrides();
   const { data: state } = useGameState();
@@ -53,12 +63,12 @@ export function ChordTrainer({
         return;
       }
       if (phase === "countin") {
-        playSignal("start");
+        beep("start");
         deadline.current = Date.now() + ROUND_MS;
         setRemainingMs(ROUND_MS);
         setPhase("run");
       } else {
-        playSignal("ende");
+        beep("ende");
         setPhase("ask");
       }
     }, TICK_MS);
@@ -75,6 +85,7 @@ export function ChordTrainer({
   }
 
   async function submit() {
+    if (savingRef.current) return;
     const value = count.trim() === "" ? Number.NaN : Number(count);
     if (!Number.isInteger(value) || value < 0) {
       setError("Gib eine Zahl ab 0 ein.");
@@ -86,6 +97,8 @@ export function ChordTrainer({
       setPhase("done");
       return;
     }
+    savingRef.current = true;
+    setSaving(true);
     try {
       setResult(
         await gameApi.log({
@@ -100,6 +113,9 @@ export function ChordTrainer({
       setPhase("done");
     } catch {
       setError("Das Ergebnis konnte nicht gespeichert werden. Bitte später erneut versuchen.");
+    } finally {
+      savingRef.current = false;
+      setSaving(false);
     }
   }
 
@@ -171,7 +187,7 @@ export function ChordTrainer({
               className="ml-2 w-24 rounded border border-slate-300 px-2 py-1 dark:border-slate-700 dark:bg-slate-900"
             />
           </label>
-          <button type="submit" className="rounded border px-3 py-1">
+          <button type="submit" disabled={saving} className="rounded border px-3 py-1">
             Speichern
           </button>
         </form>
