@@ -252,3 +252,7 @@
     grid-template-areas: "map today" "menu menu";
   }
 }
+
+.game-home + .game-home {
+  margin-left: 8px;
+}

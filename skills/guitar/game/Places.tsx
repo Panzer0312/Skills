@@ -10,7 +10,7 @@ import Tuner from "../widgets/Tuner.js";
 import { GAME_BASE, gameContent, useGameState } from "./api.js";
 import { formatTime } from "./StatusBar.js";
 
-function ToolFrame({ title, children }: { title: string; children: ReactNode }) {
+export function ToolFrame({ title, children }: { title: string; children: ReactNode }) {
   return (
     <section className="tool-frame">
       <h1>{title}</h1>
@@ -165,15 +165,7 @@ export function Chronicle() {
   );
 }
 
-/* Temporary stubs, replaced in Tasks 7 and 9. */
-
-export function Placement() {
-  return (
-    <ToolFrame title="Einstufung">
-      <p>Die Einstufung öffnet bald.</p>
-    </ToolFrame>
-  );
-}
+/* Temporary stubs, replaced in Task 9. */
 
 export function QuestBoard() {
   return (

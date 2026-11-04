@@ -31,5 +31,5 @@ export type SpriteName = (typeof SPRITE_NAMES)[number];
 const urls = import.meta.glob("../assets/*.png", { eager: true, query: "?url", import: "default" }) as Record<string, string>;
 
 export function spriteUrl(name: SpriteName): string {
-  return urls[`../assets/${name}.png`];
+  return urls[`../assets/${name}.png`] ?? "";
 }

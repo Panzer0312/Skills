@@ -44,6 +44,9 @@ export function StatusBar({ state }: { state: GameState | undefined }) {
       <Link to={GAME_BASE} className="game-home">
         Zum Dorf
       </Link>
+      <Link to="/" className="game-home game-exit">
+        Zur App
+      </Link>
     </header>
   );
 }

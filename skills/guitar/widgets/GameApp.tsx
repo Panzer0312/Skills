@@ -10,12 +10,12 @@ import {
   Harbor,
   Library,
   Market,
-  Placement,
   QuestBoard,
   QuestView,
   Shrine,
   Tavern,
 } from "../game/Places.js";
+import { Placement } from "../game/Placement.js";
 import { Village } from "../game/Village.js";
 
 export default function GameApp(props: WidgetProps) {
@@ -28,7 +28,7 @@ export default function GameApp(props: WidgetProps) {
             <Route path="quests" element={<QuestBoard />} />
             <Route path="quest/:questId" element={<QuestView />} />
           </Route>
-          <Route path="einstufung" element={<Placement />} />
+          <Route path="einstufung" element={<Placement {...props} />} />
           <Route path="taverne" element={<Tavern {...props} />} />
           <Route path="bibliothek" element={<Library />} />
           <Route path="bibliothek/:lessonId" element={<Library />} />
