@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it } from "vitest";
 import { computeStreak, levelFromXp, titleForLevel, xpForEntry } from "./progression.js";
 
 describe("xpForEntry", () => {
@@ -32,7 +32,25 @@ describe("computeStreak", () => {
   it("breaks on a second miss in one week", () => {
     expect(computeStreak(["2026-11-02", "2026-11-05", "2026-11-06"], "2026-11-06")).toBe(2);
   });
-  it("survives the clock change", () => {
-    expect(computeStreak(["2026-10-24", "2026-10-25", "2026-10-26"], "2026-10-26")).toBe(3);
+  it("forgives one miss per week, not more", () => {
+    // Mon, Wed, Fri, Sun practised: Sat is forgiven, Thu is the second miss.
+    expect(computeStreak(["2026-11-02", "2026-11-04", "2026-11-06", "2026-11-08"], "2026-11-08")).toBe(2);
+  });
+  it("survives one miss in each of two calendar weeks", () => {
+    // Sun 11-01 and Mon 11-02 are missed, one per week.
+    expect(computeStreak(["2026-10-31", "2026-11-03"], "2026-11-03")).toBe(2);
+  });
+  describe("clock change", () => {
+    const tz = process.env.TZ;
+    afterEach(() => {
+      if (tz === undefined) delete process.env.TZ;
+      else process.env.TZ = tz;
+    });
+    it("survives the clock change", () => {
+      process.env.TZ = "Europe/Berlin";
+      // DST ends 2026-10-25 (25 hour day); the zone must really be active.
+      expect(new Date(2026, 9, 26).getTime() - new Date(2026, 9, 25).getTime()).toBe(25 * 3_600_000);
+      expect(computeStreak(["2026-10-24", "2026-10-25", "2026-10-26"], "2026-10-26")).toBe(3);
+    });
   });
 });

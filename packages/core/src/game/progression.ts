@@ -57,7 +57,7 @@ export function computeStreak(days: string[], today: string): number {
       streak += 1;
     } else {
       const week = weekStartKey(cursor);
-      if (forgivenWeeks.has(week) || !practised.has(previousDay(cursor))) break;
+      if (forgivenWeeks.has(week)) break;
       forgivenWeeks.add(week);
     }
     cursor = previousDay(cursor);
