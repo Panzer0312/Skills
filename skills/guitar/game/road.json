@@ -1,0 +1,15 @@
+[
+  { "lessonId": "01-haltung", "questId": "haltung-check", "months": [1, 1], "reason": "Eine gute Haltung verhindert Verspannungen und schlechte Gewohnheiten von Anfang an." },
+  { "lessonId": "02-anschlag", "questId": "anschlag-takt", "months": [1, 1], "reason": "Ein gleichmäßiger Anschlag ist die Grundlage für jeden Rhythmus." },
+  { "lessonId": "03-saiten-buende", "questId": "griffbrett-namen", "months": [1, 1], "reason": "Wer Saiten und Bünde kennt, versteht alle späteren Anleitungen." },
+  { "lessonId": "04-aufwaermen", "questId": "aufwaermen-finger", "months": [1, 2], "reason": "Fingerunabhängigkeit macht alle Griffe leichter und schützt die Hand." },
+  { "lessonId": "05-erste-toene", "questId": "erste-toene", "months": [1, 2], "reason": "Saubere Einzeltöne sind die Voraussetzung für Akkorde und Läufe." },
+  { "lessonId": "06-offene-akkorde", "questId": "offene-akkorde", "months": [2, 3], "reason": "Offene Akkorde öffnen dir die ersten echten Lieder." },
+  { "lessonId": "07-akkordwechsel", "questId": "akkordwechsel-takt", "months": [2, 3], "reason": "Flüssige Wechsel entscheiden, ob ein Lied nach Musik klingt." },
+  { "lessonId": "08-schlagmuster", "questId": "schlagmuster", "months": [3, 4], "reason": "Mit Schlagmustern bekommen deine Akkorde Groove und Wiedererkennung." },
+  { "lessonId": "09-powerchords", "questId": "powerchords-palmmute", "months": [3, 4], "reason": "Power Chords sind der schnelle Weg zu Rock und Punk." },
+  { "lessonId": "10-barre", "questId": "barre-greifen", "months": [4, 5], "reason": "Barré-Akkorde machen jede Tonart auf dem ganzen Griffbrett spielbar." },
+  { "lessonId": "11-pentatonik", "questId": "pentatonik-box1", "months": [5, 6], "reason": "Die Pentatonik ist dein Einstieg ins Solospiel und ins Improvisieren." },
+  { "lessonId": "12-techniken", "questId": "spieltechniken", "months": [5, 6], "reason": "Hammer-on, Bending und Vibrato geben deinem Spiel Ausdruck." },
+  { "lessonId": "13-theorie", "questId": "stufenakkorde", "months": [6, 6], "reason": "Die Stufentheorie verbindet alles Gelernte und lässt dich Songs selbst verstehen." }
+]

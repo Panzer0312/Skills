@@ -1,0 +1,104 @@
+{
+  "techniques": [
+    { "id": "akkordwechsel", "title": "Akkordwechsel" },
+    { "id": "anschlag", "title": "Anschlag" },
+    { "id": "rhythmus", "title": "Rhythmus" },
+    { "id": "powerchords", "title": "Power Chords" },
+    { "id": "barre", "title": "Barré" },
+    { "id": "lead", "title": "Lead und Pentatonik" },
+    { "id": "theorie", "title": "Theorie" },
+    { "id": "song", "title": "Songs" }
+  ],
+  "quests": [
+    {
+      "id": "haltung-check", "title": "Haltungs-Check",
+      "description": "Setze die Gitarre dreimal neu an und prüfe Schultern, Daumen und Handgelenk. Fünf Minuten genügen.",
+      "kind": "technik", "techniqueId": "anschlag", "lessonId": "01-haltung", "minutes": 5, "icon": "guitar", "scale": {}
+    },
+    {
+      "id": "anschlag-takt", "title": "Gleichmäßiger Anschlag",
+      "description": "Schlage die leeren Saiten im Takt des Metronoms an. Halte Gewicht und Lautstärke gleich.",
+      "kind": "technik", "techniqueId": "anschlag", "lessonId": "02-anschlag", "minutes": 5, "icon": "pick",
+      "scale": { "bpm": [40, 80] }
+    },
+    {
+      "id": "griffbrett-namen", "title": "Saiten und Bünde",
+      "description": "Nenne die Saitennamen vorwärts und rückwärts und zeige den 3., 5., 7. und 12. Bund ohne zu zählen.",
+      "kind": "theorie", "techniqueId": "theorie", "lessonId": "03-saiten-buende", "minutes": 5, "icon": "fretboard", "scale": {}
+    },
+    {
+      "id": "aufwaermen-finger", "title": "Fingerübung zum Aufwärmen",
+      "description": "Spiele 1-2-3-4 aufsteigend und 4-3-2-1 absteigend, ein Ton pro Schlag, und wechsle Saite für Saite.",
+      "kind": "aufwaermen", "techniqueId": "anschlag", "lessonId": "04-aufwaermen", "minutes": 5, "icon": "flame",
+      "scale": { "bpm": [40, 80] }
+    },
+    {
+      "id": "erste-toene", "title": "Saubere Einzeltöne",
+      "description": "Spiele einzelne Töne im Takt und achte darauf, dass jeder Ton klar und ohne Schnarren klingt.",
+      "kind": "technik", "techniqueId": "anschlag", "lessonId": "05-erste-toene", "minutes": 5, "icon": "note",
+      "scale": { "bpm": [50, 90] }
+    },
+    {
+      "id": "offene-akkorde", "title": "Offene Akkorde greifen",
+      "description": "Greife Em, Am, C und G nacheinander und prüfe jede Saite einzeln auf sauberen Klang.",
+      "kind": "technik", "techniqueId": "akkordwechsel", "lessonId": "06-offene-akkorde", "minutes": 10, "icon": "chord",
+      "scale": { "bpm": [40, 80] }
+    },
+    {
+      "id": "akkordwechsel-takt", "title": "Akkordwechsel im Takt",
+      "description": "Wechsle im Takt zwischen zwei Akkorden, auf jeden vierten Schlag ein Wechsel. Alle Finger setzen gleichzeitig auf.",
+      "kind": "technik", "techniqueId": "akkordwechsel", "lessonId": "07-akkordwechsel", "minutes": 10, "icon": "chord",
+      "scale": { "bpm": [50, 90] }
+    },
+    {
+      "id": "wechsel-minute", "title": "Wechsel pro Minute",
+      "description": "Eine Minute lang zwischen zwei Akkorden hin und her wechseln. Zähle die sauberen Wechsel und notiere die Zahl.",
+      "kind": "wechsel", "techniqueId": "akkordwechsel", "lessonId": "07-akkordwechsel", "minutes": 5, "icon": "stopwatch",
+      "metricLabel": "Wechsel pro Minute", "masteryTarget": 40,
+      "scale": {
+        "chordPairs": [["Em", "Am"], ["Am", "C"], ["C", "G"], ["G", "D"], ["D", "Am"]]
+      }
+    },
+    {
+      "id": "schlagmuster", "title": "Schlagmuster üben",
+      "description": "Spiele ein Schlagmuster auf einem Akkord, bis die Schlaghand von allein läuft. Das Metronom gibt den Takt vor.",
+      "kind": "technik", "techniqueId": "rhythmus", "lessonId": "08-schlagmuster", "minutes": 10, "icon": "strum",
+      "scale": { "bpm": [60, 100] }
+    },
+    {
+      "id": "powerchords-palmmute", "title": "Power Chords mit Palm Mute",
+      "description": "Wechsle zwischen Power Chords und dämpfe mit dem Handballen. Achte auf kurze, trockene Anschläge.",
+      "kind": "technik", "techniqueId": "powerchords", "lessonId": "09-powerchords", "minutes": 10, "icon": "bolt",
+      "scale": { "bpm": [70, 110] }
+    },
+    {
+      "id": "barre-greifen", "title": "Barré-Akkord halten",
+      "description": "Greife F oder Bm als Barré und prüfe jede Saite. Entspanne zwischendurch die Hand.",
+      "kind": "technik", "techniqueId": "barre", "lessonId": "10-barre", "minutes": 10, "icon": "barre",
+      "scale": { "bpm": [50, 90] }
+    },
+    {
+      "id": "pentatonik-box1", "title": "Pentatonik Box 1",
+      "description": "Spiele die Moll-Pentatonik in Box 1 auf- und abwärts, langsam und mit gleichmäßigem Anschlag.",
+      "kind": "technik", "techniqueId": "lead", "lessonId": "11-pentatonik", "minutes": 10, "icon": "scale",
+      "scale": { "bpm": [60, 100] }
+    },
+    {
+      "id": "spieltechniken", "title": "Hammer-on, Pull-off und Bending",
+      "description": "Übe Hammer-on, Pull-off, Slide, Bending und Vibrato einzeln, bis jeder Ton klar und gleich laut klingt.",
+      "kind": "technik", "techniqueId": "lead", "lessonId": "12-techniken", "minutes": 10, "icon": "bend",
+      "scale": { "bpm": [60, 100] }
+    },
+    {
+      "id": "stufenakkorde", "title": "Stufenakkorde spielen",
+      "description": "Spiele I, vi, IV und V in C-Dur und danach in G-Dur. Sage bei jedem Wechsel die Stufe laut an.",
+      "kind": "theorie", "techniqueId": "theorie", "lessonId": "13-theorie", "minutes": 5, "icon": "book", "scale": {}
+    },
+    {
+      "id": "song-ziel", "title": "Dein Zielsong",
+      "description": "Übe deinen Zielsong abschnittsweise. Beginne langsam und steigere das Tempo, sobald es sauber läuft.",
+      "kind": "song", "techniqueId": "song", "lessonId": null, "minutes": 10, "icon": "song",
+      "scale": { "tempoPercent": [50, 100] }
+    }
+  ]
+}
