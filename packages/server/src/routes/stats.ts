@@ -1,14 +1,8 @@
 import { Hono } from "hono";
+import { localDayKey } from "@skills/core";
 import type { AppEnv } from "../app.js";
 
 const DAY = 86_400_000;
-
-function dayKey(ts: number): string {
-  const d = new Date(ts);
-  const month = String(d.getMonth() + 1).padStart(2, "0");
-  const day = String(d.getDate()).padStart(2, "0");
-  return `${d.getFullYear()}-${month}-${day}`;
-}
 
 function startOfLocalDay(ts: number): number {
   const d = new Date(ts);
@@ -29,12 +23,12 @@ statsRoutes.get("/api/stats", (c) => {
 
   const counts = new Map<string, number>();
   for (const row of reviewRows) {
-    const key = dayKey(row.reviewedAt);
+    const key = localDayKey(row.reviewedAt);
     counts.set(key, (counts.get(key) ?? 0) + 1);
   }
   const heatmap = Array.from({ length: 365 }, (_, i) => {
     const ts = today - (364 - i) * DAY;
-    const key = dayKey(ts);
+    const key = localDayKey(ts);
     return { day: key, count: counts.get(key) ?? 0 };
   });
 
@@ -62,18 +56,18 @@ statsRoutes.get("/api/stats", (c) => {
     .all(today + 30 * DAY) as { due: number }[];
   const dueCounts = new Map<string, number>();
   for (const row of dueRows) {
-    const bucket = row.due < today ? dayKey(today) : dayKey(row.due);
+    const bucket = row.due < today ? localDayKey(today) : localDayKey(row.due);
     dueCounts.set(bucket, (dueCounts.get(bucket) ?? 0) + 1);
   }
   const forecast = Array.from({ length: 30 }, (_, i) => {
-    const key = dayKey(today + i * DAY);
+    const key = localDayKey(today + i * DAY);
     return { day: key, count: dueCounts.get(key) ?? 0 };
   });
 
   let streak = 0;
-  const activeDays = new Set(reviewRows.map((row) => dayKey(row.reviewedAt)));
-  let cursor = activeDays.has(dayKey(today)) ? today : today - DAY;
-  while (activeDays.has(dayKey(cursor))) {
+  const activeDays = new Set(reviewRows.map((row) => localDayKey(row.reviewedAt)));
+  let cursor = activeDays.has(localDayKey(today)) ? today : today - DAY;
+  while (activeDays.has(localDayKey(cursor))) {
     streak += 1;
     cursor -= DAY;
   }
