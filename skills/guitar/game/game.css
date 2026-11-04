@@ -1,0 +1,24 @@
+@import "@fontsource/jersey-15/latin-400.css";
+@import "@fontsource/pixelify-sans/latin-400.css";
+@import "@fontsource/pixelify-sans/latin-700.css";
+
+.game-root {
+  --ink: #2b1d12;
+  --parch: #ecd9b0;
+  --parch2: #dcc392;
+  --wood: #3a2414;
+  --wood2: #1c1009;
+  --gold: #e8b23a;
+  font-family: "Jersey 15", monospace;
+  color: var(--ink);
+}
+
+.game-root h1,
+.game-root h2,
+.game-root h3 {
+  font-family: "Pixelify Sans", monospace;
+}
+
+.game-root img {
+  image-rendering: pixelated;
+}

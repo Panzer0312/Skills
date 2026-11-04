@@ -9,6 +9,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fontsource/jersey-15": "^5.3.0",
+    "@fontsource/pixelify-sans": "^5.3.0",
     "@mdx-js/react": "^3.0.1",
     "@skills/core": "*",
     "@tanstack/react-query": "^5.59.0",
