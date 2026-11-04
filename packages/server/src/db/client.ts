@@ -117,6 +117,15 @@ CREATE TABLE IF NOT EXISTS chord_overrides (
 );
 CREATE UNIQUE INDEX IF NOT EXISTS chord_overrides_identity
   ON chord_overrides (scope, song_key, symbol);
+CREATE TABLE IF NOT EXISTS game_log (
+  id INTEGER PRIMARY KEY AUTOINCREMENT, skill_id TEXT NOT NULL, day TEXT NOT NULL, at INTEGER NOT NULL,
+  kind TEXT NOT NULL, quest_id TEXT, lesson_id TEXT, technique_id TEXT, seconds INTEGER NOT NULL,
+  level INTEGER NOT NULL, rating TEXT, metric_key TEXT, metric_value REAL
+);
+CREATE INDEX IF NOT EXISTS game_log_by_skill ON game_log (skill_id, day);
+CREATE TABLE IF NOT EXISTS game_levels (skill_id TEXT NOT NULL, technique_id TEXT NOT NULL, level INTEGER NOT NULL, PRIMARY KEY (skill_id, technique_id));
+CREATE TABLE IF NOT EXISTS game_today (skill_id TEXT NOT NULL, day TEXT NOT NULL, minutes INTEGER NOT NULL, quest_ids_json TEXT NOT NULL, PRIMARY KEY (skill_id, day));
+CREATE TABLE IF NOT EXISTS game_profile (skill_id TEXT PRIMARY KEY, placed_at INTEGER, target_song_id TEXT);
 `;
 
 export function openDatabase(path: string): AppDatabase {

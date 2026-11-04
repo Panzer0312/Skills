@@ -30,5 +30,7 @@ export {
   type RoadStep,
   type GameContent,
   type LessonStatus,
+  type GameState,
+  type LogBody,
   type Rating as PracticeRating,
 } from "./game/index.js";
