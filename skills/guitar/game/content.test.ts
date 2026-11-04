@@ -2,7 +2,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
-import { parseGameContent } from "@skills/core";
+import { bestNext, buildDailyQuests, lessonMasteryTarget, parseGameContent, type LessonStatus } from "@skills/core";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const read = (name: string) => JSON.parse(readFileSync(join(here, name), "utf8"));
@@ -44,5 +44,33 @@ describe("guitar game content", () => {
   it("has the song and change quests", () => {
     expect(content.quests.find((x) => x.id === "song-ziel")).toMatchObject({ kind: "song", minutes: 10, lessonId: null });
     expect(content.quests.find((x) => x.id === "wechsel-minute")).toMatchObject({ kind: "wechsel", minutes: 5, masteryTarget: 40 });
+  });
+  it("gives lesson 07 the change target for both of its quests", () => {
+    expect(content.quests.filter((x) => x.lessonId === "07-akkordwechsel").map((x) => x.id)).toEqual([
+      "akkordwechsel-takt",
+      "wechsel-minute",
+    ]);
+    expect(lessonMasteryTarget(content.quests, "07-akkordwechsel")).toBe(40);
+    expect(lessonMasteryTarget(content.quests, "01-haltung")).toBeUndefined();
+  });
+});
+
+describe("daily quests on the real content", () => {
+  const statuses: Record<string, LessonStatus> = Object.fromEntries(
+    content.road.slice(0, 6).map((step) => [step.lessonId, "gelernt"]),
+  );
+  const build = (minutes: number, recentQuestIds: string[] = []) =>
+    buildDailyQuests({ minutes, content, statuses, hasTargetSong: false, recentQuestIds });
+
+  it("recommends the change drill once lessons 01 to 06 are learned", () => {
+    expect(bestNext(content.road, statuses)?.questId).toBe("wechsel-minute");
+  });
+  it("leads a 10 minute session with the change drill and stays inside it", () => {
+    expect(build(10)).toEqual(["wechsel-minute", "stufenakkorde"]);
+  });
+  it("changes the theory slot after yesterday's quests", () => {
+    expect(build(30)).toContain("stufenakkorde");
+    const after = build(10, ["stufenakkorde"]);
+    expect(after).toEqual(["wechsel-minute", "griffbrett-namen"]);
   });
 });

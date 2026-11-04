@@ -55,6 +55,7 @@ function PlacementForm({ state, songs }: { state: GameState; songs: SongOption[]
       {step === 0 ? (
         <section>
           <h2 className="mb-3 text-lg font-semibold">Was kannst du schon?</h2>
+          <p className="mb-3 text-sm">Hake „Akkordwechsel“ nur an, wenn deine Wechsel schon flüssig laufen.</p>
           <ul className="space-y-1">
             {lessons.map((lesson) => (
               <li key={lesson.id}>

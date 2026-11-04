@@ -23,6 +23,7 @@ export {
   parseGameContent,
   bestNext,
   buildDailyQuests,
+  lessonMasteryTarget,
   type ScaledQuest,
   type QuestScale,
   type QuestDefinition,

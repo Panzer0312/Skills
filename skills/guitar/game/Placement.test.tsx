@@ -110,6 +110,12 @@ describe("Placement", () => {
     expect(body.targetSongId).toBe("uebung:em-am-wiege");
   });
 
+  it("asks to tick Akkordwechsel only when changes are already fluent", async () => {
+    serve();
+    renderPlacement();
+    expect(await screen.findByText(/„Akkordwechsel“ nur an, wenn .* flüssig/)).toBeInTheDocument();
+  });
+
   it("works with no songs at all", async () => {
     const fetchMock = serve();
     renderPlacement();

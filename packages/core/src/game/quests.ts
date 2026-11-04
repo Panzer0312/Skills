@@ -49,12 +49,20 @@ export function parseGameContent(input: unknown): GameContent {
   return result.data;
 }
 
+function isUnfinished(status: LessonStatus | undefined): boolean {
+  return status === undefined || status === "offen" || status === "aktiv";
+}
+
 export function bestNext(road: RoadStep[], statuses: Record<string, LessonStatus>): RoadStep | null {
-  for (const step of road) {
-    const status = statuses[step.lessonId];
-    if (status === undefined || status === "offen" || status === "aktiv") return step;
-  }
-  return null;
+  return road.find((step) => isUnfinished(statuses[step.lessonId])) ?? null;
+}
+
+/** The highest target of any quest on this lesson, so every quest of a lesson masters it alike. */
+export function lessonMasteryTarget(quests: QuestDefinition[], lessonId: string): number | undefined {
+  const targets = quests.flatMap((quest) =>
+    quest.lessonId === lessonId && quest.masteryTarget !== undefined ? [quest.masteryTarget] : [],
+  );
+  return targets.length > 0 ? Math.max(...targets) : undefined;
 }
 
 export function buildDailyQuests(input: {
@@ -67,14 +75,22 @@ export function buildDailyQuests(input: {
   const { content, minutes } = input;
   const byId = new Map(content.quests.map((quest) => [quest.id, quest]));
   const firstOfKind = (kind: QuestDefinition["kind"]) => content.quests.find((quest) => quest.kind === kind);
+  const freshOfKind = (kind: QuestDefinition["kind"]) =>
+    content.quests.find(
+      (quest) =>
+        quest.kind === kind &&
+        quest.lessonId !== null &&
+        isUnfinished(input.statuses[quest.lessonId]) &&
+        !input.recentQuestIds.includes(quest.id),
+    ) ?? firstOfKind(kind);
 
   const next = bestNext(content.road, input.statuses);
   const candidates: (QuestDefinition | undefined)[] = [
     next ? byId.get(next.questId) : undefined,
     firstOfKind("wechsel"),
     input.hasTargetSong ? firstOfKind("song") : undefined,
-    firstOfKind("theorie"),
-    firstOfKind("aufwaermen"),
+    freshOfKind("theorie"),
+    freshOfKind("aufwaermen"),
     ...content.quests.filter((quest) => !input.recentQuestIds.includes(quest.id)),
   ];
 

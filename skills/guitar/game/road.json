@@ -5,7 +5,7 @@
   { "lessonId": "04-aufwaermen", "questId": "aufwaermen-finger", "months": [1, 2], "reason": "Fingerunabhängigkeit macht alle Griffe leichter und schützt die Hand." },
   { "lessonId": "05-erste-toene", "questId": "erste-toene", "months": [1, 2], "reason": "Saubere Einzeltöne sind die Voraussetzung für Akkorde und Läufe." },
   { "lessonId": "06-offene-akkorde", "questId": "offene-akkorde", "months": [2, 3], "reason": "Offene Akkorde öffnen dir die ersten echten Lieder." },
-  { "lessonId": "07-akkordwechsel", "questId": "akkordwechsel-takt", "months": [2, 3], "reason": "Flüssige Wechsel entscheiden, ob ein Lied nach Musik klingt." },
+  { "lessonId": "07-akkordwechsel", "questId": "wechsel-minute", "months": [2, 3], "reason": "Flüssige Wechsel entscheiden, ob ein Lied nach Musik klingt." },
   { "lessonId": "08-schlagmuster", "questId": "schlagmuster", "months": [3, 4], "reason": "Mit Schlagmustern bekommen deine Akkorde Groove und Wiedererkennung." },
   { "lessonId": "09-powerchords", "questId": "powerchords-palmmute", "months": [3, 4], "reason": "Power Chords sind der schnelle Weg zu Rock und Punk." },
   { "lessonId": "10-barre", "questId": "barre-greifen", "months": [4, 5], "reason": "Barré-Akkorde machen jede Tonart auf dem ganzen Griffbrett spielbar." },

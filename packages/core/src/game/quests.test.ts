@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   bestNext,
   buildDailyQuests,
+  lessonMasteryTarget,
   parseGameContent,
   type GameContent,
   type LessonStatus,
@@ -46,6 +47,54 @@ describe("buildDailyQuests", () => {
   });
   it("skips recent quests among the fillers", () => {
     expect(build({ minutes: 60, recentQuestIds: ["b"] })).not.toContain("b");
+  });
+});
+
+describe("buildDailyQuests slots", () => {
+  const lesson = (quest: QuestDefinition, lessonId: string | null): QuestDefinition => ({ ...quest, lessonId });
+  const slots: GameContent = {
+    ...content,
+    quests: [
+      q("a", "technik", 10),
+      lesson(q("theorie-1", "theorie", 5), "lt1"),
+      lesson(q("theorie-2", "theorie", 5), "lt2"),
+      lesson(q("warm-1", "aufwaermen", 5), "lw1"),
+      lesson(q("warm-2", "aufwaermen", 5), "lw2"),
+    ],
+  };
+  const fill = (o: { statuses?: Record<string, LessonStatus>; recentQuestIds?: string[] }) =>
+    buildDailyQuests({ minutes: 20, hasTargetSong: false, statuses: {}, recentQuestIds: [], content: slots, ...o });
+
+  it("takes the first of a kind on a fresh start", () => {
+    expect(fill({})).toEqual(["a", "theorie-1", "warm-1"]);
+  });
+  it("skips a slot quest of a finished lesson", () => {
+    expect(fill({ statuses: { lt1: "gelernt", lw1: "gemeistert" } })).toEqual(["a", "theorie-2", "warm-2"]);
+  });
+  it("skips a slot quest played yesterday", () => {
+    expect(fill({ recentQuestIds: ["theorie-1", "warm-1"] })).toEqual(["a", "theorie-2", "warm-2"]);
+  });
+  it("keeps a slot quest of an active lesson", () => {
+    expect(fill({ statuses: { lt1: "aktiv" } })).toEqual(["a", "theorie-1", "warm-1"]);
+  });
+  it("falls back to the first of a kind when none is left", () => {
+    const statuses: Record<string, LessonStatus> = { lt1: "gelernt", lt2: "gelernt", lw1: "gelernt", lw2: "gelernt" };
+    expect(fill({ statuses })).toEqual(["a", "theorie-1", "warm-1"]);
+  });
+});
+
+describe("lessonMasteryTarget", () => {
+  const target = (id: string, lessonId: string | null, masteryTarget?: number): QuestDefinition => ({
+    ...q(id, "technik", 5),
+    lessonId,
+    ...(masteryTarget !== undefined ? { masteryTarget } : {}),
+  });
+  it("takes the highest target of any quest on the lesson", () => {
+    const quests = [target("a", "l"), target("b", "l", 40), target("c", "l", 30), target("d", "m", 90)];
+    expect(lessonMasteryTarget(quests, "l")).toBe(40);
+  });
+  it("has no target for a lesson without a metric", () => {
+    expect(lessonMasteryTarget([target("a", "l")], "l")).toBeUndefined();
   });
 });
 
