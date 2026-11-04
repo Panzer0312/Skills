@@ -7,6 +7,7 @@ const RATINGS: { value: PracticeRating; label: string }[] = [
   { value: "passt", label: "Passt" },
   { value: "zu-schwer", label: "Zu schwer" },
 ];
+const MIN_MINUTES = 1;
 const MAX_MINUTES = 240;
 
 function failure(error: unknown): string {
@@ -87,7 +88,9 @@ export function ResultDialog({
 }) {
   const [rating, setRating] = useState<PracticeRating | null>(null);
   const [metric, setMetric] = useState(metricPrefill === null ? "" : String(metricPrefill));
-  const [minutes, setMinutes] = useState(() => String(Math.min(Math.round(seconds / 60), quest.minutes * 3)));
+  const [minutes, setMinutes] = useState(() =>
+    String(Math.max(MIN_MINUTES, Math.min(Math.round(seconds / 60), quest.minutes * 3))),
+  );
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<LogResult | null>(null);
@@ -100,8 +103,8 @@ export function ResultDialog({
       return;
     }
     const practiced = minutes.trim() === "" ? Number.NaN : Number(minutes);
-    if (!Number.isInteger(practiced) || practiced < 0 || practiced > MAX_MINUTES) {
-      setError(`Gib die Minuten als ganze Zahl von 0 bis ${MAX_MINUTES} ein.`);
+    if (!Number.isInteger(practiced) || practiced < MIN_MINUTES || practiced > MAX_MINUTES) {
+      setError(`Gib die Minuten als ganze Zahl von ${MIN_MINUTES} bis ${MAX_MINUTES} ein.`);
       return;
     }
     const value = metric.trim() === "" ? null : Number(metric);
@@ -194,7 +197,7 @@ export function ResultDialog({
           <input
             type="number"
             inputMode="numeric"
-            min={0}
+            min={MIN_MINUTES}
             value={minutes}
             onChange={(event) => setMinutes(event.target.value)}
           />

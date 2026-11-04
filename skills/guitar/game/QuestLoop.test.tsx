@@ -1,6 +1,6 @@
 import { buildDailyQuests, type GameState } from "@skills/core";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -51,9 +51,9 @@ function json(body: unknown, status = 200) {
 }
 
 interface Options {
-  log?: () => Response;
+  log?: () => Response | Promise<Response>;
   today?: () => Response | undefined;
-  level?: () => Response;
+  level?: () => Response | Promise<Response>;
   songs?: unknown[];
 }
 
@@ -86,6 +86,14 @@ function writes(fetchMock: ReturnType<typeof serve>, path: string) {
   return fetchMock.mock.calls
     .filter(([url, init]) => String(url).endsWith(path) && init?.method !== undefined && init.method !== "GET")
     .map(([, init]) => JSON.parse(String(init?.body)) as Record<string, unknown>);
+}
+
+function held() {
+  let release: (response: Response) => void = () => undefined;
+  const promise = new Promise<Response>((resolve) => {
+    release = resolve;
+  });
+  return { promise, release };
 }
 
 function renderGame(path = "", data: unknown[] = []) {
@@ -389,6 +397,30 @@ describe("result dialog", () => {
     expect(screen.queryByLabelText("Wechsel pro Minute")).not.toBeInTheDocument();
   });
 
+  it("prefills at least one minute", async () => {
+    serve({});
+    renderGame("/quest/anschlag-takt");
+    await finish();
+    expect(screen.getByLabelText("Geübte Minuten")).toHaveValue(1);
+  });
+
+  it("refuses zero minutes and leaves Abbrechen as the exit", async () => {
+    const fetchMock = serve({ today: { minutes: 30, questIds: ["anschlag-takt"] } });
+    renderGame("/quest/anschlag-takt");
+    await finish();
+    await userEvent.click(screen.getByRole("button", { name: "Passt" }));
+    const minutes = screen.getByLabelText("Geübte Minuten");
+    await userEvent.clear(minutes);
+    await userEvent.type(minutes, "0");
+    await userEvent.click(screen.getByRole("button", { name: "Speichern" }));
+    expect(await screen.findByRole("alert")).toHaveTextContent("von 1 bis 240");
+    expect(writes(fetchMock, "/log")).toEqual([]);
+    await userEvent.click(screen.getByRole("button", { name: "Abbrechen" }));
+    expect(await screen.findByRole("heading", { name: "Quest Board" })).toBeInTheDocument();
+    expect(sessionStorage.getItem(ACTIVE)).toBeNull();
+    expect(writes(fetchMock, "/log")).toEqual([]);
+  });
+
   it("logs edited minutes, not the timer value", async () => {
     const fetchMock = serve({});
     startedMinutesAgo("anschlag-takt", 7);
@@ -417,11 +449,18 @@ describe("result dialog", () => {
   });
 
   it("sends one log on a double click", async () => {
-    const fetchMock = serve({});
+    const response = held();
+    const fetchMock = serve({}, { log: () => response.promise });
     renderGame("/quest/anschlag-takt");
     await finish();
     await userEvent.click(screen.getByRole("button", { name: "Passt" }));
-    await userEvent.dblClick(screen.getByRole("button", { name: "Speichern" }));
+    const save = screen.getByRole("button", { name: "Speichern" });
+    const form = save.closest("form")!;
+    fireEvent.submit(form);
+    fireEvent.submit(form);
+    expect(writes(fetchMock, "/log")).toHaveLength(1);
+    expect(save).toBeDisabled();
+    response.release(json({ xpGained: 40, suggestion: null, isRecord: false }));
     expect(await screen.findByText("+40 XP")).toBeInTheDocument();
     expect(writes(fetchMock, "/log")).toHaveLength(1);
   });
@@ -453,9 +492,10 @@ describe("result dialog", () => {
   });
 
   it("offers the suggested level and saves the owner's choice", async () => {
+    const response = held();
     const fetchMock = serve(
       { levels: { anschlag: 4 }, today: { minutes: 30, questIds: ["anschlag-takt"] } },
-      { log: () => json({ xpGained: 40, suggestion: 5, isRecord: false }) },
+      { log: () => json({ xpGained: 40, suggestion: 5, isRecord: false }), level: () => response.promise },
     );
     renderGame("/quest/anschlag-takt");
     await finish();
@@ -465,7 +505,15 @@ describe("result dialog", () => {
     const slider = screen.getByRole("slider", { name: "Stufe" });
     expect(slider).toHaveValue("5");
     fireEvent.change(slider, { target: { value: "7" } });
-    await userEvent.dblClick(screen.getByRole("button", { name: "Stufe speichern" }));
+    const save = screen.getByRole("button", { name: "Stufe speichern" });
+    // One act keeps React from disabling the button between the clicks.
+    act(() => {
+      fireEvent.click(save);
+      fireEvent.click(save);
+    });
+    expect(writes(fetchMock, "/level/anschlag")).toEqual([{ level: 7 }]);
+    expect(save).toBeDisabled();
+    response.release(json({ ok: true }));
     expect(await screen.findByRole("heading", { name: "Quest Board" })).toBeInTheDocument();
     expect(writes(fetchMock, "/level/anschlag")).toEqual([{ level: 7 }]);
   });
