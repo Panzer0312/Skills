@@ -22,6 +22,20 @@ describe("parseManifest", () => {
     }
   });
 
+  it("defaults fullscreen to false and keeps redirect and entry", () => {
+    const result = parseManifest({
+      ...valid,
+      entry: "/vollbild/demo/cards",
+      modules: [{ id: "cards", type: "practice", title: "K", redirect: "/x", data: [] }],
+    });
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.manifest.entry).toBe("/vollbild/demo/cards");
+      expect(result.manifest.modules[0]?.fullscreen).toBe(false);
+      expect(result.manifest.modules[0]?.redirect).toBe("/x");
+    }
+  });
+
   it("rejects an unknown module type", () => {
     const result = parseManifest({ ...valid, modules: [{ id: "x", type: "quiz", title: "X", data: [] }] });
     expect(result.ok).toBe(false);

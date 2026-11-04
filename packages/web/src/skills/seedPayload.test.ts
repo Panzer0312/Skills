@@ -11,8 +11,8 @@ const skill: LoadedSkill = {
     accent: "#4f46e5",
     description: "",
     modules: [
-      { id: "cards", type: "srs-deck", title: "Karten", pinned: false, data: ["decks/a.json"] },
-      { id: "kurs", type: "course", title: "Kurs", pinned: false, data: [] },
+      { id: "cards", type: "srs-deck", title: "Karten", pinned: false, fullscreen: false, data: ["decks/a.json"] },
+      { id: "kurs", type: "course", title: "Kurs", pinned: false, fullscreen: false, data: [] },
     ],
   },
   data: {

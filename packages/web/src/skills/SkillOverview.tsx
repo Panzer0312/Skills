@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, Navigate, useParams } from "react-router-dom";
 import { getSkill } from "./registry.js";
 
 export function SkillOverview() {
@@ -8,6 +8,8 @@ export function SkillOverview() {
   if (!skill) {
     return <p className="text-slate-600 dark:text-slate-400">Dieser Lernbereich existiert nicht.</p>;
   }
+
+  if (skill.manifest.entry) return <Navigate to={skill.manifest.entry} replace />;
 
   return (
     <div>

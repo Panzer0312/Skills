@@ -1,5 +1,5 @@
 import { Suspense, useMemo } from "react";
-import { useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import { CourseRenderer } from "../renderers/CourseRenderer.js";
 import { DeckRenderer } from "../renderers/DeckRenderer.js";
 import { LibraryRenderer } from "../renderers/LibraryRenderer.js";
@@ -23,20 +23,42 @@ function collect(data: Record<string, unknown>, patterns: string[]): unknown[] {
   return result;
 }
 
-export function ModuleRoute() {
+function useRouteModule(requireFullscreen: boolean) {
   const { skillId, moduleId } = useParams();
   const skill = skillId ? getSkill(skillId) : undefined;
-  const module = skill?.manifest.modules.find((m) => m.id === moduleId);
+  const found = skill?.manifest.modules.find((m) => m.id === moduleId);
+  const module = found && (!requireFullscreen || found.fullscreen) ? found : undefined;
 
   const progress = useMemo(() => createProgressApi(skillId ?? ""), [skillId]);
   const Widget = useMemo(
     () => (skill && module?.widget ? loadWidget(skill.manifest.id, module.widget) : null),
     [skill, module],
   );
+  return { skill, module, progress, Widget };
+}
 
+export function ModuleRoute() {
+  const { skill, module, progress, Widget } = useRouteModule(false);
+  return renderModule(skill, module, progress, Widget, true);
+}
+
+export function FullscreenModuleRoute() {
+  const { skill, module, progress, Widget } = useRouteModule(true);
+  return renderModule(skill, module, progress, Widget, false);
+}
+
+function renderModule(
+  skill: ReturnType<typeof getSkill>,
+  module: NonNullable<ReturnType<typeof getSkill>>["manifest"]["modules"][number] | undefined,
+  progress: ReturnType<typeof createProgressApi>,
+  Widget: ReturnType<typeof loadWidget> | null,
+  followRedirect: boolean,
+) {
   if (!skill || !module) {
     return <p className="text-slate-600 dark:text-slate-400">Dieses Modul existiert nicht.</p>;
   }
+
+  if (followRedirect && module.redirect) return <Navigate to={module.redirect} replace />;
 
   const data = collect(skill.data, module.data);
 

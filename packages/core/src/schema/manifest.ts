@@ -23,6 +23,8 @@ export const skillModuleSchema = z.object({
   data: z.array(z.string().min(1)).default([]),
   dailyNewLimit: z.number().int().positive().optional(),
   dailyReviewLimit: z.number().int().positive().optional(),
+  fullscreen: z.boolean().default(false),
+  redirect: z.string().min(1).optional(),
 });
 
 export const skillManifestSchema = z
@@ -32,6 +34,7 @@ export const skillManifestSchema = z
     icon: z.string().min(1),
     accent: z.string().regex(/^#[0-9a-fA-F]{6}$/, "muss eine Hex-Farbe sein"),
     description: z.string().default(""),
+    entry: z.string().min(1).optional(),
     modules: z.array(skillModuleSchema).min(1),
   })
   .superRefine((manifest, ctx) => {

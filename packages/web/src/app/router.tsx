@@ -5,7 +5,7 @@ import { ReviewSession } from "../features/review/ReviewSession.js";
 import { Settings } from "../features/settings/Settings.js";
 import { SongImport } from "../features/songs/SongImport.js";
 import { Stats } from "../features/stats/Stats.js";
-import { ModuleRoute } from "../skills/ModuleRoute.js";
+import { FullscreenModuleRoute, ModuleRoute } from "../skills/ModuleRoute.js";
 import { SkillOverview } from "../skills/SkillOverview.js";
 import { Layout } from "./Layout.js";
 
@@ -24,4 +24,5 @@ export const router = createBrowserRouter([
       { path: "skill/:skillId/:moduleId", element: <ModuleRoute /> },
     ],
   },
+  { path: "/vollbild/:skillId/:moduleId/*", element: <FullscreenModuleRoute /> },
 ]);
