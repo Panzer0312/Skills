@@ -7,6 +7,7 @@ import ChordDiagram from "../widgets/ChordDiagram.js";
 import Fretboard from "../widgets/Fretboard.js";
 import SongLibrary from "../widgets/SongLibrary.js";
 import Tuner from "../widgets/Tuner.js";
+import { ChordTrainer } from "./ChordTrainer.js";
 import { GAME_BASE, gameContent, useGameState } from "./api.js";
 import { formatTime } from "./StatusBar.js";
 
@@ -69,6 +70,7 @@ export function FretboardPlace(props: WidgetProps) {
 export function Forge(props: WidgetProps) {
   return (
     <ToolFrame title="Schmiede">
+      <ChordTrainer />
       <ChordDiagram {...props} />
     </ToolFrame>
   );
