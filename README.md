@@ -32,9 +32,13 @@ Gebrauch: er holt eine einzelne Seite, prüft die Adresse gegen private Netze un
 ## Mitgelieferte Lernbereiche
 
 `skills/demo` (Vorlage und alle Modultypen), `skills/japanese` (30-Lektionen-Kurs, Kana, Vokabeln,
-Grammatik, Lesen) und `skills/guitar` (13 Lektionen, Stimmgerät, Metronom, Songbibliothek mit
-Import). Griffbilder lassen sich direkt im Song ändern — wahlweise nur für diesen Song oder für
-alle.
+Grammatik, Lesen) und `skills/guitar`. Die Gitarre ist ein kleines Rollenspiel: Nach einer kurzen
+Einstufung beim ersten Start führt ein Dorf zu Quest Board (Tagesquests nach Sitzungslänge),
+Bibliothek (13 Lektionen), Taverne (Songbibliothek mit Import), Schrein (Stimmgerät), Schmiede
+(Akkordgriffe) und Griffbrett. Geübte Minuten und ehrliche Bewertungen bringen XP, Level und eine
+Serie; es gibt keine Strafen. Der Akkordwechsel-Trainer zählt eine Minute lang saubere Wechsel.
+Nichts ist gesperrt, alle Werkzeuge sind jederzeit erreichbar. Griffbilder lassen sich direkt im
+Song ändern — wahlweise nur für diesen Song oder für alle.
 
 ## Neuen Lernbereich hinzufügen
 

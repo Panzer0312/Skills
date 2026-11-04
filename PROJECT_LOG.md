@@ -16,6 +16,7 @@ Dieses Dokument ist die zentrale Stelle für Stand, Probleme und Ideen.
 | C7 Guitar-Skill | fertig | Plan 3, Tasks 1-3: `packages/core/src/music/notes.ts` (Notennamen, Stimmungen, Griffbrett, Frequenzen, Intervalle), `chords.ts` (Akkord-Parsing, Transponieren, Akkordtöne, offene Griffe, Barré-Formen, Stufenakkorde) und das interne Songformat: `song.ts` (Zod-Schema `Song`/`SongSection`/`SongLine`/`TabLine`, `transposeSong`), `detectFormat.ts`, `parseChordPro.ts`, `parseChordSheet.ts`, `parseTab.ts` sowie `parseSong` als Format-Dispatcher in `packages/core/src/music/index.ts`. Task 6: `skills/guitar/skill.json` sowie die Widgets `Fretboard` (Griffbrett bis Bund 15, umschaltbar zwischen Notennamen/Intervallen/Dur-Tonleiter, Stimmung wählbar), `ChordDiagram` (Raster aller offenen Akkorde) mit `packages/web/src/music/ChordDiagramSingle.tsx` (einzelnes Griffbild, auch von der künftigen Songansicht nutzbar) und `Tuner` (Cent-Anzeige, Saitenerkennung, Referenzton, einstellbare Rauschschwelle `minRms`). Tasks 7-8: 13 Lektionen, Nice-to-know-Referenz, `PracticePlan`-Widget. Task 9: `skills/guitar/songs/uebungsstuecke.json` (zwölf selbst geschriebene Übungsstücke, gestaffelt nach Stufe), `skills/guitar/widgets/SongLibrary.tsx` (Bibliotheksansicht, gefiltert nach Stufe, plus importierte Songs aus `/api/songs`), `packages/web/src/features/songs/SongView.tsx` (Songanzeige mit Transponieren, Auto-Scroll, Metronom, Griffbildern). Task 11: `packages/web/src/features/songs/SongImport.tsx` unter `/songs/neu`, Navigationseintrag „Song hinzufügen" in `Layout.tsx`. Task 12: `nice-to-know`-Modul in `skills/guitar/skill.json` von einem festen Dateinamen auf das Muster `reference/*.mdx` umgestellt (siehe „Abweichungen vom Plan (Plan 3, Task 12)") — das Registry-Manifest verlangte sonst eine Datei, die als JSON-Daten nie geladen wurde, und meldete den Skill fälschlich als kaputt. Rauchtest in `e2e/guitar.spec.ts`. |
 | C8 Song-Import | fertig | Plan 3, Task 10: `packages/server/src/services/songFetch.ts` (`assertPublicUrl`, `extractSongText` mit `cheerio`, `fetchSongFromUrl` mit manueller Redirect-Verfolgung), `packages/server/src/routes/songs.ts` (`GET/POST /api/songs`, `GET/DELETE /api/songs/:id`, `POST /api/songs/fetch`), eingehängt in `app.ts`. Siehe „Abweichungen vom Plan (Plan 3, Task 10)" für die SSRF-Absicherung und ihre bekannte Grenze (DNS-Rebinding) im Detail. |
 | C9 Japanese-Skill | fertig | Kana-Transliteration (Hepburn), Kana-Daten, `KanaGrid`, `KanaDrill`, acht Themen-Vokabel-Decks (256 Karten), zwölfteiliger Grammatik-Kurs, 40 Kanji mit Lesungsregeln und 60 annotierte Sätze, `ReadingTrainer`. Rauchtest in `e2e/japanese.spec.ts`. |
+| C11 Gitarren-RPG, Stufe 1 | fertig | Fundament: Einstufung beim ersten Start, Dorf mit Statusleiste (Level, XP, Serie, Zeit), Quest Board mit Tagesquests und anpassbarer Sitzungslänge, Quest-Ansicht mit Metronom und Stoppuhr, Ergebnisdialog (Bewertung, Minuten, Messwert), Akkordwechsel-Trainer mit 60-Sekunden-Runde. Alle Werkzeuge (Stimmgerät, Griffbrett, Akkorde, Songs, Lektionen) bleiben jederzeit erreichbar; nur Dorf und Quests warten auf die Einstufung. Routen unter `/vollbild/guitar/spiel`, Ende-zu-Ende-Test in `e2e/guitar-game.spec.ts`. Stufen 2-5 (Karte, Werkzeuge, weitere Lektionen, Belohnungen) stehen aus. |
 | C10 Projekt-Log | fertig | dieses Dokument |
 
 ## Offene Punkte
@@ -285,6 +286,16 @@ Dieses Dokument ist die zentrale Stelle für Stand, Probleme und Ideen.
   ein Griff, den man „in allen Songs" gespeichert hat, wäre sonst genau in dem Modul unsichtbar, dessen
   Aufgabe das Zeigen von Griffbildern ist.
 
+## Abweichungen vom Plan (Gitarren-RPG, Stufe 1)
+
+- Der Ende-zu-Ende-Test löscht die Datenbank nicht selbst und hängt nicht von der Reihenfolge ab:
+  Erscheint die Einstufung nicht, weil ein früherer Lauf schon eingestuft hat, geht er vom Quest Board
+  aus weiter. XP und Wochenzeit prüft er als Zuwachs gegenüber dem Stand vor der Quest.
+- Die E2E-Datenbank liegt unter `packages/server/data/e2e.db` (der Server läuft im Paketordner), nicht
+  unter `data/e2e.db`. Für einen frischen Lauf `packages/server/data/e2e.db*` löschen.
+- Die Quest-Ansicht und die Einstufung nutzen den hellen Werkzeugrahmen, das Board und das Dorf die
+  Pergament-Optik. Das ist stimmig genug für Stufe 1; eine einheitliche Optik gehört in Stufe 5.
+
 ## Ideen und Möglichkeiten
 
 - Tastaturkürzel `/` für eine globale Suche über alle Karten und Lektionen.
@@ -309,3 +320,9 @@ Dieses Dokument ist die zentrale Stelle für Stand, Probleme und Ideen.
   die Dateien zur Buildzeit, und ein songbezogener Geltungsbereich hat im Dateiformat keine Entsprechung.
 - 2026-08-07 — Der Japanisch-Kurs verweist auf das Grammatikmodul, statt es zu ersetzen: der Kurs ist
   der rote Faden, das Grammatikmodul bleibt Nachschlagewerk.
+- 2026-11-04 — XP werden aus `game_log` abgeleitet statt gespeichert: ein Zähler könnte von den
+  Protokollzeilen abweichen, und Regeländerungen wirken so rückwirkend.
+- 2026-11-04 — Der Lektionsstatus im Spiel nutzt weiter `lesson_progress`: eine Quelle der Wahrheit,
+  und der bisherige Kurs bleibt unverändert.
+- 2026-11-04 — Spielinhalte (Quests, Wegweiser, Techniken) liegen als JSON neben den Lektionen unter
+  `skills/guitar/game/`, damit sich Inhalte ohne Codeänderung erweitern lassen.
