@@ -121,6 +121,12 @@ describe("SkillMap nodes", () => {
     expect(shape(button("Start"))).not.toHaveAttribute("stroke-dasharray");
   });
 
+  it("draws an available quick node as a gold star", () => {
+    setup();
+    expect(shape(button("Stern")).tagName).toBe("polygon");
+    expect(shape(button("Stern"))).toHaveAttribute("fill", "#ffd34d");
+  });
+
   it("marks best next", () => {
     setup({ bestId: "Mitte" });
     expect(button("Mitte").querySelector(".map-best-pulse")).not.toBeNull();
@@ -194,6 +200,59 @@ describe("SkillMap labels", () => {
     const y = Number(label.getAttribute("y"));
     expect(y).toBeGreaterThan(200 + 16);
     expect(y).toBeLessThanOrEqual(200 + 32);
+  });
+
+  const realData = { nodes: gameContent.nodes, paths: gameContent.paths, road: gameContent.road };
+  const collisions = (container: HTMLElement) => {
+    const byTitle = new Map(gameContent.nodes.map((n) => [n.title, n]));
+    const boxes = Array.from(container.querySelectorAll(".map-label")).map((label) => {
+      const n = byTitle.get(label.textContent ?? "") as MapNode;
+      const half = (n.title.length * 6.4 * (label.classList.contains("is-big") ? 19 / 13.5 : 1)) / 2;
+      return { title: n.title, left: n.x - half, right: n.x + half, top: n.y + 16, bottom: n.y + 32 };
+    });
+    return boxes.flatMap((a, i) =>
+      boxes
+        .slice(i + 1)
+        .filter((b) => a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom)
+        .map((b) => `${a.title} / ${b.title}`),
+    );
+  };
+
+  it.each(gameContent.paths.map((path) => path.id))("keeps labels apart on the whole map when filtering %s", (id) => {
+    const { container } = setup({ ...realData, filter: { path: id, tier: null, term: "" } });
+    expect(labels(container).length).toBeGreaterThan(0);
+    expect(collisions(container)).toEqual([]);
+  });
+
+  it.each([1, 2, 3] as const)("keeps labels apart on the whole map when filtering tier %s", (tier) => {
+    const { container } = setup({ ...realData, filter: { path: null, tier, term: "" } });
+    expect(collisions(container)).toEqual([]);
+  });
+
+  it("keeps a selected label apart from every filter match", () => {
+    for (const path of gameContent.paths) {
+      for (const n of gameContent.nodes.filter((other) => other.path === path.id)) {
+        const { container, unmount } = setup({ ...realData, selectedId: n.id, filter: { path: path.id, tier: null, term: "" } });
+        expect(collisions(container), n.id).toEqual([]);
+        unmount();
+      }
+    }
+  });
+
+  it("enlarges a called-out label on the whole map only where it fits", () => {
+    const { container } = setup({ ...realData, selectedId: "01-haltung" });
+    expect(container.querySelector(".map-label")).toHaveClass("is-big");
+  });
+
+  it("keeps neighbouring selected and best labels apart", () => {
+    const { container } = setup({ ...realData, selectedId: "06-offene-akkorde", bestId: "07-akkordwechsel" });
+    expect(labels(container)).toHaveLength(2);
+    expect(collisions(container)).toEqual([]);
+  });
+
+  it("keeps filter matches at the normal size", () => {
+    const { container } = setup({ ...realData, filter: { path: "metal", tier: null, term: "" } });
+    expect(container.querySelector(".map-label.is-big")).toBeNull();
   });
 
   it("always shows region titles", () => {
@@ -295,6 +354,33 @@ describe("SkillMap viewport", () => {
   });
 });
 
+describe("SkillMap selection from outside", () => {
+  const props = { nodes, paths, road: [], statuses: {}, bestId: null, filter: noFilter, onSelect: vi.fn() };
+  const zoomIn = async () => {
+    for (let i = 0; i < 4; i += 1) await userEvent.click(screen.getByRole("button", { name: "Hineinzoomen" }));
+  };
+
+  it("brings a selected node into view when it is off-screen", async () => {
+    const { svg, rerender } = setup();
+    await zoomIn();
+    rerender(<SkillMap {...props} selectedId="Fern" />);
+    const [x, y, width, height] = (svg.getAttribute("viewBox") as string).split(" ").map(Number) as [number, number, number, number];
+    expect(1500).toBeGreaterThan(x);
+    expect(1500).toBeLessThan(x + width);
+    expect(1000).toBeGreaterThan(y);
+    expect(1000).toBeLessThan(y + height);
+  });
+
+  it("leaves the view alone when the selected node is already visible", async () => {
+    const withCentre = [...nodes, node("Zentrum", { x: 800, y: 550 })];
+    const { svg, rerender } = setup({ nodes: withCentre });
+    await zoomIn();
+    const before = svg.getAttribute("viewBox");
+    rerender(<SkillMap {...props} nodes={withCentre} selectedId="Zentrum" />);
+    expect(svg.getAttribute("viewBox")).toBe(before);
+  });
+});
+
 describe("SkillMap decoration", () => {
   it("keeps sprites clear of nodes, labels and region titles", () => {
     const { container } = setup({ nodes: gameContent.nodes, paths: gameContent.paths, road: gameContent.road });
@@ -307,9 +393,13 @@ describe("SkillMap decoration", () => {
       const half = (n.title.length * 6.4) / 2;
       return [
         { left: n.x - half, right: n.x + half, top: n.y + 16, bottom: n.y + 32 },
-        { left: n.x - 16, right: n.x + 16, top: n.y - 16, bottom: n.y + 16 },
+        { left: n.x - 18, right: n.x + 18, top: n.y - 18, bottom: n.y + 18 },
       ];
     });
+    for (const { title, subtitle, label } of gameContent.paths) {
+      const width = Math.max(title.length * 12, subtitle.length * 9);
+      boxes.push({ left: label.x, right: label.x + width, top: label.y - 24, bottom: label.y + 26 });
+    }
     for (const image of images) {
       for (const b of boxes) {
         const hit = image.left < b.right && b.left < image.right && image.top < b.bottom && b.top < image.bottom;

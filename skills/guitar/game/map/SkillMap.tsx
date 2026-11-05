@@ -27,7 +27,7 @@ const DRAG_PIXELS = 4;
 const BUTTON_ZOOM = 0.7;
 const NODE_RADIUS = 14;
 const REGION_RADIUS = 115;
-const BIG_LABELS_UP_TO = 16;
+const BIG_LABEL_SCALE = 19 / 13.5;
 const TITLE_SIZE = 26;
 const TIER_COLORS = { 1: "#5f9e3f", 2: "#d08a1d", 3: "#b23a2e" } as const;
 const UNAVAILABLE_FILL = "#77756c";
@@ -89,13 +89,20 @@ const SCENERY: Record<PathId, { sprites: SpriteName[]; density: number }> = {
 
 const overlaps = (a: Box, b: Box) => a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom;
 
-/** Node plus its label, in the estimate content.test.ts checks collisions on. */
+/** The estimate content.test.ts checks collisions on. */
+function labelBox(node: MapNode, scale = 1): Box {
+  const half = (node.title.length * 6.4 * scale) / 2;
+  return { left: node.x - half, right: node.x + half, top: node.y + 16, bottom: node.y + 32 };
+}
+
 function nodeBoxes(node: MapNode): Box[] {
-  const half = (node.title.length * 6.4) / 2;
-  return [
-    { left: node.x - half, right: node.x + half, top: node.y + 16, bottom: node.y + 32 },
-    { left: node.x - 18, right: node.x + 18, top: node.y - 18, bottom: node.y + 18 },
-  ];
+  return [labelBox(node), { left: node.x - 18, right: node.x + 18, top: node.y - 18, bottom: node.y + 18 }];
+}
+
+/** The view itself, or moved just enough to centre a node outside it. */
+function reveal(view: View, node: MapNode): View {
+  const inside = node.x > view.x && node.x < view.x + view.width && node.y > view.y && node.y < view.y + view.height;
+  return inside ? view : centerOn(view, node);
 }
 
 function titleBox(path: MapPath): Box {
@@ -236,6 +243,12 @@ export function SkillMap({ nodes, paths, road, statuses, selectedId, bestId, fil
     return new Set([...buildsOn, ...unlocks, ...linked.map((link) => link.node)].map((node) => node.id));
   }, [nodes, selectedId]);
 
+  // The nav pane and the Tips Board select nodes the zoomed view may not show.
+  useEffect(() => {
+    const node = selectedId ? byId.get(selectedId) : undefined;
+    if (node) setView((current) => reveal(current, node));
+  }, [selectedId, byId]);
+
   const term = filter.term.trim().toLowerCase();
   const filtering = filter.path !== null || filter.tier !== null || term !== "";
   const isMatch = (node: MapNode) => !filtering || matches(node, filter, term);
@@ -258,10 +271,14 @@ export function SkillMap({ nodes, paths, road, statuses, selectedId, bestId, fil
 
   const called = (node: MapNode) => node.id === selectedId || node.id === bestId || node.id === hoveredId;
   const labelled = (node: MapNode) => view.width <= LABEL_MAX_WIDTH || called(node) || (filtering && isMatch(node));
-  // On the whole map a label at its zoomed size is too small to read. Few labels
-  // have room for more, while many would collide.
-  const fewMatches = filtering && nodes.filter(isMatch).length <= BIG_LABELS_UP_TO;
-  const bigLabel = (node: MapNode) => view.width > LABEL_MAX_WIDTH && (called(node) || fewMatches);
+  const shownLabels = nodes.filter(labelled);
+  // On the whole map a label at its zoomed size is too small to read, so the
+  // called-out ones grow, unless that would run them into another label.
+  const scaleOf = (node: MapNode) => (called(node) ? BIG_LABEL_SCALE : 1);
+  const bigLabel = (node: MapNode) =>
+    view.width > LABEL_MAX_WIDTH &&
+    called(node) &&
+    !shownLabels.some((other) => other !== node && overlaps(labelBox(node, BIG_LABEL_SCALE), labelBox(other, scaleOf(other))));
   // Titles shrink as the map grows under them, so they never take over a zoomed view.
   const titleSize = TITLE_SIZE * Math.sqrt(view.width / FULL_VIEW.width);
 
@@ -300,11 +317,7 @@ export function SkillMap({ nodes, paths, road, statuses, selectedId, bestId, fil
 
   function onNodeFocus(node: MapNode) {
     setHoveredId(node.id);
-    setView((current) => {
-      const inside =
-        node.x > current.x && node.x < current.x + current.width && node.y > current.y && node.y < current.y + current.height;
-      return inside ? current : centerOn(current, node);
-    });
+    setView((current) => reveal(current, node));
   }
 
   return (
@@ -415,7 +428,7 @@ export function SkillMap({ nodes, paths, road, statuses, selectedId, bestId, fil
         </g>
 
         <g data-layer="labels">
-          {nodes.filter(labelled).map((node) => (
+          {shownLabels.map((node) => (
             <text
               key={node.id}
               className={`map-label${bigLabel(node) ? " is-big" : ""}`}
