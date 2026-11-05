@@ -24,6 +24,7 @@ export {
   bestNext,
   buildDailyQuests,
   lessonMasteryTarget,
+  MAX_CHOSEN,
   type ScaledQuest,
   type QuestScale,
   type QuestDefinition,

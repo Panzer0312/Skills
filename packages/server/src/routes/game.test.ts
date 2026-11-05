@@ -132,4 +132,93 @@ describe("game api", () => {
     expect(s.totalSeconds).toBe(0);
     expect(s.xp).toBe(0);
   });
+  describe("chosen lessons, quick wins and target song", () => {
+    const choose = (id: string, body?: object, skill = "guitar") =>
+      send("PUT", `/api/game/${skill}/chosen/${id}`, body ?? {});
+
+    it("lists chosen lessons oldest first", async () => {
+      await choose("a");
+      await choose("b");
+      expect((await state()).chosenLessons).toEqual(["a", "b"]);
+    });
+
+    it("moves an open lesson to aktiv when chosen", async () => {
+      await choose("a");
+      expect((await state()).lessons.a).toBe("aktiv");
+    });
+
+    it("refuses a third chosen lesson with 409 limit and changes nothing", async () => {
+      await choose("a");
+      await choose("b");
+      const r = await choose("c");
+      expect(r.status).toBe(409);
+      expect(((await r.json()) as { error: { code: string } }).error.code).toBe("limit");
+      const s = await state();
+      expect(s.chosenLessons).toEqual(["a", "b"]);
+      expect(s.lessons.c).toBeUndefined();
+    });
+
+    it("replaces a chosen lesson in one step", async () => {
+      await choose("a");
+      await choose("b");
+      const r = await choose("c", { replace: "a" });
+      expect(r.status).toBe(200);
+      expect((await state()).chosenLessons).toEqual(["b", "c"]);
+    });
+
+    it("accepts choosing an already chosen lesson again", async () => {
+      await choose("a");
+      await choose("b");
+      expect((await choose("a")).status).toBe(200);
+      expect((await state()).chosenLessons).toEqual(["a", "b"]);
+    });
+
+    it("frees the slot when a chosen lesson is gelernt", async () => {
+      await choose("a");
+      await choose("b");
+      await send("PUT", "/api/game/guitar/lesson/a", { status: "gelernt" });
+      expect((await state()).chosenLessons).toEqual(["b"]);
+      expect((await choose("c")).status).toBe(200);
+      expect((await state()).chosenLessons).toEqual(["b", "c"]);
+    });
+
+    it("removes a chosen lesson with DELETE", async () => {
+      await choose("a");
+      expect((await send("DELETE", "/api/game/guitar/chosen/a")).status).toBe(200);
+      expect((await state()).chosenLessons).toEqual([]);
+    });
+
+    it("makes a quick lesson gelernt after one passing quest", async () => {
+      await log({ kind: "quest", questId: "q", lessonId: "l", seconds: 60, level: 1, rating: "passt", quick: true });
+      expect((await state()).lessons.l).toBe("gelernt");
+    });
+
+    it("leaves a quick lesson aktiv after zu-schwer", async () => {
+      await log({ kind: "quest", questId: "q", lessonId: "l", seconds: 60, level: 1, rating: "zu-schwer", quick: true });
+      expect((await state()).lessons.l).toBe("aktiv");
+    });
+
+    it("does not lower gemeistert through a quick log", async () => {
+      await send("PUT", "/api/game/guitar/lesson/l", { status: "gemeistert" });
+      await log({ kind: "quest", questId: "q", lessonId: "l", seconds: 60, level: 1, rating: "passt", quick: true });
+      expect((await state()).lessons.l).toBe("gemeistert");
+    });
+
+    it("sets and clears the target song", async () => {
+      expect((await send("PUT", "/api/game/guitar/target-song", { targetSongId: "db:12" })).status).toBe(200);
+      expect((await state()).targetSongId).toBe("db:12");
+      expect((await send("PUT", "/api/game/guitar/target-song", { targetSongId: null })).status).toBe(200);
+      expect((await state()).targetSongId).toBeNull();
+    });
+
+    it("rejects a malformed target song id", async () => {
+      const r = await send("PUT", "/api/game/guitar/target-song", { targetSongId: "nope" });
+      expect(r.status).toBe(400);
+    });
+
+    it("keeps chosen lessons apart per skill", async () => {
+      await choose("a");
+      expect((await state("demo")).chosenLessons).toEqual([]);
+    });
+  });
 });

@@ -75,6 +75,7 @@ export type QuestDefinition = z.infer<typeof questSchema>;
 export type GameContent = z.infer<typeof baseSchema>;
 export type Technique = GameContent["techniques"][number];
 export type RoadStep = GameContent["road"][number];
+export const MAX_CHOSEN = 2;
 export type LessonStatus = "offen" | "aktiv" | "gelernt" | "gemeistert";
 
 export function parseGameContent(input: unknown): GameContent {

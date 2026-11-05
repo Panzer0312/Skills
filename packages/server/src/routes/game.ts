@@ -4,6 +4,7 @@ import {
   computeStreak,
   isMastered,
   levelFromXp,
+  MAX_CHOSEN,
   localDayKey,
   previousDay,
   suggestLevel,
@@ -30,6 +31,7 @@ const logSchema = z.object({
   metricKey: z.string().min(1).optional(),
   metricValue: z.number().finite().optional(),
   masteryTarget: z.number().finite().optional(),
+  quick: z.boolean().optional(),
 });
 const levelBodySchema = z.object({ level: levelSchema });
 const lessonBodySchema = z.object({ status: statusSchema });
@@ -42,6 +44,9 @@ const placementSchema = z.object({
   levels: z.record(levelSchema),
   targetSongId: z.string().regex(/^(uebung|db):.+$/).nullable(),
 });
+
+const chosenBodySchema = z.object({ replace: z.string().min(1).optional() });
+const targetSongSchema = z.object({ targetSongId: z.string().regex(/^(uebung|db):.+$/).nullable() });
 
 const STATUS_READ: Record<string, LessonStatus> = {
   done: "gelernt",
@@ -108,6 +113,13 @@ gameRoutes.get("/api/game/:skillId/state", (c) => {
     .all(skillId) as { lesson_id: string; status: string }[]) {
     lessons[r.lesson_id] = STATUS_READ[r.status] ?? "offen";
   }
+  const chosenLessons = (
+    raw
+      .prepare("SELECT lesson_id FROM game_chosen WHERE skill_id = ? ORDER BY chosen_at, rowid")
+      .all(skillId) as { lesson_id: string }[]
+  )
+    .map((r) => r.lesson_id)
+    .filter((id) => lessons[id] !== "gelernt" && lessons[id] !== "gemeistert");
   const profile = raw
     .prepare("SELECT placed_at, target_song_id FROM game_profile WHERE skill_id = ?")
     .get(skillId) as { placed_at: number | null; target_song_id: string | null } | undefined;
@@ -130,6 +142,7 @@ gameRoutes.get("/api/game/:skillId/state", (c) => {
     doneToday: questIdsOn(today),
     levels,
     lessons,
+    chosenLessons,
     records,
     recentQuestIds: questIdsOn(yesterday),
     today: todayRow
@@ -148,6 +161,7 @@ gameRoutes.post("/api/game/:skillId/log", async (c) => {
   const now = Date.now();
   const day = localDayKey(now);
 
+  const run = raw.transaction(() => {
   const previousMax =
     body.metricKey !== undefined && body.metricValue !== undefined
       ? (raw
@@ -205,9 +219,16 @@ gameRoutes.post("/api/game/:skillId/log", async (c) => {
     );
     let next: LessonStatus = status;
     if (status === "offen") next = "aktiv";
+    if (body.quick && (body.rating === "passt" || body.rating === "zu-leicht") && RANK[next] < RANK.gelernt) {
+      next = "gelernt";
+    }
     if (isMastered(entries, body.masteryTarget)) next = "gemeistert";
     if (RANK[next] > RANK[status]) setLesson(raw, skillId, body.lessonId, next);
   }
+
+  return { suggestion, isRecord };
+  });
+  const { suggestion, isRecord } = run();
 
   const xpGained = xpForEntry({
     kind: body.kind,
@@ -289,5 +310,83 @@ gameRoutes.post("/api/game/:skillId/placement", async (c) => {
       )
       .run(skillId, Date.now(), targetSongId);
   })();
+  return c.json({ ok: true });
+});
+
+gameRoutes.put("/api/game/:skillId/chosen/:lessonId", async (c) => {
+  const parsed = chosenBodySchema.safeParse(
+    await c.req.json().catch(() => ({})),
+  );
+  if (!parsed.success) return invalid(c, parsed.error);
+  const raw = c.get("database").raw;
+  const skillId = c.req.param("skillId");
+  const lessonId = c.req.param("lessonId");
+  const { replace } = parsed.data;
+  const result = raw.transaction(() => {
+    const rows = raw
+      .prepare(
+        `SELECT g.lesson_id AS id FROM game_chosen g
+         LEFT JOIN lesson_progress p ON p.skill_id = g.skill_id AND p.lesson_id = g.lesson_id
+         WHERE g.skill_id = ? AND COALESCE(p.status, 'offen') NOT IN ('gelernt','gemeistert','done')`,
+      )
+      .all(skillId) as { id: string }[];
+    const active = rows.map((r) => r.id);
+    if (
+      !active.includes(lessonId) &&
+      active.length >= MAX_CHOSEN &&
+      replace === undefined
+    )
+      return "limit" as const;
+    if (replace !== undefined) {
+      raw
+        .prepare("DELETE FROM game_chosen WHERE skill_id = ? AND lesson_id = ?")
+        .run(skillId, replace);
+    }
+    raw
+      .prepare(
+        "INSERT INTO game_chosen (skill_id, lesson_id, chosen_at) VALUES (?, ?, ?) ON CONFLICT(skill_id, lesson_id) DO NOTHING",
+      )
+      .run(skillId, lessonId, Date.now());
+    const current = raw
+      .prepare(
+        "SELECT status FROM lesson_progress WHERE skill_id = ? AND lesson_id = ?",
+      )
+      .get(skillId, lessonId) as { status: string } | undefined;
+    if (!current || (STATUS_READ[current.status] ?? "offen") === "offen")
+      setLesson(raw, skillId, lessonId, "aktiv");
+    return "ok" as const;
+  })();
+  if (result === "limit") {
+    return c.json(
+      {
+        error: {
+          code: "limit",
+          message: `Höchstens ${MAX_CHOSEN} gewählte Lektionen gleichzeitig.`,
+        },
+      },
+      409,
+    );
+  }
+  return c.json({ ok: true });
+});
+
+gameRoutes.delete("/api/game/:skillId/chosen/:lessonId", (c) => {
+  c.get("database")
+    .raw.prepare("DELETE FROM game_chosen WHERE skill_id = ? AND lesson_id = ?")
+    .run(c.req.param("skillId"), c.req.param("lessonId"));
+  return c.json({ ok: true });
+});
+
+gameRoutes.put("/api/game/:skillId/target-song", async (c) => {
+  const parsed = targetSongSchema.safeParse(
+    await c.req.json().catch(() => null),
+  );
+  if (!parsed.success) return invalid(c, parsed.error);
+  c.get("database")
+    .raw.prepare(
+      `INSERT INTO game_profile (skill_id, placed_at, target_song_id) VALUES (?, NULL, ?)
+       ON CONFLICT(skill_id) DO UPDATE SET target_song_id = excluded.target_song_id`,
+    )
+    .run(c.req.param("skillId"), parsed.data.targetSongId);
   return c.json({ ok: true });
 });

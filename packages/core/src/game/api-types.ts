@@ -15,6 +15,7 @@ export interface GameState {
   doneToday: string[];
   levels: Record<string, number>;
   lessons: Record<string, LessonStatus>;
+  chosenLessons: string[];
   records: Record<string, number>;
   recentQuestIds: string[];
   today: { minutes: number; questIds: string[] } | null;
@@ -31,4 +32,5 @@ export interface LogBody {
   metricKey?: string;
   metricValue?: number;
   masteryTarget?: number;
+  quick?: boolean;
 }
