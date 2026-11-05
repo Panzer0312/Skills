@@ -35,6 +35,7 @@ const base: GameState = {
   lessons: {},
   records: {},
   recentQuestIds: [],
+  chosenLessonIds: [],
   today: null,
 };
 
@@ -139,6 +140,7 @@ describe("Quest Board", () => {
       statuses: {},
       hasTargetSong: false,
       recentQuestIds: [],
+      chosenLessonIds: [],
     });
     expect(await screen.findByRole("link", { name: new RegExp(quest(expected[0]!).title) })).toBeInTheDocument();
     expect(writes(fetchMock, "/today")).toEqual([{ minutes: 30, questIds: expected }]);
@@ -174,6 +176,7 @@ describe("Quest Board", () => {
         statuses: {},
         hasTargetSong: false,
         recentQuestIds: [],
+        chosenLessonIds: [],
       }),
     });
     await waitFor(() => expect(screen.getByRole("button", { name: "10 min" })).toHaveAttribute("aria-pressed", "true"));
@@ -298,7 +301,7 @@ describe("Quest Board", () => {
 
 describe("village panel", () => {
   const expected = () =>
-    buildDailyQuests({ minutes: 30, content: gameContent, statuses: {}, hasTargetSong: false, recentQuestIds: [] });
+    buildDailyQuests({ minutes: 30, content: gameContent, statuses: {}, hasTargetSong: false, recentQuestIds: [], chosenLessonIds: [] });
 
   it("builds today's set on the first visit, one click from a quest", async () => {
     const fetchMock = serve({});

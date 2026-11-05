@@ -5,6 +5,8 @@ export interface ScaledQuest {
   bpm: number | null;
   tempoPercent: number | null;
   chordPair: [string, string] | null;
+  section: string | null;
+  runs: number | null;
 }
 
 function lerp(range: [number, number], level: number): number {
@@ -13,17 +15,21 @@ function lerp(range: [number, number], level: number): number {
 }
 
 export function scaleQuest(quest: QuestDefinition, level: number): ScaledQuest {
-  const { bpm, tempoPercent, chordPairs } = quest.scale;
+  const { bpm, tempoPercent, chordPairs, sections, runs } = quest.scale;
   const clamped = Math.min(10, Math.max(1, level));
   let chordPair: [string, string] | null = null;
   if (chordPairs && chordPairs.length > 0) {
     const index = Math.min(chordPairs.length - 1, Math.floor(((clamped - 1) / 10) * chordPairs.length));
     chordPair = chordPairs[index]!;
   }
+  const section =
+    sections && sections.length > 0 ? sections[Math.min(sections.length - 1, Math.floor(((clamped - 1) / 10) * sections.length))]! : null;
   return {
     bpm: bpm ? lerp(bpm, level) : null,
     tempoPercent: tempoPercent ? lerp(tempoPercent, level) : null,
     chordPair,
+    section,
+    runs: runs ? lerp(runs, level) : null,
   };
 }
 

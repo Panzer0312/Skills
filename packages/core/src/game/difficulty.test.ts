@@ -45,6 +45,11 @@ describe("scaleQuest", () => {
     expect(scaleQuest(quest, 5).bpm).toBe(68);
   });
   it("returns null for missing scale parts", () => {
-    expect(scaleQuest({ ...quest, scale: {} }, 3)).toEqual({ bpm: null, tempoPercent: null, chordPair: null });
+    expect(scaleQuest({ ...quest, scale: {} }, 3)).toEqual({ bpm: null, tempoPercent: null, chordPair: null, section: null, runs: null });
+  });
+  it("picks a later section at a higher level", () => {
+    const withScale = { ...quest, scale: { sections: ["Intro", "Strophe"], runs: [2, 6] as [number, number] } };
+    expect(scaleQuest(withScale, 1)).toMatchObject({ section: "Intro", runs: 2 });
+    expect(scaleQuest(withScale, 10)).toMatchObject({ section: "Strophe", runs: 6 });
   });
 });

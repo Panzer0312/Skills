@@ -6,7 +6,7 @@ import { bestNext, buildDailyQuests, lessonMasteryTarget, parseGameContent, type
 
 const here = dirname(fileURLToPath(import.meta.url));
 const read = (name: string) => JSON.parse(readFileSync(join(here, name), "utf8"));
-const content = parseGameContent({ ...read("quests.json"), road: read("road.json") });
+const content = parseGameContent({ ...read("quests.json"), road: read("road.json"), ...read("map.json") });
 const lessonIds = Array.from({ length: 13 }, (_, i) => i + 1).map((n) => {
   const prefix = String(n).padStart(2, "0");
   return { prefix, id: content.road.find((s) => s.lessonId.startsWith(prefix))?.lessonId };
@@ -60,17 +60,16 @@ describe("daily quests on the real content", () => {
     content.road.slice(0, 6).map((step) => [step.lessonId, "gelernt"]),
   );
   const build = (minutes: number, recentQuestIds: string[] = []) =>
-    buildDailyQuests({ minutes, content, statuses, hasTargetSong: false, recentQuestIds });
+    buildDailyQuests({ minutes, content, statuses, hasTargetSong: false, recentQuestIds, chosenLessonIds: [] });
 
   it("recommends the change drill once lessons 01 to 06 are learned", () => {
     expect(bestNext(content.road, statuses)?.questId).toBe("wechsel-minute");
   });
   it("leads a 10 minute session with the change drill and stays inside it", () => {
-    expect(build(10)).toEqual(["wechsel-minute", "stufenakkorde"]);
+    expect(build(10)).toEqual(["wechsel-minute", "griffbrett-namen"]);
   });
-  it("changes the theory slot after yesterday's quests", () => {
-    expect(build(30)).toContain("stufenakkorde");
-    const after = build(10, ["stufenakkorde"]);
-    expect(after).toEqual(["wechsel-minute", "griffbrett-namen"]);
+  it("does not reach lesson 13 theory at lesson 07", () => {
+    expect(build(45)).not.toContain("stufenakkorde");
+    expect(build(10, ["griffbrett-namen"])).not.toContain("stufenakkorde");
   });
 });

@@ -8,6 +8,7 @@ import {
 import { useQuery, type UseQueryResult } from "@tanstack/react-query";
 import { api } from "../../../packages/web/src/api/client.js";
 import { queryClient } from "../../../packages/web/src/app/queryClient.js";
+import map from "./map.json";
 import quests from "./quests.json";
 import road from "./road.json";
 
@@ -19,7 +20,7 @@ export const GAME_BASE = "/vollbild/guitar/spiel";
 
 export const DEFAULT_LEVEL = 3;
 
-export const gameContent: GameContent = parseGameContent({ ...quests, road });
+export const gameContent: GameContent = parseGameContent({ ...quests, road, ...map });
 
 export function questLevel(state: GameState, quest: QuestDefinition): number {
   return state.levels[quest.techniqueId] ?? DEFAULT_LEVEL;

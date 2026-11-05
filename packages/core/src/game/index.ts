@@ -2,4 +2,6 @@ export * from "./time.js";
 export * from "./progression.js";
 export * from "./difficulty.js";
 export * from "./quests.js";
+export * from "./map.js";
+export * from "./tips.js";
 export * from "./api-types.js";

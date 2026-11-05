@@ -59,6 +59,7 @@ export function useTodaySet(state: GameState, fetching: boolean) {
         statuses: state.lessons,
         hasTargetSong: state.targetSongId !== null,
         recentQuestIds: state.recentQuestIds,
+        chosenLessonIds: [],
       }),
     );
   }
