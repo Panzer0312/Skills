@@ -54,7 +54,7 @@
     },
     {
       "id": "akkordtoene", "title": "Akkordtöne nennen",
-      "description": "Greife C und zupfe Saite für Saite: C, E, G, C, E. Greife Em: E, H, E, G, H, E. Nenne jeden Ton laut. Jeder Akkord besteht nur aus drei verschiedenen Tönen.",
+      "description": "Greife C und zupfe Saite für Saite: C, E, G, C, E. Greife Em: E, H, E, G, H, E. Nenne jeden Ton laut. Beide Akkorde bestehen nur aus drei verschiedenen Tönen.",
       "kind": "theorie", "techniqueId": "theorie", "lessonId": "06-offene-akkorde", "minutes": 5, "icon": "book", "scale": {}
     },
     {

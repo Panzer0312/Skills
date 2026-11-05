@@ -133,7 +133,7 @@ describe("skill map content", () => {
     expect(has("10-barre", "caged-e")).toBe(true);
     expect(has("finger-arpeggio", "lead-sweep")).toBe(true);
     expect(has("07-akkordwechsel", "song-bards-vorbereitung")).toBe(true);
-    expect(has("caged-d", "caged-c")).toBe(true);
+    expect(has("caged-g", "caged-e")).toBe(true);
   });
   it("covers every available lesson on the road or as a quick win", () => {
     const onRoad = new Set(content.road.map((step) => step.lessonId));
@@ -148,6 +148,15 @@ describe("skill map content", () => {
       if (!before) return;
       expect(step.months[0], step.lessonId).toBeGreaterThanOrEqual(before.months[0]);
       expect(step.months[1], step.lessonId).toBeGreaterThanOrEqual(before.months[1]);
+    });
+  });
+  it("reaches every road step after its parent", () => {
+    const at = new Map(content.road.map((step, i) => [step.lessonId, i]));
+    content.road.forEach((step, i) => {
+      const node = byId.get(step.lessonId);
+      expect(node?.quick, step.lessonId).toBe(false);
+      expect(node?.knownSong, step.lessonId).toBe(false);
+      if (node?.parent) expect(at.get(node.parent) ?? Infinity, step.lessonId).toBeLessThan(i);
     });
   });
   it("gives every written road step a quest and every planned step none", () => {
