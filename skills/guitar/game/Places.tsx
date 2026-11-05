@@ -1,6 +1,7 @@
-import { bestNext, type GameState } from "@skills/core";
+import type { GameState } from "@skills/core";
 import type { ReactNode } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import type { LessonMeta } from "../../../packages/web/src/mdx/lessons.js";
 import { CourseRenderer } from "../../../packages/web/src/renderers/CourseRenderer.js";
 import type { WidgetProps } from "../../../packages/web/src/skills/widgets.js";
 import ChordDiagram from "../widgets/ChordDiagram.js";
@@ -33,19 +34,41 @@ export function Tavern(props: WidgetProps) {
   );
 }
 
+function metaIds(meta: Record<string, unknown>): Set<string> {
+  return new Set(Object.values(meta).map((entry) => (entry as LessonMeta).id));
+}
+
+const LIBRARY = [
+  {
+    folder: "lessons",
+    title: "Lektionen",
+    ids: metaIds(import.meta.glob("../lessons/*.mdx", { eager: true, import: "meta" })),
+  },
+  {
+    folder: "reference",
+    title: "Nachschlagen",
+    ids: metaIds(import.meta.glob("../reference/*.mdx", { eager: true, import: "meta" })),
+  },
+];
+
 export function Library() {
   const { lessonId } = useParams();
+  const navigate = useNavigate();
+  const owner = LIBRARY.find(({ ids }) => lessonId !== undefined && ids.has(lessonId));
   return (
     <ToolFrame title="Bibliothek">
       <div key={lessonId} className="space-y-8">
-        <CourseRenderer skillId="guitar" title="Lektionen" ignoreLocks initialLessonId={lessonId} />
-        <CourseRenderer
-          skillId="guitar"
-          title="Nachschlagen"
-          folder="reference"
-          ignoreLocks
-          initialLessonId={lessonId}
-        />
+        {(owner ? [owner] : LIBRARY).map(({ folder, title }) => (
+          <CourseRenderer
+            key={folder}
+            skillId="guitar"
+            title={title}
+            folder={folder}
+            ignoreLocks
+            initialLessonId={lessonId}
+            onOpen={(id) => navigate(`${GAME_BASE}/bibliothek${id ? `/${id}` : ""}`)}
+          />
+        ))}
       </div>
     </ToolFrame>
   );
@@ -72,48 +95,6 @@ export function Forge(props: WidgetProps) {
     <ToolFrame title="Schmiede">
       <ChordTrainer />
       <ChordDiagram {...props} />
-    </ToolFrame>
-  );
-}
-
-function Road({ lessons }: { lessons: GameState["lessons"] }) {
-  const next = bestNext(gameContent.road, lessons);
-  return (
-    <ol className="space-y-2">
-      {gameContent.road.map((step) => {
-        const isNext = step === next;
-        const quest = gameContent.quests.find((q) => q.id === step.questId);
-        return (
-          <li
-            key={step.lessonId}
-            aria-current={isNext ? "step" : undefined}
-            className={`rounded border p-3 ${isNext ? "border-amber-500 bg-amber-50 dark:bg-amber-950" : "border-slate-200 dark:border-slate-800"}`}
-          >
-            <div className="flex items-center justify-between gap-3">
-              <Link to={`${GAME_BASE}/bibliothek/${step.lessonId}`} className="underline">
-                {quest?.title ?? step.lessonId}
-              </Link>
-              <span className="text-sm text-slate-500">{lessons[step.lessonId] ?? "offen"}</span>
-            </div>
-            {isNext ? (
-              <>
-                <div className="mt-1 text-sm font-semibold">Bester nächster Schritt</div>
-                <p className="text-sm">{step.reason}</p>
-              </>
-            ) : null}
-          </li>
-        );
-      })}
-    </ol>
-  );
-}
-
-export function Harbor() {
-  const { data: state } = useGameState();
-  return (
-    <ToolFrame title="Hafen">
-      <p className="mb-4">Die Karte öffnet bald</p>
-      {state ? <Road lessons={state.lessons} /> : null}
     </ToolFrame>
   );
 }

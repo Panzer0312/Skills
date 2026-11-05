@@ -2,6 +2,7 @@ import {
   parseGameContent,
   type GameContent,
   type GameState,
+  type LessonStatus,
   type LogBody,
   type QuestDefinition,
 } from "@skills/core";
@@ -21,6 +22,13 @@ export const GAME_BASE = "/vollbild/guitar/spiel";
 export const DEFAULT_LEVEL = 3;
 
 export const gameContent: GameContent = parseGameContent({ ...quests, road, ...map });
+
+export const isDone = (status: LessonStatus | undefined) => status === "gelernt" || status === "gemeistert";
+
+/** Song titles as compared across the map content and imported songs. */
+export function normalizeTitle(s: string): string {
+  return s.toLowerCase().replace(/[’‘ʼ´`]/g, "'").replace(/\s+/g, " ").trim();
+}
 
 export function questLevel(state: GameState, quest: QuestDefinition): number {
   return state.levels[quest.techniqueId] ?? DEFAULT_LEVEL;
@@ -70,4 +78,10 @@ export const gameApi = {
     refreshing(api.put<{ ok: true }>(`/api/game/${SKILL}/today`, { minutes, questIds })),
   placement: (body: PlacementBody) =>
     refreshing(api.post<{ ok: true }>(`/api/game/${SKILL}/placement`, body)),
+  /** Rejects with an ApiError of code `limit` when two lessons are chosen and `replace` is missing. */
+  chooseLesson: (id: string, replace?: string) =>
+    refreshing(api.put<{ ok: true }>(`/api/game/${SKILL}/chosen/${id}`, replace ? { replace } : {})),
+  pauseLesson: (id: string) => refreshing(api.del<{ ok: true }>(`/api/game/${SKILL}/chosen/${id}`)),
+  setTargetSong: (targetSongId: string | null) =>
+    refreshing(api.put<{ ok: true }>(`/api/game/${SKILL}/target-song`, { targetSongId })),
 };

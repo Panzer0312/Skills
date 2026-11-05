@@ -23,12 +23,15 @@ export function CourseRenderer({
   folder = "lessons",
   ignoreLocks = false,
   initialLessonId,
+  onOpen,
 }: {
   skillId: string;
   title: string;
   folder?: string;
   ignoreLocks?: boolean;
   initialLessonId?: string;
+  /** Called with the lesson the reader opens, or null on the way back to the list. */
+  onOpen?: (lessonId: string | null) => void;
 }) {
   const queryClient = useQueryClient();
   const [openId, setOpenId] = useState<string | null>(initialLessonId ?? null);
@@ -57,6 +60,11 @@ export function CourseRenderer({
     (progress.data?.lessons ?? []).filter((l) => FINISHED.has(l.status)).map((l) => l.lessonId),
   );
 
+  function open(lessonId: string | null) {
+    setOpenId(lessonId);
+    onOpen?.(lessonId);
+  }
+
   const openEntry = lessons.find((l) => l.meta.id === openId);
   // Kept stable: a new lazy would remount the lesson and scroll the confirmation out of view.
   const Lesson = useMemo(
@@ -84,7 +92,7 @@ export function CourseRenderer({
   if (Lesson && openEntry) {
     return (
       <div className="mx-auto max-w-3xl">
-        <button type="button" onClick={() => setOpenId(null)} className="mb-4 text-sm text-slate-500">
+        <button type="button" onClick={() => open(null)} className="mb-4 text-sm text-slate-500">
           ← Zurück zur Übersicht
         </button>
         <h1 className="text-2xl font-semibold">{openEntry.meta.title}</h1>
@@ -117,7 +125,7 @@ export function CourseRenderer({
               <button
                 type="button"
                 disabled={!unlocked}
-                onClick={() => setOpenId(meta.id)}
+                onClick={() => open(meta.id)}
                 className="flex w-full items-center justify-between rounded border border-slate-200 px-4 py-3 text-left disabled:opacity-40 dark:border-slate-800"
               >
                 <span>{meta.title}</span>

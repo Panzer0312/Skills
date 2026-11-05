@@ -185,3 +185,358 @@
 .map-controls .game-button {
   min-width: 34px;
 }
+
+/* Map screen. Below 640 px the map gives way to a list, and the Tips Board leads. */
+.map-screen {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+}
+
+.map-stage {
+  display: none;
+  min-width: 0;
+  min-height: 0;
+}
+
+/* Its children join the page's single column here, so the Tips Board can lead. */
+.map-side {
+  display: contents;
+}
+
+.map-panel-box {
+  min-width: 0;
+  scroll-margin-top: 8px;
+}
+
+.tips-board {
+  order: -1;
+}
+
+.map-screen > .map-nav {
+  min-width: 0;
+}
+
+.game-root .lesson-panel h2,
+.game-root .lesson-panel h3,
+.game-root .tips-board h3,
+.game-root .map-nav h4,
+.game-root .map-dialog h2 {
+  font-family: inherit;
+  font-weight: 400;
+}
+
+.map-nav small,
+.map-rows small,
+.lesson-panel small {
+  display: block;
+  color: #6a4f2c;
+  font-size: 16px;
+}
+
+.map-search {
+  width: 100%;
+  margin-bottom: 8px;
+  padding: 4px 6px;
+  background: #f5e8c8;
+  border: 2px solid #8a6a3d;
+}
+
+.map-paths {
+  display: grid;
+  gap: 3px;
+}
+
+.map-path,
+.map-step,
+.map-row {
+  width: 100%;
+  text-align: left;
+}
+
+.map-path {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 3px 6px;
+  background: var(--parch);
+  border-left: 6px solid;
+}
+
+.map-path:hover,
+.map-path[aria-pressed="true"],
+.map-step:hover,
+.map-row:hover,
+.map-row[aria-pressed="true"] {
+  background: #fff3d4;
+}
+
+.map-path[aria-pressed="true"] {
+  outline: 2px solid var(--wood);
+  outline-offset: -2px;
+}
+
+.map-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 8px 0;
+}
+
+.map-chips .game-button {
+  padding: 0 7px;
+}
+
+.map-year {
+  margin-bottom: 8px;
+}
+
+.map-year summary,
+.lesson-panel summary {
+  cursor: pointer;
+}
+
+.map-year h4 {
+  margin-top: 6px;
+  color: #6a4f2c;
+  font-size: 16px;
+}
+
+.map-step {
+  padding: 2px 6px;
+  border-left: 4px solid transparent;
+}
+
+.map-step[aria-current="step"] {
+  background: var(--parch);
+  border-left-color: var(--gold);
+}
+
+.map-legend {
+  color: #4d3820;
+  font-size: 16px;
+}
+
+.map-legend li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 2px;
+}
+
+.map-swatch {
+  flex: none;
+  width: 15px;
+  height: 15px;
+  border: 2px solid var(--wood2);
+  border-radius: 50%;
+}
+
+.map-swatch.is-planned {
+  background: #77756c;
+  border-style: dashed;
+}
+
+.map-legend-mark {
+  flex: none;
+  width: 15px;
+  text-align: center;
+}
+
+.map-legend-mark.is-star,
+.map-legend-mark.is-road {
+  color: #a8720f;
+}
+
+.map-legend-mark.is-link {
+  color: #7d3fd0;
+}
+
+.map-rows ul {
+  display: grid;
+  gap: 4px;
+}
+
+.map-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  background: var(--parch);
+  border: 2px solid #8a6a3d;
+}
+
+.map-row[aria-pressed="true"] {
+  border-color: var(--wood2);
+}
+
+.map-text-button {
+  color: #5a2d91;
+  text-align: left;
+  text-decoration: underline;
+}
+
+.lesson-panel {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+
+.lesson-panel h2 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.lesson-panel h3 {
+  color: #6a4f2c;
+  font-size: 17px;
+}
+
+.lesson-meta {
+  color: #6a4f2c;
+}
+
+.lesson-note {
+  padding: 4px 8px;
+  background: var(--parch);
+  border-left: 4px solid var(--gold);
+}
+
+.lesson-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.lesson-tag {
+  justify-self: start;
+  padding: 0 8px;
+  background: var(--wood);
+  color: var(--gold);
+}
+
+.lesson-level {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+}
+
+.lesson-block li + li {
+  margin-top: 3px;
+}
+
+.tips-board {
+  display: grid;
+  gap: 8px;
+  padding: 10px;
+  background: var(--wood);
+  border: 3px solid var(--gold);
+  color: #f4e4bf;
+}
+
+.tips-board h2 {
+  color: var(--gold);
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.tips-board h3 {
+  color: var(--gold);
+}
+
+.tips-entry {
+  display: flex;
+  gap: 8px;
+}
+
+.tips-entry img {
+  flex: none;
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+}
+
+.tips-board .map-text-button {
+  color: #fff2c9;
+}
+
+.map-dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: #1c1009cc;
+}
+
+.map-dialog {
+  display: grid;
+  gap: 10px;
+  width: min(100%, 360px);
+}
+
+.map-dialog ul {
+  display: grid;
+  gap: 6px;
+}
+
+.map-dialog li .game-button {
+  width: 100%;
+  text-align: left;
+}
+
+@media (min-width: 640px) {
+  .map-screen {
+    grid-template-columns: 220px minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .map-screen > .map-nav {
+    grid-row: span 2;
+  }
+
+  .map-stage {
+    display: block;
+  }
+
+  .map-rows {
+    display: none;
+  }
+
+  .map-side {
+    display: grid;
+    gap: 12px;
+    min-width: 0;
+    align-content: start;
+  }
+
+  .tips-board {
+    order: 0;
+  }
+}
+
+/* The three columns of the mockup: each side scrolls by itself beside the map. */
+@media (min-width: 1000px) {
+  .map-screen {
+    grid-template-columns: 220px minmax(0, 1fr) 300px;
+    height: calc(100vh - 76px);
+    min-height: 560px;
+  }
+
+  .map-screen > .map-nav {
+    grid-row: auto;
+  }
+
+  .map-screen > .map-nav,
+  .map-side {
+    height: 100%;
+    overflow-y: auto;
+  }
+
+  .map-stage {
+    height: 100%;
+  }
+}

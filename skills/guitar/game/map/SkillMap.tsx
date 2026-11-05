@@ -29,12 +29,12 @@ const NODE_RADIUS = 14;
 const REGION_RADIUS = 115;
 const BIG_LABEL_SCALE = 19 / 13.5;
 const TITLE_SIZE = 26;
-const TIER_COLORS = { 1: "#5f9e3f", 2: "#d08a1d", 3: "#b23a2e" } as const;
+export const TIER_COLORS = { 1: "#5f9e3f", 2: "#d08a1d", 3: "#b23a2e" } as const;
 const UNAVAILABLE_FILL = "#77756c";
 
-const tierOf = (rank: number) => (rank <= 3 ? 1 : rank <= 6 ? 2 : 3);
+export const tierOf = (rank: number) => (rank <= 3 ? 1 : rank <= 6 ? 2 : 3);
 
-function matches(node: MapNode, filter: MapFilter, term: string): boolean {
+export function matches(node: MapNode, filter: MapFilter, term: string): boolean {
   return (
     (filter.path === null || node.path === filter.path) &&
     (filter.tier === null || tierOf(node.rank) === filter.tier) &&

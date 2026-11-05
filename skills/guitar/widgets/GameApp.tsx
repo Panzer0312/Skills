@@ -7,12 +7,12 @@ import {
   Chronicle,
   Forge,
   FretboardPlace,
-  Harbor,
   Library,
   Market,
   Shrine,
   Tavern,
 } from "../game/Places.js";
+import { MapScreen } from "../game/map/MapScreen.js";
 import { Placement } from "../game/Placement.js";
 import { QuestBoard } from "../game/QuestBoard.js";
 import { QuestView } from "../game/QuestView.js";
@@ -32,7 +32,8 @@ export default function GameApp(props: WidgetProps) {
           <Route path="taverne" element={<Tavern {...props} />} />
           <Route path="bibliothek" element={<Library />} />
           <Route path="bibliothek/:lessonId" element={<Library />} />
-          <Route path="hafen" element={<Harbor />} />
+          {/* One optional segment, so selecting a node keeps the map and its zoom mounted. */}
+          <Route path="hafen/:nodeId?" element={<MapScreen />} />
           <Route path="markt" element={<Market />} />
           <Route path="schrein" element={<Shrine {...props} />} />
           <Route path="schmiede" element={<Forge {...props} />} />

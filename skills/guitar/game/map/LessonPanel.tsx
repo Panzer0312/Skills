@@ -1,0 +1,296 @@
+import { relations, type GameState, type MapNode, type MapPath } from "@skills/core";
+import { useQuery } from "@tanstack/react-query";
+import { useId, useState } from "react";
+import { Link } from "react-router-dom";
+import { api, ApiError } from "../../../../packages/web/src/api/client.js";
+import { DEFAULT_LEVEL, GAME_BASE, gameApi, isDone, normalizeTitle } from "../api.js";
+
+function NodeList({
+  title,
+  nodes,
+  onSelect,
+}: {
+  title: string;
+  nodes: MapNode[];
+  onSelect: (id: string) => void;
+}) {
+  if (nodes.length === 0) return null;
+  return (
+    <div className="lesson-block">
+      <h3>{title}</h3>
+      <ul>
+        {nodes.map((node) => (
+          <li key={node.id}>
+            <button type="button" className="map-text-button" onClick={() => onSelect(node.id)}>
+              {node.title}
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function LevelSlider({ saved, onChange }: { saved: number; onChange: (level: number) => Promise<boolean> }) {
+  const [level, setLevel] = useState(saved);
+  const id = useId();
+
+  async function change(next: number) {
+    setLevel(next);
+    if (!(await onChange(next))) setLevel(saved);
+  }
+
+  return (
+    <div className="lesson-level">
+      <label htmlFor={id}>Deine Stufe</label>
+      <input
+        id={id}
+        type="range"
+        min={1}
+        max={10}
+        value={level}
+        onChange={(event) => void change(Number(event.target.value))}
+      />
+      <output htmlFor={id}>{level}</output>
+    </div>
+  );
+}
+
+function TargetSong({
+  song,
+  targetSongId,
+  busy,
+  onSet,
+}: {
+  song: NonNullable<MapNode["targetSong"]>;
+  targetSongId: string | null;
+  busy: boolean;
+  onSet: (id: string) => void;
+}) {
+  const imported = useQuery({
+    queryKey: ["songs"],
+    queryFn: () => api.get<{ songs: { id: number; title: string }[] }>("/api/songs"),
+  });
+  if (imported.isPending) return null;
+  const wanted = normalizeTitle(song.title);
+  const ids = (imported.data?.songs ?? [])
+    .filter((entry) => normalizeTitle(entry.title) === wanted)
+    .map((entry) => `db:${entry.id}`);
+  const first = ids[0];
+  return (
+    <div className="lesson-block">
+      <h3>Zielsong</h3>
+      <p>
+        {song.title} · {song.artist}
+      </p>
+      {targetSongId !== null && ids.includes(targetSongId) ? (
+        <p className="lesson-tag">Ist dein Zielsong</p>
+      ) : first !== undefined ? (
+        <button type="button" className="game-button" disabled={busy} onClick={() => onSet(first)}>
+          Als Zielsong setzen
+        </button>
+      ) : (
+        <Link to="/songs/neu" className="map-text-button">
+          Importiere den Song, die Übungen funktionieren auch ohne
+        </Link>
+      )}
+    </div>
+  );
+}
+
+function PauseDialog({
+  chosen,
+  busy,
+  onPick,
+  onCancel,
+}: {
+  chosen: { id: string; title: string }[];
+  busy: boolean;
+  onPick: (id: string) => void;
+  onCancel: () => void;
+}) {
+  const titleId = useId();
+  return (
+    <div className="map-dialog-backdrop">
+      <section
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+        className="game-panel map-dialog"
+        onKeyDown={(event) => {
+          if (event.key === "Escape") onCancel();
+        }}
+      >
+        <h2 id={titleId}>Welche Lektion pausierst du?</h2>
+        <ul>
+          {chosen.map(({ id, title }) => (
+            <li key={id}>
+              <button type="button" className="game-button" disabled={busy} onClick={() => onPick(id)}>
+                {title}
+              </button>
+            </li>
+          ))}
+        </ul>
+        <button type="button" className="game-button" autoFocus onClick={onCancel}>
+          Abbrechen
+        </button>
+      </section>
+    </div>
+  );
+}
+
+export function LessonPanel({
+  node,
+  nodes,
+  paths,
+  state,
+  isBest,
+  onSelect,
+}: {
+  node: MapNode;
+  nodes: MapNode[];
+  paths: MapPath[];
+  state: GameState;
+  isBest: boolean;
+  onSelect: (id: string) => void;
+}) {
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [asking, setAsking] = useState(false);
+
+  async function run(write: () => Promise<unknown>): Promise<boolean> {
+    setBusy(true);
+    setError(null);
+    try {
+      await write();
+      setAsking(false);
+      return true;
+    } catch (e) {
+      if (e instanceof ApiError && e.code === "limit") setAsking(true);
+      else setError(e instanceof Error ? e.message : "Speichern fehlgeschlagen.");
+      return false;
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  const { buildsOn, unlocks, linked } = relations(nodes, node.id);
+  const status = state.lessons[node.id];
+  const chosen = state.chosenLessons.includes(node.id);
+  const actionable = node.available && !node.knownSong;
+  const region = paths.find((path) => path.id === node.path);
+
+  return (
+    <section className="lesson-panel game-panel" aria-label="Lektion">
+      <h2>{node.title}</h2>
+      <p className="lesson-meta">
+        {region?.title} · Schwierigkeit {node.rank} von 10
+      </p>
+      <p>{node.description}</p>
+
+      {node.quick && status === "gelernt" ? (
+        <p className="lesson-note">Schneller Erfolg geschafft. Komm zurück und verfeinere ihn.</p>
+      ) : null}
+
+      {node.knownSong ? (
+        <p className="lesson-tag">Bekannter Song</p>
+      ) : !node.available ? (
+        <p className="lesson-tag">In Vorbereitung</p>
+      ) : (
+        <div className="lesson-actions">
+          <Link to={`${GAME_BASE}/bibliothek/${node.id}`} className="game-button">
+            Lektion öffnen
+          </Link>
+          {isBest ? (
+            <span className="lesson-tag">Hauptweg</span>
+          ) : chosen ? (
+            <button
+              type="button"
+              className="game-button"
+              disabled={busy}
+              onClick={() => void run(() => gameApi.pauseLesson(node.id))}
+            >
+              Pausieren
+            </button>
+          ) : isDone(status) ? null : (
+            <button
+              type="button"
+              className="game-button"
+              disabled={busy}
+              onClick={() => void run(() => gameApi.chooseLesson(node.id))}
+            >
+              Als Quest annehmen
+            </button>
+          )}
+        </div>
+      )}
+
+      {error ? (
+        <p role="alert" className="game-error">
+          {error}
+        </p>
+      ) : null}
+
+      {actionable && node.techniqueId ? (
+        <LevelSlider
+          saved={state.levels[node.techniqueId] ?? DEFAULT_LEVEL}
+          onChange={(level) => run(() => gameApi.setLevel(node.techniqueId!, level))}
+        />
+      ) : null}
+
+      <NodeList title="Baut auf" nodes={buildsOn} onSelect={onSelect} />
+      <NodeList title="Schaltet frei" nodes={unlocks} onSelect={onSelect} />
+
+      {linked.length > 0 ? (
+        <details open className="lesson-block">
+          <summary>Verbindungen ({linked.length})</summary>
+          <ul>
+            {linked.map((link) => (
+              <li key={link.node.id}>
+                <button type="button" className="map-text-button" onClick={() => onSelect(link.node.id)}>
+                  {link.node.title}
+                </button>
+                <small>{link.reason}</small>
+              </li>
+            ))}
+          </ul>
+        </details>
+      ) : null}
+
+      {node.songs.length > 0 ? (
+        <div className="lesson-block">
+          <h3>Songs dafür</h3>
+          <ul>
+            {node.songs.map((song) => (
+              <li key={`${song.title}-${song.artist}`}>
+                {song.title} · {song.artist}
+                <small>{song.trains}</small>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
+
+      {actionable && node.targetSong ? (
+        <TargetSong
+          song={node.targetSong}
+          targetSongId={state.targetSongId}
+          busy={busy}
+          onSet={(id) => void run(() => gameApi.setTargetSong(id))}
+        />
+      ) : null}
+
+      {asking ? (
+        <PauseDialog
+          chosen={state.chosenLessons.map((id) => ({
+            id,
+            title: nodes.find((entry) => entry.id === id)?.title ?? id,
+          }))}
+          busy={busy}
+          onPick={(id) => void run(() => gameApi.chooseLesson(node.id, id))}
+          onCancel={() => setAsking(false)}
+        />
+      ) : null}
+    </section>
+  );
+}

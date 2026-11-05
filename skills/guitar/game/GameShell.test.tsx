@@ -2,7 +2,7 @@ import type { GameState } from "@skills/core";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { MemoryRouter, Route, Routes } from "react-router-dom";
+import { MemoryRouter, Route, Routes, useLocation } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { queryClient } from "../../../packages/web/src/app/queryClient.js";
 import GameApp from "../widgets/GameApp.js";
@@ -22,6 +22,7 @@ const base: GameState = {
   doneToday: [],
   levels: {},
   lessons: {},
+  chosenLessons: [],
   records: {},
   recentQuestIds: [],
   today: null,
@@ -45,10 +46,18 @@ function serve(state: Partial<GameState>) {
   return fetchMock;
 }
 
+function Where() {
+  return <output aria-label="Adresse">{useLocation().pathname}</output>;
+}
+
 function renderGame(path = "") {
   return render(
     <QueryClientProvider client={queryClient}>
-      <MemoryRouter initialEntries={[`/vollbild/guitar/spiel${path}`]}>
+      <MemoryRouter
+        initialEntries={[`/vollbild/guitar/spiel${path}`]}
+        future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
+      >
+        <Where />
         <Routes>
           <Route
             path="/vollbild/:skillId/:moduleId/*"
@@ -186,6 +195,36 @@ describe("game places", () => {
     expect(await screen.findByRole("button", { name: /Zurück zur Übersicht/ })).toBeInTheDocument();
   });
 
+  it("shows only the folder of a lesson opened by url", async () => {
+    serve({});
+    const lesson = renderGame("/bibliothek/02-anschlag");
+    await screen.findByRole("button", { name: /Zurück zur Übersicht/ });
+    expect(screen.queryByRole("heading", { name: "Nachschlagen" })).not.toBeInTheDocument();
+    lesson.unmount();
+    renderGame("/bibliothek/nice-to-know");
+    await screen.findByRole("button", { name: /Zurück zur Übersicht/ });
+    expect(screen.queryByRole("heading", { name: "Lektionen" })).not.toBeInTheDocument();
+  });
+
+  it("keeps both folders for an unknown lesson", async () => {
+    serve({});
+    renderGame("/bibliothek/gibt-es-nicht");
+    expect(await screen.findByRole("heading", { name: "Lektionen" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Nachschlagen" })).toBeInTheDocument();
+  });
+
+  it("puts an opened lesson in the url and removes it on the way back", async () => {
+    serve({});
+    renderGame("/bibliothek");
+    await userEvent.click(await screen.findByRole("button", { name: /Anschlag/ }));
+    await screen.findByRole("button", { name: /Zurück zur Übersicht/ });
+    expect(screen.getByLabelText("Adresse")).toHaveTextContent("/bibliothek/02-anschlag");
+    expect(screen.queryByRole("heading", { name: "Nachschlagen" })).not.toBeInTheDocument();
+    await userEvent.click(screen.getByRole("button", { name: /Zurück zur Übersicht/ }));
+    expect(await screen.findByRole("heading", { name: "Nachschlagen" })).toBeInTheDocument();
+    expect(screen.getByLabelText("Adresse").textContent).toMatch(/\/bibliothek$/);
+  });
+
   it("links from the tavern to the song import", async () => {
     serve({});
     renderGame("/taverne");
@@ -193,21 +232,18 @@ describe("game places", () => {
     expect(await screen.findByText(/Noch keine eigenen Songs/)).not.toHaveTextContent("Seitenleiste");
   });
 
-  it("highlights the best next step in the harbor", async () => {
-    const [first, second] = gameContent.road;
-    serve({ lessons: { [first!.lessonId]: "gelernt" } });
+  it("opens the map in the harbor", async () => {
+    serve({});
     renderGame("/hafen");
-    const current = await screen.findByText(second!.reason);
-    expect(current.closest("li")).toHaveAttribute("aria-current", "step");
-    expect(screen.getByText("Die Karte öffnet bald")).toBeInTheDocument();
+    expect(await screen.findByRole("group", { name: "Lernkarte" })).toBeInTheDocument();
+    expect(screen.queryByText("Die Karte öffnet bald")).not.toBeInTheDocument();
   });
 
-  it("shows no road in the harbor without a state", async () => {
+  it("shows no map in the harbor without a state", async () => {
     vi.stubGlobal("fetch", vi.fn(async () => json({}, 500)));
     renderGame("/hafen");
     expect(await screen.findByRole("button", { name: /Erneut versuchen/ })).toBeInTheDocument();
-    expect(screen.getByText("Die Karte öffnet bald")).toBeInTheDocument();
-    expect(screen.queryByRole("list")).not.toBeInTheDocument();
+    expect(screen.queryByRole("group", { name: "Lernkarte" })).not.toBeInTheDocument();
     expect(screen.queryByText("Bester nächster Schritt")).not.toBeInTheDocument();
   });
 
