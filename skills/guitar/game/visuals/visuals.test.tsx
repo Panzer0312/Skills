@@ -13,7 +13,7 @@ describe("RhythmusRaster", () => {
   it("draws one cell per pattern character", () => {
     render(<RhythmusRaster muster="D-DU-UDU" />);
     expect(screen.getAllByTestId("rhythmus-zelle")).toHaveLength(8);
-    expect(screen.getByRole("img")).toHaveAttribute("aria-label", expect.stringContaining("8 Schläge"));
+    expect(screen.getByRole("img")).toHaveAttribute("aria-label", expect.stringContaining("8 Zählzeiten"));
   });
 
   it("rejects an unknown pattern character visibly", () => {
@@ -32,6 +32,11 @@ describe("Tab", () => {
     expect(zeilen[5]).toBe("E|-3-|");
   });
 
+  it("notes lines of different length", () => {
+    render(<Tab zeilen={["-0-", "--", "---", "---", "---", "---"]} />);
+    expect(screen.getByText(/unterschiedlich lang/)).toBeInTheDocument();
+  });
+
   it("rejects a tab without six lines", () => {
     render(<Tab zeilen={["-0-"]} />);
     expect(screen.getByText(/Ungültige Tabulatur/)).toBeInTheDocument();
@@ -44,6 +49,14 @@ describe("GriffbrettBild", () => {
     expect(screen.getByTestId("punkt-2-3")).toHaveTextContent("C");
     expect(screen.getByTestId("punkt-6-0")).toBeInTheDocument();
     expect(screen.getByRole("img")).toHaveAttribute("aria-label", expect.stringContaining("H-Saite Bund 3"));
+  });
+});
+
+describe("GriffbrettBild notes", () => {
+  it("shows a note for a string outside 1-6", () => {
+    render(<GriffbrettBild punkte={[{ saite: 7, bund: 2 }]} />);
+    expect(screen.getByText(/ungültiger Saite/)).toBeInTheDocument();
+    expect(screen.queryByTestId("punkt-7-2")).toBeNull();
   });
 });
 

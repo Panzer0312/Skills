@@ -22,7 +22,7 @@ export function RhythmusRaster({ muster, zaehlzeiten }: { muster: string; zaehlz
   return (
     <div
       role="img"
-      aria-label={`Schlagmuster mit ${zeichen.length} Schlägen: ${beschreibung}`}
+      aria-label={`Schlagmuster mit ${zeichen.length} Zählzeiten: ${beschreibung}`}
       className="my-4 flex flex-wrap gap-1"
     >
       {zeichen.map((c, i) => {

@@ -5,19 +5,28 @@ export interface GriffbrettPunkt {
 }
 
 const SAITEN = ["e", "H", "G", "D", "A", "E"]; // saite 1 = high e
-const LEFT = 28;
+const LEFT = 44;
 const TOP = 16;
 const GAP_X = 52;
 const GAP_Y = 22;
 
 /** Fretboard section with marked points. saite 1 = high e, 6 = low E; bund 0 = open string. */
-export function GriffbrettBild({ punkte, bis = 5 }: { punkte: GriffbrettPunkt[]; bis?: number }) {
+export function GriffbrettBild({ punkte: alle, bis = 5 }: { punkte: GriffbrettPunkt[]; bis?: number }) {
+  const gueltig = (p: GriffbrettPunkt) => Number.isInteger(p.saite) && p.saite >= 1 && p.saite <= 6;
+  const punkte = alle.filter(gueltig);
+  const fehlerhaft = alle.length - punkte.length;
   const breite = LEFT + GAP_X * bis + 12;
   const hoehe = TOP * 2 + GAP_Y * 5 + 14;
   const beschreibung = punkte
     .map((p) => `${SAITEN[p.saite - 1] ?? "?"}-Saite ${p.bund === 0 ? "leer" : `Bund ${p.bund}`}`)
     .join(", ");
   return (
+    <>
+      {fehlerhaft > 0 ? (
+        <p role="alert" className="mt-4 text-sm text-red-700 dark:text-red-300">
+          Hinweis: {fehlerhaft} Punkt(e) mit ungültiger Saite (erlaubt 1 bis 6) nicht gezeichnet.
+        </p>
+      ) : null}
     <svg
       viewBox={`0 0 ${breite} ${hoehe}`}
       role="img"
@@ -65,7 +74,7 @@ export function GriffbrettBild({ punkte, bis = 5 }: { punkte: GriffbrettPunkt[];
         </text>
       ))}
       {punkte.map((p) => {
-        const cx = p.bund === 0 ? LEFT - 2 : LEFT + (p.bund - 0.3) * GAP_X;
+        const cx = p.bund === 0 ? LEFT - 16 : LEFT + (p.bund - 0.3) * GAP_X;
         const cy = TOP + (p.saite - 1) * GAP_Y;
         const offen = p.bund === 0;
         return (
@@ -93,5 +102,6 @@ export function GriffbrettBild({ punkte, bis = 5 }: { punkte: GriffbrettPunkt[];
         );
       })}
     </svg>
+    </>
   );
 }
