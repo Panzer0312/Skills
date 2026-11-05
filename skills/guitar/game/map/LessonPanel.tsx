@@ -1,9 +1,11 @@
 import { relations, type GameState, type MapNode, type MapPath } from "@skills/core";
 import { useQuery } from "@tanstack/react-query";
-import { useId, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { api, ApiError } from "../../../../packages/web/src/api/client.js";
 import { DEFAULT_LEVEL, GAME_BASE, gameApi, isDone, normalizeTitle } from "../api.js";
+
+const LEVEL_SAVE_DELAY = 300;
 
 function NodeList({
   title,
@@ -34,10 +36,29 @@ function NodeList({
 function LevelSlider({ saved, onChange }: { saved: number; onChange: (level: number) => Promise<boolean> }) {
   const [level, setLevel] = useState(saved);
   const id = useId();
+  const latest = useRef({ saved, onChange });
+  latest.current = { saved, onChange };
+  const pending = useRef<number | null>(null);
+  const timer = useRef<ReturnType<typeof setTimeout>>();
 
-  async function change(next: number) {
+  function flush() {
+    clearTimeout(timer.current);
+    const next = pending.current;
+    if (next === null) return;
+    pending.current = null;
+    void latest.current.onChange(next).then((ok) => {
+      if (!ok) setLevel(latest.current.saved);
+    });
+  }
+
+  // Selecting another node unmounts the slider, and that step must not get lost.
+  useEffect(() => flush, []);
+
+  function change(next: number) {
     setLevel(next);
-    if (!(await onChange(next))) setLevel(saved);
+    pending.current = next;
+    clearTimeout(timer.current);
+    timer.current = setTimeout(flush, LEVEL_SAVE_DELAY);
   }
 
   return (
@@ -49,7 +70,7 @@ function LevelSlider({ saved, onChange }: { saved: number; onChange: (level: num
         min={1}
         max={10}
         value={level}
-        onChange={(event) => void change(Number(event.target.value))}
+        onChange={(event) => change(Number(event.target.value))}
       />
       <output htmlFor={id}>{level}</output>
     </div>
@@ -72,8 +93,15 @@ function TargetSong({
     queryFn: () => api.get<{ songs: { id: number; title: string }[] }>("/api/songs"),
   });
   if (imported.isPending) return null;
+  if (!imported.data) {
+    return (
+      <p role="alert" className="game-error">
+        Deine Songs konnten nicht geladen werden.
+      </p>
+    );
+  }
   const wanted = normalizeTitle(song.title);
-  const ids = (imported.data?.songs ?? [])
+  const ids = imported.data.songs
     .filter((entry) => normalizeTitle(entry.title) === wanted)
     .map((entry) => `db:${entry.id}`);
   const first = ids[0];
@@ -101,11 +129,13 @@ function TargetSong({
 function PauseDialog({
   chosen,
   busy,
+  error,
   onPick,
   onCancel,
 }: {
   chosen: { id: string; title: string }[];
   busy: boolean;
+  error: string | null;
   onPick: (id: string) => void;
   onCancel: () => void;
 }) {
@@ -131,6 +161,11 @@ function PauseDialog({
             </li>
           ))}
         </ul>
+        {error ? (
+          <p role="alert" className="game-error">
+            {error}
+          </p>
+        ) : null}
         <button type="button" className="game-button" autoFocus onClick={onCancel}>
           Abbrechen
         </button>
@@ -201,9 +236,8 @@ export function LessonPanel({
           <Link to={`${GAME_BASE}/bibliothek/${node.id}`} className="game-button">
             Lektion öffnen
           </Link>
-          {isBest ? (
-            <span className="lesson-tag">Hauptweg</span>
-          ) : chosen ? (
+          {isBest ? <span className="lesson-tag">Hauptweg</span> : null}
+          {chosen ? (
             <button
               type="button"
               className="game-button"
@@ -212,7 +246,7 @@ export function LessonPanel({
             >
               Pausieren
             </button>
-          ) : isDone(status) ? null : (
+          ) : isBest || isDone(status) ? null : (
             <button
               type="button"
               className="game-button"
@@ -225,7 +259,7 @@ export function LessonPanel({
         </div>
       )}
 
-      {error ? (
+      {error && !asking ? (
         <p role="alert" className="game-error">
           {error}
         </p>
@@ -287,8 +321,12 @@ export function LessonPanel({
             title: nodes.find((entry) => entry.id === id)?.title ?? id,
           }))}
           busy={busy}
+          error={error}
           onPick={(id) => void run(() => gameApi.chooseLesson(node.id, id))}
-          onCancel={() => setAsking(false)}
+          onCancel={() => {
+            setAsking(false);
+            setError(null);
+          }}
         />
       ) : null}
     </section>

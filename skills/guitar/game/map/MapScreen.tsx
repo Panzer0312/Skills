@@ -5,25 +5,24 @@ import { GAME_BASE, gameContent, useGameState } from "../api.js";
 import { LessonPanel } from "./LessonPanel.js";
 import "./map.css";
 import { NavPane } from "./NavPane.js";
-import { matches, SkillMap, TIER_COLORS, tierOf, type MapFilter } from "./SkillMap.js";
+import { matches, SkillMap, statusLabel, TIER_COLORS, tierOf, type MapFilter } from "./SkillMap.js";
 import { TipsBoard } from "./TipsBoard.js";
 
 const NO_FILTER: MapFilter = { path: null, tier: null, term: "" };
-
-function statusLabel(node: MapNode, status: LessonStatus | undefined): string {
-  if (node.knownSong) return "Bekannter Song";
-  return node.available ? (status ?? "offen") : "in Vorbereitung";
-}
 
 /** What the map shows below 640 px. */
 function NodeRows({
   nodes,
   statuses,
+  chosen,
+  bestId,
   selectedId,
   onSelect,
 }: {
   nodes: MapNode[];
   statuses: Record<string, LessonStatus>;
+  chosen: string[];
+  bestId: string | null;
   selectedId: string;
   onSelect: (id: string) => void;
 }) {
@@ -43,7 +42,7 @@ function NodeRows({
               <span>
                 {node.title}
                 <small>
-                  Schwierigkeit {node.rank} · {statusLabel(node, statuses[node.id])}
+                  Schwierigkeit {node.rank} · {statusLabel(node, statuses[node.id], chosen.includes(node.id) || node.id === bestId)}
                 </small>
               </span>
             </button>
@@ -98,6 +97,7 @@ function MapView({ state }: { state: GameState }) {
           paths={paths}
           road={road}
           statuses={state.lessons}
+          chosen={state.chosenLessons}
           selectedId={selected.id}
           bestId={bestId}
           filter={filter}
@@ -107,6 +107,8 @@ function MapView({ state }: { state: GameState }) {
       <NodeRows
         nodes={nodes.filter((node) => matches(node, listFilter, term))}
         statuses={state.lessons}
+        chosen={state.chosenLessons}
+        bestId={bestId}
         selectedId={selected.id}
         onSelect={select}
       />

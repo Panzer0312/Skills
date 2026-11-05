@@ -1,5 +1,5 @@
 import type { MapNode } from "./map.js";
-import { bestNext, type GameContent, type LessonStatus, type RoadStep } from "./quests.js";
+import { bestNext, isUnfinished, type GameContent, type LessonStatus, type RoadStep } from "./quests.js";
 
 export interface QuickTip {
   node: MapNode;
@@ -13,13 +13,13 @@ export interface Tips {
   moreComing: boolean;
 }
 
-/** An open quick lesson first, else a learned one worth refining. */
+/** An unfinished quick lesson first, else a learned one worth refining. */
 export function quickWin(nodes: MapNode[], statuses: Record<string, LessonStatus>): QuickTip | null {
   const quick = nodes.filter((node) => node.quick && node.available);
-  const open = quick.find((node) => (statuses[node.id] ?? "offen") === "offen");
+  const open = quick.find((node) => isUnfinished(statuses[node.id]));
   if (open) return { node: open, refine: false };
-  const rest = quick.find((node) => statuses[node.id] !== "gemeistert");
-  return rest ? { node: rest, refine: true } : null;
+  const learned = quick.find((node) => statuses[node.id] === "gelernt");
+  return learned ? { node: learned, refine: true } : null;
 }
 
 function stayOnTrackText(chosen: number): string {

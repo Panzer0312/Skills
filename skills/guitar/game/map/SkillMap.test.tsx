@@ -35,6 +35,7 @@ function setup(props: Partial<Parameters<typeof SkillMap>[0]> = {}) {
       paths={paths}
       road={[step("Start"), step("Mitte"), step("Ende")]}
       statuses={{}}
+      chosen={[]}
       selectedId={null}
       bestId={null}
       filter={noFilter}
@@ -76,9 +77,20 @@ describe("SkillMap nodes", () => {
 
   it("names title, status and difficulty", () => {
     setup({ statuses: { Mitte: "aktiv" } });
-    expect(button("Mitte")).toHaveAccessibleName("Mitte, aktiv, Schwierigkeit 5 von 10");
+    expect(button("Mitte")).toHaveAccessibleName("Mitte, begonnen, Schwierigkeit 5 von 10");
     expect(button("Start")).toHaveAccessibleName("Start, offen, Schwierigkeit 2 von 10");
     expect(button("Später")).toHaveAccessibleName("Später, in Vorbereitung, Schwierigkeit 2 von 10");
+  });
+
+  it("calls a started lesson aktiv only when chosen or best next", () => {
+    setup({ statuses: { Mitte: "aktiv", Ende: "aktiv" }, chosen: ["Mitte"], bestId: "Ende" });
+    expect(button("Mitte")).toHaveAccessibleName("Mitte, aktiv, Schwierigkeit 5 von 10");
+    expect(button("Ende")).toHaveAccessibleName("Ende, aktiv, Schwierigkeit 8 von 10, beste nächste Lektion");
+  });
+
+  it("names a known song as such", () => {
+    setup({ nodes: [node("Lied", { knownSong: true, available: false })] });
+    expect(button("Lied")).toHaveAccessibleName("Lied, Bekannter Song, Schwierigkeit 2 von 10");
   });
 
   it("selects a node with Enter", async () => {
@@ -106,11 +118,13 @@ describe("SkillMap nodes", () => {
 
   it("shows done, quick and unavailable nodes differently", () => {
     const statuses: Record<string, LessonStatus> = { Start: "gelernt", Mitte: "gemeistert", Ende: "aktiv" };
-    setup({ statuses });
+    setup({ statuses, chosen: ["Stern"] });
     expect(within(button("Start")).getByText("✓")).toBeInTheDocument();
     expect(within(button("Mitte")).getByText("✓✓")).toBeInTheDocument();
     expect(within(button("Ende")).getByText("8")).toBeInTheDocument();
-    expect(button("Ende").querySelector(".map-active-ring")).not.toBeNull();
+    // The ring means chosen: a started lesson that was paused has none.
+    expect(button("Stern").querySelector(".map-active-ring")).not.toBeNull();
+    expect(button("Ende").querySelector(".map-active-ring")).toBeNull();
     expect(button("Start").querySelector(".map-active-ring")).toBeNull();
 
     expect(shape(button("Stern")).tagName).toBe("polygon");
@@ -160,7 +174,7 @@ describe("SkillMap lines", () => {
     const { container, rerender } = setup();
     expect(container.querySelector(".map-link")).not.toHaveClass("is-on");
     rerender(
-      <SkillMap nodes={nodes} paths={paths} road={[]} statuses={{}} selectedId="Start" bestId={null} filter={noFilter} onSelect={vi.fn()} />,
+      <SkillMap nodes={nodes} paths={paths} road={[]} statuses={{}} chosen={[]} selectedId="Start" bestId={null} filter={noFilter} onSelect={vi.fn()} />,
     );
     expect(container.querySelector(".map-link")).toHaveClass("is-on");
     for (const name of ["Mitte", "Ende", "Stern", "Später"]) expect(button(name)).toHaveClass("is-related");
@@ -276,7 +290,7 @@ describe("SkillMap filter", () => {
     expect(opacity("Ende")).toBeNull();
     expect(opacity("Mitte")).toBe("0.22");
     rerender(
-      <SkillMap nodes={nodes} paths={paths} road={[]} statuses={{}} selectedId={null} bestId={null} filter={{ path: null, tier: null, term: " STE " }} onSelect={vi.fn()} />,
+      <SkillMap nodes={nodes} paths={paths} road={[]} statuses={{}} chosen={[]} selectedId={null} bestId={null} filter={{ path: null, tier: null, term: " STE " }} onSelect={vi.fn()} />,
     );
     expect(opacity("Stern")).toBeNull();
     expect(opacity("Ende")).toBe("0.22");
@@ -355,7 +369,7 @@ describe("SkillMap viewport", () => {
 });
 
 describe("SkillMap selection from outside", () => {
-  const props = { nodes, paths, road: [], statuses: {}, bestId: null, filter: noFilter, onSelect: vi.fn() };
+  const props = { nodes, paths, road: [], statuses: {}, chosen: [], bestId: null, filter: noFilter, onSelect: vi.fn() };
   const zoomIn = async () => {
     for (let i = 0; i < 4; i += 1) await userEvent.click(screen.getByRole("button", { name: "Hineinzoomen" }));
   };

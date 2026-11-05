@@ -28,6 +28,10 @@ describe("buildTips", () => {
   it("asks to refine a learned quick win", () => {
     expect(tips({ statuses: { q1: "gelernt", q2: "gelernt" } }).quick).toMatchObject({ node: { id: "q1" }, refine: true });
   });
+  it("keeps a started quick win as a quick win, not as refining", () => {
+    expect(tips({ statuses: { q1: "aktiv", q2: "gemeistert" } }).quick).toMatchObject({ node: { id: "q1" }, refine: false });
+    expect(tips({ statuses: { q1: "aktiv", q2: "gelernt" } }).quick).toMatchObject({ node: { id: "q1" }, refine: false });
+  });
   it("drops a mastered quick win", () => {
     expect(tips({ statuses: { q1: "gemeistert", q2: "gemeistert" } }).quick).toBeNull();
   });

@@ -15,6 +15,7 @@ export interface SkillMapProps {
   paths: MapPath[];
   road: RoadStep[];
   statuses: Record<string, LessonStatus>;
+  chosen: string[];
   selectedId: string | null;
   bestId: string | null;
   filter: MapFilter;
@@ -40,6 +41,13 @@ export function matches(node: MapNode, filter: MapFilter, term: string): boolean
     (filter.tier === null || tierOf(node.rank) === filter.tier) &&
     node.title.toLowerCase().includes(term)
   );
+}
+
+/** A started lesson only counts as active while it is chosen or best next. */
+export function statusLabel(node: MapNode, status: LessonStatus = "offen", current: boolean): string {
+  if (node.knownSong) return "Bekannter Song";
+  if (!node.available) return "in Vorbereitung";
+  return status === "aktiv" && !current ? "begonnen" : status;
 }
 
 function starPoints(x: number, y: number): string {
@@ -204,7 +212,7 @@ function Decor({ sprites }: { sprites: Sprite[] }) {
   );
 }
 
-export function SkillMap({ nodes, paths, road, statuses, selectedId, bestId, filter, onSelect }: SkillMapProps) {
+export function SkillMap({ nodes, paths, road, statuses, chosen, selectedId, bestId, filter, onSelect }: SkillMapProps) {
   const [view, setView] = useState<View>(FULL_VIEW);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const svgRef = useRef<SVGSVGElement>(null);
@@ -385,6 +393,7 @@ export function SkillMap({ nodes, paths, road, statuses, selectedId, bestId, fil
             const status = statuses[node.id] ?? "offen";
             const tierColor = TIER_COLORS[tierOf(node.rank)];
             const best = node.id === bestId;
+            const isChosen = chosen.includes(node.id);
             const shape = {
               className: "map-shape",
               fill: !node.available ? UNAVAILABLE_FILL : node.quick ? "#ffd34d" : tierColor,
@@ -398,7 +407,7 @@ export function SkillMap({ nodes, paths, road, statuses, selectedId, bestId, fil
                 className={classes.filter(Boolean).join(" ")}
                 tabIndex={0}
                 role="button"
-                aria-label={`${node.title}, ${node.available ? status : "in Vorbereitung"}, Schwierigkeit ${node.rank} von 10${best ? ", beste nächste Lektion" : ""}`}
+                aria-label={`${node.title}, ${statusLabel(node, status, isChosen || best)}, Schwierigkeit ${node.rank} von 10${best ? ", beste nächste Lektion" : ""}`}
                 aria-pressed={node.id === selectedId}
                 opacity={isMatch(node) ? undefined : DIMMED}
                 onClick={() => {
@@ -413,7 +422,7 @@ export function SkillMap({ nodes, paths, road, statuses, selectedId, bestId, fil
                 {best && <circle className="map-best-pulse" cx={node.x} cy={node.y} r={NODE_RADIUS + 7} />}
                 <circle className="map-focus" cx={node.x} cy={node.y} r={NODE_RADIUS + 9} />
                 {node.id === selectedId && <circle className="map-selected-ring" cx={node.x} cy={node.y} r={NODE_RADIUS + 6} />}
-                {status === "aktiv" && <circle className="map-active-ring" cx={node.x} cy={node.y} r={NODE_RADIUS + 4} />}
+                {isChosen && <circle className="map-active-ring" cx={node.x} cy={node.y} r={NODE_RADIUS + 4} />}
                 {node.quick ? (
                   <polygon {...shape} points={starPoints(node.x, node.y)} />
                 ) : (

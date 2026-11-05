@@ -68,6 +68,10 @@ function Legend() {
         In Vorbereitung
       </li>
       <li>
+        <i className="map-swatch is-chosen" />
+        Als Quest angenommen
+      </li>
+      <li>
         <span className="map-legend-mark is-star">★</span>Schneller Erfolg
       </li>
       <li>

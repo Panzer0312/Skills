@@ -210,6 +210,22 @@ describe("LessonPanel", () => {
     expect(within(box).queryByRole("button", { name: "Pausieren" })).not.toBeInTheDocument();
   });
 
+  it("offers Pausieren beside Hauptweg on a chosen best next", async () => {
+    const fetchMock = serve({ chosenLessons: [FIRST] });
+    renderMap();
+    const box = await panel();
+    expect(await within(box).findByText("Hauptweg")).toBeInTheDocument();
+    await userEvent.click(within(box).getByRole("button", { name: "Pausieren" }));
+    await waitFor(() =>
+      expect(writes(fetchMock)).toEqual([
+        { url: `/api/game/guitar/chosen/${FIRST}`, method: "DELETE", body: undefined },
+      ]),
+    );
+    await waitFor(() => expect(within(box).queryByRole("button", { name: "Pausieren" })).not.toBeInTheDocument());
+    expect(within(box).getByText("Hauptweg")).toBeInTheDocument();
+    expect(within(box).queryByRole("button", { name: "Als Quest annehmen" })).not.toBeInTheDocument();
+  });
+
   it("takes a lesson as quest", async () => {
     const fetchMock = serve({});
     renderMap(`/hafen/${OTHER}`);
@@ -266,6 +282,32 @@ describe("LessonPanel", () => {
     });
   });
 
+  it("shows a failed pick inside the dialog and keeps it open", async () => {
+    serve({ chosenLessons: CHOSEN });
+    renderMap(`/hafen/${OTHER}`);
+    await userEvent.click(await within(await panel()).findByRole("button", { name: "Als Quest annehmen" }));
+    const dialog = await screen.findByRole("dialog");
+    vi.stubGlobal("fetch", vi.fn(async () => json({ error: { code: "x", message: "Kaputt" } }, 500)));
+    await userEvent.click(within(dialog).getByRole("button", { name: titleOf(CHOSEN[0]!) }));
+    expect(await within(dialog).findByRole("alert")).toHaveTextContent("Kaputt");
+    expect(screen.getAllByRole("alert")).toHaveLength(1);
+
+    await userEvent.click(within(dialog).getByRole("button", { name: "Abbrechen" }));
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+  });
+
+  it("refreshes a stale list when the server reports the limit", async () => {
+    serve({ chosenLessons: [CHOSEN[0]!] });
+    renderMap(`/hafen/${OTHER}`);
+    const take = await within(await panel()).findByRole("button", { name: "Als Quest annehmen" });
+    serve({ chosenLessons: CHOSEN });
+    await userEvent.click(take);
+    const dialog = await screen.findByRole("dialog");
+    for (const id of CHOSEN) {
+      expect(await within(dialog).findByRole("button", { name: titleOf(id) })).toBeInTheDocument();
+    }
+  });
+
   it("shows a failed save", async () => {
     serve({});
     renderMap(`/hafen/${OTHER}`);
@@ -318,6 +360,45 @@ describe("LessonPanel", () => {
         { url: `/api/game/guitar/level/${techniqueId}`, method: "PUT", body: JSON.stringify({ level: 7 }) },
       ]),
     );
+  });
+
+  it("saves a burst of slider steps once, with the last value", async () => {
+    const techniqueId = nodeOf(OTHER).techniqueId!;
+    const fetchMock = serve({});
+    renderMap(`/hafen/${OTHER}`);
+    const slider = await within(await panel()).findByRole("slider", { name: "Deine Stufe" });
+    for (const value of ["4", "5", "6", "7"]) fireEvent.change(slider, { target: { value } });
+    expect(writes(fetchMock)).toEqual([]);
+    await waitFor(() => expect(writes(fetchMock)).toHaveLength(1));
+    await new Promise((resolve) => setTimeout(resolve, 400));
+    expect(writes(fetchMock)).toEqual([
+      { url: `/api/game/guitar/level/${techniqueId}`, method: "PUT", body: JSON.stringify({ level: 7 }) },
+    ]);
+  });
+
+  it("still saves the level when the player moves on at once", async () => {
+    const techniqueId = nodeOf(OTHER).techniqueId!;
+    const fetchMock = serve({});
+    renderMap(`/hafen/${OTHER}`);
+    const box = await panel();
+    fireEvent.change(await within(box).findByRole("slider", { name: "Deine Stufe" }), { target: { value: "8" } });
+    fireEvent.click(within(box).getByRole("button", { name: titleOf(nodeOf(OTHER).parent!) }));
+    await within(await panel()).findByRole("heading", { name: titleOf(nodeOf(OTHER).parent!) });
+    expect(writes(fetchMock)).toEqual([
+      { url: `/api/game/guitar/level/${techniqueId}`, method: "PUT", body: JSON.stringify({ level: 8 }) },
+    ]);
+  });
+
+  it("puts the slider back when the save fails", async () => {
+    serve({ levels: { [nodeOf(OTHER).techniqueId!]: 4 } });
+    renderMap(`/hafen/${OTHER}`);
+    const box = await panel();
+    const slider = await within(box).findByRole("slider", { name: "Deine Stufe" });
+    await waitFor(() => expect(slider).toHaveValue("4"));
+    vi.stubGlobal("fetch", vi.fn(async () => json({ error: { code: "x", message: "Kaputt" } }, 500)));
+    fireEvent.change(slider, { target: { value: "9" } });
+    expect(await within(box).findByRole("alert")).toHaveTextContent("Kaputt");
+    expect(slider).toHaveValue("4");
   });
 
   it("selects a linked lesson from the connections list", async () => {
@@ -394,6 +475,20 @@ describe("target song", () => {
     });
     expect(link).toHaveAttribute("href", "/songs/neu");
     expect(screen.queryByRole("button", { name: "Als Zielsong setzen" })).not.toBeInTheDocument();
+  });
+
+  it("reports a failed song list instead of asking to import", async () => {
+    patchNode(OTHER, { targetSong: BARDS });
+    serve({});
+    const stateOnly = vi.mocked(fetch);
+    vi.stubGlobal("fetch", vi.fn(async (url: string, init?: RequestInit) =>
+      String(url).startsWith("/api/songs") ? json({}, 500) : stateOnly(url, init),
+    ));
+    renderMap(`/hafen/${OTHER}`);
+    const box = await panel();
+    expect(await within(box).findByRole("alert")).toHaveTextContent("Deine Songs konnten nicht geladen werden.");
+    expect(within(box).queryByRole("link", { name: /Importiere den Song/ })).not.toBeInTheDocument();
+    expect(within(box).queryByRole("button", { name: "Als Zielsong setzen" })).not.toBeInTheDocument();
   });
 
   it("matches a curly apostrophe and other case as the same song", async () => {
@@ -485,15 +580,21 @@ describe("NavPane", () => {
     serve({});
     renderMap();
     const pane = await nav();
-    for (const entry of ["Leicht, 1 bis 3", "Mittel, 4 bis 6", "Schwer, 7 bis 10", "Schneller Erfolg", "In Vorbereitung"]) {
+    for (const entry of ["Leicht, 1 bis 3", "Mittel, 4 bis 6", "Schwer, 7 bis 10", "Schneller Erfolg", "In Vorbereitung", "Als Quest angenommen"]) {
       expect(within(pane).getByText(new RegExp(entry))).toBeInTheDocument();
     }
   });
 });
 
 describe("Das erste Jahr", () => {
-  const year = async () =>
-    (await within(await nav()).findByText("Das erste Jahr")).closest("details") as HTMLDetailsElement;
+  const year = async () => {
+    const summary = await within(await nav()).findByText("Das erste Jahr");
+    const details = summary.closest("details") as HTMLDetailsElement;
+    expect(details).not.toHaveAttribute("open");
+    await userEvent.click(summary);
+    expect(details).toHaveAttribute("open");
+    return details;
+  };
 
   it("lists every road step in road order with title and months, planned ones included", async () => {
     serve({});
@@ -645,6 +746,16 @@ describe("narrow screen", () => {
     expect(within(await list()).getAllByRole("button")).toHaveLength(count);
   });
 
+  it("labels rows like the map: aktiv only when chosen or best next", async () => {
+    serve({ lessons: { [FIRST]: "aktiv", "02-anschlag": "aktiv", "03-saiten-buende": "aktiv" }, chosenLessons: ["02-anschlag"] });
+    renderMap();
+    const items = await list();
+    const row = (id: string) => within(items).getByRole("button", { name: new RegExp(titleOf(id)) });
+    await waitFor(() => expect(row("03-saiten-buende")).toHaveTextContent("begonnen"));
+    expect(row(FIRST)).toHaveTextContent("· aktiv");
+    expect(row("02-anschlag")).toHaveTextContent("· aktiv");
+  });
+
   it("searches all paths from the list", async () => {
     serve({});
     renderMap();
@@ -670,6 +781,16 @@ describe("narrow screen", () => {
     await userEvent.click(row);
     expect(await within(await panel()).findByRole("heading", { name: titleOf("02-anschlag") })).toBeInTheDocument();
     expect(row).toHaveAttribute("aria-pressed", "true");
+  });
+});
+
+describe("the map's ring", () => {
+  it("follows the chosen lessons, not the status", async () => {
+    serve({ lessons: { "02-anschlag": "aktiv" }, chosenLessons: [OTHER] });
+    renderMap();
+    await panel();
+    await waitFor(() => expect(mapNode(titleOf(OTHER)).querySelector(".map-active-ring")).not.toBeNull());
+    expect(mapNode(titleOf("02-anschlag")).querySelector(".map-active-ring")).toBeNull();
   });
 });
 

@@ -7,7 +7,7 @@ import {
   type QuestDefinition,
 } from "@skills/core";
 import { useQuery, type UseQueryResult } from "@tanstack/react-query";
-import { api } from "../../../packages/web/src/api/client.js";
+import { api, ApiError } from "../../../packages/web/src/api/client.js";
 import { queryClient } from "../../../packages/web/src/app/queryClient.js";
 import map from "./map.json";
 import quests from "./quests.json";
@@ -78,9 +78,18 @@ export const gameApi = {
     refreshing(api.put<{ ok: true }>(`/api/game/${SKILL}/today`, { minutes, questIds })),
   placement: (body: PlacementBody) =>
     refreshing(api.post<{ ok: true }>(`/api/game/${SKILL}/placement`, body)),
-  /** Rejects with an ApiError of code `limit` when two lessons are chosen and `replace` is missing. */
-  chooseLesson: (id: string, replace?: string) =>
-    refreshing(api.put<{ ok: true }>(`/api/game/${SKILL}/chosen/${id}`, replace ? { replace } : {})),
+  /**
+   * Rejects with an ApiError of code `limit` when two lessons are chosen and `replace` is missing.
+   * The state is fresh by then, so whoever asks which lesson to pause lists the real ones.
+   */
+  chooseLesson: async (id: string, replace?: string) => {
+    try {
+      return await refreshing(api.put<{ ok: true }>(`/api/game/${SKILL}/chosen/${id}`, replace ? { replace } : {}));
+    } catch (e) {
+      if (e instanceof ApiError && e.code === "limit") await queryClient.invalidateQueries({ queryKey: GAME_KEY });
+      throw e;
+    }
+  },
   pauseLesson: (id: string) => refreshing(api.del<{ ok: true }>(`/api/game/${SKILL}/chosen/${id}`)),
   setTargetSong: (targetSongId: string | null) =>
     refreshing(api.put<{ ok: true }>(`/api/game/${SKILL}/target-song`, { targetSongId })),

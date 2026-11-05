@@ -87,7 +87,7 @@ export function parseGameContent(input: unknown): GameContent {
   return result.data;
 }
 
-function isUnfinished(status: LessonStatus | undefined): boolean {
+export function isUnfinished(status: LessonStatus | undefined): boolean {
   return status === undefined || status === "offen" || status === "aktiv";
 }
 
