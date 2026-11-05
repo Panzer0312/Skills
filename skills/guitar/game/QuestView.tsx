@@ -1,4 +1,4 @@
-import { scaleQuest, type GameState, type QuestDefinition } from "@skills/core";
+import { scaleQuest, type GameState, type QuestDefinition, type ScaledQuest } from "@skills/core";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -107,13 +107,24 @@ function useTargetSongTitle(targetSongId: string | null, data: unknown[]) {
   return { title: null, loading: false };
 }
 
+/** "Abschnitt: Strophe · 3 Durchläufe · 70 % Tempo", whichever parts the quest scales. */
+function songLine({ section, runs, tempoPercent }: ScaledQuest): string {
+  return [
+    section !== null ? `Abschnitt: ${section}` : null,
+    runs !== null ? `${runs} ${runs === 1 ? "Durchlauf" : "Durchläufe"}` : null,
+    tempoPercent !== null ? `${tempoPercent} % Tempo` : null,
+  ]
+    .filter((part) => part !== null)
+    .join(" · ");
+}
+
 function SongPanel({
   targetSongId,
-  tempoPercent,
+  scaled,
   data,
 }: {
   targetSongId: string | null;
-  tempoPercent: number | null;
+  scaled: ScaledQuest;
   data: unknown[];
 }) {
   const { title, loading } = useTargetSongTitle(targetSongId, data);
@@ -128,7 +139,7 @@ function SongPanel({
   return (
     <div>
       <p className="font-semibold">{title}</p>
-      {tempoPercent !== null ? <p>{tempoPercent} % Tempo</p> : null}
+      {songLine(scaled) ? <p>{songLine(scaled)}</p> : null}
       <Link to={`${GAME_BASE}/taverne`} className="underline">
         Zur Taverne
       </Link>
@@ -206,8 +217,13 @@ function QuestRun({ quest, state, data }: { quest: QuestDefinition; state: GameS
             Lektion lesen
           </Link>
         ) : null}
+        {quest.lessonId !== null ? (
+          <Link to={`${GAME_BASE}/hafen/${quest.lessonId}`} className="underline">
+            Auf der Karte
+          </Link>
+        ) : null}
         {quest.kind === "song" ? (
-          <SongPanel targetSongId={state.targetSongId} tempoPercent={scaled.tempoPercent} data={data} />
+          <SongPanel targetSongId={state.targetSongId} scaled={scaled} data={data} />
         ) : null}
         {pair ? (
           <ChordTrainer pair={pair} onResult={(n) => setTrainerValue((v) => Math.max(v ?? 0, n))} />

@@ -1,21 +1,64 @@
-import type { GameState } from "@skills/core";
+import type { GameState, MapNode } from "@skills/core";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../../../packages/web/src/api/client.js";
-import { sortLessons, type LessonMeta } from "../../../packages/web/src/mdx/lessons.js";
 import type { WidgetProps } from "../../../packages/web/src/skills/widgets.js";
 import { DEFAULT_LEVEL, GAME_BASE, gameApi, gameContent, useGameState } from "./api.js";
 import { ToolFrame } from "./Places.js";
 
-const lessonMeta = import.meta.glob("../lessons/*.mdx", { eager: true, import: "meta" });
-const lessons = sortLessons(Object.values(lessonMeta) as LessonMeta[]);
+/** Road order first, nodes the road does not name after it. */
+function roadOrder(nodes: MapNode[]): MapNode[] {
+  const rank = (node: MapNode) => {
+    const at = gameContent.road.findIndex((step) => step.lessonId === node.id);
+    return at === -1 ? gameContent.road.length : at;
+  };
+  return [...nodes].sort((a, b) => rank(a) - rank(b));
+}
+
+const available = gameContent.nodes.filter((node) => node.available);
+const KNOWN_SONGS = gameContent.nodes.filter((node) => node.knownSong);
+const ROAD_NODES = roadOrder(available.filter((node) => !node.knownSong && !node.quick));
+const QUICK_NODES = available.filter((node) => node.quick && !node.knownSong);
+const LISTED = [...ROAD_NODES, ...KNOWN_SONGS, ...QUICK_NODES];
 
 const KNOWN = new Set(["gelernt", "gemeistert"]);
 
 interface SongOption {
   value: string;
   title: string;
+}
+
+function NodeChecklist({
+  nodes,
+  known,
+  setKnown,
+}: {
+  nodes: MapNode[];
+  known: Set<string>;
+  setKnown: (next: Set<string>) => void;
+}) {
+  return (
+    <ul className="space-y-1">
+      {nodes.map((node) => (
+        <li key={node.id}>
+          <label className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              checked={known.has(node.id)}
+              onChange={(e) => {
+                const next = new Set(known);
+                if (e.target.checked) next.add(node.id);
+                else next.delete(node.id);
+                setKnown(next);
+              }}
+            />
+            {node.title}
+          </label>
+        </li>
+      ))}
+    </ul>
+  );
 }
 
 function PlacementForm({ state, songs }: { state: GameState; songs: SongOption[] }) {
@@ -38,7 +81,7 @@ function PlacementForm({ state, songs }: { state: GameState; songs: SongOption[]
     setError(null);
     try {
       await gameApi.placement({
-        knownLessonIds: lessons.filter((l) => known.has(l.id)).map((l) => l.id),
+        knownLessonIds: LISTED.filter((node) => known.has(node.id)).map((node) => node.id),
         levels,
         targetSongId: target === "" ? null : target,
       });
@@ -56,25 +99,19 @@ function PlacementForm({ state, songs }: { state: GameState; songs: SongOption[]
         <section>
           <h2 className="mb-3 text-lg font-semibold">Was kannst du schon?</h2>
           <p className="mb-3 text-sm">Hake „Akkordwechsel“ nur an, wenn deine Wechsel schon flüssig laufen.</p>
-          <ul className="space-y-1">
-            {lessons.map((lesson) => (
-              <li key={lesson.id}>
-                <label className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    checked={known.has(lesson.id)}
-                    onChange={(e) => {
-                      const next = new Set(known);
-                      if (e.target.checked) next.add(lesson.id);
-                      else next.delete(lesson.id);
-                      setKnown(next);
-                    }}
-                  />
-                  {lesson.title}
-                </label>
-              </li>
-            ))}
-          </ul>
+          <NodeChecklist nodes={ROAD_NODES} known={known} setKnown={setKnown} />
+          {KNOWN_SONGS.length > 0 ? (
+            <>
+              <h3 className="mb-2 mt-4 font-semibold">Songs, die du schon spielst</h3>
+              <NodeChecklist nodes={KNOWN_SONGS} known={known} setKnown={setKnown} />
+            </>
+          ) : null}
+          {QUICK_NODES.length > 0 ? (
+            <>
+              <h3 className="mb-2 mt-4 font-semibold">Schnelle Erfolge</h3>
+              <NodeChecklist nodes={QUICK_NODES} known={known} setKnown={setKnown} />
+            </>
+          ) : null}
         </section>
       ) : null}
       {step === 1 ? (

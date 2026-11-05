@@ -48,4 +48,9 @@ describe("buildTips", () => {
     expect(tips({ chosen: ["a"] }).stayOnTrack).toBe("Neben dem Hauptweg läuft ein Nebenweg. Das ist ein gutes Maß.");
     expect(tips().stayOnTrack).toBe("Bleib beim Hauptweg und nimm dir bei Lust einen Nebenweg dazu.");
   });
+  it("does not count the best next lesson as a side road", () => {
+    expect(tips({ chosen: ["r1"] }).stayOnTrack).toBe("Bleib beim Hauptweg und nimm dir bei Lust einen Nebenweg dazu.");
+    expect(tips({ chosen: ["r1", "a"] }).stayOnTrack).toBe("Neben dem Hauptweg läuft ein Nebenweg. Das ist ein gutes Maß.");
+    expect(tips({ chosen: ["r1", "a", "b"] }).stayOnTrack).toBe("Zwei Nebenwege reichen. Bring erst einen davon zu Ende.");
+  });
 });

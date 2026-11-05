@@ -59,7 +59,7 @@ export function useTodaySet(state: GameState, fetching: boolean) {
         statuses: state.lessons,
         hasTargetSong: state.targetSongId !== null,
         recentQuestIds: state.recentQuestIds,
-        chosenLessonIds: [],
+        chosenLessonIds: state.chosenLessons,
       }),
     );
   }
@@ -76,5 +76,5 @@ export function useTodaySet(state: GameState, fetching: boolean) {
     void build(minutes);
   });
 
-  return { quests, missing, minutes, saving, failed, save, build };
+  return { quests, missing, minutes, saving, writing, failed, save, build };
 }

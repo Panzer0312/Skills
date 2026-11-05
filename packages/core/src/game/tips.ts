@@ -33,7 +33,8 @@ export function buildTips(content: GameContent, statuses: Record<string, LessonS
   return {
     best,
     quick: quickWin(content.nodes, statuses),
-    stayOnTrack: stayOnTrackText(chosen.length),
+    // The lesson on the gold road is the main way, not a side road.
+    stayOnTrack: stayOnTrackText(chosen.filter((id) => id !== best?.lessonId).length),
     moreComing: best === null && content.road.some((step) => step.questId === null),
   };
 }

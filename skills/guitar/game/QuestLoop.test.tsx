@@ -35,7 +35,7 @@ const base: GameState = {
   lessons: {},
   records: {},
   recentQuestIds: [],
-  chosenLessonIds: [],
+  chosenLessons: [],
   today: null,
 };
 
@@ -180,6 +180,62 @@ describe("Quest Board", () => {
       }),
     });
     await waitFor(() => expect(screen.getByRole("button", { name: "10 min" })).toHaveAttribute("aria-pressed", "true"));
+  });
+
+  it("includes chosen lessons in a fresh set", async () => {
+    const fetchMock = serve({ chosenLessons: ["10-barre"] });
+    renderGame("/quests");
+    const expected = buildDailyQuests({
+      minutes: 30,
+      content: gameContent,
+      statuses: {},
+      hasTargetSong: false,
+      recentQuestIds: [],
+      chosenLessonIds: ["10-barre"],
+    });
+    expect(expected).toContain("barre-greifen");
+    await waitFor(() => expect(writes(fetchMock, "/today")).toEqual([{ minutes: 30, questIds: expected }]));
+  });
+
+  it("does not rebuild today's set when a lesson is taken", async () => {
+    const fetchMock = serve({ today: set, chosenLessons: ["10-barre"] });
+    renderGame("/quests");
+    const side = (await screen.findByRole("heading", { name: "Nebenwege" })).closest("div")!;
+    expect(side).toHaveTextContent("Barré");
+    expect(side).toHaveTextContent("Morgen dabei");
+    expect(screen.queryByRole("link", { name: /Barré-Akkorde greifen/ })).not.toBeInTheDocument();
+    expect(writes(fetchMock, "/today")).toEqual([]);
+  });
+
+  it("appends a chosen lesson's quest with Heute dazunehmen", async () => {
+    const fetchMock = serve({ today: set, chosenLessons: ["10-barre"] });
+    renderGame("/quests");
+    await userEvent.click(await screen.findByRole("button", { name: /heute dazunehmen/ }));
+    await waitFor(() =>
+      expect(writes(fetchMock, "/today")).toEqual([{ minutes: 30, questIds: [...set.questIds, "barre-greifen"] }]),
+    );
+    await waitFor(() => expect(screen.queryByRole("button", { name: /heute dazunehmen/ })).not.toBeInTheDocument());
+  });
+
+  it("blocks board writes while the village build runs", async () => {
+    const response = held();
+    serve({}, { today: () => response.promise });
+    renderGame();
+    await userEvent.click(await screen.findByRole("link", { name: /Quest Board/ }));
+    await screen.findByRole("heading", { name: "Quest Board" });
+    expect(screen.getByRole("button", { name: "10 min" })).toBeDisabled();
+    response.release(json({ ok: true }));
+    await waitFor(() => expect(screen.getByRole("button", { name: "10 min" })).toBeEnabled());
+  });
+
+  it("links a board row to its map node", async () => {
+    serve({ today: set });
+    renderGame("/quests");
+    const row = (await screen.findByRole("link", { name: /Haltungs-Check/ })).closest("li")!;
+    expect(within(row).getByRole("link", { name: "Auf der Karte" })).toHaveAttribute(
+      "href",
+      "/vollbild/guitar/spiel/hafen/01-haltung",
+    );
   });
 
   it("shows an error and retries when the set cannot be saved", async () => {
@@ -474,8 +530,14 @@ describe("quest view", () => {
     renderGame("/quest/song-ziel", [[{ id: "wiege", titel: "Eine Wiege" }]]);
     expect(await screen.findByText("Eine Wiege")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /Taverne/ })).toHaveAttribute("href", "/vollbild/guitar/spiel/taverne");
-    expect(screen.getByText("100 % Tempo")).toBeInTheDocument();
+    expect(screen.getByText("Abschnitt: Ganzer Song · 5 Durchläufe · 100 % Tempo")).toBeInTheDocument();
     expect(screen.queryByRole("link", { name: "Lektion lesen" })).not.toBeInTheDocument();
+  });
+
+  it("shows section, runs and tempo on a song quest", async () => {
+    serve({ targetSongId: "uebung:wiege", levels: { song: 5 } });
+    renderGame("/quest/song-ziel", [[{ id: "wiege", titel: "Eine Wiege" }]]);
+    expect(await screen.findByText("Abschnitt: Refrain · 3 Durchläufe · 72 % Tempo")).toBeInTheDocument();
   });
 
   it("resolves an imported target song", async () => {
@@ -498,6 +560,26 @@ describe("result dialog", () => {
     renderGame("/quest/akkordwechsel-takt");
     await saveResult();
     expect(writes(fetchMock, "/log")[0]).toMatchObject({ lessonId: "07-akkordwechsel", masteryTarget: 40 });
+  });
+
+  it("sends quick for a quick-win quest", async () => {
+    const node = gameContent.nodes.find((n) => n.id === "02-anschlag")!;
+    node.quick = true;
+    try {
+      const fetchMock = serve({});
+      renderGame("/quest/anschlag-takt");
+      await saveResult();
+      expect(writes(fetchMock, "/log")[0]).toMatchObject({ quick: true });
+    } finally {
+      node.quick = false;
+    }
+  });
+
+  it("sends no quick flag for other quests", async () => {
+    const fetchMock = serve({});
+    renderGame("/quest/anschlag-takt");
+    await saveResult();
+    expect(writes(fetchMock, "/log")[0]).not.toHaveProperty("quick");
   });
 
   it("sends no target for a lesson without a metric", async () => {

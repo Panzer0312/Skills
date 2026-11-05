@@ -111,7 +111,7 @@
       "id": "song-ziel", "title": "Dein Zielsong",
       "description": "Übe deinen Zielsong abschnittsweise. Beginne langsam und steigere das Tempo, sobald es sauber läuft.",
       "kind": "song", "techniqueId": "song", "lessonId": null, "minutes": 10, "icon": "song",
-      "scale": { "tempoPercent": [50, 100] }
+      "scale": { "tempoPercent": [50, 100], "sections": ["Intro", "Strophe", "Refrain", "Bridge", "Ganzer Song"], "runs": [2, 5] }
     }
   ]
 }

@@ -46,6 +46,11 @@ function QuestRow({
           </span>
         </Link>
         <LevelDots level={level} />
+        {quest.lessonId !== null ? (
+          <Link to={`${GAME_BASE}/hafen/${quest.lessonId}`} className="underline">
+            Auf der Karte
+          </Link>
+        ) : null}
         <div className="quest-buttons">
           <button
             type="button"
@@ -75,13 +80,21 @@ function QuestRow({
 }
 
 function Board({ state, fetching }: { state: GameState; fetching: boolean }) {
-  const { quests, missing, minutes, saving, failed, save, build } = useTodaySet(state, fetching);
+  const { quests, missing, minutes, saving, writing, failed, save, build } = useTodaySet(state, fetching);
+  const busy = saving || writing;
 
   const next = bestNext(gameContent.road, state.lessons);
   const nextQuest = gameContent.quests.find((quest) => (next ? quest.id === next.questId : quest.kind === "wechsel"));
   const chosen = new Set(quests.map((quest) => quest.id));
   const others = gameContent.quests.filter((quest) => !chosen.has(quest.id));
   const ids = quests.map((quest) => quest.id);
+  // Chosen lessons join a set that is already built only on request, otherwise tomorrow's.
+  const sideRoads = state.chosenLessons.flatMap((lessonId) => {
+    const node = gameContent.nodes.find((n) => n.id === lessonId);
+    if (!node) return [];
+    const sideQuest = gameContent.quests.find((q) => q.lessonId === lessonId);
+    return [{ node, quest: sideQuest, today: sideQuest ? chosen.has(sideQuest.id) : false }];
+  });
 
   return (
     <section className="game-panel quest-board">
@@ -93,7 +106,7 @@ function Board({ state, fetching }: { state: GameState; fetching: boolean }) {
             type="button"
             className="game-button"
             aria-pressed={length === minutes}
-            disabled={saving}
+            disabled={busy}
             onClick={() => {
               if (length !== minutes) void build(length);
             }}
@@ -134,7 +147,7 @@ function Board({ state, fetching }: { state: GameState; fetching: boolean }) {
             key={quest.id}
             quest={quest}
             state={state}
-            canRemove={quests.length > 1 && !saving}
+            canRemove={quests.length > 1 && !busy}
             onRemove={() =>
               void save(
                 minutes,
@@ -144,6 +157,36 @@ function Board({ state, fetching }: { state: GameState; fetching: boolean }) {
           />
         ))}
       </ul>
+
+      {sideRoads.length > 0 ? (
+        <div className="quest-side">
+          <h2>Nebenwege</h2>
+          <ul>
+            {sideRoads.map(({ node, quest: sideQuest, today }) => (
+              <li key={node.id}>
+                <Link to={`${GAME_BASE}/hafen/${node.id}`} className="underline">
+                  {node.title}
+                </Link>
+                {sideQuest && !today ? (
+                  <>
+                    {" "}
+                    <small>Morgen dabei</small>{" "}
+                    <button
+                      type="button"
+                      className="game-button"
+                      aria-label={`${node.title} heute dazunehmen`}
+                      disabled={busy}
+                      onClick={() => void save(minutes, [...ids, sideQuest.id])}
+                    >
+                      Heute dazunehmen
+                    </button>
+                  </>
+                ) : null}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
 
       <details className="quest-swap">
         <summary>Quest hinzufügen</summary>
@@ -157,7 +200,7 @@ function Board({ state, fetching }: { state: GameState; fetching: boolean }) {
                 type="button"
                 className="game-button"
                 aria-label={`${quest.title} hinzufügen`}
-                disabled={saving}
+                disabled={busy}
                 onClick={() => void save(minutes, [...ids, quest.id])}
               >
                 Hinzufügen

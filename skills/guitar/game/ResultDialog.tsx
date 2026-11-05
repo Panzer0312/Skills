@@ -125,6 +125,8 @@ export function ResultDialog({
     const masteryTarget =
       quest.lessonId !== null ? lessonMasteryTarget(gameContent.quests, quest.lessonId) : undefined;
 
+    const quick = gameContent.nodes.some((node) => node.id === quest.lessonId && node.quick);
+
     savingRef.current = true;
     setSaving(true);
     setError(null);
@@ -139,6 +141,7 @@ export function ResultDialog({
         rating,
         ...(value !== null && metricKey !== undefined ? { metricKey, metricValue: value } : {}),
         ...(masteryTarget !== undefined ? { masteryTarget } : {}),
+        ...(quick ? { quick: true } : {}),
       });
       onSaved();
       setResult(logged);

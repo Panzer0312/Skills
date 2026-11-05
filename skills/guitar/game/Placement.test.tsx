@@ -1,6 +1,6 @@
 import type { GameState } from "@skills/core";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -24,6 +24,7 @@ const base: GameState = {
   lessons: {},
   records: {},
   recentQuestIds: [],
+  chosenLessons: [],
   today: null,
 };
 
@@ -88,8 +89,9 @@ describe("Placement", () => {
     const fetchMock = serve({ songs: [{ id: 7, title: "Wonderwall" }] });
     renderPlacement([bundled]);
     expect(await screen.findByRole("heading", { name: "Was kannst du schon?" })).toBeInTheDocument();
-    expect(screen.getAllByRole("checkbox")).toHaveLength(13);
-    await userEvent.click(screen.getByRole("checkbox", { name: /Instrument und Haltung/ }));
+    const listed = gameContent.nodes.filter((n) => n.available || n.knownSong);
+    expect(screen.getAllByRole("checkbox")).toHaveLength(listed.length);
+    await userEvent.click(screen.getByRole("checkbox", { name: "Haltung" }));
     await userEvent.click(screen.getByRole("button", { name: "Weiter" }));
     expect(screen.getByRole("heading", { name: "Wie sicher fühlst du dich?" })).toBeInTheDocument();
     const tech = gameContent.techniques[0]!;
@@ -108,6 +110,24 @@ describe("Placement", () => {
     expect(body.levels[tech.id]).toBe(5);
     expect(body.levels[gameContent.techniques[1]!.id]).toBe(3);
     expect(body.targetSongId).toBe("uebung:em-am-wiege");
+  });
+
+  it("lists known songs in the placement and saves them", async () => {
+    const fetchMock = serve();
+    renderPlacement();
+    const heading = await screen.findByRole("heading", { name: "Songs, die du schon spielst" });
+    const songs = gameContent.nodes.filter((n) => n.knownSong);
+    expect(songs.length).toBeGreaterThan(0);
+    const list = heading.nextElementSibling as HTMLElement;
+    for (const song of songs) expect(within(list).getByRole("checkbox", { name: song.title })).toBeInTheDocument();
+    expect(screen.getAllByRole("checkbox").findIndex((box) => list.contains(box))).toBe(
+      gameContent.nodes.filter((n) => n.available && !n.knownSong && !n.quick).length,
+    );
+    await userEvent.click(within(list).getByRole("checkbox", { name: songs[0]!.title }));
+    await toSongStep();
+    await userEvent.click(screen.getByRole("button", { name: "Fertig" }));
+    await screen.findByRole("heading", { name: "Quest Board" });
+    expect(placementBody(fetchMock).knownLessonIds).toEqual([songs[0]!.id]);
   });
 
   it("asks to tick Akkordwechsel only when changes are already fluent", async () => {
@@ -157,7 +177,7 @@ describe("Placement", () => {
     });
     renderPlacement([bundled]);
     expect(await screen.findByRole("checkbox", { name: /Anschlag/ })).toBeChecked();
-    expect(screen.getByRole("checkbox", { name: /Instrument und Haltung/ })).not.toBeChecked();
+    expect(screen.getByRole("checkbox", { name: "Haltung" })).not.toBeChecked();
     await userEvent.click(screen.getByRole("button", { name: "Weiter" }));
     expect(screen.getByRole("slider", { name: tech.title })).toHaveValue("7");
     await userEvent.click(screen.getByRole("button", { name: "Weiter" }));
