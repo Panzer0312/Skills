@@ -6,6 +6,9 @@ const VISIBLE_FRETS = 4;
 const COLUMN_REM = 1.75; // w-6 (1.5rem) + gap-1 (0.25rem)
 const DOT_REM = 1.5;
 
+/** German spelling for the display: the plain note B is H. Altered notes stay as they are. */
+const germanNote = (note: string) => (note === "B" ? "H" : note);
+
 /** Finds a barre at `fretNumber`: two or more strings held down by the same finger. */
 function findBarre(shape: ChordShape, fretNumber: number): { start: number; end: number } | null {
   const byFinger = new Map<number, number[]>();
@@ -117,7 +120,7 @@ export function ChordDiagramSingle({
       </div>
 
       <p className="mt-3 text-xs text-slate-600 dark:text-slate-400">
-        Töne: {chordNotes(name).join(", ")}
+        Töne: {chordNotes(name).map(germanNote).join(", ")}
       </p>
 
       {onEdit ? (

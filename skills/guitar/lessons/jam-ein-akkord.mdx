@@ -1,8 +1,8 @@
 export const meta = { id: "jam-ein-akkord", title: "Jam über einen Akkord", order: 105, requires: null };
 
-import { GriffbrettBild, RhythmusRaster, Tab } from "../game/visuals/index";
+import { Griffbild, GriffbrettBild, RhythmusRaster, Tab } from "../game/visuals/index";
 
-<Ziel>Du erfindest über einem gleichmäßigen Em-Rhythmus freie Phrasen aus vier Tönen und landest jedes Mal auf E.</Ziel>
+<Ziel>Du erfindest im Wechsel mit einem gleichmäßigen Em-Rhythmus freie Phrasen aus vier Tönen und landest jedes Mal auf E.</Ziel>
 
 Jammen heißt: ohne Plan spielen und trotzdem ankommen. Dafür brauchst du nur vier Töne, die alle gut
 über Em klingen. Der Ton E ist dein Zuhause, denn nach ihm ist Em benannt. Jede Phrase endet dort.
@@ -30,7 +30,9 @@ das Metronom läuft durch. Ein Durchgang hat vier Takte:
 - Takt 3 und 4: deine Phrase. Sie endet spätestens auf der 3 von Takt 4 auf E. Auf der 4 wandert die
   Hand zurück zu Em.
 
-Der Em-Rhythmus in Takt 1:
+So greifst du Em, und das ist der Rhythmus in Takt 1:
+
+<Griffbild akkorde={["Em"]} />
 
 <RhythmusRaster muster="DDDD" zaehlzeiten={["1", "2", "3", "4"]} />
 
@@ -62,7 +64,7 @@ Zwei Beispiele für Takt 3 und 4. Die erste Phrase landet auf der 1 von Takt 4, 
 
 <Handhaltung>
 Für die Phrase bleibt die Hand im 5. Bund: Zeigefinger für Bund 5, Ringfinger für Bund 7, kleiner
-Finger für Bund 8. Der Weg zu Em und zurück geschieht in einem Schlag, also löse die Hand ohne Hast
+Finger für Bund 8. Der Weg zu Em und zurück dauert einen Schlag, also löse die Hand ohne Hast
 und lass sie als Ganzes wandern. Die Schlaghand bleibt locker und gleichmäßig.
 </Handhaltung>
 
@@ -71,14 +73,14 @@ Die Phrase hört irgendwo auf, und der Em-Rhythmus setzt zu spät wieder ein. Da
 einzelne Versuche. Prüfe: Liegt dein letzter Ton auf E, und kommt der nächste Em genau auf der 1?
 </Fehlerbild>
 
-<Merksatz>Spiel, was du willst, aber komm nach Hause: Das letzte Wort hat E.</Merksatz>
+<Merksatz>Spiel, was du willst, aber komm nach Hause: Das letzte Wort hat das E.</Merksatz>
 
-<Uebung bpm={70}>
-Metronom auf 70, ein Klick pro Schlag. Spiele erst beide Beispiele je zweimal im Vier-Takt-Durchgang.
+<Uebung bpm={60}>
+Metronom auf 60, ein Klick pro Schlag. Spiele erst beide Beispiele je zweimal im Vier-Takt-Durchgang.
 Dann fünf Minuten frei: Reihenfolge und Rhythmus wählst du selbst, nur der letzte Ton ist immer E.
 Pausen sind erlaubt. Zwei Töne und viel Luft sind schon eine Phrase.
 </Uebung>
 
 <Hinweis>Der Jam Room mit Begleitung kommt später. Für diese Übung brauchst du ihn nicht.</Hinweis>
 
-<Checkpoint>Du spielst acht Durchgänge bei 70 BPM ohne Stopp, und jede Phrase endet auf E.</Checkpoint>
+<Checkpoint>Du spielst acht Durchgänge bei 60 BPM ohne Stopp, und jede Phrase endet auf E.</Checkpoint>

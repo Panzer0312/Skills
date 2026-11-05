@@ -22,6 +22,16 @@ describe("ChordDiagramSingle", () => {
     expect(screen.getByTestId("base-fret")).toHaveTextContent(/\d+\. Bund/);
   });
 
+  it("names the plain note B as H in the note line", () => {
+    render(<ChordDiagramSingle name="Em" />);
+    expect(screen.getByText("Töne: E, G, H")).toBeInTheDocument();
+  });
+
+  it("leaves altered notes such as Bb as they are", () => {
+    render(<ChordDiagramSingle name="Bb" />);
+    expect(screen.getByText(/^Töne: /).textContent).toMatch(/Bb|A#/);
+  });
+
   it("does not show a base fret label for an open chord (baseFret 1)", () => {
     render(<ChordDiagramSingle name="Em" />);
     expect(screen.queryByTestId("base-fret")).not.toBeInTheDocument();
