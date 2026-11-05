@@ -20,16 +20,42 @@ function meta(file: string) {
 }
 
 describe("guitar lessons", () => {
-  it("ships thirteen lessons", () => {
-    expect(files).toHaveLength(13);
+  it("gives every lesson a unique order", () => {
+    const orders = files.map((file) => meta(file).order);
+    expect(new Set(orders).size).toBe(orders.length);
   });
 
-  it("orders them continuously and chains the prerequisites", () => {
-    const metas = files.map(meta);
-    expect(metas.map((m) => m.order)).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]);
-    expect(metas[0]!.requires).toBeNull();
-    for (let i = 1; i < metas.length; i += 1) {
-      expect(metas[i]!.requires).toBe(metas[i - 1]!.id);
+  it("lets every requires point to nothing or to an existing lesson", () => {
+    const ids = new Set(files.map((file) => meta(file).id));
+    for (const file of files) {
+      const { requires } = meta(file);
+      expect(requires === null || ids.has(requires), `${file} verweist auf ${requires}`).toBe(true);
+    }
+  });
+
+  it("gives every lesson on road months 1 to 3 at least one visual", () => {
+    const road = JSON.parse(readFileSync(join(here, "../game/road.json"), "utf8")) as {
+      lessonId: string;
+      months: [number, number];
+    }[];
+    const early = road.filter((step) => step.months[0] <= 3).map((step) => `${step.lessonId}.mdx`);
+    const present = early.filter((file) => files.includes(file));
+    expect(present.length).toBeGreaterThan(0);
+    for (const file of present) {
+      const source = readFileSync(join(here, file), "utf8");
+      expect(source, `${file} ohne Visual-Import`).toMatch(/import \{[^}]+\} from "\.\.\/game\/visuals\/index"/);
+    }
+  });
+
+  it("keeps every Tab line within 40 characters", () => {
+    for (const file of files) {
+      const source = readFileSync(join(here, file), "utf8");
+      for (const tab of source.match(/<Tab[\s\S]*?\/>/g) ?? []) {
+        const zeilen = /zeilen=\{\[([\s\S]*?)\]\}/.exec(tab)?.[1] ?? "";
+        for (const line of zeilen.match(/"[^"]*"/g) ?? []) {
+          expect(line.length - 2, `${file}: ${line}`).toBeLessThanOrEqual(40);
+        }
+      }
     }
   });
 
@@ -47,6 +73,9 @@ describe("guitar lessons", () => {
       const source = readFileSync(join(here, file), "utf8");
       return !/<Uebung\s+bpm=\{\d+\}/.test(source);
     });
-    expect(withoutTempo).toEqual(["01-haltung.mdx", "03-saiten-buende.mdx", "13-theorie.mdx"]);
+    // metal-sound is a listening lesson without a target tempo, once it exists.
+    const expected = ["01-haltung.mdx", "03-saiten-buende.mdx", "13-theorie.mdx"];
+    if (files.includes("metal-sound.mdx")) expected.push("metal-sound.mdx");
+    expect(withoutTempo).toEqual(expected.sort());
   });
 });

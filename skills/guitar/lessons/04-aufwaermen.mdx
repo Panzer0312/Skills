@@ -1,5 +1,7 @@
 export const meta = { id: "04-aufwaermen", title: "Aufwärmen und Fingerunabhängigkeit", order: 4, requires: "03-saiten-buende" };
 
+import { GriffbrettBild, Tab } from "../game/visuals/index";
+
 <Ziel>Du spielst die chromatische Übung 1-2-3-4 sauber über alle sechs Saiten, jeder Finger sein eigener Bund.</Ziel>
 
 Die vier Finger der Greifhand sind über Sehnen locker miteinander verbunden — deshalb zieht der
@@ -9,6 +11,28 @@ sondern trainierbare Trennung dieser Bewegungen.
 **Die Übung:** Zeigefinger auf Bund 1, Mittelfinger auf Bund 2, Ringfinger auf Bund 3, kleiner
 Finger auf Bund 4 — jeweils auf derselben Saite. Ein Finger pro Bund, immer derselbe Finger für
 denselben Bund.
+
+<GriffbrettBild
+  punkte={[
+    { saite: 6, bund: 1, text: "1" },
+    { saite: 6, bund: 2, text: "2" },
+    { saite: 6, bund: 3, text: "3" },
+    { saite: 6, bund: 4, text: "4" },
+  ]}
+  bis={4}
+/>
+
+<Tab
+  titel="1-2-3-4 auf der tiefen E-Saite, hinauf und hinab"
+  zeilen={[
+    "-----------------",
+    "-----------------",
+    "-----------------",
+    "-----------------",
+    "-----------------",
+    "1-2-3-4---4-3-2-1",
+  ]}
+/>
 
 <Handhaltung>
 Jeder Finger bleibt über „seinem" Bund stehen, auch wenn er gerade nicht greift — er schwebt nur

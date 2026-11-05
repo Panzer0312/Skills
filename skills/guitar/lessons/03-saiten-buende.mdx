@@ -1,11 +1,24 @@
 export const meta = { id: "03-saiten-buende", title: "Saiten, Bünde, Halbtonschritte", order: 3, requires: "02-anschlag" };
 
+import { GriffbrettBild } from "../game/visuals/index";
+
 <Ziel>Du kennst die Namen der leeren Saiten und weißt, dass jeder Bund einen Halbtonschritt bedeutet.</Ziel>
 
 Bevor die erste Melodie Sinn ergibt, muss die Landkarte des Griffbretts sitzen. Sechs Saiten, von
 tief nach hoch (von der dicksten zur dünnsten Saite, wenn die Gitarre normal gehalten wird):
 
 E – A – D – G – H – E
+
+<GriffbrettBild
+  punkte={[
+    { saite: 1, bund: 0, text: "E" },
+    { saite: 2, bund: 0, text: "H" },
+    { saite: 3, bund: 0, text: "G" },
+    { saite: 4, bund: 0, text: "D" },
+    { saite: 5, bund: 0, text: "A" },
+    { saite: 6, bund: 0, text: "E" },
+  ]}
+/>
 
 Merkhilfe: „**E**ine **A**lte **D**ame **G**eht **H**eute **E**inkaufen."
 
@@ -30,6 +43,19 @@ Metallstäbchen.
 
 Kontrollpunkte am Griffbrett heißen **Bundmarkierungen** (Punkte am 3., 5., 7., 9. und 12. Bund,
 der 12. meist doppelt). Sie sind reine Orientierungshilfen, kein musikalisches Muster.
+
+Die Bundmarkierungen auf der tiefen E-Saite:
+
+<GriffbrettBild
+  punkte={[
+    { saite: 6, bund: 3, text: "3" },
+    { saite: 6, bund: 5, text: "5" },
+    { saite: 6, bund: 7, text: "7" },
+    { saite: 6, bund: 9, text: "9" },
+    { saite: 6, bund: 12, text: "12" },
+  ]}
+  bis={12}
+/>
 
 <Uebung>
 Sage laut die sechs Saitennamen von tief nach hoch auf, dann rückwärts. Wiederhole, bis es ohne

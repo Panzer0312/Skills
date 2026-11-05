@@ -1,5 +1,7 @@
 export const meta = { id: "08-schlagmuster", title: "Schlagmuster", order: 8, requires: "07-akkordwechsel" };
 
+import { RhythmusRaster } from "../game/visuals/index";
+
 <Ziel>Du spielst ein Achtel-Schlagmuster mit durchgehender Hand über einem Akkordwechsel, ohne dass der Puls stockt.</Ziel>
 
 Ein Schlagmuster besteht aus Abwärts- (↓) und Aufwärtsschlägen (↑), die einem festen Achtel-Puls
@@ -8,6 +10,8 @@ im Achtelpuls, auch über Schläge hinweg, bei denen keine Saite getroffen wird.
 
 **Grundmuster:** ↓ – ↓↑ – ↑↓ – ↑ (Zählweise: 1 – 2&2 – &3 – 4&, mit „&" als angehobener Zwischenschlag).
 Die Aufwärtsbewegung zwischen den Zählzeiten schlägt oft nur die oberen drei bis vier Saiten.
+
+<RhythmusRaster muster="D-DU-UDU" />
 
 <Handhaltung>
 Das Handgelenk schwingt im gleichmäßigen Achtelpuls wie ein Pendel, unabhängig davon, ob gerade eine

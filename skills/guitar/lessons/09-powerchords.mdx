@@ -1,5 +1,7 @@
 export const meta = { id: "09-powerchords", title: "Power Chords und Palm Mute", order: 9, requires: "08-schlagmuster" };
 
+import { GriffbrettBild, Tab } from "../game/visuals/index";
+
 <Ziel>Du greifst Power Chords (Quinten) auf der tiefen E- und A-Saite und schlägst sie mit Palm Mute an.</Ziel>
 
 Ein Power Chord besteht nur aus Grundton und Quinte — kein Terz, deshalb weder Dur noch Moll. Das
@@ -9,6 +11,28 @@ anderen Bund verschieben.
 **Form auf der tiefen E-Saite:** Zeigefinger greift den Grundton, Ringfinger zwei Bünde tiefer auf
 der A-Saite (dieselbe Bundnummer plus zwei). Nur diese zwei Saiten klingen mit, die restlichen vier
 bleiben stumm.
+
+Die Form mit Grundton auf dem 3. Bund (G5): Zeigefinger (1) auf der tiefen E-Saite, Ringfinger (3) auf der A-Saite.
+
+<GriffbrettBild
+  punkte={[
+    { saite: 6, bund: 3, text: "1" },
+    { saite: 5, bund: 5, text: "3" },
+  ]}
+  bis={5}
+/>
+
+<Tab
+  titel="G5 – A5 – H5"
+  zeilen={[
+    "-----------",
+    "-----------",
+    "-----------",
+    "-----------",
+    "5---7---9--",
+    "3---5---7--",
+  ]}
+/>
 
 <Handhaltung>
 Der Ringfinger liegt so, dass er leicht auch die D-Saite abdämpft — das ist erwünscht. Die

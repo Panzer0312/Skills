@@ -1,5 +1,7 @@
 export const meta = { id: "02-anschlag", title: "Die Anschlagshand", order: 2, requires: "01-haltung" };
 
+import { RhythmusRaster, Tab } from "../game/visuals/index";
+
 <Ziel>Du schlägst mit Pick oder Daumen gleichmäßig einzelne Saiten an, im Abwärts- und im Aufwärtsschlag.</Ziel>
 
 Bevor die Greifhand überhaupt einen Ton formt, muss die Anschlagshand zuverlässig Töne erzeugen —
@@ -9,6 +11,24 @@ gleichmäßig laut, gleichmäßig lang, ohne Nachbarsaiten zu berühren. Übe da
 **Pick-Haltung:** Der Pick liegt auf der Seite des Zeigefingers, oberhalb des ersten
 Fingergelenks, und wird vom Daumen fixiert. Es ragt nur die Spitze heraus — etwa ein halber
 Zentimeter. Zu viel Pick ragt heraus, wenn er beim Anschlag umknickt.
+
+Reiner Abwärtsschlag (↓↓↓↓), dann Wechselschlag (↓↑↓↑) auf der leeren A-Saite:
+
+<RhythmusRaster muster="DDDD" zaehlzeiten={["1", "2", "3", "4"]} />
+
+<RhythmusRaster muster="DUDU" zaehlzeiten={["1", "2", "3", "4"]} />
+
+<Tab
+  titel="Leere A-Saite"
+  zeilen={[
+    "--------",
+    "--------",
+    "--------",
+    "--------",
+    "0-0-0-0-",
+    "--------",
+  ]}
+/>
 
 <Handhaltung>
 Der Pick trifft die Saite in einem leichten Winkel, nicht flach parallel zur Saite. Die Bewegung

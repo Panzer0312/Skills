@@ -1,5 +1,7 @@
 export const meta = { id: "05-erste-toene", title: "Erste saubere Töne", order: 5, requires: "04-aufwaermen" };
 
+import { GriffbrettBild, Tab } from "../game/visuals/index";
+
 <Ziel>Du greifst einzelne Töne auf verschiedenen Saiten und Bünden so, dass sie klar klingen — kein Schnarren, kein Dämpfen.</Ziel>
 
 Ein sauberer Einzelton ist die kleinste Einheit, an der sich alles später Gelernte messen lässt.
@@ -29,6 +31,30 @@ Metronom auf 70. Greife nacheinander den 1., 3., 5. und 7. Bund auf der D-Saite,
 jeden Ton stehen lassen bis zum nächsten Schlag. Wiederhole auf der G- und der H-Saite. Ziel: jeder
 einzelne Ton klingt klar, ohne Schnarren, bis der nächste Schlag kommt.
 </Uebung>
+
+Die Übung auf der D-Saite, Bund 1, 3, 5 und 7:
+
+<GriffbrettBild
+  punkte={[
+    { saite: 4, bund: 1, text: "1" },
+    { saite: 4, bund: 3, text: "3" },
+    { saite: 4, bund: 5, text: "5" },
+    { saite: 4, bund: 7, text: "7" },
+  ]}
+  bis={7}
+/>
+
+<Tab
+  titel="Bund 1, 3, 5, 7 auf der D-Saite"
+  zeilen={[
+    "-------",
+    "-------",
+    "-------",
+    "1-3-5-7",
+    "-------",
+    "-------",
+  ]}
+/>
 
 <Checkpoint>Du greifst zehn zufällig gewählte Einzeltöne auf verschiedenen Saiten und Bünden hintereinander,
 jeder klingt klar und ohne Schnarren.</Checkpoint>
