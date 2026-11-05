@@ -73,9 +73,27 @@
       }
     },
     {
+      "id": "ankerfinger-wechsel", "title": "Ankerfinger",
+      "description": "Wechsle Am–C, C–G und Em–G im Takt. Bei Am–C bleiben Zeige- und Mittelfinger liegen, bei den anderen beiden setzt du die ganze Form gleichzeitig auf.",
+      "kind": "technik", "techniqueId": "akkordwechsel", "lessonId": "rhythmus-ankerfinger", "minutes": 10, "icon": "chord",
+      "scale": { "bpm": [50, 90] }
+    },
+    {
+      "id": "drei-akkord-song", "title": "Drei-Akkord-Song",
+      "description": "Spiele „Zwei Akkorde, eine Wiege“ und „Wanderung zu zweit“ hintereinander: acht Takte mit Em, Am und C, ein Abschlag pro Schlag.",
+      "kind": "technik", "techniqueId": "akkordwechsel", "lessonId": "rhythmus-drei-akkorde", "minutes": 15, "icon": "song",
+      "scale": { "bpm": [50, 75] }
+    },
+    {
       "id": "schlagmuster", "title": "Schlagmuster üben",
       "description": "Spiele ein Schlagmuster auf einem Akkord, bis die Schlaghand von allein läuft. Das Metronom gibt den Takt vor.",
       "kind": "technik", "techniqueId": "rhythmus", "lessonId": "08-schlagmuster", "minutes": 10, "icon": "strum",
+      "scale": { "bpm": [60, 100] }
+    },
+    {
+      "id": "achtel-fluss", "title": "Achtel im Fluss",
+      "description": "Zähle laut 1 + 2 + 3 + 4 + und spiele die drei Muster. Die Hand läuft durch, auch bei Leerschlägen.",
+      "kind": "technik", "techniqueId": "rhythmus", "lessonId": "rhythmus-achtel", "minutes": 10, "icon": "strum",
       "scale": { "bpm": [60, 100] }
     },
     {
@@ -95,6 +113,18 @@
       "description": "Spiele die Moll-Pentatonik in Box 1 auf- und abwärts, langsam und mit gleichmäßigem Anschlag.",
       "kind": "technik", "techniqueId": "lead", "lessonId": "11-pentatonik", "minutes": 10, "icon": "scale",
       "scale": { "bpm": [60, 100] }
+    },
+    {
+      "id": "solo-drei-toene", "title": "Solo aus drei Tönen",
+      "description": "Spiele die Phrase aus E, G und A im Takt und erfinde eine eigene. Der letzte Ton ist A und klingt voll aus.",
+      "kind": "technik", "techniqueId": "lead", "lessonId": "lead-drei-toene", "minutes": 10, "icon": "scale",
+      "scale": { "bpm": [60, 100] }
+    },
+    {
+      "id": "jam-em", "title": "Jam über Em",
+      "description": "Wechsle dich mit dir selbst ab: zwei Takte Em, zwei Takte Phrase aus D, E, G und A. Jede Phrase endet auf E.",
+      "kind": "technik", "techniqueId": "jam", "lessonId": "jam-ein-akkord", "minutes": 10, "icon": "scale",
+      "scale": { "bpm": [60, 90] }
     },
     {
       "id": "spieltechniken", "title": "Hammer-on, Pull-off und Bending",

@@ -1,0 +1,50 @@
+export const meta = { id: "rhythmus-drei-akkorde", title: "Drei-Akkord-Song", order: 103, requires: null };
+
+import { Griffbild, RhythmusRaster } from "../game/visuals/index";
+
+<Ziel>Du spielst in etwa 15 Minuten acht Takte mit Em, Am und C ohne Anhalten von vorn bis hinten.</Ziel>
+
+Zwei Übungsstücke aus der Taverne passen genau aneinander: **Zwei Akkorde, eine Wiege** (Em, Am) endet
+auf Am, und **Wanderung zu zweit** (Am, C) beginnt auf Am. Hintereinander gespielt sind sie ein kleiner
+Song mit drei Akkorden. Du kennst alle drei aus „Offene Akkorde".
+
+Jeder Akkord dauert einen Takt, also vier Schläge:
+
+- Wiege: Em, Am, Em, Am
+- Wanderung: Am, C, Am, C
+
+<Griffbild akkorde={["Em", "Am", "C"]} />
+
+Die Schlaghand macht nur eines: ein Abschlag auf jeden Schlag.
+
+<RhythmusRaster muster="DDDD" zaehlzeiten={["1", "2", "3", "4"]} />
+
+<Handhaltung>
+Die Augen sind schon beim nächsten Akkord, bevor du wechselst. Beim Wechsel Am–C bleiben Zeige- und
+Mittelfinger liegen, nur der Ringfinger wandert. Bei Em–Am setzen alle Finger gleichzeitig auf. Am
+und C schlägst du ab der A-Saite an, Em über alle sechs Saiten.
+</Handhaltung>
+
+<Fehlerbild>
+Du hältst an, um nachzugreifen, und das Stück zerfällt in einzelne Takte. Wenn das immer an derselben
+Stelle passiert, ist das Tempo zu hoch. Geh mit dem Metronom herunter, statt anzuhalten. Prüfe: Läuft
+deine Schlaghand durch, auch wenn der Akkord noch nicht ganz sitzt?
+</Fehlerbild>
+
+<Merksatz>Ein ganzes Stück langsam schlägt einen halben Takt schnell.</Merksatz>
+
+<Uebung bpm={60}>
+Metronom auf 60, ein Abschlag pro Klick. Du brauchst 15 Minuten:
+
+1. Fünf Minuten: die Wiege (Em, Am, Em, Am), immer wieder von vorn.
+2. Fünf Minuten: die Wanderung (Am, C, Am, C), immer wieder von vorn.
+3. Fünf Minuten: beide hintereinander, alle acht Takte. Am Übergang spielst du zwei Takte Am, dort
+   kannst du kurz durchatmen.
+
+Sitzt ein Abschnitt noch nicht, geh auf 50 BPM zurück.
+</Uebung>
+
+<Hinweis>In der Taverne stehen die beiden Stücke mit 70 und 75 BPM. Das ist das nächste Ziel, für heute
+reichen 60 BPM.</Hinweis>
+
+<Checkpoint>Du spielst alle acht Takte bei 60 BPM einmal durch, ohne anzuhalten.</Checkpoint>

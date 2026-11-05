@@ -1,0 +1,57 @@
+export const meta = { id: "rhythmus-achtel", title: "Achtel im Fluss", order: 102, requires: null };
+
+import { RhythmusRaster } from "../game/visuals/index";
+
+<Ziel>Du zählst Achtel laut mit, deine Hand läuft ohne Pause, und du setzt Leerschläge bewusst ein.</Ziel>
+
+Ein Takt hat vier Schläge. Teilst du jeden Schlag in zwei, bekommst du acht Achtel: 1 + 2 + 3 + 4 +.
+Gesprochen: „eins und zwei und drei und vier und". Das Metronom klickt auf die Zahlen, das „+" liegt
+genau in der Mitte zwischen zwei Klicks.
+
+**Die Regel für die Hand:** Auf jeder Zahl geht sie abwärts, auf jedem „+" aufwärts. Immer. Ein
+Leerschlag ändert daran nichts: Die Hand macht dieselbe Bewegung, geht aber an den Saiten vorbei.
+Im Raster steht dafür ein Punkt.
+
+**Muster 1: alle acht Achtel.** Hier triffst du jeden Schlag. So lernt die Hand das Pendel.
+
+<RhythmusRaster muster="DUDUDUDU" />
+
+**Muster 2: zwei Leerschläge aufwärts.** Auf dem „+" nach der 1 und nach der 3 fährt die Hand ohne
+Ton nach oben.
+
+<RhythmusRaster muster="D-DUD-DU" />
+
+**Muster 3: das Grundmuster aus „Schlagmuster".** Der erste Leerschlag geht aufwärts, auf dem „+" nach
+der 1. Der zweite geht abwärts, auf der 3. Das ist die schwerste Stelle, denn dort fehlt ein Schlag
+auf einer Zahl.
+
+<RhythmusRaster muster="D-DU-UDU" />
+
+<Handhaltung>
+Die Bewegung kommt aus dem lockeren Handgelenk, der Unterarm schwingt leicht mit. Für einen
+Leerschlag änderst du nicht das Tempo der Hand, sondern nur ihre Höhe: Sie fährt knapp über den
+Saiten vorbei. Den Pick hältst du locker, damit die Hand nicht verkrampft.
+</Handhaltung>
+
+<Fehlerbild>
+Die Hand wartet beim Leerschlag kurz. Danach landet der nächste Abschlag zu früh oder auf dem „+".
+Prüfe: Sprich laut mit und schaue auf deine Hand. Bei jeder Zahl muss sie nach unten gehen. Geht sie
+auf einer Zahl nach oben, ist das Pendel gekippt.
+</Fehlerbild>
+
+<Merksatz>Zahl abwärts, „+" aufwärts. Ob du triffst, entscheidet das Muster, nicht die Hand.</Merksatz>
+
+<Uebung bpm={70}>
+Metronom auf 70, ein Klick pro Zahl. Greife Em und spiele jedes Muster vier Takte lang, laut zählend:
+erst Muster 1, dann 2, dann 3.
+
+Danach Muster 2 mit Wechsel Em → C alle vier Takte. Der Trick für den Wechsel: Löse die Greifhand auf
+dem letzten „+" vor dem Wechsel. Der Aufschlag trifft dann leere Saiten, und die Schlaghand läuft weiter,
+während du zum neuen Akkord wanderst. Bei C schlägst du wie gewohnt ab der A-Saite an.
+</Uebung>
+
+<Hinweis>Fängt es an zu wackeln, geh auf 60 BPM zurück. Erst wenn Zählen und Hand zusammen stimmen, wird
+es schneller.</Hinweis>
+
+<Checkpoint>Du spielst Muster 3 acht Takte lang bei 70 BPM, zählst laut mit, und die Hand stoppt kein
+einziges Mal.</Checkpoint>

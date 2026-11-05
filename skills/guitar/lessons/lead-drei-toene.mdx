@@ -1,0 +1,60 @@
+export const meta = { id: "lead-drei-toene", title: "Solo aus drei Tönen", order: 104, requires: null };
+
+import { GriffbrettBild, Tab } from "../game/visuals/index";
+
+<Ziel>Du spielst eine kurze Phrase aus drei Tönen im Takt, und ihr letzter Ton klingt voll aus.</Ziel>
+
+Ein Solo braucht keine schnellen Finger. Drei Töne aus der A-Moll-Pentatonik reichen schon. Die
+Pentatonik ist eine Auswahl aus fünf Tönen, die gut zusammen klingen, hier nimmst du nur drei davon.
+
+- Ton E: H-Saite, Bund 5, Zeigefinger
+- Ton G: H-Saite, Bund 8, kleiner Finger
+- Ton A: hohe E-Saite, Bund 5, Zeigefinger
+
+<GriffbrettBild
+  punkte={[
+    { saite: 2, bund: 5, text: "E" },
+    { saite: 2, bund: 8, text: "G" },
+    { saite: 1, bund: 5, text: "A" },
+  ]}
+  bis={8}
+/>
+
+Die Phrase dauert zwei Takte. A ist hier der Ton, der nach Ankommen klingt, deshalb steht er am Schluss.
+
+- Takt 1: E auf 1, G auf 2, A auf 3, G auf 4
+- Takt 2: E auf 1 und zwei Schläge halten, A auf 3 und zwei Schläge halten
+
+<Tab
+  titel="Phrase aus drei Tönen, zwei Takte"
+  zeilen={[
+    "--------5-------|--------5-------",
+    "5---8-------8---|5---------------",
+    "----------------|----------------",
+    "----------------|----------------",
+    "----------------|----------------",
+    "----------------|----------------",
+  ]}
+/>
+
+<Handhaltung>
+Die Hand bleibt die ganze Phrase im 5. Bund: Der Zeigefinger ist für Bund 5 zuständig, der kleine
+Finger für Bund 8. Der Daumen liegt hinter dem Hals, etwa gegenüber dem Mittelfinger. Schlage jeden
+Ton mit einem Abschlag an.
+</Handhaltung>
+
+<Fehlerbild>
+Der letzte Ton wird abgewürgt, weil du schon wieder von vorn anfangen willst. Dann klingt die Phrase
+wie eine Fingerübung. Prüfe: Hörst du das A am Ende volle zwei Schläge lang, bevor du neu beginnst?
+</Fehlerbild>
+
+<Merksatz>Ein Ton, der lange klingt, sagt mehr als zehn schnelle.</Merksatz>
+
+<Uebung bpm={70}>
+Metronom auf 70, ein Klick pro Schlag. Spiele die Phrase viermal hintereinander, mit einem Takt Pause
+dazwischen. Danach erfindest du eine eigene: dieselben drei Töne, andere Reihenfolge, zwei Takte lang,
+und der letzte Ton ist wieder A.
+</Uebung>
+
+<Checkpoint>Du spielst die Phrase viermal bei 70 BPM im Takt, und das A klingt jedes Mal zwei volle
+Schläge lang.</Checkpoint>

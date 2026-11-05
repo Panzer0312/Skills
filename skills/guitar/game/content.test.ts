@@ -21,6 +21,14 @@ const lessonIds = Array.from({ length: 13 }, (_, i) => i + 1).map((n) => {
   return { prefix, id: content.road.find((s) => s.lessonId.startsWith(prefix))?.lessonId };
 });
 
+const WRITTEN_IN_STAGE_2 = [
+  "rhythmus-ankerfinger",
+  "rhythmus-achtel",
+  "rhythmus-drei-akkorde",
+  "lead-drei-toene",
+  "jam-ein-akkord",
+];
+
 describe("guitar game content", () => {
   it("references existing lesson files", () => {
     for (const quest of content.quests) {
@@ -139,6 +147,17 @@ describe("skill map content", () => {
     const onRoad = new Set(content.road.map((step) => step.lessonId));
     for (const node of content.nodes.filter((n) => n.available)) {
       expect(onRoad.has(node.id) || node.quick, node.id).toBe(true);
+    }
+  });
+  it("opens every lesson written in stage 2, with a quest, on the road or as a quick win", () => {
+    const onRoad = new Map(content.road.map((step) => [step.lessonId, step]));
+    for (const id of WRITTEN_IN_STAGE_2) {
+      const node = content.nodes.find((n) => n.id === id);
+      const quest = content.quests.find((q) => q.lessonId === id);
+      expect(node?.available, id).toBe(true);
+      expect(quest?.techniqueId, id).toBe(node?.techniqueId);
+      expect(Object.keys(quest?.scale ?? {}), id).not.toHaveLength(0);
+      expect(node?.quick || onRoad.get(id)?.questId === quest?.id, id).toBe(true);
     }
   });
   it("orders road months without going backwards", () => {

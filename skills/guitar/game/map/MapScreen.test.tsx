@@ -674,7 +674,8 @@ describe("TipsBoard", () => {
     first.unmount();
 
     queryClient.clear();
-    serve({ lessons: { [quick.id]: "gelernt" } });
+    const quickWins = gameContent.nodes.filter((node) => node.quick && node.available);
+    serve({ lessons: Object.fromEntries(quickWins.map((node) => [node.id, "gelernt" as LessonStatus])) });
     renderMap();
     expect(await within(await tips()).findByText("Verfeinern")).toBeInTheDocument();
   });

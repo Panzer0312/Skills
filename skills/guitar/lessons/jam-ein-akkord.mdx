@@ -1,0 +1,84 @@
+export const meta = { id: "jam-ein-akkord", title: "Jam über einen Akkord", order: 105, requires: null };
+
+import { GriffbrettBild, RhythmusRaster, Tab } from "../game/visuals/index";
+
+<Ziel>Du erfindest über einem gleichmäßigen Em-Rhythmus freie Phrasen aus vier Tönen und landest jedes Mal auf E.</Ziel>
+
+Jammen heißt: ohne Plan spielen und trotzdem ankommen. Dafür brauchst du nur vier Töne, die alle gut
+über Em klingen. Der Ton E ist dein Zuhause, denn nach ihm ist Em benannt. Jede Phrase endet dort.
+
+- Ton D: G-Saite, Bund 7, Ringfinger
+- Ton E: H-Saite, Bund 5, Zeigefinger
+- Ton G: H-Saite, Bund 8, kleiner Finger
+- Ton A: hohe E-Saite, Bund 5, Zeigefinger
+
+<GriffbrettBild
+  punkte={[
+    { saite: 3, bund: 7, text: "D" },
+    { saite: 2, bund: 5, text: "E" },
+    { saite: 2, bund: 8, text: "G" },
+    { saite: 1, bund: 5, text: "A" },
+  ]}
+  bis={8}
+/>
+
+Em und Phrase kannst du nicht gleichzeitig spielen. Deshalb wechselst du dich mit dir selbst ab, und
+das Metronom läuft durch. Ein Durchgang hat vier Takte:
+
+- Takt 1: Em, vier Abschläge
+- Takt 2: Em, Abschläge auf 1, 2 und 3. Auf der 4 wandert die Hand in den 5. Bund.
+- Takt 3 und 4: deine Phrase. Sie endet spätestens auf der 3 von Takt 4 auf E. Auf der 4 wandert die
+  Hand zurück zu Em.
+
+Der Em-Rhythmus in Takt 1:
+
+<RhythmusRaster muster="DDDD" zaehlzeiten={["1", "2", "3", "4"]} />
+
+Zwei Beispiele für Takt 3 und 4. Die erste Phrase landet auf der 1 von Takt 4, die zweite auf der 2.
+
+<Tab
+  titel="Phrase 1: G A G D, dann E"
+  zeilen={[
+    "----5-----------|----------------",
+    "8-------8-------|5---------------",
+    "------------7---|----------------",
+    "----------------|----------------",
+    "----------------|----------------",
+    "----------------|----------------",
+  ]}
+/>
+
+<Tab
+  titel="Phrase 2: D E G A, dann G und E"
+  zeilen={[
+    "------------5---|----------------",
+    "----5---8-------|8---5-----------",
+    "7---------------|----------------",
+    "----------------|----------------",
+    "----------------|----------------",
+    "----------------|----------------",
+  ]}
+/>
+
+<Handhaltung>
+Für die Phrase bleibt die Hand im 5. Bund: Zeigefinger für Bund 5, Ringfinger für Bund 7, kleiner
+Finger für Bund 8. Der Weg zu Em und zurück geschieht in einem Schlag, also löse die Hand ohne Hast
+und lass sie als Ganzes wandern. Die Schlaghand bleibt locker und gleichmäßig.
+</Handhaltung>
+
+<Fehlerbild>
+Die Phrase hört irgendwo auf, und der Em-Rhythmus setzt zu spät wieder ein. Dann zerfällt der Jam in
+einzelne Versuche. Prüfe: Liegt dein letzter Ton auf E, und kommt der nächste Em genau auf der 1?
+</Fehlerbild>
+
+<Merksatz>Spiel, was du willst, aber komm nach Hause: Das letzte Wort hat E.</Merksatz>
+
+<Uebung bpm={70}>
+Metronom auf 70, ein Klick pro Schlag. Spiele erst beide Beispiele je zweimal im Vier-Takt-Durchgang.
+Dann fünf Minuten frei: Reihenfolge und Rhythmus wählst du selbst, nur der letzte Ton ist immer E.
+Pausen sind erlaubt. Zwei Töne und viel Luft sind schon eine Phrase.
+</Uebung>
+
+<Hinweis>Der Jam Room mit Begleitung kommt später. Für diese Übung brauchst du ihn nicht.</Hinweis>
+
+<Checkpoint>Du spielst acht Durchgänge bei 70 BPM ohne Stopp, und jede Phrase endet auf E.</Checkpoint>

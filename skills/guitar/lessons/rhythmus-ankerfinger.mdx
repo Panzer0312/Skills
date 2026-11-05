@@ -1,0 +1,74 @@
+export const meta = { id: "rhythmus-ankerfinger", title: "Ankerfinger", order: 101, requires: null };
+
+import { Griffbild } from "../game/visuals/index";
+
+<Ziel>Du weißt bei Am–C, C–G und Em–G genau, welcher Finger wohin geht, und wechselst ohne unnötige Bewegung.</Ziel>
+
+Ein Ankerfinger bleibt beim Wechsel auf seinem Platz liegen. Das spart Weg und hält die Hand in
+Position. Aber nicht jedes Akkordpaar hat einen. Deshalb schaust du dir jedes Paar einzeln an: Was
+liegen bleiben kann, bleibt liegen. Bleibt nichts liegen, bewegst du die ganze Form auf einmal.
+
+Die Ziffern im Griffbild sind deine Finger: 1 Zeigefinger, 2 Mittelfinger, 3 Ringfinger, 4 kleiner Finger.
+
+**Am und C: zwei Anker.** Zeigefinger (H-Saite, Bund 1) und Mittelfinger (D-Saite, Bund 2) liegen in
+beiden Akkorden am selben Platz. Nur der Ringfinger wandert: von der G-Saite, Bund 2 (Am) zur
+A-Saite, Bund 3 (C). Bei beiden Akkorden schlägst du erst ab der A-Saite an.
+
+<Griffbild akkorde={["Am", "C"]} />
+
+**C und G: kein Anker.** Hier bleibt kein Finger liegen. Alle drei verlassen ihren Platz, und der
+kleine Finger kommt dazu:
+
+- Ringfinger: A-Saite, Bund 3 → H-Saite, Bund 3
+- Mittelfinger: D-Saite, Bund 2 → tiefe E-Saite, Bund 3
+- Zeigefinger: H-Saite, Bund 1 → A-Saite, Bund 2
+- Kleiner Finger: neu auf der hohen E-Saite, Bund 3
+
+Die Hand bleibt dabei im Bereich von Bund 1 bis 3, nur die Form ändert sich. Eine Orientierung
+hilft: In C bilden Ring- und Mittelfinger eine Schräge (A-Saite Bund 3, D-Saite Bund 2). In G liegt
+dieselbe Schräge eine Saite tiefer (tiefe E-Saite Bund 3, A-Saite Bund 2), aber mit Mittel- und
+Zeigefinger.
+
+<Griffbild akkorde={["C", "G"]} />
+
+**Em und G: kein Anker, aber ein kurzer Weg.** Auch hier bleibt kein Finger liegen.
+
+- Mittelfinger: A-Saite, Bund 2 → tiefe E-Saite, Bund 3. Das ist nur eine Saite und ein Bund.
+- Zeigefinger: landet auf A-Saite, Bund 2, genau dort, wo eben der Mittelfinger lag
+- Ringfinger: D-Saite, Bund 2 → H-Saite, Bund 3
+- Kleiner Finger: neu auf der hohen E-Saite, Bund 3
+
+Der Platz auf der A-Saite, Bund 2 ist in beiden Akkorden belegt, aber von verschiedenen Fingern. Das
+sieht wie ein Anker aus, ist aber keiner.
+
+<Griffbild akkorde={["Em", "G"]} />
+
+<Hinweis>Die Variante 320003 aus „Offene Akkorde" lässt die H-Saite leer klingen. Dann landet bei C–G
+und Em–G ein Finger weniger. Bremst dich die G-Form mit vier Fingern, nimm vorerst diese Variante.</Hinweis>
+
+<Handhaltung>
+Bei Am–C drücken Zeige- und Mittelfinger einfach weiter, während der Ringfinger wandert. Bei C–G und
+Em–G heben alle Finger gleichzeitig knapp von den Saiten ab, formen G schon in der Luft und setzen
+gleichzeitig auf. Der Daumen bleibt in beiden Fällen hinter dem Hals an seinem Platz.
+</Handhaltung>
+
+<Fehlerbild>
+Bei Am–C heben aus Gewohnheit alle Finger ab. Dann greifst du den ganzen Akkord neu, obwohl nur ein
+Finger wandern muss. Das Gegenteil passiert bei Em–G: Der Mittelfinger will auf der A-Saite liegen
+bleiben, weil der Platz vertraut ist. Dann fehlt er auf der tiefen E-Saite, und die Hand verdreht
+sich. Prüfe: Schau bei Am–C auf Zeige- und Mittelfinger. Sie dürfen sich nicht bewegen.
+</Fehlerbild>
+
+<Merksatz>Was liegen bleiben kann, bleibt liegen. Alles andere wandert gemeinsam.</Merksatz>
+
+<Uebung bpm={50}>
+Metronom auf 50, vier Klicks pro Akkord. Schlage auf 1, 2 und 3 je einmal abwärts an, auf der 4
+wechselst du, damit der neue Akkord auf der nächsten 1 sitzt.
+
+Paare, in dieser Reihenfolge, je zwei Minuten: Am↔C, C↔G, Em↔G.
+
+Steigere das Tempo erst, wenn ein Paar eine Minute lang sauber läuft.
+</Uebung>
+
+<Checkpoint>Du wechselst alle drei Paare je eine Minute lang bei 50 BPM, und bei Am↔C heben Zeige- und
+Mittelfinger kein einziges Mal ab.</Checkpoint>
