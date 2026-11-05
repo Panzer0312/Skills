@@ -1,0 +1,187 @@
+.skill-map {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-height: 100%;
+  background: var(--wood);
+  border: 4px solid var(--wood);
+}
+
+.skill-map svg {
+  display: block;
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: 0;
+  aspect-ratio: 1600 / 1100;
+  background: #35592f;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+.skill-map svg:active {
+  cursor: grabbing;
+}
+
+.map-ground {
+  fill: #35592f;
+}
+
+.map-sprite {
+  image-rendering: pixelated;
+  pointer-events: none;
+}
+
+.map-parent,
+.map-road,
+.map-quick,
+.map-link {
+  pointer-events: none;
+  stroke-linecap: round;
+}
+
+.map-parent {
+  stroke: #ecd9b0;
+  stroke-width: 4;
+}
+
+.map-parent.is-on {
+  stroke: #fff;
+  stroke-width: 6;
+}
+
+.map-road {
+  stroke: var(--gold);
+  stroke-width: 7;
+  stroke-dasharray: 14 10;
+  stroke-linecap: butt;
+}
+
+.map-quick {
+  stroke: #ffd34d;
+  stroke-width: 4;
+  stroke-dasharray: 1 9;
+}
+
+.map-link {
+  stroke: #c58cff;
+  stroke-width: 1.5;
+  stroke-dasharray: 5 6;
+  stroke-opacity: 0.4;
+}
+
+.map-link.is-on {
+  stroke-width: 3.5;
+  stroke-opacity: 1;
+}
+
+.map-node {
+  cursor: pointer;
+  outline: none;
+}
+
+.map-shape {
+  stroke-width: 3;
+}
+
+.map-node.is-related .map-shape {
+  stroke: #fff;
+}
+
+.map-rank {
+  fill: #fff;
+  font-size: 16px;
+  text-anchor: middle;
+  paint-order: stroke;
+  stroke: #1c1009;
+  stroke-width: 2.5px;
+  pointer-events: none;
+}
+
+.map-focus {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 2;
+  stroke-dasharray: 3 3;
+  opacity: 0;
+}
+
+.map-node:focus-visible .map-focus {
+  opacity: 1;
+}
+
+.map-selected-ring {
+  fill: none;
+  stroke: #ffd34d;
+  stroke-width: 4;
+}
+
+.map-active-ring {
+  fill: none;
+  stroke: #fff2c9;
+  stroke-width: 3;
+}
+
+.map-best-pulse {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 3;
+  animation: map-pulse 1.5s infinite;
+}
+
+@keyframes map-pulse {
+  0%,
+  100% {
+    stroke-opacity: 1;
+    stroke-width: 3;
+  }
+
+  50% {
+    stroke-opacity: 0.3;
+    stroke-width: 9;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .map-best-pulse {
+    animation: none;
+    stroke-width: 4;
+  }
+}
+
+.map-label {
+  fill: #fff;
+  font-size: 13.5px;
+  paint-order: stroke;
+  stroke: #1c1009;
+  stroke-width: 3px;
+  pointer-events: none;
+}
+
+.map-label.is-big {
+  font-size: 19px;
+}
+
+.map-title {
+  fill: #fff2c9;
+  paint-order: stroke;
+  stroke: #1c1009;
+  stroke-width: 0.16em;
+  pointer-events: none;
+}
+
+.map-subtitle {
+  fill: #e5cf9f;
+  font-size: 0.72em;
+}
+
+.map-controls {
+  display: flex;
+  justify-content: flex-end;
+  gap: 4px;
+  padding-top: 4px;
+}
+
+.map-controls .game-button {
+  min-width: 34px;
+}
