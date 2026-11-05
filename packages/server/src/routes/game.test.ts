@@ -166,6 +166,14 @@ describe("game api", () => {
       expect((await state()).chosenLessons).toEqual(["b", "c"]);
     });
 
+    it("ignores a bogus replace at the limit", async () => {
+      await choose("a");
+      await choose("b");
+      const r = await choose("c", { replace: "zzz" });
+      expect(r.status).toBe(409);
+      expect((await state()).chosenLessons).toEqual(["a", "b"]);
+    });
+
     it("accepts choosing an already chosen lesson again", async () => {
       await choose("a");
       await choose("b");

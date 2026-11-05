@@ -162,71 +162,71 @@ gameRoutes.post("/api/game/:skillId/log", async (c) => {
   const day = localDayKey(now);
 
   const run = raw.transaction(() => {
-  const previousMax =
-    body.metricKey !== undefined && body.metricValue !== undefined
-      ? (raw
-          .prepare("SELECT MAX(metric_value) AS m FROM game_log WHERE skill_id = ? AND metric_key = ?")
-          .get(skillId, body.metricKey) as { m: number | null }).m
-      : null;
-  const isRecord =
-    body.metricValue !== undefined && body.metricKey !== undefined && (previousMax === null || body.metricValue > previousMax);
+    const previousMax =
+      body.metricKey !== undefined && body.metricValue !== undefined
+        ? (raw
+            .prepare("SELECT MAX(metric_value) AS m FROM game_log WHERE skill_id = ? AND metric_key = ?")
+            .get(skillId, body.metricKey) as { m: number | null }).m
+        : null;
+    const isRecord =
+      body.metricValue !== undefined && body.metricKey !== undefined && (previousMax === null || body.metricValue > previousMax);
 
-  raw
-    .prepare(
-      `INSERT INTO game_log (skill_id, day, at, kind, quest_id, lesson_id, technique_id, seconds, level, rating, metric_key, metric_value)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-    )
-    .run(
-      skillId,
-      day,
-      now,
-      body.kind,
-      body.questId ?? null,
-      body.lessonId ?? null,
-      body.techniqueId ?? null,
-      body.seconds,
-      body.level,
-      body.rating ?? null,
-      body.metricKey ?? null,
-      body.metricValue ?? null,
-    );
-
-  let suggestion: number | null = null;
-  if (body.techniqueId !== undefined) {
-    const rated = raw
+    raw
       .prepare(
-        "SELECT rating, level FROM game_log WHERE skill_id = ? AND technique_id = ? AND rating IS NOT NULL ORDER BY at DESC, id DESC",
+        `INSERT INTO game_log (skill_id, day, at, kind, quest_id, lesson_id, technique_id, seconds, level, rating, metric_key, metric_value)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       )
-      .all(skillId, body.techniqueId) as { rating: PracticeRating; level: number }[];
-    suggestion = suggestLevel(rated, body.level);
-  }
+      .run(
+        skillId,
+        day,
+        now,
+        body.kind,
+        body.questId ?? null,
+        body.lessonId ?? null,
+        body.techniqueId ?? null,
+        body.seconds,
+        body.level,
+        body.rating ?? null,
+        body.metricKey ?? null,
+        body.metricValue ?? null,
+      );
 
-  if (body.lessonId !== undefined) {
-    const current = raw
-      .prepare("SELECT status FROM lesson_progress WHERE skill_id = ? AND lesson_id = ?")
-      .get(skillId, body.lessonId) as { status: string } | undefined;
-    const status = current ? (STATUS_READ[current.status] ?? "offen") : "offen";
-    const entries = (
-      raw
+    let suggestion: number | null = null;
+    if (body.techniqueId !== undefined) {
+      const rated = raw
         .prepare(
-          "SELECT rating, day, metric_value AS metricValue FROM game_log WHERE skill_id = ? AND lesson_id = ?",
+          "SELECT rating, level FROM game_log WHERE skill_id = ? AND technique_id = ? AND rating IS NOT NULL ORDER BY at DESC, id DESC",
         )
-        .all(skillId, body.lessonId) as {
-        rating: PracticeRating | null;
-        day: string;
-        metricValue: number | null;
-      }[]
-    );
-    let next: LessonStatus = status;
-    if (status === "offen") next = "aktiv";
-    if (body.quick && (body.rating === "passt" || body.rating === "zu-leicht") && RANK[next] < RANK.gelernt) {
-      next = "gelernt";
+        .all(skillId, body.techniqueId) as { rating: PracticeRating; level: number }[];
+      suggestion = suggestLevel(rated, body.level);
     }
-    if (isMastered(entries, body.masteryTarget)) next = "gemeistert";
-    if (RANK[next] > RANK[status]) setLesson(raw, skillId, body.lessonId, next);
-  }
 
-  return { suggestion, isRecord };
+    if (body.lessonId !== undefined) {
+      const current = raw
+        .prepare("SELECT status FROM lesson_progress WHERE skill_id = ? AND lesson_id = ?")
+        .get(skillId, body.lessonId) as { status: string } | undefined;
+      const status = current ? (STATUS_READ[current.status] ?? "offen") : "offen";
+      const entries = (
+        raw
+          .prepare(
+            "SELECT rating, day, metric_value AS metricValue FROM game_log WHERE skill_id = ? AND lesson_id = ?",
+          )
+          .all(skillId, body.lessonId) as {
+          rating: PracticeRating | null;
+          day: string;
+          metricValue: number | null;
+        }[]
+      );
+      let next: LessonStatus = status;
+      if (status === "offen") next = "aktiv";
+      if (body.quick && (body.rating === "passt" || body.rating === "zu-leicht") && RANK[next] < RANK.gelernt) {
+        next = "gelernt";
+      }
+      if (isMastered(entries, body.masteryTarget)) next = "gemeistert";
+      if (RANK[next] > RANK[status]) setLesson(raw, skillId, body.lessonId, next);
+    }
+
+    return { suggestion, isRecord };
   });
   const { suggestion, isRecord } = run();
 
@@ -331,13 +331,9 @@ gameRoutes.put("/api/game/:skillId/chosen/:lessonId", async (c) => {
       )
       .all(skillId) as { id: string }[];
     const active = rows.map((r) => r.id);
-    if (
-      !active.includes(lessonId) &&
-      active.length >= MAX_CHOSEN &&
-      replace === undefined
-    )
-      return "limit" as const;
-    if (replace !== undefined) {
+    const validReplace = replace !== undefined && replace !== lessonId && active.includes(replace);
+    if (!active.includes(lessonId) && active.length >= MAX_CHOSEN && !validReplace) return "limit" as const;
+    if (validReplace) {
       raw
         .prepare("DELETE FROM game_chosen WHERE skill_id = ? AND lesson_id = ?")
         .run(skillId, replace);
