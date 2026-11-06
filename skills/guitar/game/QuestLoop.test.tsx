@@ -1,4 +1,4 @@
-import { buildDailyQuests, type GameState } from "@skills/core";
+import { buildDailyQuests, localDayKey, type GameState } from "@skills/core";
 import { focusManager, QueryClientProvider } from "@tanstack/react-query";
 import { act, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -20,6 +20,7 @@ vi.mock("./ChordTrainer.js", async (original) => ({
 const ACTIVE = "game.activeQuest";
 
 const base: GameState = {
+  day: localDayKey(Date.now()),
   placed: true,
   targetSongId: null,
   xp: 620,
@@ -319,6 +320,18 @@ describe("Quest Board", () => {
     await userEvent.click(start);
     expect(await screen.findByRole("button", { name: "Fertig" })).toBeInTheDocument();
     expect(writes(fetchMock, "/today")).toEqual([]);
+  });
+
+  it("does not write a set built on yesterday's state", async () => {
+    const yesterday = localDayKey(Date.now() - 24 * 60 * 60 * 1000);
+    const fetchMock = serve({ day: yesterday, today: { minutes: 20, questIds: ["wechsel-minute"] } });
+    renderGame("/quests");
+    await userEvent.click(await screen.findByRole("link", { name: "Quest starten" }));
+    const stateReads = () => fetchMock.mock.calls.filter(([url]) => String(url).endsWith("/state")).length;
+    await waitFor(() => expect(stateReads()).toBeGreaterThan(1));
+    expect(writes(fetchMock, "/today")).toEqual([]);
+    expect(screen.getByRole("heading", { name: "Quest Board" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Fertig" })).not.toBeInTheDocument();
   });
 
   it("adds a missing best next quest to today's set before starting it", async () => {

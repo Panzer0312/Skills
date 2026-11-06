@@ -134,6 +134,7 @@ gameRoutes.get("/api/game/:skillId/state", (c) => {
     ...new Set(rows.filter((r) => r.day === day && r.quest_id !== null).map((r) => r.quest_id!)),
   ];
   const state: GameState = {
+    day: today,
     placed: profile?.placed_at != null,
     targetSongId: profile?.target_song_id ?? null,
     xp,

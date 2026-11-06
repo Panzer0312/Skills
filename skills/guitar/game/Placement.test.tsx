@@ -1,4 +1,5 @@
 import type { GameState } from "@skills/core";
+import { localDayKey } from "@skills/core";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -9,6 +10,7 @@ import GameApp from "../widgets/GameApp.js";
 import { gameContent } from "./api.js";
 
 const base: GameState = {
+  day: localDayKey(Date.now()),
   placed: false,
   targetSongId: null,
   xp: 0,

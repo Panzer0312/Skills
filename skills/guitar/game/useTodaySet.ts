@@ -1,5 +1,5 @@
-import { buildDailyQuests, type GameState } from "@skills/core";
-import { useIsMutating, useMutation } from "@tanstack/react-query";
+import { buildDailyQuests, localDayKey, type GameState } from "@skills/core";
+import { useIsMutating, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import { gameApi, gameContent, todaysQuests } from "./api.js";
 
@@ -38,6 +38,7 @@ export function useTodaySet(state: GameState, fetching: boolean) {
   const [failed, setFailed] = useState<FailedSave | null>(null);
   const savingRef = useRef(false);
   const built = useRef(false);
+  const queryClient = useQueryClient();
   const { mutateAsync } = useMutation({
     mutationKey: WRITE_KEY,
     networkMode: "always",
@@ -48,6 +49,11 @@ export function useTodaySet(state: GameState, fetching: boolean) {
 
   /** Whether the set was written. */
   async function save(length: number, questIds: string[]): Promise<boolean> {
+    // Past midnight the ids were built on yesterday's state, so let the fresh state rebuild them.
+    if (state.day !== localDayKey(Date.now())) {
+      void queryClient.invalidateQueries({ queryKey: ["game", "guitar"] });
+      return false;
+    }
     if (savingRef.current) return false;
     savingRef.current = true;
     setSaving(true);

@@ -2,6 +2,8 @@ import type { Rating } from "./progression.js";
 import type { LessonStatus } from "./quests.js";
 
 export interface GameState {
+  /** The server's local day key, which a set written now is stored under. */
+  day: string;
   placed: boolean;
   targetSongId: string | null;
   xp: number;

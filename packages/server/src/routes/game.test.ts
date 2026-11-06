@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { createApp } from "../app.js";
 import { openDatabase, type AppDatabase } from "../db/client.js";
-import type { GameState } from "@skills/core";
+import { localDayKey, type GameState } from "@skills/core";
 
 describe("game api", () => {
   let database: AppDatabase;
@@ -105,6 +105,10 @@ describe("game api", () => {
     expect(a.lessons.a).toBe("gelernt");
     await send("PUT", "/api/game/guitar/level/t1", { level: 6 });
     expect((await state()).levels.t1).toBe(6);
+  });
+
+  it("reports the local day in the state", async () => {
+    expect((await state()).day).toBe(localDayKey(Date.now()));
   });
 
   it("lists done quests today", async () => {

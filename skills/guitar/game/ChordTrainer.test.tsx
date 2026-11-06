@@ -1,4 +1,5 @@
 import type { GameState } from "@skills/core";
+import { localDayKey } from "@skills/core";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
@@ -13,6 +14,7 @@ vi.mock("../../../packages/web/src/audio/signalTone.js", () => ({
 }));
 
 const base: GameState = {
+  day: localDayKey(Date.now()),
   placed: true,
   targetSongId: null,
   xp: 0,
