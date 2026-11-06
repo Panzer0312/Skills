@@ -146,13 +146,15 @@ function Board({ state, fetching }: { state: GameState; fetching: boolean }) {
         {nextQuest ? <p>{nextQuest.title}</p> : null}
         <p>{next ? next.reason : moreComing ? MORE_COMING : ROAD_DONE_REASON}</p>
         {nextQuest ? (
-          <Link
-            to={`${GAME_BASE}/quest/${nextQuest.id}`}
-            className="underline"
-            onClick={(event) => void startNext(event, nextQuest)}
-          >
-            Quest starten
-          </Link>
+          <p>
+            <Link
+              to={`${GAME_BASE}/quest/${nextQuest.id}`}
+              className="underline"
+              onClick={(event) => void startNext(event, nextQuest)}
+            >
+              Quest starten
+            </Link>
+          </p>
         ) : null}
         {next && state.lessons[next.lessonId] === "aktiv" ? (
           <Link to={`${GAME_BASE}/bibliothek/${next.lessonId}`} className="underline">
