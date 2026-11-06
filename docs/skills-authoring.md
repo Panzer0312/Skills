@@ -105,6 +105,8 @@ macht es vor:
 `<Ziel>`, `<Handhaltung>`, `<Fehlerbild>`, `<Uebung bpm={80}>`, `<Merksatz>`, `<Hinweis>`, `<Checkpoint>`.
 `<Checkpoint>` schließt die Lektion beim Klick ab.
 
+Eine MDX-Lektion darf außerdem Komponenten importieren, die im Skill selbst liegen (etwa die Gitarren-Visualisierungen unter `skills/guitar/`), und sie wie die Bausteine oben einsetzen.
+
 ## Eigenes Widget
 
 Lege `skills/<id>/widgets/MeinWidget.tsx` an und trage `"widget": "MeinWidget"` im Modul ein.

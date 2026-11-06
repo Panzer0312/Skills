@@ -326,3 +326,18 @@ Dieses Dokument ist die zentrale Stelle für Stand, Probleme und Ideen.
   und der bisherige Kurs bleibt unverändert.
 - 2026-11-04 — Spielinhalte (Quests, Wegweiser, Techniken) liegen als JSON neben den Lektionen unter
   `skills/guitar/game/`, damit sich Inhalte ohne Codeänderung erweitern lassen.
+
+## Abweichungen vom Plan (Gitarren-RPG, Stufe 2: Fähigkeitenkarte)
+
+- 2026-11-06 — `skills/guitar/game/map.json` ist die Quelle für alle geplanten Lektionen (85 Knoten,
+  27 geschrieben). Ungeschriebene Lektionen erscheinen als „In Vorbereitung“ mit Titel und Beschreibung;
+  Best Next und Quests zeigen nie auf sie.
+- 2026-11-06 — Gewählte Nebenlektionen liegen in `game_chosen`, höchstens zwei neben der Hauptweg-Lektion.
+  Eine dritte fragt, welche pausiert wird. Best Next folgt immer der goldenen Straße.
+- 2026-11-06 — Gitarren-Visualisierungen (Griffbrett, Tab, Takt) werden direkt in der MDX-Lektion aus
+  dem Skill importiert, statt als eigene Modultypen zu laufen.
+- 2026-11-06 — Songempfehlungen in `map.json` haben je eine geprüfte, frei lesbare Quelle. Master of
+  Puppets nennt keine bpm mehr, weil die Quellseite keine Zahl belegt.
+- 2026-11-06 — `e2e/guitar-map.spec.ts` pausiert vor jedem Test alle gewählten Lektionen über die API,
+  damit die Tests unabhängig von Reihenfolge und früheren Läufen bleiben.
+- Offen: Stufe 3 (Werkzeuge), 4 (restliche Lektionen und Story), 5 (Belohnungen, Politur).
