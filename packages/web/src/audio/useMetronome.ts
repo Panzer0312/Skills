@@ -1,38 +1,79 @@
+import {
+  clickLevel,
+  defaultAccents,
+  speedTrainerBpm,
+  SUBDIVISIONS,
+  type ClickLevel,
+  type SpeedTrainer,
+  type Subdivision,
+} from "@skills/core";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { startLookahead } from "./lookahead.js";
 
 const MIN_BPM = 20;
 const MAX_BPM = 300;
-const LOOKAHEAD_MS = 25;
-const SCHEDULE_AHEAD_S = 0.1;
+
+const CLICKS: Record<Exclude<ClickLevel, "stumm">, { frequency: number; gain: number }> = {
+  betont: { frequency: 1600, gain: 0.6 },
+  schlag: { frequency: 900, gain: 0.6 },
+  unter: { frequency: 600, gain: 0.3 },
+};
 
 export function useMetronome() {
   const [bpm, setBpmRaw] = useState(80);
-  const [beatsPerBar, setBeatsPerBar] = useState(4);
+  const [beatsPerBar, setBeatsPerBarRaw] = useState(4);
   const [running, setRunning] = useState(false);
   const [currentBeat, setCurrentBeat] = useState(0);
+  const [subdivision, setSubdivision] = useState<Subdivision>("viertel");
+  const [accents, setAccents] = useState<boolean[]>(() => defaultAccents(4));
+  const [speedTrainer, setSpeedTrainerRaw] = useState<SpeedTrainer | null>(null);
 
   const contextRef = useRef<AudioContext | null>(null);
-  const nextNoteRef = useRef(0);
-  const beatRef = useRef(0);
-  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const stopLookaheadRef = useRef<(() => void) | null>(null);
   const tapsRef = useRef<number[]>([]);
 
   const bpmRef = useRef(bpm);
   bpmRef.current = bpm;
   const beatsRef = useRef(beatsPerBar);
   beatsRef.current = beatsPerBar;
+  const subdivisionRef = useRef(subdivision);
+  subdivisionRef.current = subdivision;
+  const accentsRef = useRef(accents);
+  accentsRef.current = accents;
+  const trainerRef = useRef(speedTrainer);
+  trainerRef.current = speedTrainer;
 
-  const setBpm = useCallback((value: number) => {
-    setBpmRaw(Math.min(MAX_BPM, Math.max(MIN_BPM, Math.round(value))));
+  const setSpeedTrainer = useCallback((value: SpeedTrainer | null) => {
+    trainerRef.current = value;
+    setSpeedTrainerRaw(value);
   }, []);
 
-  const click = useCallback((time: number, accented: boolean) => {
+  // A tempo chosen by hand always wins over the speed trainer.
+  const setBpm = useCallback(
+    (value: number) => {
+      setSpeedTrainer(null);
+      setBpmRaw(Math.min(MAX_BPM, Math.max(MIN_BPM, Math.round(value))));
+    },
+    [setSpeedTrainer],
+  );
+
+  const setBeatsPerBar = useCallback((value: number) => {
+    setBeatsPerBarRaw(value);
+    setAccents(defaultAccents(value));
+  }, []);
+
+  const toggleAccent = useCallback((beat: number) => {
+    setAccents((current) => current.map((on, index) => (index === beat ? !on : on)));
+  }, []);
+
+  const click = useCallback((time: number, level: ClickLevel) => {
     const context = contextRef.current;
-    if (!context) return;
+    if (!context || level === "stumm") return;
+    const { frequency, gain: volume } = CLICKS[level];
     const oscillator = context.createOscillator();
     const gain = context.createGain();
-    oscillator.frequency.value = accented ? 1600 : 900;
-    gain.gain.setValueAtTime(0.6, time);
+    oscillator.frequency.value = frequency;
+    gain.gain.setValueAtTime(volume, time);
     gain.gain.exponentialRampToValueAtTime(0.001, time + 0.05);
     oscillator.connect(gain);
     gain.connect(context.destination);
@@ -41,36 +82,57 @@ export function useMetronome() {
   }, []);
 
   const stop = useCallback(() => {
-    if (timerRef.current !== null) clearInterval(timerRef.current);
-    timerRef.current = null;
+    stopLookaheadRef.current?.();
+    stopLookaheadRef.current = null;
     void contextRef.current?.close();
     contextRef.current = null;
-    beatRef.current = 0;
     setCurrentBeat(0);
     setRunning(false);
   }, []);
 
   const start = useCallback(() => {
-    if (timerRef.current !== null) return;
+    if (stopLookaheadRef.current) return;
 
     const context = new AudioContext();
     contextRef.current = context;
     void context.resume();
-    nextNoteRef.current = context.currentTime + 0.05;
-    beatRef.current = 0;
 
-    // Scheduling ahead of time keeps the click steady; setInterval alone drifts.
-    timerRef.current = setInterval(() => {
-      const ctx = contextRef.current;
-      if (!ctx) return;
-      while (nextNoteRef.current < ctx.currentTime + SCHEDULE_AHEAD_S) {
-        const beat = beatRef.current % beatsRef.current;
-        click(nextNoteRef.current, beat === 0);
-        setCurrentBeat(beat);
-        nextNoteRef.current += 60 / bpmRef.current;
-        beatRef.current += 1;
-      }
-    }, LOOKAHEAD_MS);
+    let stepInBeat = 0;
+    let beat = 0;
+    let bars = 0;
+    stopLookaheadRef.current = startLookahead({
+      context,
+      stepSeconds: () => 60 / bpmRef.current / SUBDIVISIONS[subdivisionRef.current].pattern.length,
+      onStep: (time) => {
+        const stepsPerBeat = SUBDIVISIONS[subdivisionRef.current].pattern.length;
+        if (stepInBeat >= stepsPerBeat) {
+          stepInBeat = 0;
+          beat += 1;
+        }
+        if (beat >= beatsRef.current) {
+          beat = 0;
+          bars += 1;
+        }
+        const trainer = trainerRef.current;
+        if (trainer && beat === 0 && stepInBeat === 0) {
+          const next = speedTrainerBpm(trainer, bars);
+          if (next !== bpmRef.current) {
+            bpmRef.current = next;
+            setBpmRaw(next);
+          }
+        }
+        click(
+          time,
+          clickLevel(beat * stepsPerBeat + stepInBeat, {
+            beatsPerBar: beatsRef.current,
+            subdivision: subdivisionRef.current,
+            accents: accentsRef.current,
+          }),
+        );
+        if (stepInBeat === 0) setCurrentBeat(beat);
+        stepInBeat += 1;
+      },
+    });
 
     setRunning(true);
   }, [click]);
@@ -90,5 +152,21 @@ export function useMetronome() {
 
   useEffect(() => stop, [stop]);
 
-  return { bpm, setBpm, beatsPerBar, setBeatsPerBar, running, start, stop, tap, currentBeat };
+  return {
+    bpm,
+    setBpm,
+    beatsPerBar,
+    setBeatsPerBar,
+    running,
+    start,
+    stop,
+    tap,
+    currentBeat,
+    subdivision,
+    setSubdivision,
+    accents,
+    toggleAccent,
+    speedTrainer,
+    setSpeedTrainer,
+  };
 }
