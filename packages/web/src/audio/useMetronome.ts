@@ -33,6 +33,8 @@ export function useMetronome() {
     null,
   );
 
+  const [error, setError] = useState<string | null>(null);
+
   const contextRef = useRef<AudioContext | null>(null);
   const stopLookaheadRef = useRef<(() => void) | null>(null);
   const tapsRef = useRef<number[]>([]);
@@ -97,62 +99,76 @@ export function useMetronome() {
     stopLookaheadRef.current = null;
     void contextRef.current?.close();
     contextRef.current = null;
+    // A trainer left set would restart at its start tempo on the next start.
+    setSpeedTrainer(null);
     setCurrentBeat(0);
     setRunning(false);
-  }, []);
+  }, [setSpeedTrainer]);
 
   const start = useCallback(() => {
     if (stopLookaheadRef.current) return;
 
-    const context = new AudioContext();
-    contextRef.current = context;
-    void context.resume();
+    let context: AudioContext | null = null;
+    try {
+      context = new AudioContext();
+      contextRef.current = context;
+      void context.resume();
 
-    let stepInBeat = 0;
-    let beat = 0;
-    barsRef.current = 0;
-    trainerStartBarRef.current = 0;
-    stopLookaheadRef.current = startLookahead({
-      context,
-      stepSeconds: () =>
-        60 /
-        bpmRef.current /
-        SUBDIVISIONS[subdivisionRef.current].pattern.length,
-      onStep: (time) => {
-        const stepsPerBeat =
-          SUBDIVISIONS[subdivisionRef.current].pattern.length;
-        if (stepInBeat >= stepsPerBeat) {
-          stepInBeat = 0;
-          beat += 1;
-        }
-        if (beat >= beatsRef.current) {
-          beat = 0;
-          barsRef.current += 1;
-        }
-        const trainer = trainerRef.current;
-        if (trainer && beat === 0 && stepInBeat === 0) {
-          const next = speedTrainerBpm(
-            trainer,
-            barsRef.current - trainerStartBarRef.current,
-          );
-          if (next !== bpmRef.current) {
-            bpmRef.current = next;
-            setBpmRaw(next);
+      let stepInBeat = 0;
+      let beat = 0;
+      barsRef.current = 0;
+      trainerStartBarRef.current = 0;
+      stopLookaheadRef.current = startLookahead({
+        context,
+        stepSeconds: () =>
+          60 /
+          bpmRef.current /
+          SUBDIVISIONS[subdivisionRef.current].pattern.length,
+        onStep: (time) => {
+          const stepsPerBeat =
+            SUBDIVISIONS[subdivisionRef.current].pattern.length;
+          if (stepInBeat >= stepsPerBeat) {
+            stepInBeat = 0;
+            beat += 1;
           }
-        }
-        click(
-          time,
-          clickLevel(beat * stepsPerBeat + stepInBeat, {
-            beatsPerBar: beatsRef.current,
-            subdivision: subdivisionRef.current,
-            accents: accentsRef.current,
-          }),
-        );
-        if (stepInBeat === 0) setCurrentBeat(beat);
-        stepInBeat += 1;
-      },
-    });
+          if (beat >= beatsRef.current) {
+            beat = 0;
+            barsRef.current += 1;
+          }
+          const trainer = trainerRef.current;
+          if (trainer && beat === 0 && stepInBeat === 0) {
+            const next = speedTrainerBpm(
+              trainer,
+              barsRef.current - trainerStartBarRef.current,
+            );
+            if (next !== bpmRef.current) {
+              bpmRef.current = next;
+              setBpmRaw(next);
+            }
+          }
+          click(
+            time,
+            clickLevel(beat * stepsPerBeat + stepInBeat, {
+              beatsPerBar: beatsRef.current,
+              subdivision: subdivisionRef.current,
+              accents: accentsRef.current,
+            }),
+          );
+          if (stepInBeat === 0) setCurrentBeat(beat);
+          stepInBeat += 1;
+        },
+      });
+    } catch {
+      stopLookaheadRef.current?.();
+      stopLookaheadRef.current = null;
+      void context?.close();
+      contextRef.current = null;
+      setRunning(false);
+      setError("Der Ton konnte nicht gestartet werden. Prüfe die Audioausgabe des Browsers.");
+      return;
+    }
 
+    setError(null);
     setRunning(true);
   }, [click]);
 
@@ -187,5 +203,6 @@ export function useMetronome() {
     toggleAccent,
     speedTrainer,
     setSpeedTrainer,
+    error,
   };
 }

@@ -194,4 +194,47 @@ describe("useMetronome", () => {
     act(() => result.current.setBeatsPerBar(3));
     expect(result.current.accents).toEqual([true, false, false]);
   });
+  it("clears the speed trainer on stop", () => {
+    const { result } = renderHook(() => useMetronome());
+    act(() =>
+      result.current.setSpeedTrainer({ startBpm: 60, targetBpm: 68, stepBpm: 4, everyBars: 1 }),
+    );
+    act(() => result.current.start());
+    act(() => result.current.stop());
+    expect(result.current.speedTrainer).toBeNull();
+  });
+
+  it("stays stopped and reports a German error when the audio context throws", () => {
+    const { result } = renderHook(() => useMetronome());
+    vi.stubGlobal(
+      "AudioContext",
+      class {
+        constructor() {
+          throw new Error("no audio");
+        }
+      },
+    );
+    act(() => result.current.start());
+    expect(result.current.running).toBe(false);
+    expect(result.current.error).toMatch(/Audio|Ton/);
+  });
+
+  it("closes the context when starting fails after it opened", () => {
+    const close = vi.fn(async () => {});
+    vi.stubGlobal(
+      "AudioContext",
+      class {
+        currentTime = 0;
+        close = close;
+        resume() {
+          throw new Error("blocked");
+        }
+      },
+    );
+    const { result } = renderHook(() => useMetronome());
+    act(() => result.current.start());
+    expect(close).toHaveBeenCalled();
+    expect(result.current.running).toBe(false);
+    expect(result.current.error).not.toBeNull();
+  });
 });

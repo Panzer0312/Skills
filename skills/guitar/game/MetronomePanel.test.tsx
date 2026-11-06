@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { act, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { useMetronome } from "../../../packages/web/src/audio/useMetronome.js";
@@ -125,12 +125,42 @@ describe("MetronomePanel", () => {
     await user.click(
       screen.getByRole("button", { name: "Tempotrainer starten" }),
     );
-    await user.click(screen.getByText("Tempotrainer", { selector: "summary" }));
     expect(screen.getByText("Tempotrainer: 80 → 100 BPM")).toBeVisible();
     await user.click(
       screen.getByRole("button", { name: "Tempotrainer stoppen" }),
     );
     expect(latest.speedTrainer).toBeNull();
     expect(screen.queryByText(/Tempotrainer: /)).toBeNull();
+  });
+  it("defaults the target to 20 above the tempo", async () => {
+    const user = userEvent.setup();
+    render(<Harness />);
+    await openTrainer(user);
+    expect(screen.getByLabelText("Bis")).toHaveValue(100);
+  });
+
+  it("shows no alert while the trainer runs at its target", async () => {
+    const user = userEvent.setup();
+    render(<Harness />);
+    await openTrainer(user);
+    await user.click(screen.getByRole("button", { name: "Tempotrainer starten" }));
+    act(() => latest.setSpeedTrainer({ startBpm: 80, targetBpm: 100, stepBpm: 4, everyBars: 2 }));
+    expect(screen.queryByRole("alert")).toBeNull();
+    expect(screen.queryByRole("button", { name: "Tempotrainer starten" })).toBeNull();
+  });
+
+  it("shows the audio error of the metronome", async () => {
+    vi.stubGlobal(
+      "AudioContext",
+      class {
+        constructor() {
+          throw new Error("no audio");
+        }
+      },
+    );
+    const user = userEvent.setup();
+    render(<Harness />);
+    await user.click(screen.getByRole("button", { name: "Metronom starten" }));
+    expect(screen.getByRole("alert")).toHaveTextContent(/Ton/);
   });
 });
