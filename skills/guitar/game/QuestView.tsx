@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { api } from "../../../packages/web/src/api/client.js";
+import { MetronomePanel } from "./MetronomePanel.js";
 import { useMetronome } from "../../../packages/web/src/audio/useMetronome.js";
 import type { WidgetProps } from "../../../packages/web/src/skills/widgets.js";
 import { GAME_BASE, gameContent, normalizeTitle, questLevel, useGameState } from "./api.js";
@@ -55,34 +56,6 @@ function Elapsed({ startedAt }: { startedAt: number }) {
     <p role="timer" aria-label="Verstrichene Zeit" className="quest-timer">
       {formatElapsed(seconds)}
     </p>
-  );
-}
-
-function Metronome({ metronome }: { metronome: ReturnType<typeof useMetronome> }) {
-  return (
-    <section aria-label="Metronom" className="quest-metronome">
-      <button
-        type="button"
-        className="game-button"
-        onClick={() => (metronome.running ? metronome.stop() : metronome.start())}
-      >
-        Metronom {metronome.running ? "stoppen" : "starten"}
-      </button>
-      <div className="quest-bpm">
-        <input
-          type="range"
-          aria-label="BPM"
-          min={20}
-          max={300}
-          value={metronome.bpm}
-          onChange={(event) => metronome.setBpm(Number(event.target.value))}
-        />
-        <output>{metronome.bpm} BPM</output>
-      </div>
-      <button type="button" className="game-button" onClick={metronome.tap}>
-        Tap
-      </button>
-    </section>
   );
 }
 
@@ -264,7 +237,7 @@ function QuestRun({ quest, state, data }: { quest: QuestDefinition; state: GameS
         {trainerValue !== null ? (
           <p>Beste Runde: {trainerValue}. Starte noch eine Runde oder tippe auf Fertig.</p>
         ) : null}
-        <Metronome metronome={metronome} />
+        <MetronomePanel metronome={metronome} />
         <div className="quest-buttons">
           <button type="button" className="game-button" onClick={finish}>
             Fertig

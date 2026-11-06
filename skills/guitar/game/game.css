@@ -394,6 +394,20 @@
   gap: 8px;
 }
 
+.quest-accents {
+  display: flex;
+  gap: 4px;
+}
+
+.quest-accent[aria-pressed="true"] {
+  background: #a8720f;
+  color: #fff;
+}
+
+.quest-trainer {
+  flex-basis: 100%;
+}
+
 .quest-field {
   display: flex;
   flex-wrap: wrap;
