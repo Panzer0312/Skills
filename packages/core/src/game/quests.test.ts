@@ -49,6 +49,16 @@ describe("buildDailyQuests", () => {
     const r = buildDailyQuests({ minutes: 30, hasTargetSong: false, statuses: {}, recentQuestIds: [], chosenLessonIds: [], content: c });
     expect(r[0]).toBe("song");
   });
+  it("skips the generic song slot when the best next is a song quest", () => {
+    const quests = [...content.quests, q("bard", "song", 15, "la")];
+    const c = { ...content, quests, road: [step("la", "bard")] };
+    const r = buildDailyQuests({ minutes: 120, hasTargetSong: true, statuses: {}, recentQuestIds: [], chosenLessonIds: [], content: c });
+    expect(r[0]).toBe("bard");
+    expect(r).not.toContain("song");
+  });
+  it("keeps the generic song slot when the best next is no song quest", () => {
+    expect(build({ minutes: 30 })).toContain("song");
+  });
   it("trims to the most important item for a short session", () => {
     expect(build({ minutes: 10 })).toEqual(["a"]);
   });

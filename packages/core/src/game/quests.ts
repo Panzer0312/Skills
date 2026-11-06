@@ -115,6 +115,9 @@ export function buildDailyQuests(input: {
   const byId = new Map(content.quests.map((quest) => [quest.id, quest]));
   const next = bestNext(content.road, input.statuses);
   const nextIndex = next ? content.road.indexOf(next) : -1;
+  const nextQuest = next?.questId ? byId.get(next.questId) : undefined;
+  // One song per session: a song on the road takes the place of the target song.
+  const songSlot = input.hasTargetSong && nextQuest?.kind !== "song";
   const recent = (quest: QuestDefinition) => input.recentQuestIds.includes(quest.id);
   // A lesson is reached when the road is at or past it, or finished.
   const reached = (quest: QuestDefinition) => {
@@ -124,7 +127,7 @@ export function buildDailyQuests(input: {
   };
   const onRoad = (quest: QuestDefinition) => content.road.some((step) => step.lessonId === quest.lessonId);
   const fillable = (quest: QuestDefinition) => {
-    if (quest.kind === "song" && !input.hasTargetSong) return false;
+    if (quest.kind === "song" && !songSlot) return false;
     return quest.kind === "theorie" || quest.kind === "aufwaermen" || onRoad(quest) ? reached(quest) : true;
   };
   const slot = (kind: QuestDefinition["kind"]) => {
@@ -140,10 +143,10 @@ export function buildDailyQuests(input: {
   };
 
   const candidates: (QuestDefinition | undefined)[] = [
-    next?.questId ? byId.get(next.questId) : undefined,
+    nextQuest,
     content.quests.find((quest) => quest.kind === "wechsel"),
     ...input.chosenLessonIds.map((id) => content.quests.find((quest) => quest.lessonId === id)),
-    input.hasTargetSong ? content.quests.find((quest) => quest.kind === "song") : undefined,
+    songSlot ? content.quests.find((quest) => quest.kind === "song") : undefined,
     slot("theorie"),
     slot("aufwaermen"),
     ...content.quests.filter((quest) => !recent(quest) && fillable(quest)),
