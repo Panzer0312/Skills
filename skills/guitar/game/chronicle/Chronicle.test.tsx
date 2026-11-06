@@ -86,6 +86,47 @@ describe("Chronicle", () => {
     expect(chart.querySelectorAll("polyline")).toHaveLength(0);
   });
 
+  it("draws the best tempo of a quest as a line", async () => {
+    serve({
+      days: [],
+      metrics: [
+        { key: "palm-mute-akzente", day: "2026-11-01", value: 80 },
+        { key: "palm-mute-akzente", day: "2026-11-05", value: 96 },
+      ],
+    });
+    renderIt();
+    expect(await screen.findByRole("heading", { name: "Sauberes Tempo" })).toBeTruthy();
+    const chart = await screen.findByRole("img", { name: /Tempo: .*, zuletzt 96/ });
+    expect(chart.querySelectorAll("polyline")).toHaveLength(1);
+    expect(chart.querySelectorAll("circle")).toHaveLength(2);
+  });
+
+  it("names the note finder rounds in German and shows at most four lines", async () => {
+    const keys = ["notenfinder:0", "notenfinder:1", "notenfinder:0-1", "notenfinder:0-1-2-3-4-5", "noten-e-saite"];
+    serve({ days: [], metrics: keys.map((key, i) => ({ key, day: `2026-11-0${i + 1}`, value: 10 + i })) });
+    renderIt();
+    const chart = await screen.findByRole("img", { name: /^Noten finden: / });
+    const name = chart.getAttribute("aria-label")!;
+    expect(name).toContain("Alle, zuletzt 13");
+    expect(name).toContain("E und A, zuletzt 12");
+    expect(name).not.toMatch(/notenfinder/);
+    expect(chart.querySelectorAll("[data-testid=series]")).toHaveLength(4);
+  });
+
+  it("names the note finder records in German", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async (url: string) =>
+        String(url).includes("/history")
+          ? json({ days: [], metrics: [] })
+          : json({ ...state, records: { "notenfinder:0-1-2-3-4-5": 21, "notenfinder:1": 9 } }),
+      ),
+    );
+    renderIt();
+    expect(await screen.findByText("Noten finden, Alle")).toBeTruthy();
+    expect(screen.getByText("Noten finden, A-Saite")).toBeTruthy();
+  });
+
   it("says so when nothing is measured yet", async () => {
     serve({ days: [], metrics: [] });
     renderIt();

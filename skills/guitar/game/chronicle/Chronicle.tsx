@@ -1,4 +1,4 @@
-import { metricGroup, metricSeries, weeklyMinutes, type GameState, type History } from "@skills/core";
+import { localDayKey, metricGroup, metricSeries, weeklyMinutes, type GameState, type History } from "@skills/core";
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { GAME_BASE, gameContent, useGameHistory, useGameState } from "../api.js";
@@ -11,8 +11,19 @@ const MAX_LINES = 4;
 
 const pairLabel = (key: string) => key.slice("wechsel:".length).replace("-", "–");
 
+const NOTE_CHOICES: Record<string, string> = {
+  "0": "E-Saite",
+  "1": "A-Saite",
+  "0-1": "E und A",
+  "0-1-2-3-4-5": "Alle",
+};
+
+/** The strings a note finder round was played on, in German. */
+const noteRoundLabel = (key: string) => NOTE_CHOICES[key.slice("notenfinder:".length)] ?? "Eigene Saiten";
+
 function recordLabel(key: string): string {
   if (key.startsWith("wechsel:")) return `Wechsel ${pairLabel(key)}`;
+  if (key.startsWith("notenfinder:")) return `Noten finden, ${noteRoundLabel(key)}`;
   return gameContent.quests.find((quest) => quest.id === key)?.title ?? key;
 }
 
@@ -84,7 +95,11 @@ function GroupSection({
   metrics: History["metrics"];
   keys: string[];
 }) {
-  const series = keys.map((key) => ({ label: recordLabel(key), points: metricSeries(metrics, key) }));
+  const shown = [...keys].sort((a, b) => (lastDay(metrics, a) < lastDay(metrics, b) ? 1 : -1)).slice(0, MAX_LINES);
+  const series = shown.map((key) => ({
+    label: key.startsWith("notenfinder:") ? noteRoundLabel(key) : recordLabel(key),
+    points: metricSeries(metrics, key),
+  }));
   return (
     <section>
       <h2 className="mt-6 text-lg font-semibold">{title}</h2>
@@ -99,7 +114,7 @@ function Graphs({ history }: { history: History }) {
   const wechsel = inGroup("wechsel");
   const bpm = inGroup("bpm");
   const noten = inGroup("noten");
-  const weeks = weeklyMinutes(history.days, new Date().toLocaleDateString("sv-SE"));
+  const weeks = weeklyMinutes(history.days, localDayKey(Date.now()));
   return (
     <>
       {wechsel.length > 0 ? <ChangeSection metrics={history.metrics} keys={wechsel} /> : null}
