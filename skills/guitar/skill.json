@@ -7,7 +7,7 @@
   "entry": "/vollbild/guitar/spiel",
   "modules": [
     { "id": "spiel", "type": "practice", "title": "Spiel", "fullscreen": true, "widget": "GameApp", "data": ["songs/uebungsstuecke.json"] },
-    { "id": "kurs", "type": "course", "title": "Kurs", "subtitle": "13 Lektionen, aufeinander aufbauend", "redirect": "/vollbild/guitar/spiel/bibliothek", "data": ["lessons/*.mdx"] },
+    { "id": "kurs", "type": "course", "title": "Kurs", "subtitle": "Alle Lektionen, aufeinander aufbauend", "redirect": "/vollbild/guitar/spiel/bibliothek", "data": ["lessons/*.mdx"] },
     { "id": "stimmgeraet", "type": "practice", "title": "Stimmgerät", "pinned": true, "redirect": "/vollbild/guitar/spiel/schrein", "data": [] },
     { "id": "griffbrett", "type": "practice", "title": "Griffbrett", "redirect": "/vollbild/guitar/spiel/griffbrett", "data": [] },
     { "id": "akkorde", "type": "practice", "title": "Akkordgriffe", "redirect": "/vollbild/guitar/spiel/schmiede", "data": ["songs/uebungsstuecke.json"] },

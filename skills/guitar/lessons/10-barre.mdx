@@ -1,5 +1,7 @@
 export const meta = { id: "10-barre", title: "Barré-Akkorde", order: 10, requires: "09-powerchords" };
 
+import { GriffbrettBild } from "../game/visuals/index";
+
 <Ziel>Du greifst F-Dur als Barré-Akkord über alle sechs Saiten mit klarem Klang jeder Saite.</Ziel>
 
 Beim Barré ersetzt der Zeigefinger den Sattel: er legt sich flach über mehrere oder alle Saiten
@@ -8,6 +10,21 @@ Akkordform frei verschiebbar.
 
 **F-Dur (133211):** Zeigefinger liegt flach über alle sechs Saiten im 1. Bund. Ringfinger,
 Mittelfinger und kleiner Finger bilden dahinter die Form von E-Dur, verschoben um einen Bund.
+
+F-Dur im Griffbrett, die Zahlen sind die Finger. Die Einsen gehören zum Zeigefinger, der als Barré
+über alle sechs Saiten im 1. Bund liegt.
+
+<GriffbrettBild
+  bis={4}
+  punkte={[
+    { saite: 6, bund: 1, text: "1" },
+    { saite: 5, bund: 3, text: "3" },
+    { saite: 4, bund: 3, text: "4" },
+    { saite: 3, bund: 2, text: "2" },
+    { saite: 2, bund: 1, text: "1" },
+    { saite: 1, bund: 1, text: "1" },
+  ]}
+/>
 
 <Handhaltung>
 Der Zeigefinger liegt nicht mit der Fingerkuppe, sondern mit der **Seite** des ersten Glieds auf

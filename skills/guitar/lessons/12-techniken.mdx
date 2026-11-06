@@ -1,5 +1,7 @@
 export const meta = { id: "12-techniken", title: "Hammer-on, Pull-off, Slide, Bending, Vibrato", order: 12, requires: "11-pentatonik" };
 
+import { Tab } from "../game/visuals/index";
+
 <Ziel>Du spielst Hammer-on, Pull-off, Slide, einen Ganztonbend und Vibrato einzeln sauber innerhalb der Pentatonik-Box.</Ziel>
 
 Diese fünf Techniken erzeugen Töne, ohne dass die Anschlagshand jedes Mal neu anschlägt — sie sind
@@ -35,6 +37,21 @@ greifen und hören, dann den Bend exakt darauf ziehen, mit dem Ohr als Referenz,
 </Fehlerbild>
 
 <Merksatz>Ein Bend ohne kontrollierten Zielton ist nur ein verstimmter Ton. Erst hören, wohin, dann ziehen.</Merksatz>
+
+Die Übung unten als Tab, von links nach rechts: h ist Hammer-on, p Pull-off, / Slide, b Bending und
+~ Vibrato. Die Zahlen sind Bünde.
+
+<Tab
+  titel="Hammer-on, Pull-off, Slide, Bending mit Vibrato"
+  zeilen={[
+    "--------------------",
+    "--------------------",
+    "-5h7p5--------7b9~~-",
+    "---------5/7--------",
+    "--------------------",
+    "--------------------",
+  ]}
+/>
 
 <Uebung bpm={80}>
 Metronom auf 80. In der Pentatonik-Box 1: Hammer-on von Bund 5 auf Bund 7 auf der G-Saite, danach

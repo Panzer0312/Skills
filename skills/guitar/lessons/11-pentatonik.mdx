@@ -1,5 +1,7 @@
 export const meta = { id: "11-pentatonik", title: "Pentatonik Box 1", order: 11, requires: "10-barre" };
 
+import { GriffbrettBild } from "../game/visuals/index";
+
 <Ziel>Du spielst die Moll-Pentatonik-Box 1 auf, ab und über zwei Oktaven, mit fester Fingerzuordnung.</Ziel>
 
 Die Moll-Pentatonik hat fünf Töne statt sieben — sie lässt jeden ihrer Töne über fast jedem Akkord
@@ -7,6 +9,26 @@ der zugehörigen Tonart gut klingen. Deshalb ist sie der Einstieg in freies Solo
 
 **Box 1 in A-Moll:** Bund 5 und 8 auf der tiefen E-Saite, der H-Saite und der hohen E-Saite, Bund 5 und 7
 auf der A-, D- und G-Saite.
+
+Box 1 im Griffbrett, die Zahlen sind die Finger: 1 Zeigefinger, 3 Ringfinger, 4 kleiner Finger.
+
+<GriffbrettBild
+  bis={8}
+  punkte={[
+    { saite: 6, bund: 5, text: "1" },
+    { saite: 6, bund: 8, text: "4" },
+    { saite: 5, bund: 5, text: "1" },
+    { saite: 5, bund: 7, text: "3" },
+    { saite: 4, bund: 5, text: "1" },
+    { saite: 4, bund: 7, text: "3" },
+    { saite: 3, bund: 5, text: "1" },
+    { saite: 3, bund: 7, text: "3" },
+    { saite: 2, bund: 5, text: "1" },
+    { saite: 2, bund: 8, text: "4" },
+    { saite: 1, bund: 5, text: "1" },
+    { saite: 1, bund: 8, text: "4" },
+  ]}
+/>
 
 <Handhaltung>
 Feste Fingerzuordnung: Zeigefinger für Bund 5, Ringfinger für Bund 7, kleiner Finger für Bund 8 —

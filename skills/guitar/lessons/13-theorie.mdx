@@ -1,5 +1,7 @@
 export const meta = { id: "13-theorie", title: "Theorie am Griffbrett", order: 13, requires: "12-techniken" };
 
+import { Griffbild } from "../game/visuals/index";
+
 <Ziel>Du findest die Stufenakkorde einer Dur-Tonart am Griffbrett und erklärst, warum Em, Am, C, G und D zusammenpassen.</Ziel>
 
 Nach zwölf Lektionen aus der Hand kommt jetzt der Kopf dazu: warum klingen bestimmte Akkorde
@@ -25,6 +27,14 @@ sofort den passenden Griff aus Lektion 6 oder 10 spielen, nicht nur den Namen ne
 </Fehlerbild>
 
 <Merksatz>Dur-Moll-Moll-Dur-Dur-Moll-vermindert — dieses Muster gilt für jede Dur-Tonart, nicht nur für C-Dur.</Merksatz>
+
+Die Folge I–vi–IV–V in C-Dur:
+
+<Griffbild akkorde={["C", "Am", "F", "G"]} />
+
+Dieselbe Folge in G-Dur:
+
+<Griffbild akkorde={["G", "Em", "C", "D"]} />
 
 <Uebung>
 Baue die Stufenakkorde I–vi als Akkordfolge (C – Am – F – G) und spiele sie viermal hintereinander,

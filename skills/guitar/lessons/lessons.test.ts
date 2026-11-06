@@ -33,18 +33,20 @@ describe("guitar lessons", () => {
     }
   });
 
-  it("gives every lesson on road months 1 to 3 at least one visual", () => {
-    const road = JSON.parse(readFileSync(join(here, "../game/road.json"), "utf8")) as {
-      lessonId: string;
-      months: [number, number];
-    }[];
-    const early = road.filter((step) => step.months[0] <= 3).map((step) => `${step.lessonId}.mdx`);
-    const present = early.filter((file) => files.includes(file));
-    expect(present.length).toBeGreaterThan(0);
-    for (const file of present) {
+  it("gives every lesson at least one visual", () => {
+    expect(files.length).toBeGreaterThan(0);
+    for (const file of files) {
       const source = readFileSync(join(here, file), "utf8");
       expect(source, `${file} ohne Visual-Import`).toMatch(/import \{[^}]+\} from "\.\.\/game\/visuals\/index"/);
+      expect(source, `${file} zeigt kein Visual`).toMatch(/<(Griffbild|GriffbrettBild|RhythmusRaster|Tab)\b/);
     }
+  });
+
+  it("names no lesson count in the course subtitle", () => {
+    const skill = JSON.parse(readFileSync(join(here, "../skill.json"), "utf8")) as {
+      modules: { id: string; subtitle?: string }[];
+    };
+    expect(skill.modules.find((module) => module.id === "kurs")?.subtitle).not.toMatch(/\d/);
   });
 
   it("keeps every Tab line within 40 characters", () => {
