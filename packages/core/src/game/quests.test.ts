@@ -29,6 +29,7 @@ const content: GameContent = {
   road: [step("la", "a"), step("lb", "b")],
   paths: [],
   nodes: [node("la"), node("lb"), node("lc")],
+  riffs: [],
 };
 function build(o: { minutes?: number; hasTargetSong?: boolean; statuses?: Record<string, LessonStatus>; recentQuestIds?: string[]; chosenLessonIds?: string[] }) {
   return buildDailyQuests({ minutes: 30, hasTargetSong: true, statuses: {}, recentQuestIds: [], chosenLessonIds: [], content, ...o });
@@ -214,6 +215,28 @@ describe("parseGameContent", () => {
     });
     expect(() => parseGameContent(withTuning("Quinten"))).toThrow(/Stimmung/);
     expect(() => parseGameContent(withTuning("Drop D"))).not.toThrow();
+  });
+  describe("riffs", () => {
+    const six = Array.from({ length: 6 }, () => "-0-0-");
+    const riff = (extra: Record<string, unknown> = {}) => ({
+      id: "r", title: "R", description: "d", lessonId: "la", bpm: 70, zeilen: six, ...extra,
+    });
+    const withRiffs = (riffs: unknown[], quests = content.quests) => ({ ...content, quests, riffs });
+    it("defaults to no riffs", () => {
+      expect(parseGameContent(content).riffs).toEqual([]);
+    });
+    it("rejects an unknown riff id on a quest", () => {
+      const quests = content.quests.map((quest, i) => (i === 0 ? { ...quest, riffId: "zz" } : quest));
+      expect(() => parseGameContent(withRiffs([riff()], quests))).toThrow(/riffId/);
+      const ok = content.quests.map((quest, i) => (i === 0 ? { ...quest, riffId: "r" } : quest));
+      expect(() => parseGameContent(withRiffs([riff()], ok))).not.toThrow();
+    });
+    it("rejects an unknown lesson, bad tuning and bad tab lines", () => {
+      expect(() => parseGameContent(withRiffs([riff({ lessonId: "zz" })]))).toThrow(/riffs\.0\.lessonId/);
+      expect(() => parseGameContent(withRiffs([riff({ tuning: "Quinten" })]))).toThrow(/Stimmung/);
+      expect(() => parseGameContent(withRiffs([riff({ zeilen: six.slice(1) })]))).toThrow(/riffs\.0\.zeilen/);
+      expect(() => parseGameContent(withRiffs([riff({ zeilen: [...six.slice(1), "-0-"] })]))).toThrow(/riffs\.0\.zeilen/);
+    });
   });
   it("throws a German message", () => {
     expect(() => parseGameContent({})).toThrow(/Spielinhalt/);

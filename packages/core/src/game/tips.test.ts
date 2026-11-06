@@ -10,6 +10,7 @@ const node = (id: string, extra: Partial<MapNode> = {}): MapNode => ({
 const content: GameContent = {
   techniques: [],
   quests: [],
+  riffs: [],
   paths: [],
   nodes: [node("q0", { available: false, quick: true }), node("q1", { quick: true }), node("q2", { quick: true }), node("r1"), node("r2")],
   road: [

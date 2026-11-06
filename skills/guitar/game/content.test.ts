@@ -16,7 +16,12 @@ import {
 
 const here = dirname(fileURLToPath(import.meta.url));
 const read = (name: string) => JSON.parse(readFileSync(join(here, name), "utf8"));
-const content = parseGameContent({ ...read("quests.json"), road: read("road.json"), ...read("map.json") });
+const content = parseGameContent({
+  ...read("quests.json"),
+  road: read("road.json"),
+  ...read("map.json"),
+  riffs: read("riffs.json"),
+});
 const lessonExists = (id: string) => existsSync(join(here, "../lessons", `${id}.mdx`));
 const lessonIds = Array.from({ length: 13 }, (_, i) => i + 1).map((n) => {
   const prefix = String(n).padStart(2, "0");
@@ -335,5 +340,12 @@ describe("song recommendations", () => {
   it("leans towards metal", () => {
     const metal = content.nodes.filter((n) => n.path === "metal").flatMap((n) => n.songs);
     expect(metal.length).toBeGreaterThanOrEqual(4);
+  });
+  it("takes every riff from its lesson", () => {
+    expect(content.riffs.length).toBeGreaterThan(0);
+    for (const riff of content.riffs) {
+      const mdx = readFileSync(join(here, "../lessons", `${riff.lessonId}.mdx`), "utf8");
+      for (const line of riff.zeilen) expect(mdx, `${riff.id}: ${line}`).toContain(`"${line}"`);
+    }
   });
 });

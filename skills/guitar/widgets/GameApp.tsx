@@ -13,6 +13,7 @@ import {
   Tavern,
 } from "../game/Places.js";
 import { MapScreen } from "../game/map/MapScreen.js";
+import { Riffs } from "../game/RiffViewer.js";
 import { Placement } from "../game/Placement.js";
 import { QuestBoard } from "../game/QuestBoard.js";
 import { QuestView } from "../game/QuestView.js";
@@ -38,6 +39,7 @@ export default function GameApp(props: WidgetProps) {
           <Route path="schrein" element={<Shrine {...props} />} />
           <Route path="schmiede" element={<Forge {...props} />} />
           <Route path="griffbrett" element={<FretboardPlace {...props} />} />
+          <Route path="riffs" element={<Riffs />} />
           <Route path="chronik" element={<Chronicle />} />
           <Route path="*" element={<Navigate to={GAME_BASE} replace />} />
         </Route>

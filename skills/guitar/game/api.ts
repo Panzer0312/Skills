@@ -5,23 +5,27 @@ import {
   type LessonStatus,
   type LogBody,
   type QuestDefinition,
+  type SongMeta,
+  type SongMetaPatch,
 } from "@skills/core";
 import { useQuery, type UseQueryResult } from "@tanstack/react-query";
 import { api, ApiError } from "../../../packages/web/src/api/client.js";
 import { queryClient } from "../../../packages/web/src/app/queryClient.js";
 import map from "./map.json";
 import quests from "./quests.json";
+import riffs from "./riffs.json";
 import road from "./road.json";
 
 const SKILL = "guitar";
 const GAME_KEY = ["game", SKILL];
 const PROGRESS_KEY = ["progress", SKILL];
+export const SONG_META_KEY = ["game", SKILL, "songs"];
 
 export const GAME_BASE = "/vollbild/guitar/spiel";
 
 export const DEFAULT_LEVEL = 3;
 
-export const gameContent: GameContent = parseGameContent({ ...quests, road, ...map });
+export const gameContent: GameContent = parseGameContent({ ...quests, road, ...map, riffs });
 
 export const isDone = (status: LessonStatus | undefined) => status === "gelernt" || status === "gemeistert";
 
@@ -102,6 +106,12 @@ export const gameApi = {
     }
   },
   pauseLesson: (id: string) => refreshing(api.del<{ ok: true }>(`/api/game/${SKILL}/chosen/${id}`)),
+  songMeta: () => api.get<{ songs: Record<string, SongMeta> }>(`/api/game/${SKILL}/songs`),
+  setSongMeta: async (songKey: string, patch: SongMetaPatch) => {
+    const result = await api.put<{ ok: true }>(`/api/game/${SKILL}/song/${encodeURIComponent(songKey)}`, patch);
+    await queryClient.invalidateQueries({ queryKey: SONG_META_KEY });
+    return result;
+  },
   setTargetSong: (targetSongId: string | null) =>
     refreshing(api.put<{ ok: true }>(`/api/game/${SKILL}/target-song`, { targetSongId })),
 };

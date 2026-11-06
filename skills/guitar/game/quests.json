@@ -27,11 +27,12 @@
     {
       "id": "griffbrett-namen", "title": "Saiten und Bünde",
       "description": "Nenne die Saitennamen vorwärts und rückwärts und zeige den 3., 5., 7. und 12. Bund ohne zu zählen.",
-      "kind": "theorie", "techniqueId": "theorie", "lessonId": "03-saiten-buende", "minutes": 5, "icon": "fretboard", "scale": {}
+      "kind": "theorie", "techniqueId": "theorie", "lessonId": "03-saiten-buende", "minutes": 5, "icon": "fretboard", "scale": {},
+      "metricLabel": "Treffer pro Minute", "noteGame": { "strings": [0] }
     },
     {
       "id": "noten-e-saite", "title": "Noten auf der E-Saite",
-      "description": "Nenne die Töne auf der tiefen E-Saite und zeige sie: F im 1., G im 3., A im 5., H im 7., C im 8., D im 10. und E im 12. Bund. Danach rückwärts.",
+      "description": "Nenne die Töne auf der tiefen E-Saite und zeige sie: F im 1., G im 3., A im 5., H im 7., C im 8., D im 10. und E im 12. Bund. Danach rückwärts. Im Spiel findest du eine Minute lang so viele gefragte Töne wie möglich, per Klick oder auf der Gitarre.",
       "kind": "theorie", "techniqueId": "theorie", "lessonId": "03-saiten-buende", "minutes": 5, "icon": "fretboard", "scale": {}
     },
     {
@@ -114,7 +115,7 @@
       "scale": { "bpm": [60, 100] }
     },
     {
-      "id": "palm-mute-akzente", "title": "Palm Mute mit Akzenten",
+      "id": "palm-mute-akzente", "riffId": "palm-mute-akzente", "title": "Palm Mute mit Akzenten",
       "description": "Wechsle zwischen offenen und gedämpften Tönen und setze Akzente. Trage am Ende dein höchstes sauberes Tempo ein.",
       "kind": "technik", "techniqueId": "metal", "lessonId": "metal-palm-mute", "minutes": 10, "icon": "bolt",
       "metricLabel": "Sauberes Tempo (BPM)", "masteryTarget": 120,
@@ -139,13 +140,13 @@
       "scale": { "bpm": [50, 90] }
     },
     {
-      "id": "erstes-riff", "title": "Erstes Riff",
+      "id": "erstes-riff", "riffId": "erstes-riff", "title": "Erstes Riff",
       "description": "Lerne das Riff aus leerer E-Saite, G5 und A5 und spiele es zum Metronom. Die E-Saite bleibt gedämpft.",
       "kind": "technik", "techniqueId": "metal", "lessonId": "metal-erster-riff", "minutes": 15, "icon": "bolt",
       "scale": { "bpm": [70, 110] }
     },
     {
-      "id": "downpicking-ausdauer", "title": "Downpicking-Ausdauer",
+      "id": "downpicking-ausdauer", "riffId": "downpicking-achtel", "title": "Downpicking-Ausdauer",
       "description": "Spiele Achtel nur mit Abschlägen in kurzen Runden mit Pausen. Bei Schmerz hörst du sofort auf. Trage dein höchstes sauberes Tempo ein.",
       "kind": "technik", "techniqueId": "metal", "lessonId": "metal-downpicking", "minutes": 10, "icon": "pick",
       "metricLabel": "Sauberes Tempo (BPM)", "masteryTarget": 160,

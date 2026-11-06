@@ -9,7 +9,9 @@ import { useMetronome } from "../../../packages/web/src/audio/useMetronome.js";
 import type { WidgetProps } from "../../../packages/web/src/skills/widgets.js";
 import { GAME_BASE, gameContent, normalizeTitle, questLevel, useGameState } from "./api.js";
 import { ChordTrainer, changeMetricKey } from "./ChordTrainer.js";
+import { NoteFinder } from "./NoteFinder.js";
 import { ToolFrame } from "./Places.js";
+import { RiffCard } from "./RiffViewer.js";
 import { ResultDialog } from "./ResultDialog.js";
 
 const ACTIVE_KEY = "game.activeQuest";
@@ -166,6 +168,7 @@ function QuestRun({ quest, state, data }: { quest: QuestDefinition; state: GameS
   const level = questLevel(state, quest);
   const scaled = scaleQuest(quest, level);
   const pair = quest.kind === "wechsel" ? scaled.chordPair : null;
+  const riff = gameContent.riffs.find((entry) => entry.id === quest.riffId);
   const lessonSong = gameContent.nodes.find((node) => node.id === quest.lessonId)?.targetSong ?? null;
 
   useEffect(() => {
@@ -240,6 +243,7 @@ function QuestRun({ quest, state, data }: { quest: QuestDefinition; state: GameS
             <SongPanel targetSongId={state.targetSongId} scaled={scaled} data={data} />
           )
         ) : null}
+        {riff ? <RiffCard riff={riff} onTempo={setBpm} /> : null}
         {quest.fretboard ? (
           <FretOverlay
             root={quest.fretboard.root}
@@ -249,6 +253,12 @@ function QuestRun({ quest, state, data }: { quest: QuestDefinition; state: GameS
         ) : null}
         {pair ? (
           <ChordTrainer pair={pair} onResult={(n) => setTrainerValue((v) => Math.max(v ?? 0, n))} />
+        ) : null}
+        {quest.noteGame ? (
+          <NoteFinder
+            strings={quest.noteGame.strings}
+            onResult={(n) => setTrainerValue((v) => Math.max(v ?? 0, n))}
+          />
         ) : null}
         {trainerValue !== null ? (
           <p>Beste Runde: {trainerValue}. Starte noch eine Runde oder tippe auf Fertig.</p>

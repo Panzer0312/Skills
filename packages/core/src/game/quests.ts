@@ -29,7 +29,22 @@ const questSchema = z.object({
   masteryTarget: z.number().positive().optional(),
   scale: scaleSchema,
   fretboard: fretboardSchema.optional(),
+  noteGame: z.object({ strings: z.array(z.number().int().min(0).max(5)).min(1) }).optional(),
   tuning: z.string().optional(),
+  riffId: z.string().min(1).optional(),
+});
+
+const riffSchema = z.object({
+  id: z.string().min(1),
+  title: z.string().min(1),
+  description: z.string().min(1),
+  lessonId: z.string().min(1),
+  bpm: z.number().positive(),
+  tuning: z.string().optional(),
+  zeilen: z
+    .array(z.string())
+    .length(6, "Eine Tabulatur braucht sechs Zeilen.")
+    .refine((lines) => lines.every((line) => line.length === lines[0]!.length), "Alle Zeilen müssen gleich lang sein."),
 });
 
 const baseSchema = z.object({
@@ -45,6 +60,7 @@ const baseSchema = z.object({
   ),
   paths: z.array(mapPathSchema),
   nodes: z.array(mapNodeSchema),
+  riffs: z.array(riffSchema).default([]),
 });
 
 const contentSchema = baseSchema.superRefine((content, ctx) => {
@@ -56,6 +72,8 @@ const contentSchema = baseSchema.superRefine((content, ctx) => {
   dupes("nodes", content.nodes.map((n) => n.id));
   dupes("quests", content.quests.map((n) => n.id));
   dupes("techniques", content.techniques.map((n) => n.id));
+  dupes("riffs", content.riffs.map((n) => n.id));
+  const riffIds = new Set(content.riffs.map((n) => n.id));
   const nodeIds = new Set(content.nodes.map((n) => n.id));
   const questIds = new Set(content.quests.map((n) => n.id));
   const techniqueIds = new Set(content.techniques.map((n) => n.id));
@@ -73,6 +91,13 @@ const contentSchema = baseSchema.superRefine((content, ctx) => {
       fail(["quests", i, "lessonId"], `Die Lektion "${quest.lessonId}" existiert nicht.`);
     if (quest.tuning !== undefined && !TUNINGS.some((t) => t.name === quest.tuning))
       fail(["quests", i, "tuning"], `Die Stimmung "${quest.tuning}" ist unbekannt.`);
+    if (quest.riffId !== undefined && !riffIds.has(quest.riffId))
+      fail(["quests", i, "riffId"], `Das Riff "${quest.riffId}" existiert nicht.`);
+  });
+  content.riffs.forEach((riff, i) => {
+    if (!nodeIds.has(riff.lessonId)) fail(["riffs", i, "lessonId"], `Die Lektion "${riff.lessonId}" existiert nicht.`);
+    if (riff.tuning !== undefined && !TUNINGS.some((t) => t.name === riff.tuning))
+      fail(["riffs", i, "tuning"], `Die Stimmung "${riff.tuning}" ist unbekannt.`);
   });
   content.road.forEach((step, i) => {
     if (!nodeIds.has(step.lessonId)) fail(["road", i, "lessonId"], `Die Lektion "${step.lessonId}" existiert nicht.`);
@@ -84,6 +109,7 @@ const contentSchema = baseSchema.superRefine((content, ctx) => {
 export type QuestScale = z.infer<typeof scaleSchema>;
 export type QuestDefinition = z.infer<typeof questSchema>;
 export type GameContent = z.infer<typeof baseSchema>;
+export type Riff = GameContent["riffs"][number];
 export type Technique = GameContent["techniques"][number];
 export type RoadStep = GameContent["road"][number];
 export const MAX_CHOSEN = 2;
