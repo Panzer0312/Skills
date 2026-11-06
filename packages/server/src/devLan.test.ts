@@ -1,6 +1,6 @@
 import type { NetworkInterfaceInfo } from "node:os";
 import { describe, expect, it } from "vitest";
-import { lanUrls } from "./devLan.js";
+import { lanUrls, WEB_ARGS } from "./devLan.js";
 
 function nic(address: string, family: "IPv4" | "IPv6", internal = false): NetworkInterfaceInfo {
   return { address, family, internal } as NetworkInterfaceInfo;
@@ -19,5 +19,12 @@ describe("lanUrls", () => {
   it("returns nothing without a network", () => {
     expect(lanUrls({}, 5173)).toEqual([]);
     expect(lanUrls({ eth0: undefined }, 5173)).toEqual([]);
+  });
+});
+
+describe("WEB_ARGS", () => {
+  it("fails instead of moving to another port, so the printed URLs stay true", () => {
+    expect(WEB_ARGS).toContain("--strictPort");
+    expect(WEB_ARGS).toContain("--host");
   });
 });

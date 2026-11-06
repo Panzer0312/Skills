@@ -7,6 +7,9 @@ const WEB_PORT = 5173;
 export const WARNING =
   "Achtung: Die App hat keine Anmeldung. Jeder in diesem Netzwerk kann sie öffnen, deine Daten ändern und deine Sicherung herunterladen. Nutze das nur im eigenen Heimnetz und beende es mit Strg+C.";
 
+/** Vite must keep port 5173, or the printed addresses would point at nothing. */
+export const WEB_ARGS = ["run", "dev", "-w", "@skills/web", "--", "--host", "0.0.0.0", "--strictPort"];
+
 /** Web addresses of this machine on its networks: non-internal IPv4 only. */
 export function lanUrls(interfaces: NodeJS.Dict<NetworkInterfaceInfo[]>, port: number): string[] {
   return Object.values(interfaces)
@@ -17,13 +20,14 @@ export function lanUrls(interfaces: NodeJS.Dict<NetworkInterfaceInfo[]>, port: n
 
 /** Starts the API on localhost and Vite on all interfaces, and stops both together. */
 function start() {
-  const children = [
-    spawn("npm", ["run", "dev", "-w", "@skills/server"], { stdio: "inherit" }),
-    spawn("npm", ["run", "dev", "-w", "@skills/web", "--", "--host", "0.0.0.0"], { stdio: "inherit" }),
-  ];
   const urls = lanUrls(networkInterfaces(), WEB_PORT);
   console.log(`\n${WARNING}\n`);
   console.log(urls.length > 0 ? `Im Heimnetz erreichbar unter:\n${urls.join("\n")}\n` : "Kein Netzwerk gefunden.\n");
+
+  const children = [
+    spawn("npm", ["run", "dev", "-w", "@skills/server"], { stdio: "inherit" }),
+    spawn("npm", WEB_ARGS, { stdio: "inherit" }),
+  ];
 
   let stopping = false;
   const stop = (code: number) => {
