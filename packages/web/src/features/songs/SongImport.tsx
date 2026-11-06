@@ -1,5 +1,5 @@
 import { detectFormat, parseSong } from "@skills/core";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api, ApiError } from "../../api/client.js";
@@ -15,6 +15,7 @@ const FORMAT_LABELS: Record<string, string> = {
 
 export function SongImport() {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [mode, setMode] = useState<Mode>("paste");
   const [url, setUrl] = useState("");
   const [text, setText] = useState("");
@@ -43,7 +44,10 @@ export function SongImport() {
         sourceUrl: mode === "url" && url.trim() !== "" ? url : undefined,
         tags: [],
       }),
-    onSuccess: () => navigate("/skill/guitar/songs"),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ["songs"] });
+      navigate("/skill/guitar/songs");
+    },
   });
 
   function onTextChange(value: string) {

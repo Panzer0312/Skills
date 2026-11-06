@@ -14,8 +14,7 @@ vi.mock("../../audio/useMetronome.js", () => ({
 
 const chordPro = "{title: Übung in Em}\n{start_of_verse}\n[Em]Zeile eins\n{end_of_verse}";
 
-function renderImport() {
-  const client = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+function renderImport(client = new QueryClient({ defaultOptions: { queries: { retry: false } } })) {
   return render(
     <QueryClientProvider client={client}>
       <MemoryRouter>
@@ -35,6 +34,25 @@ describe("SongImport", () => {
     await userEvent.paste(chordPro);
     expect(await screen.findByText(/ChordPro/)).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Übung in Em" })).toBeInTheDocument();
+  });
+
+  it("marks the song list stale after saving", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async (url: string) =>
+        new Response(JSON.stringify(String(url).startsWith("/api/chords") ? { global: [], song: [] } : { song: { id: 1 } }), {
+          status: 200,
+          headers: { "content-type": "application/json" },
+        }),
+      ),
+    );
+    const client = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+    client.setQueryData(["songs"], { songs: [] });
+    renderImport(client);
+    await userEvent.click(screen.getByLabelText(/Songtext/));
+    await userEvent.paste(chordPro);
+    await userEvent.click(await screen.findByRole("button", { name: "Speichern" }));
+    await waitFor(() => expect(client.getQueryState(["songs"])?.isInvalidated).toBe(true));
   });
 
   it("fills the text field from a fetched url", async () => {
