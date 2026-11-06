@@ -7,6 +7,13 @@
     "baseFret": 1
   },
   {
+    "symbol": "Em7",
+    "name": "Em7",
+    "frets": [0, 2, 2, 0, 3, 0],
+    "fingers": [null, 1, 2, null, 3, null],
+    "baseFret": 1
+  },
+  {
     "symbol": "Cadd9",
     "name": "Cadd9",
     "frets": [null, 3, 2, 0, 3, 0],

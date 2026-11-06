@@ -134,8 +134,8 @@
     },
     {
       "id": "bards-wechsel", "title": "The Bard's Song: Wechsel",
-      "description": "Übe die neuen Wechsel einzeln im Takt: Em7–Dm, Dm–C, Am–Dm, Dm–F und F–G. Spiele danach die Kette Am, Dm, F, G, vier Klicks pro Akkord.",
-      "kind": "technik", "techniqueId": "song", "lessonId": "song-bards-vorbereitung", "minutes": 10, "icon": "chord",
+      "description": "Übe die neuen Wechsel einzeln im Takt: Em7–Dm, Dm–C, Am–Dm, Dm–F und F–G. Spiele danach die Kette Em7, Dm, C, Am, Dm, F, G, vier Klicks pro Akkord.",
+      "kind": "technik", "techniqueId": "song", "lessonId": "song-bards-vorbereitung", "minutes": 15, "icon": "chord",
       "scale": { "bpm": [50, 90] }
     },
     {
@@ -194,7 +194,7 @@
     },
     {
       "id": "bards-ganz", "title": "The Bard's Song: ganz",
-      "description": "Spiele den genannten Abschnitt im genannten Tempo, ohne bei einem Fehler anzuhalten. 100 % ist das Tempo, das du in der Lektion ermittelt hast.",
+      "description": "Spiele den genannten Abschnitt im genannten Tempo, ohne bei einem Fehler anzuhalten. 100 % ist dein Zieltempo aus der Lektion. Bis du es kennst, gilt 100 % = 100 BPM.",
       "kind": "song", "techniqueId": "song", "lessonId": "song-bards-ganz", "minutes": 15, "icon": "song",
       "scale": { "tempoPercent": [50, 100], "sections": ["Intro", "Teil A", "Teil B", "Zwischenspiel", "Teil C", "Ganzer Song"], "runs": [1, 4] }
     }

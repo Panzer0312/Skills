@@ -73,6 +73,15 @@ describe("resolveChordShape", () => {
     expect(resolveChordShape("Em")?.frets).toHaveLength(6);
   });
 
+  it("draws Em7 as the shipped open grip, not as a barre at fret 0", () => {
+    expect(resolveChordShape("Em7")).toEqual({
+      name: "Em7",
+      frets: [0, 2, 2, 0, 3, 0],
+      fingers: [null, 1, 2, null, 3, null],
+      baseFret: 1,
+    });
+  });
+
   it("returns null for a symbol nothing can resolve", () => {
     expect(resolveChordShape("Hglurb", {})).toBeNull();
   });
