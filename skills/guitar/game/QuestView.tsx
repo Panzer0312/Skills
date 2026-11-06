@@ -13,6 +13,7 @@ import { NoteFinder } from "./NoteFinder.js";
 import { ToolFrame } from "./Places.js";
 import { RiffCard } from "./RiffViewer.js";
 import { ResultDialog } from "./ResultDialog.js";
+import { Griffbild } from "./visuals/index.js";
 
 const ACTIVE_KEY = "game.activeQuest";
 
@@ -243,6 +244,7 @@ function QuestRun({ quest, state, data }: { quest: QuestDefinition; state: GameS
             <SongPanel targetSongId={state.targetSongId} scaled={scaled} data={data} />
           )
         ) : null}
+        {quest.chords ? <Griffbild akkorde={quest.chords} /> : null}
         {riff ? <RiffCard riff={riff} onTempo={setBpm} /> : null}
         {quest.fretboard ? (
           <FretOverlay

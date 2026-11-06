@@ -13,6 +13,7 @@ import {
   type LessonStatus,
   type MapNode,
 } from "@skills/core";
+import { resolveChordShape } from "../../../packages/web/src/music/userChords.js";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const read = (name: string) => JSON.parse(readFileSync(join(here, name), "utf8"));
@@ -347,6 +348,35 @@ describe("song recommendations", () => {
       const mdx = readFileSync(join(here, "../lessons", `${riff.lessonId}.mdx`), "utf8");
       for (const line of riff.zeilen) expect(mdx, `${riff.id}: ${line}`).toContain(`"${line}"`);
     }
+  });
+});
+
+const QUEST_CHORDS: Record<string, string[]> = {
+  "offene-akkorde": ["Em", "Am", "C", "G"],
+  akkordtoene: ["C", "Em"],
+  "ankerfinger-wechsel": ["Am", "C", "G", "Em"],
+  "drei-akkord-song": ["Em", "Am", "C"],
+  "arpeggio-muster": ["Em", "Am", "C", "G"],
+  "bards-wechsel": ["Em7", "Dm", "C", "Am", "F", "G"],
+  "barre-greifen": ["F"],
+  stufenakkorde: ["C", "Am", "F", "G", "Em", "D"],
+};
+
+describe("quest chords", () => {
+  for (const [id, chords] of Object.entries(QUEST_CHORDS)) {
+    it(`shows the chords of ${id} from its lesson`, () => {
+      const quest = content.quests.find((q) => q.id === id)!;
+      expect(quest.chords).toEqual(chords);
+      const mdx = readFileSync(join(here, "../lessons", `${quest.lessonId}.mdx`), "utf8");
+      for (const chord of chords) {
+        expect(mdx, `${id}: ${chord}`).toMatch(new RegExp(`(^|[^A-Za-z0-9])${chord}([^A-Za-z0-9#b]|$)`, "m"));
+        expect(resolveChordShape(chord), `${id}: ${chord} has a diagram`).not.toBeNull();
+      }
+    });
+  }
+
+  it("names no chords on a quest that grips none", () => {
+    expect(content.quests.find((q) => q.id === "haltung-check")!.chords).toBeUndefined();
   });
 });
 

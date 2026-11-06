@@ -602,6 +602,20 @@ describe("quest view", () => {
     });
   });
 
+  it("shows the chord diagrams of a quest that grips named chords", async () => {
+    serve({});
+    renderGame("/quest/offene-akkorde");
+    const group = await screen.findByRole("group", { name: "Griffbilder: Em, Am, C, G" });
+    expect(group).toBeInTheDocument();
+  });
+
+  it("shows no chord diagrams on a quest without chords", async () => {
+    serve({});
+    renderGame("/quest/haltung-check");
+    await screen.findByRole("button", { name: "Fertig" });
+    expect(screen.queryByRole("group", { name: /Griffbilder/ })).not.toBeInTheDocument();
+  });
+
   it("starts the timer and resumes it after a reload", async () => {
     serve({});
     const first = renderGame("/quest/anschlag-takt");

@@ -50,12 +50,14 @@
     {
       "id": "offene-akkorde", "title": "Offene Akkorde greifen",
       "description": "Greife Em, Am, C und G nacheinander und prüfe jede Saite einzeln auf sauberen Klang.",
+      "chords": ["Em", "Am", "C", "G"],
       "kind": "technik", "techniqueId": "akkordwechsel", "lessonId": "06-offene-akkorde", "minutes": 10, "icon": "chord",
       "scale": { "bpm": [40, 80] }
     },
     {
       "id": "akkordtoene", "title": "Akkordtöne nennen",
       "description": "Greife C und zupfe Saite für Saite: C, E, G, C, E. Greife Em: E, H, E, G, H, E. Nenne jeden Ton laut. Beide Akkorde bestehen nur aus drei verschiedenen Tönen.",
+      "chords": ["C", "Em"],
       "kind": "theorie", "techniqueId": "theorie", "lessonId": "06-offene-akkorde", "minutes": 5, "icon": "book", "scale": {}
     },
     {
@@ -76,12 +78,14 @@
     {
       "id": "ankerfinger-wechsel", "title": "Ankerfinger",
       "description": "Wechsle Am–C, C–G und Em–G im Takt. Bei Am–C bleiben Zeige- und Mittelfinger liegen, bei den anderen beiden setzt du die ganze Form gleichzeitig auf.",
+      "chords": ["Am", "C", "G", "Em"],
       "kind": "technik", "techniqueId": "akkordwechsel", "lessonId": "rhythmus-ankerfinger", "minutes": 10, "icon": "chord",
       "scale": { "bpm": [50, 90] }
     },
     {
       "id": "drei-akkord-song", "title": "Drei-Akkord-Song",
       "description": "Spiele „Zwei Akkorde, eine Wiege“ und „Wanderung zu zweit“ hintereinander: acht Takte mit Em, Am und C, ein Abschlag pro Schlag.",
+      "chords": ["Em", "Am", "C"],
       "kind": "technik", "techniqueId": "akkordwechsel", "lessonId": "rhythmus-drei-akkorde", "minutes": 15, "icon": "song",
       "scale": { "bpm": [50, 75] }
     },
@@ -130,12 +134,14 @@
     {
       "id": "arpeggio-muster", "title": "Arpeggio-Muster",
       "description": "Spiele die drei Zupfmuster über Em, Am, C und G, einen Takt pro Akkord. Der Daumen trifft die richtige Bass-Saite, und zwischen den Takten entsteht keine Lücke.",
+      "chords": ["Em", "Am", "C", "G"],
       "kind": "technik", "techniqueId": "fingerpicking", "lessonId": "finger-arpeggio", "minutes": 10, "icon": "note",
       "scale": { "bpm": [50, 90] }
     },
     {
       "id": "bards-wechsel", "title": "The Bard's Song: Wechsel",
       "description": "Übe die neuen Wechsel einzeln im Takt: Em7–Dm, Dm–C, Am–Dm, Dm–F und F–G. Spiele danach die Kette Em7, Dm, C, Am, Dm, F, G, vier Klicks pro Akkord.",
+      "chords": ["Em7", "Dm", "C", "Am", "F", "G"],
       "kind": "technik", "techniqueId": "song", "lessonId": "song-bards-vorbereitung", "minutes": 15, "icon": "chord",
       "scale": { "bpm": [50, 90] }
     },
@@ -155,6 +161,7 @@
     {
       "id": "barre-greifen", "title": "Barré-Akkord halten",
       "description": "Greife F oder Bm als Barré und prüfe jede Saite. Entspanne zwischendurch die Hand.",
+      "chords": ["F"],
       "kind": "technik", "techniqueId": "barre", "lessonId": "10-barre", "minutes": 10, "icon": "barre",
       "scale": { "bpm": [50, 90] }
     },
@@ -188,6 +195,7 @@
     {
       "id": "stufenakkorde", "title": "Stufenakkorde spielen",
       "description": "Spiele I, vi, IV und V in C-Dur und danach in G-Dur. Sage bei jedem Wechsel die Stufe laut an.",
+      "chords": ["C", "Am", "F", "G", "Em", "D"],
       "kind": "theorie", "techniqueId": "theorie", "lessonId": "13-theorie", "minutes": 5, "icon": "book", "scale": {}
     },
     {

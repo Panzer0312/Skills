@@ -32,6 +32,8 @@ const questSchema = z.object({
   noteGame: z.object({ strings: z.array(z.number().int().min(0).max(5)).min(1) }).optional(),
   tuning: z.string().optional(),
   riffId: z.string().min(1).optional(),
+  /** Chords the quest tells the owner to grip, shown as diagrams. Names come from the quest's lesson. */
+  chords: z.array(z.string().min(1)).optional(),
 });
 
 const riffSchema = z.object({
