@@ -1,4 +1,3 @@
-import type { GameState } from "@skills/core";
 import type { ReactNode } from "react";
 import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import type { LessonMeta } from "../../../packages/web/src/mdx/lessons.js";
@@ -10,8 +9,7 @@ import SongLibrary from "../widgets/SongLibrary.js";
 import Tuner from "../widgets/Tuner.js";
 import { ChordTrainer } from "./ChordTrainer.js";
 import { NoteFinder } from "./NoteFinder.js";
-import { GAME_BASE, gameContent, useGameState } from "./api.js";
-import { formatTime } from "./StatusBar.js";
+import { GAME_BASE, gameContent } from "./api.js";
 
 export function ToolFrame({ title, children }: { title: string; children: ReactNode }) {
   return (
@@ -140,62 +138,6 @@ export function Market() {
   return (
     <ToolFrame title="Markt">
       <p>Der Markt öffnet bald</p>
-    </ToolFrame>
-  );
-}
-
-function recordLabel(key: string): string {
-  if (key.startsWith("wechsel:")) return `Wechsel ${key.slice("wechsel:".length)}`;
-  return gameContent.quests.find((quest) => quest.id === key)?.title ?? key;
-}
-
-function Records({ records }: { records: GameState["records"] }) {
-  const entries = Object.entries(records);
-  return (
-    <>
-      <h2 className="mt-6 text-lg font-semibold">Rekorde</h2>
-      {entries.length === 0 ? (
-        <p className="text-slate-600 dark:text-slate-400">Noch keine Rekorde.</p>
-      ) : (
-        <ul>
-          {entries.map(([key, value]) => (
-            <li key={key} className="flex justify-between gap-6">
-              <span>{recordLabel(key)}</span>
-              <span>{value}</span>
-            </li>
-          ))}
-        </ul>
-      )}
-    </>
-  );
-}
-
-export function Chronicle() {
-  const { data: state } = useGameState();
-  return (
-    <ToolFrame title="Chronik">
-      {state ? (
-        <>
-          <dl className="grid grid-cols-[auto_1fr] gap-x-6 gap-y-1">
-            <dt>Gesamt</dt>
-            <dd>{formatTime(state.totalSeconds)}</dd>
-            <dt>Diese Woche</dt>
-            <dd>{formatTime(state.weekSeconds)}</dd>
-            <dt>Serie</dt>
-            <dd>
-              {state.streak} {state.streak === 1 ? "Tag" : "Tage"}
-            </dd>
-            <dt>Level</dt>
-            <dd>
-              {state.level} · {state.title}
-            </dd>
-          </dl>
-          <Records records={state.records} />
-        </>
-      ) : null}
-      <Link to={`${GAME_BASE}/einstufung`} className="mt-6 inline-block underline">
-        Einstufung wiederholen
-      </Link>
     </ToolFrame>
   );
 }

@@ -39,6 +39,7 @@ function json(body: unknown, status = 200) {
 function serve(state: Partial<GameState>) {
   const fetchMock = vi.fn(async (url: string) => {
     if (String(url).includes("/state")) return json({ ...base, ...state });
+    if (String(url).includes("/history")) return json({ days: [], metrics: [] });
     if (String(url).startsWith("/api/progress")) return json({ lessons: [] });
     if (String(url).startsWith("/api/songs")) return json({ songs: [] });
     if (String(url).startsWith("/api/chords")) return json({ global: [], song: [], entries: [] });
@@ -269,7 +270,7 @@ describe("game places", () => {
     serve({ records: { "wechsel:Am-Em": 41 } });
     renderGame("/chronik");
     expect(await screen.findByText("2h 15m", { selector: "dd" })).toBeInTheDocument();
-    expect(screen.getByText("Wechsel Am-Em")).toBeInTheDocument();
+    expect(screen.getByText("Wechsel Am–Em")).toBeInTheDocument();
     expect(screen.getByText("41")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Einstufung wiederholen" })).toHaveAttribute(
       "href",

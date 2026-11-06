@@ -2,6 +2,7 @@ import {
   parseGameContent,
   type GameContent,
   type GameState,
+  type History,
   type LessonStatus,
   type LogBody,
   type QuestDefinition,
@@ -57,6 +58,15 @@ export function useGameState(): UseQueryResult<GameState> {
   });
 }
 
+export function useGameHistory(): UseQueryResult<History> {
+  return useQuery({
+    queryKey: [...GAME_KEY, "history"],
+    queryFn: gameApi.history,
+    retry: false,
+    refetchOnWindowFocus: "always",
+  });
+}
+
 async function refreshing<T>(write: Promise<T>): Promise<T> {
   const result = await write;
   // Lesson statuses live in both views, and the library reads the progress one.
@@ -80,6 +90,7 @@ export interface PlacementBody {
 }
 
 export const gameApi = {
+  history: () => api.get<History>(`/api/game/${SKILL}/history`),
   log: (body: LogBody) => refreshing(api.post<LogResult>(`/api/game/${SKILL}/log`, body)),
   setLevel: (techniqueId: string, level: number) =>
     refreshing(api.put<{ ok: true }>(`/api/game/${SKILL}/level/${techniqueId}`, { level })),

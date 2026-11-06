@@ -4,7 +4,6 @@ import { GAME_BASE } from "../game/api.js";
 import "../game/game.css";
 import { GameShell, PlacementGate } from "../game/GameShell.js";
 import {
-  Chronicle,
   Forge,
   FretboardPlace,
   Library,
@@ -12,6 +11,7 @@ import {
   Shrine,
   Tavern,
 } from "../game/Places.js";
+import { Chronicle } from "../game/chronicle/Chronicle.js";
 import { MapScreen } from "../game/map/MapScreen.js";
 import { Riffs } from "../game/RiffViewer.js";
 import { Placement } from "../game/Placement.js";
