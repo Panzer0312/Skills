@@ -25,9 +25,14 @@ export const gameContent: GameContent = parseGameContent({ ...quests, road, ...m
 
 export const isDone = (status: LessonStatus | undefined) => status === "gelernt" || status === "gemeistert";
 
-/** Song titles as compared across the map content and imported songs. */
+/** Song titles as compared across the map content and imported songs, without a suffix like " (Chords)". */
 export function normalizeTitle(s: string): string {
-  return s.toLowerCase().replace(/[’‘ʼ´`]/g, "'").replace(/\s+/g, " ").trim();
+  return s
+    .toLowerCase()
+    .replace(/[’‘ʼ´`]/g, "'")
+    .replace(/\s*\([^()]*\)\s*$/, "")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 export function questLevel(state: GameState, quest: QuestDefinition): number {

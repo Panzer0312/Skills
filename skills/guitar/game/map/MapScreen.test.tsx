@@ -607,6 +607,19 @@ describe("target song", () => {
     expect(normalizeTitle("  The  Bard‘s\tSONG ")).toBe("the bard's song");
     expect(normalizeTitle("Bard`s ´x ʼy")).toBe("bard's 'x 'y");
   });
+
+  it("strips a trailing parenthesis from titles", () => {
+    expect(normalizeTitle("The Bard's Song (Chords)")).toBe("the bard's song");
+    expect(normalizeTitle("  The Bard's Song  (Chords)  ")).toBe("the bard's song");
+    expect(normalizeTitle("Song (live) Teil 2")).toBe("song (live) teil 2");
+  });
+
+  it("finds an imported song with a suffix as the lesson's target", async () => {
+    patchNode(OTHER, { targetSong: BARDS });
+    serve({}, [{ id: 3, title: `${BARDS.title} (Chords)` }]);
+    renderMap(`/hafen/${OTHER}`);
+    expect(await within(await panel()).findByRole("button", { name: "Als Zielsong setzen" })).toBeInTheDocument();
+  });
 });
 
 describe("NavPane", () => {
