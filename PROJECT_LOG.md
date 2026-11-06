@@ -340,4 +340,24 @@ Dieses Dokument ist die zentrale Stelle für Stand, Probleme und Ideen.
   Puppets nennt keine bpm mehr, weil die Quellseite keine Zahl belegt.
 - 2026-11-06 — `e2e/guitar-map.spec.ts` pausiert vor jedem Test alle gewählten Lektionen über die API,
   damit die Tests unabhängig von Reihenfolge und früheren Läufen bleiben.
-- Offen: Stufe 3 (Werkzeuge), 4 (restliche Lektionen und Story), 5 (Belohnungen, Politur).
+- Offen: Stufe 4 (restliche Lektionen und Story), 5 (Belohnungen, Politur).
+
+## Abweichungen vom Plan (Gitarren-RPG, Stufe 3: Werkzeuge)
+
+- 2026-11-06 — Songzustand liegt in `game_songs`, getrennt von den Freitext-Zeilen in `songs`. Der Schlüssel
+  hat zwei Formen: `uebung:<id>` für mitgelieferte Übungsstücke und `song:<id>` für importierte Songs.
+  Beim Löschen eines Songs wird die zugehörige Zeile mit entfernt. „Zuletzt gespielt“ heißt: der Song wurde geöffnet.
+- 2026-11-06 — Riffs liegen in `skills/guitar/game/riffs.json` und stammen aus den Lektionen
+  (`lessonId`); es gibt nur Tab und Tempo, keinen laufenden Cursor und keinen Ton. Alle sind eigene Übungen.
+- 2026-11-06 — Der Jam Room zählt Übungszeit erst ab einer Minute Laufzeit und stoppt sich nach einer
+  Stunde selbst, damit ein vergessener Tab keine XP erzeugt. Begleitung per Web Audio, ohne Sample-Bibliothek;
+  Stile sind Rock, Metal und Blues.
+- 2026-11-06 — Der Notenfinder akzeptiert denselben Ton auf einer anderen Saite und eine Oktave daneben,
+  weil Audio das nicht zuverlässig trennt. Der Klick auf das Griffbrett bleibt immer als Ausweg.
+- 2026-11-06 — `npm run dev:lan` ist der einzige Weg ins Heimnetz und gibt nur Vite frei; der Server
+  bleibt auf localhost und wird über den Vite-Proxy erreicht. Der Standardstart bleibt rein lokal, denn die App hat keine Anmeldung.
+- 2026-11-06 — Die Griffbrett-Seite zeigt nun zwei Raster (Anzeige und Notenfinder) mit gleichen
+  `data-testid`; `e2e/guitar.spec.ts` nimmt deshalb `.first()`.
+- Offen für den Besitzer: Der Hörtest des Jam Room (Klang von Schlagzeug und Bass, Lautstärke, Taktgefühl)
+  ist noch nicht gemacht; die Tests prüfen nur Start, Stopp und Tonleiter.
+
