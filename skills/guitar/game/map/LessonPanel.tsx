@@ -217,8 +217,11 @@ export function LessonPanel({
   const mainRoad = best?.lessonId;
   const actionable = node.available && !node.knownSong;
   const region = paths.find((path) => path.id === node.path);
+  // An unwritten parent cannot be finished, so it must not hold a note open.
   const missingBasics =
-    node.quick || node.knownSong ? [] : buildsOn.filter((parent) => !isDone(state.lessons[parent.id]));
+    node.quick || node.knownSong
+      ? []
+      : buildsOn.filter((parent) => parent.available && !isDone(state.lessons[parent.id]));
 
   /** Without a set for today the next build includes the best next quest anyway. */
   async function startBest(event: MouseEvent, questId: string) {

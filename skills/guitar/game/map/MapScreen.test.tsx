@@ -283,6 +283,15 @@ describe("LessonPanel", () => {
     expect(screen.queryByText(/Dir fehlen noch Grundlagen/)).not.toBeInTheDocument();
   });
 
+  it("names no missing basics for a parent that is not written yet", async () => {
+    const id = "13-theorie";
+    expect(nodeOf(nodeOf(id).parent!).available).toBe(false);
+    serve({});
+    renderMap(`/hafen/${id}`);
+    await within(await panel()).findByRole("link", { name: "Lektion öffnen" });
+    expect(screen.queryByText(/Dir fehlen noch Grundlagen/)).not.toBeInTheDocument();
+  });
+
   it("exempts quick wins and known songs from the warning", async () => {
     const known = gameContent.nodes.find((node) => node.knownSong && node.parent !== null)!;
     expect(quick.parent).not.toBeNull();
