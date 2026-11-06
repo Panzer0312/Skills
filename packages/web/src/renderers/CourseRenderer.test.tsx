@@ -59,6 +59,19 @@ describe("CourseRenderer", () => {
     expect(await lessonButton(/Zurück zur Übersicht/)).toBeInTheDocument();
   });
 
+  it("shows an aktiv lesson as begonnen", async () => {
+    serve([{ lessonId: SECOND, status: "aktiv" }]);
+    renderCourse({ ignoreLocks: true });
+    await waitFor(async () => expect(await lessonButton(/Anschlag/)).toHaveTextContent("begonnen"));
+    expect(await lessonButton(/Haltung/)).toHaveTextContent("offen");
+  });
+
+  it("keeps a locked aktiv lesson locked", async () => {
+    serve([{ lessonId: SECOND, status: "aktiv" }]);
+    renderCourse();
+    expect(await lessonButton(/Anschlag.*gesperrt/)).toBeDisabled();
+  });
+
   it("opens the lesson given by initialLessonId", async () => {
     serve([]);
     renderCourse({ initialLessonId: SECOND });

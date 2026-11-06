@@ -59,6 +59,9 @@ export function CourseRenderer({
   const done = new Set(
     (progress.data?.lessons ?? []).filter((l) => FINISHED.has(l.status)).map((l) => l.lessonId),
   );
+  const begun = new Set(
+    (progress.data?.lessons ?? []).filter((l) => l.status === "aktiv").map((l) => l.lessonId),
+  );
 
   function open(lessonId: string | null) {
     setOpenId(lessonId);
@@ -130,7 +133,13 @@ export function CourseRenderer({
               >
                 <span>{meta.title}</span>
                 <span className="text-sm text-slate-500">
-                  {done.has(meta.id) ? "abgeschlossen" : unlocked ? "offen" : "gesperrt"}
+                  {done.has(meta.id)
+                    ? "abgeschlossen"
+                    : !unlocked
+                      ? "gesperrt"
+                      : begun.has(meta.id)
+                        ? "begonnen"
+                        : "offen"}
                 </span>
               </button>
             </li>
