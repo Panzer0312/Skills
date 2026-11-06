@@ -2,10 +2,10 @@ import { expect, test } from "@playwright/test";
 
 test("the fretboard switches from note names to intervals", async ({ page }) => {
   await page.goto("/skill/guitar/griffbrett");
-  await expect(page.getByTestId("fret-0-0")).toHaveText("E");
+  await expect(page.getByTestId("fret-0-0").first()).toHaveText("E");
   await page.getByLabel("Anzeige").selectOption("intervalle");
   await page.getByLabel("Grundton").selectOption("E");
-  await expect(page.getByTestId("fret-0-0")).toHaveText("1");
+  await expect(page.getByTestId("fret-0-0").first()).toHaveText("1");
 });
 
 test("a practice song opens and transposes", async ({ page }) => {
