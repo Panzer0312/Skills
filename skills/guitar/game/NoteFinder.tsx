@@ -121,6 +121,8 @@ export function NoteFinder({
       onResult(total);
       return;
     }
+    // Starting a round and walking away earns nothing, not even the time.
+    if (total === 0) return;
     try {
       setResult(
         await gameApi.log({
@@ -128,8 +130,8 @@ export function NoteFinder({
           seconds: ROUND_MS / 1000,
           level: 1,
           techniqueId: "theorie",
-          // A round without hits is no result worth a chart point or a record.
-          ...(total > 0 ? { metricKey: `notenfinder:${strings.join("-")}`, metricValue: total } : {}),
+          metricKey: `notenfinder:${strings.join("-")}`,
+          metricValue: total,
         }),
       );
     } catch {

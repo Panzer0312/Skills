@@ -215,7 +215,7 @@ describe("NoteFinder", () => {
     expect(Number(screen.getByRole("meter").getAttribute("aria-valuenow"))).toBeGreaterThan(0);
   });
 
-  it("logs the time of a round without hits but sends no result and shows no record", async () => {
+  it("logs nothing for a round without hits and shows no record", async () => {
     const fetchMock = vi.fn(async (url: string, _init?: RequestInit) => {
       if (String(url).includes("/state")) return json(base);
       if (String(url).includes("/log")) return json({ xpGained: 5, suggestion: null, isRecord: true });
@@ -225,14 +225,7 @@ describe("NoteFinder", () => {
     renderFinder();
     fireEvent.click(screen.getByRole("button", { name: "Start" }));
     await tick(60_000);
-    const calls = fetchMock.mock.calls.filter(([url]) => String(url).includes("/log"));
-    expect(calls).toHaveLength(1);
-    expect(JSON.parse(String(calls[0]![1]?.body))).toEqual({
-      kind: "frei",
-      seconds: 60,
-      level: 1,
-      techniqueId: "theorie",
-    });
+    expect(fetchMock.mock.calls.filter(([url]) => String(url).includes("/log"))).toHaveLength(0);
     expect(screen.queryByText("Neuer Rekord!")).toBeNull();
     expect(screen.getByText("Keine Treffer in dieser Runde. Beim nächsten Mal klappt es.")).toBeInTheDocument();
   });
