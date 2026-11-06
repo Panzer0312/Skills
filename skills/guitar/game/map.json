@@ -606,7 +606,7 @@
       "links": [
         {
           "to": "metal-tremolo",
-          "reason": "Beide schulen die Kontrolle der Anschlaghand."
+          "reason": "Beide schulen die Kontrolle der Anschlagshand."
         }
       ],
       "songs": [],
@@ -978,7 +978,7 @@
       "links": [
         {
           "to": "rhythmus-funk",
-          "reason": "Beide leben vom Dämpfen: Palm Mute mit der Anschlaghand, Funk mit der Greifhand."
+          "reason": "Beide leben vom Dämpfen: Palm Mute mit der Anschlagshand, Funk mit der Greifhand."
         }
       ],
       "songs": [],
@@ -1352,7 +1352,7 @@
     {
       "id": "lead-tapping",
       "title": "Tapping",
-      "description": "Du tappst Töne mit der Anschlaghand und verbindest sie mit Legato-Läufen.",
+      "description": "Du tappst Töne mit der Anschlagshand und verbindest sie mit Legato-Läufen.",
       "path": "lead",
       "rank": 8,
       "x": 1225,

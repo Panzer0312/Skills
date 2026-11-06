@@ -37,6 +37,30 @@ const WRITTEN_IN_STAGE_2 = [
 const WITHOUT_SCALE = ["metal-sound"];
 
 describe("guitar game content", () => {
+  for (const minutes of [60, 90]) {
+    it(`gives a beginner no road quest past the best next as filler at ${minutes} minutes`, () => {
+      const atRoad = new Map(content.road.map((step, i) => [step.lessonId, i]));
+      const fixedSlot = content.quests.find((quest) => quest.kind === "wechsel")?.id;
+      let recentQuestIds: string[] = [];
+      for (let day = 0; day < 7; day++) {
+        const ids = buildDailyQuests({
+          minutes,
+          content,
+          statuses: {},
+          hasTargetSong: false,
+          recentQuestIds,
+          chosenLessonIds: [],
+        });
+        expect(ids.length, `Tag ${day}`).toBeGreaterThan(0);
+        for (const id of ids.filter((questId) => questId !== fixedSlot)) {
+          const lessonId = content.quests.find((quest) => quest.id === id)?.lessonId;
+          const at = lessonId ? atRoad.get(lessonId) : undefined;
+          expect(at === undefined || at === 0, `Tag ${day}: ${id}`).toBe(true);
+        }
+        recentQuestIds = ids;
+      }
+    });
+  }
   it("references existing lesson files", () => {
     for (const quest of content.quests) {
       if (quest.lessonId) expect(lessonExists(quest.lessonId), quest.id).toBe(true);

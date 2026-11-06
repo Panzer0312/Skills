@@ -65,6 +65,27 @@ describe("buildDailyQuests", () => {
   });
 });
 
+describe("buildDailyQuests fillers", () => {
+  it("keeps road quests past the best next out of the fillers", () => {
+    expect(build({ minutes: 90, hasTargetSong: false })).not.toContain("b");
+  });
+  it("keeps quests off the road, with or without a lesson", () => {
+    expect(build({ minutes: 90, hasTargetSong: false })).toEqual(expect.arrayContaining(["qc", "wechsel", "theorie", "warm"]));
+  });
+  it("offers road quests the player has reached", () => {
+    const ids = build({ minutes: 90, hasTargetSong: false, statuses: { la: "gelernt" } });
+    expect(ids[0]).toBe("b");
+    expect(ids).toContain("a");
+  });
+  it("opens every filler once the road is finished", () => {
+    const ids = build({ minutes: 90, hasTargetSong: false, statuses: { la: "gelernt", lb: "gelernt" } });
+    expect(ids).toEqual(expect.arrayContaining(["a", "b", "qc"]));
+  });
+  it("still offers a chosen lesson past the best next", () => {
+    expect(build({ minutes: 90, hasTargetSong: false, chosenLessonIds: ["lb"] })).toContain("b");
+  });
+});
+
 describe("buildDailyQuests slots", () => {
   const ids = ["la", "lt1", "lw1", "lt2", "lw2", "lt-spaet"];
   const slots: GameContent = {

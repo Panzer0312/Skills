@@ -122,6 +122,9 @@ export function buildDailyQuests(input: {
     const at = content.road.findIndex((step) => step.lessonId === quest.lessonId);
     return at !== -1 && at <= nextIndex;
   };
+  const onRoad = (quest: QuestDefinition) => content.road.some((step) => step.lessonId === quest.lessonId);
+  const fillable = (quest: QuestDefinition) =>
+    quest.kind === "theorie" || quest.kind === "aufwaermen" || onRoad(quest) ? reached(quest) : true;
   const slot = (kind: QuestDefinition["kind"]) => {
     const ofKind = content.quests.filter((quest) => quest.kind === kind);
     return (
@@ -141,9 +144,7 @@ export function buildDailyQuests(input: {
     input.hasTargetSong ? content.quests.find((quest) => quest.kind === "song") : undefined,
     slot("theorie"),
     slot("aufwaermen"),
-    ...content.quests.filter(
-      (quest) => !recent(quest) && !((quest.kind === "theorie" || quest.kind === "aufwaermen") && !reached(quest)),
-    ),
+    ...content.quests.filter((quest) => !recent(quest) && fillable(quest)),
   ];
 
   const chosen: QuestDefinition[] = [];

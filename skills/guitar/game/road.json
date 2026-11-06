@@ -13,7 +13,7 @@
   { "lessonId": "metal-sound", "questId": "sound-einstellen", "months": [2, 2], "reason": "Mit dem richtigen Sound klingen deine Power Chords zum ersten Mal nach Metal." },
   { "lessonId": "metal-stumm", "questId": "saiten-stumm", "months": [2, 2], "reason": "Verzerrung verstärkt jedes Nebengeräusch, deshalb musst du jetzt lernen, Saiten stumm zu halten." },
   { "lessonId": "metal-palm-mute", "questId": "palm-mute-akzente", "months": [2, 2], "reason": "Palm Mute macht aus Power Chords erst den harten, trockenen Metal-Anschlag." },
-  { "lessonId": "finger-daumen", "questId": null, "months": [2, 3], "reason": "Nach so viel Pick lernt deine Anschlaghand für The Bard's Song das Zupfen." },
+  { "lessonId": "finger-daumen", "questId": null, "months": [2, 3], "reason": "Nach so viel Pick lernt deine Anschlagshand für The Bard's Song das Zupfen." },
   { "lessonId": "finger-arpeggio", "questId": null, "months": [2, 3], "reason": "Zupfmuster sind das Handwerk für gezupfte Songs und für deinen Weg durch The Bard's Song." },
   { "lessonId": "song-bards-vorbereitung", "questId": null, "months": [2, 3], "reason": "Du machst dort weiter, wo du beim Intro aufgehört hast, und nimmst dir die schwersten Wechsel vor." },
   { "lessonId": "song-bards-ganz", "questId": null, "months": [2, 3], "reason": "Jetzt bringst du zu Ende, was du angefangen hast: The Bard's Song von vorn bis hinten." },
