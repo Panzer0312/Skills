@@ -10,6 +10,7 @@ let audioNow = 0;
 let sources = 0;
 let oscillators = 0;
 let closed = 0;
+let gains: { gain: { value: number } }[] = [];
 
 function play(seconds: number) {
   for (let elapsed = 0; elapsed < seconds; elapsed += 0.025) {
@@ -32,6 +33,7 @@ beforeEach(() => {
   sources = 0;
   oscillators = 0;
   closed = 0;
+  gains = [];
   log.mockReset();
   log.mockResolvedValue({ xpGained: 0, suggestion: null, isRecord: false });
   vi.useFakeTimers();
@@ -56,7 +58,9 @@ beforeEach(() => {
         return osc;
       }
       createGain() {
-        return { gain: param(), connect: vi.fn() };
+        const node = { gain: param(), connect: vi.fn() };
+        gains.push(node);
+        return node;
       }
       createBuffer(_channels: number, length: number) {
         return { getChannelData: () => new Float32Array(length) };
@@ -192,5 +196,48 @@ describe("useJamEngine", () => {
     await vi.advanceTimersByTimeAsync(0);
     expect(result.current.running).toBe(false);
     expect(closed).toBe(1);
+  });
+  it("keeps the master gain low enough for the loudest step at full volume", () => {
+    const { result, rerender } = renderHook((props) => useJamEngine(props), {
+      initialProps: { ...base, volume: 1 },
+    });
+    act(() => result.current.start());
+    expect(gains[0]!.gain.value).toBeCloseTo(0.65);
+    rerender({ ...base, volume: 0.5 });
+    expect(gains[0]!.gain.value).toBeCloseTo(0.325);
+  });
+
+  it("stays stopped and reports a German error when the audio context throws", () => {
+    vi.stubGlobal(
+      "AudioContext",
+      class {
+        constructor() {
+          throw new Error("no audio");
+        }
+      },
+    );
+    const { result } = renderHook(() => useJamEngine(base));
+    act(() => result.current.start());
+    expect(result.current.running).toBe(false);
+    expect(result.current.error).toMatch(/Ton/);
+  });
+
+  it("closes the context when setup fails after it opened", () => {
+    const close = vi.fn(async () => {});
+    vi.stubGlobal(
+      "AudioContext",
+      class {
+        close = close;
+        resume = vi.fn(async () => {});
+        createGain() {
+          throw new Error("broken");
+        }
+      },
+    );
+    const { result } = renderHook(() => useJamEngine(base));
+    act(() => result.current.start());
+    expect(close).toHaveBeenCalledTimes(1);
+    expect(result.current.running).toBe(false);
+    expect(result.current.error).not.toBeNull();
   });
 });

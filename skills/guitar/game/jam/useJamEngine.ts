@@ -1,4 +1,11 @@
-import { jamBar, jamChord, JAM_STYLES, type JamHit, type JamSettings, type JamStyle } from "@skills/core";
+import {
+  jamBar,
+  jamChord,
+  JAM_STYLES,
+  type JamHit,
+  type JamSettings,
+  type JamStyle,
+} from "@skills/core";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { startLookahead } from "../../../../packages/web/src/audio/lookahead.js";
 import { gameApi } from "../api.js";
@@ -13,6 +20,9 @@ export interface JamInput {
   volume: number;
 }
 
+/** Headroom: a metal step layers kick, bass and a hat, which sums above 1.0 at the old factor. */
+const masterGain = (volume: number) => volume * 0.65;
+
 const midiToFrequency = (midi: number) => 440 * 2 ** ((midi - 69) / 12);
 
 /** Fills half a second of white noise, shared by snare and hat. */
@@ -24,7 +34,13 @@ function noiseBuffer(context: AudioContext): AudioBuffer {
   return buffer;
 }
 
-function envelope(context: AudioContext, destination: AudioNode, time: number, peak: number, length: number) {
+function envelope(
+  context: AudioContext,
+  destination: AudioNode,
+  time: number,
+  peak: number,
+  length: number,
+) {
   const gain = context.createGain();
   gain.gain.setValueAtTime(peak, time);
   gain.gain.exponentialRampToValueAtTime(0.001, time + length);
@@ -53,7 +69,13 @@ function noiseBurst(
   source.stop(time + length + 0.02);
 }
 
-function play(context: AudioContext, master: AudioNode, noise: AudioBuffer, hit: JamHit, time: number) {
+function play(
+  context: AudioContext,
+  master: AudioNode,
+  noise: AudioBuffer,
+  hit: JamHit,
+  time: number,
+) {
   switch (hit.voice) {
     case "kick": {
       const osc = context.createOscillator();
@@ -94,6 +116,7 @@ export function useJamEngine({ root, style, bpm, volume }: JamInput) {
   const [running, setRunning] = useState(false);
   const [chord, setChord] = useState<string | null>(null);
   const [nextChord, setNextChord] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const rootRef = useRef(root);
   rootRef.current = root;
@@ -111,7 +134,7 @@ export function useJamEngine({ root, style, bpm, volume }: JamInput) {
   const startedAtRef = useRef(0);
 
   useEffect(() => {
-    if (masterRef.current) masterRef.current.gain.value = volume * 0.8;
+    if (masterRef.current) masterRef.current.gain.value = masterGain(volume);
   }, [volume]);
 
   const stop = useCallback(() => {
@@ -127,11 +150,16 @@ export function useJamEngine({ root, style, bpm, volume }: JamInput) {
     setChord(null);
     setNextChord(null);
 
-    const seconds = Math.min(MAX_SECONDS, Math.round((Date.now() - startedAtRef.current) / 1000));
+    const seconds = Math.min(
+      MAX_SECONDS,
+      Math.round((Date.now() - startedAtRef.current) / 1000),
+    );
     if (seconds >= MIN_LOG_SECONDS) {
       // A failed log must never keep the music on or surface as an unhandled rejection.
       try {
-        void Promise.resolve(gameApi.log({ kind: "frei", seconds, level: 1, techniqueId: "jam" })).catch(() => {});
+        void Promise.resolve(
+          gameApi.log({ kind: "frei", seconds, level: 1, techniqueId: "jam" }),
+        ).catch(() => {});
       } catch {
         /* ignore */
       }
@@ -140,43 +168,64 @@ export function useJamEngine({ root, style, bpm, volume }: JamInput) {
 
   const start = useCallback(() => {
     if (stopLookaheadRef.current || typeof AudioContext === "undefined") return;
-    const context = new AudioContext();
-    contextRef.current = context;
-    void context.resume();
-    const master = context.createGain();
-    master.gain.value = volumeRef.current * 0.8;
-    master.connect(context.destination);
-    masterRef.current = master;
-    const noise = noiseBuffer(context);
+    let context: AudioContext | null = null;
+    try {
+      const audio = new AudioContext();
+      context = audio;
+      contextRef.current = audio;
+      void audio.resume();
+      const master = audio.createGain();
+      master.gain.value = masterGain(volumeRef.current);
+      master.connect(audio.destination);
+      masterRef.current = master;
+      const noise = noiseBuffer(audio);
 
-    let settings: JamSettings = { root: rootRef.current, style: styleRef.current };
-    let hits: JamHit[] = [];
-    let stepsPerBar = JAM_STYLES[settings.style].stepsPerBar;
-    let stepInBar = 0;
-    let bar = -1;
+      let settings: JamSettings = {
+        root: rootRef.current,
+        style: styleRef.current,
+      };
+      let hits: JamHit[] = [];
+      let stepsPerBar = JAM_STYLES[settings.style].stepsPerBar;
+      let stepInBar = 0;
+      let bar = -1;
 
-    startedAtRef.current = Date.now();
-    limitRef.current = setTimeout(stop, MAX_SECONDS * 1000);
-    stopLookaheadRef.current = startLookahead({
-      context,
-      stepSeconds: () => 60 / bpmRef.current / (stepsPerBar / 4),
-      onStep: (time) => {
-        if (stepInBar === 0) {
-          bar += 1;
-          settings = { root: rootRef.current, style: styleRef.current };
-          stepsPerBar = JAM_STYLES[settings.style].stepsPerBar;
-          hits = jamBar(settings, bar);
-          setChord(jamChord(settings, bar));
-          setNextChord(jamChord(settings, bar + 1));
-        }
-        for (const hit of hits) if (hit.step === stepInBar) play(context, master, noise, hit, time);
-        stepInBar = (stepInBar + 1) % stepsPerBar;
-      },
-    });
-    setRunning(true);
+      startedAtRef.current = Date.now();
+      limitRef.current = setTimeout(stop, MAX_SECONDS * 1000);
+      stopLookaheadRef.current = startLookahead({
+        context: audio,
+        stepSeconds: () => 60 / bpmRef.current / (stepsPerBar / 4),
+        onStep: (time) => {
+          if (stepInBar === 0) {
+            bar += 1;
+            settings = { root: rootRef.current, style: styleRef.current };
+            stepsPerBar = JAM_STYLES[settings.style].stepsPerBar;
+            hits = jamBar(settings, bar);
+            setChord(jamChord(settings, bar));
+            setNextChord(jamChord(settings, bar + 1));
+          }
+          for (const hit of hits)
+            if (hit.step === stepInBar) play(audio, master, noise, hit, time);
+          stepInBar = (stepInBar + 1) % stepsPerBar;
+        },
+      });
+      setError(null);
+      setRunning(true);
+    } catch {
+      stopLookaheadRef.current?.();
+      stopLookaheadRef.current = null;
+      if (limitRef.current) clearTimeout(limitRef.current);
+      limitRef.current = null;
+      void context?.close();
+      contextRef.current = null;
+      masterRef.current = null;
+      setRunning(false);
+      setError(
+        "Der Ton konnte nicht gestartet werden. Prüfe die Audioausgabe des Browsers.",
+      );
+    }
   }, [stop]);
 
   useEffect(() => stop, [stop]);
 
-  return { running, start, stop, chord, nextChord };
+  return { running, start, stop, chord, nextChord, error };
 }

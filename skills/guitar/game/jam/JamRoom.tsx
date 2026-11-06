@@ -15,7 +15,7 @@ export function JamRoom() {
   const [volume, setVolume] = useState(0.7);
   const [box, setBox] = useState<(typeof BOXES)[number] | undefined>(undefined);
 
-  const { running, start, stop, chord, nextChord } = useJamEngine({ root, style, bpm, volume });
+  const { running, start, stop, chord, nextChord, error } = useJamEngine({ root, style, bpm, volume });
   const supported = typeof AudioContext !== "undefined";
   const scale = JAM_STYLES[style].scale;
   const pentatonic = scale === "moll-pentatonik";
@@ -23,6 +23,11 @@ export function JamRoom() {
   return (
     <ToolFrame title="Jam Room">
       <section aria-label="Begleitung" className="jam-room">
+        {error && (
+          <p role="alert" className="game-error">
+            {error}
+          </p>
+        )}
         {!supported && (
           <p role="alert" className="game-error">
             Dein Browser kann keinen Ton erzeugen. Probiere einen aktuellen Browser auf dem PC.
