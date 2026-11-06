@@ -47,7 +47,7 @@ test("a chord shape edited for one song survives reopening it", async ({ page })
   await page.getByLabel("Anzeigename").fill("Em nach meiner Art");
   await page.getByRole("button", { name: "Nur in diesem Song" }).click();
 
-  await expect(page.getByText("Em nach meiner Art")).toBeVisible();
+  await expect(page.getByText("Em nach meiner Art").first()).toBeVisible();
 
   await page.getByRole("button", { name: /Zurück zur Bibliothek/ }).click();
   await page.getByRole("button", { name: /Zwei Akkorde, eine Wiege/ }).click();
