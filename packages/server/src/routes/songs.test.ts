@@ -85,4 +85,23 @@ describe("song routes", () => {
     const res = await app.request("/api/songs/999");
     expect(res.status).toBe(404);
   });
+
+  it("removes the song's meta with the song", async () => {
+    const a = (await (await post({ content: chordPro })).json()) as { song: { id: number } };
+    const b = (await (await post({ content: chordPro })).json()) as { song: { id: number } };
+    const put = (key: string) =>
+      app.request(`/api/game/guitar/song/${key}`, {
+        method: "PUT",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ stars: 2 }),
+      });
+    await put(`song:${a.song.id}`);
+    await put(`song:${b.song.id}`);
+    await put("uebung:x");
+    await app.request(`/api/songs/${a.song.id}`, { method: "DELETE" });
+    const rows = database.raw.prepare("SELECT song_key FROM game_songs ORDER BY song_key").all();
+    expect(rows).toEqual([{ song_key: `song:${b.song.id}` }, { song_key: "uebung:x" }]);
+    const left = database.raw.prepare("SELECT id FROM songs").all();
+    expect(left).toEqual([{ id: b.song.id }]);
+  });
 });

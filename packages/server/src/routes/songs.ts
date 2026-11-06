@@ -82,7 +82,12 @@ songRoutes.post("/api/songs", async (c) => {
 });
 
 songRoutes.delete("/api/songs/:id", (c) => {
-  c.get("database").raw.prepare("DELETE FROM songs WHERE id = ?").run(Number(c.req.param("id")));
+  const id = Number(c.req.param("id"));
+  const raw = c.get("database").raw;
+  raw.transaction(() => {
+    raw.prepare("DELETE FROM songs WHERE id = ?").run(id);
+    raw.prepare("DELETE FROM game_songs WHERE song_key = ?").run(`song:${id}`);
+  })();
   return c.json({ ok: true });
 });
 

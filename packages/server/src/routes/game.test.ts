@@ -263,4 +263,81 @@ describe("game api", () => {
       expect((await state("demo")).chosenLessons).toEqual([]);
     });
   });
+
+  describe("song meta", () => {
+    const songs = async (skill = "guitar") =>
+      (await (await app.request(`/api/game/${skill}/songs`)).json()) as {
+        songs: Record<string, { stars: number; lastPlayedAt: number | null; tags: string[] }>;
+      };
+
+    it("returns an empty map for a new skill", async () => {
+      expect((await songs()).songs).toEqual({});
+    });
+
+    it("stores tags and stars per song", async () => {
+      expect((await send("PUT", "/api/game/guitar/song/song:12", { stars: 4, tags: ["barre"] })).status).toBe(200);
+      await send("PUT", "/api/game/guitar/song/uebung:x", { stars: 1 });
+      const { songs: map } = await songs();
+      expect(map["song:12"]).toEqual({ stars: 4, lastPlayedAt: null, tags: ["barre"] });
+      expect(map["uebung:x"]).toEqual({ stars: 1, lastPlayedAt: null, tags: [] });
+      expect((await songs("demo")).songs).toEqual({});
+    });
+
+    it("keeps stars when only played is sent", async () => {
+      await send("PUT", "/api/game/guitar/song/song:12", { stars: 3, tags: ["a"] });
+      const before = Date.now();
+      await send("PUT", "/api/game/guitar/song/song:12", { played: true });
+      const meta = (await songs()).songs["song:12"]!;
+      expect(meta.stars).toBe(3);
+      expect(meta.tags).toEqual(["a"]);
+      expect(meta.lastPlayedAt).toBeGreaterThanOrEqual(before);
+    });
+
+    it("rejects six stars", async () => {
+      const res = await send("PUT", "/api/game/guitar/song/song:12", { stars: 6 });
+      expect(res.status).toBe(400);
+      expect((await songs()).songs).toEqual({});
+    });
+
+    it("rejects an unknown key form", async () => {
+      expect((await send("PUT", "/api/game/guitar/song/db:12", { stars: 1 })).status).toBe(400);
+      expect((await send("PUT", "/api/game/guitar/song/12", { stars: 1 })).status).toBe(400);
+    });
+  });
+
+  describe("history", () => {
+    const history = async (skill = "guitar") =>
+      (await (await app.request(`/api/game/${skill}/history`)).json()) as import("@skills/core").History;
+    const insert = (day: string, seconds: number, key: string | null, value: number | null) =>
+      database.raw
+        .prepare(
+          "INSERT INTO game_log (skill_id, day, at, kind, seconds, level, metric_key, metric_value) VALUES ('guitar', ?, 1, 'frei', ?, 1, ?, ?)",
+        )
+        .run(day, seconds, key, value);
+
+    it("sums the seconds per day", async () => {
+      insert("2026-11-01", 300, null, null);
+      insert("2026-11-01", 120, null, null);
+      insert("2026-11-02", 60, null, null);
+      expect((await history()).days).toEqual([
+        { day: "2026-11-01", seconds: 420 },
+        { day: "2026-11-02", seconds: 60 },
+      ]);
+    });
+
+    it("keeps the best metric per key and day", async () => {
+      insert("2026-11-01", 60, "wechsel:Am-C", 20);
+      insert("2026-11-01", 60, "wechsel:Am-C", 34);
+      insert("2026-11-02", 60, "wechsel:Am-C", 30);
+      insert("2026-11-01", 60, "tempo", 90);
+      const { metrics } = await history();
+      expect(metrics).toContainEqual({ key: "wechsel:Am-C", day: "2026-11-01", value: 34 });
+      expect(metrics).toContainEqual({ key: "wechsel:Am-C", day: "2026-11-02", value: 30 });
+      expect(metrics).toHaveLength(3);
+    });
+
+    it("does not mix skills", async () => {
+      expect(await history("demo")).toEqual({ days: [], metrics: [] });
+    });
+  });
 });

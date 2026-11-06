@@ -36,3 +36,15 @@ export interface LogBody {
   masteryTarget?: number;
   quick?: boolean;
 }
+
+export interface SongMeta {
+  stars: number;
+  lastPlayedAt: number | null;
+  tags: string[];
+}
+
+export interface SongMetaPatch {
+  stars?: number;
+  tags?: string[];
+  played?: true;
+}
