@@ -161,19 +161,22 @@
       "id": "pentatonik-box1", "title": "Pentatonik Box 1",
       "description": "Spiele die Moll-Pentatonik in Box 1 auf- und abwärts, langsam und mit gleichmäßigem Anschlag.",
       "kind": "technik", "techniqueId": "lead", "lessonId": "11-pentatonik", "minutes": 10, "icon": "scale",
-      "scale": { "bpm": [60, 100] }
+      "scale": { "bpm": [60, 100] },
+      "fretboard": { "root": "A", "scale": "moll-pentatonik", "box": 1 }
     },
     {
       "id": "solo-drei-toene", "title": "Solo aus drei Tönen",
       "description": "Spiele die Phrase aus E, G und A im Takt und erfinde eine eigene. Der letzte Ton ist A und klingt voll aus.",
       "kind": "technik", "techniqueId": "lead", "lessonId": "lead-drei-toene", "minutes": 10, "icon": "scale",
-      "scale": { "bpm": [60, 100] }
+      "scale": { "bpm": [60, 100] },
+      "fretboard": { "root": "A", "scale": "moll-pentatonik", "box": 1 }
     },
     {
       "id": "jam-em", "title": "Jam über Em",
       "description": "Wechsle dich mit dir selbst ab: zwei Takte Em, zwei Takte Phrase aus D, E, G und A. Jede Phrase endet auf E.",
       "kind": "technik", "techniqueId": "jam", "lessonId": "jam-ein-akkord", "minutes": 10, "icon": "scale",
-      "scale": { "bpm": [60, 90] }
+      "scale": { "bpm": [60, 90] },
+      "fretboard": { "root": "E", "scale": "moll-pentatonik", "box": 3 }
     },
     {
       "id": "spieltechniken", "title": "Hammer-on, Pull-off und Bending",

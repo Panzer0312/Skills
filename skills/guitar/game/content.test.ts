@@ -67,6 +67,11 @@ describe("guitar game content", () => {
       }
     });
   }
+  it("gives the pentatonic and jam quests a fretboard", () => {
+    const board = (id: string) => content.quests.find((quest) => quest.id === id)?.fretboard;
+    expect(board("pentatonik-box1")).toEqual({ root: "A", scale: "moll-pentatonik", box: 1 });
+    expect(board("jam-em")).toEqual({ root: "E", scale: "moll-pentatonik", box: 3 });
+  });
   it("references existing lesson files", () => {
     for (const quest of content.quests) {
       if (quest.lessonId) expect(lessonExists(quest.lessonId), quest.id).toBe(true);

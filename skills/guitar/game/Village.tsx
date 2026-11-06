@@ -16,7 +16,7 @@ export const QUEST_SPRITE: Record<QuestDefinition["kind"], SpriteName> = {
 const MENU: { path: string; label: string; hint: string; sprite: SpriteName }[] = [
   { path: "schrein", label: "Shrine", hint: "Stimmgerät", sprite: "ring" },
   { path: "schmiede", label: "Forge", hint: "Akkordgriffe", sprite: "sword" },
-  { path: "griffbrett", label: "Griffbrett", hint: "Töne und Skalen", sprite: "bow" },
+  { path: "griffbrett", label: "Tower of CAGED", hint: "Griffbrett", sprite: "bow" },
   { path: "chronik", label: "Chronicle", hint: "dein Fortschritt", sprite: "parchment" },
 ];
 

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { NOTES } from "../music/notes.js";
 import { mapNodeSchema, mapPathSchema } from "./map.js";
 
 const scaleSchema = z.object({
@@ -7,6 +8,12 @@ const scaleSchema = z.object({
   chordPairs: z.array(z.tuple([z.string(), z.string()])).optional(),
   sections: z.array(z.string()).optional(),
   runs: z.tuple([z.number(), z.number()]).optional(),
+});
+
+const fretboardSchema = z.object({
+  root: z.enum(NOTES),
+  scale: z.enum(["dur", "moll", "moll-pentatonik"]),
+  box: z.number().int().min(1).max(5).optional(),
 });
 
 const questSchema = z.object({
@@ -21,6 +28,7 @@ const questSchema = z.object({
   metricLabel: z.string().optional(),
   masteryTarget: z.number().positive().optional(),
   scale: scaleSchema,
+  fretboard: fretboardSchema.optional(),
 });
 
 const baseSchema = z.object({

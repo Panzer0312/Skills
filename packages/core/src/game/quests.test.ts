@@ -197,6 +197,16 @@ describe("parseGameContent", () => {
     expect(() => parseGameContent({ ...content, nodes: [node("la", { techniqueId: "zz" }), node("lb"), node("lc")] })).toThrow(/techniqueId/);
     expect(() => parseGameContent({ ...content, quests: [q("a", "technik", 5, "zz")] })).toThrow(/quests\.0\.lessonId/);
   });
+  it("rejects a quest with an unknown fretboard root", () => {
+    const withBoard = (root: string) => ({
+      ...content,
+      quests: content.quests.map((quest, i) =>
+        i === 0 ? { ...quest, fretboard: { root, scale: "moll-pentatonik", box: 1 } } : quest,
+      ),
+    });
+    expect(() => parseGameContent(withBoard("H"))).toThrow(/fretboard/);
+    expect(() => parseGameContent(withBoard("A"))).not.toThrow();
+  });
   it("throws a German message", () => {
     expect(() => parseGameContent({})).toThrow(/Spielinhalt/);
   });

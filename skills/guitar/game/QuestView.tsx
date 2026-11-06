@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { api } from "../../../packages/web/src/api/client.js";
+import { FretOverlay } from "./FretOverlay.js";
 import { MetronomePanel } from "./MetronomePanel.js";
 import { useMetronome } from "../../../packages/web/src/audio/useMetronome.js";
 import type { WidgetProps } from "../../../packages/web/src/skills/widgets.js";
@@ -230,6 +231,13 @@ function QuestRun({ quest, state, data }: { quest: QuestDefinition; state: GameS
           ) : (
             <SongPanel targetSongId={state.targetSongId} scaled={scaled} data={data} />
           )
+        ) : null}
+        {quest.fretboard ? (
+          <FretOverlay
+            root={quest.fretboard.root}
+            scale={quest.fretboard.scale}
+            box={quest.fretboard.box as 1 | 2 | 3 | 4 | 5 | undefined}
+          />
         ) : null}
         {pair ? (
           <ChordTrainer pair={pair} onResult={(n) => setTrainerValue((v) => Math.max(v ?? 0, n))} />
