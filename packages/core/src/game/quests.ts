@@ -14,6 +14,7 @@ const fretboardSchema = z.object({
   root: z.enum(NOTES),
   scale: z.enum(["dur", "moll", "moll-pentatonik"]),
   box: z.number().int().min(1).max(5).optional(),
+  caged: z.enum(["C", "A", "G", "E", "D"]).optional(),
 });
 
 const questSchema = z.object({
@@ -158,17 +159,19 @@ export function buildDailyQuests(input: {
   // One song per session: a song on the road takes the place of the target song.
   const songSlot = input.hasTargetSong && nextQuest?.kind !== "song";
   const recent = (quest: QuestDefinition) => input.recentQuestIds.includes(quest.id);
-  // A lesson is reached when the road is at or past it, or finished.
+  const nodeById = new Map(content.nodes.map((node) => [node.id, node]));
+  const done = (id: string) => input.statuses[id] === "gelernt" || input.statuses[id] === "gemeistert";
+  // A road lesson is reached when the road is at or past it. An off-road lesson is reached when it is
+  // quick, chosen, or its parent is done. A finished road reaches everything.
   const reached = (quest: QuestDefinition) => {
     if (quest.lessonId === null || nextIndex === -1) return true;
     const at = content.road.findIndex((step) => step.lessonId === quest.lessonId);
-    return at !== -1 && at <= nextIndex;
+    if (at !== -1) return at <= nextIndex;
+    const lesson = nodeById.get(quest.lessonId);
+    if (!lesson || lesson.quick || input.chosenLessonIds.includes(lesson.id)) return true;
+    return lesson.parent === null || done(lesson.parent);
   };
-  const onRoad = (quest: QuestDefinition) => content.road.some((step) => step.lessonId === quest.lessonId);
-  const fillable = (quest: QuestDefinition) => {
-    if (quest.kind === "song" && !songSlot) return false;
-    return quest.kind === "theorie" || quest.kind === "aufwaermen" || onRoad(quest) ? reached(quest) : true;
-  };
+  const fillable = (quest: QuestDefinition) => (quest.kind === "song" && !songSlot ? false : reached(quest));
   const slot = (kind: QuestDefinition["kind"]) => {
     const ofKind = content.quests.filter((quest) => quest.kind === kind);
     return (

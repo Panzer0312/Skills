@@ -73,6 +73,18 @@ describe("guitar game content", () => {
       }
     });
   }
+  it("gives every playable node a technique", () => {
+    expect(content.nodes.filter((node) => node.techniqueId === null && !node.knownSong).map((node) => node.id)).toEqual([]);
+    const board = content.nodes.filter((node) => node.path === "griffbrett");
+    expect(board.length).toBeGreaterThan(0);
+    expect(content.techniques.some((t) => t.id === "griffbrett")).toBe(true);
+    for (const node of board.filter((n) => n.id.startsWith("caged-"))) expect(node.techniqueId, node.id).toBe("griffbrett");
+  });
+  it("lets the player choose the target song on the whole-song lesson", () => {
+    const node = content.nodes.find((n) => n.id === "metal-ganzer-song")!;
+    expect(node.chooseTarget).toBe(true);
+    expect(node.songs.length).toBeGreaterThan(0);
+  });
   it("gives the pentatonic and jam quests a fretboard", () => {
     const board = (id: string) => content.quests.find((quest) => quest.id === id)?.fretboard;
     expect(board("pentatonik-box1")).toEqual({ root: "A", scale: "moll-pentatonik", box: 1 });

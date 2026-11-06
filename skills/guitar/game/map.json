@@ -1225,8 +1225,22 @@
       "knownSong": false,
       "techniqueId": "metal",
       "links": [],
-      "songs": [],
-      "targetSong": null
+      "songs": [
+        {
+          "title": "Paranoid",
+          "artist": "Black Sabbath",
+          "trains": "Kurzer Metal-Song mit durchgehendem Riff und Powerchords",
+          "source": "https://en.wikipedia.org/wiki/Paranoid_(Black_Sabbath_song)"
+        },
+        {
+          "title": "Enter Sandman",
+          "artist": "Metallica",
+          "trains": "Palm Mute, Riff-Wechsel und Songaufbau im Original-Tempo",
+          "source": "https://en.wikipedia.org/wiki/Enter_Sandman"
+        }
+      ],
+      "targetSong": null,
+      "chooseTarget": true
     },
     {
       "id": "metal-thrash-boss",
@@ -1536,7 +1550,7 @@
       "quick": false,
       "available": false,
       "knownSong": false,
-      "techniqueId": null,
+      "techniqueId": "griffbrett",
       "links": [],
       "songs": [],
       "targetSong": null
@@ -1553,7 +1567,7 @@
       "quick": false,
       "available": false,
       "knownSong": false,
-      "techniqueId": null,
+      "techniqueId": "griffbrett",
       "links": [],
       "songs": [],
       "targetSong": null
@@ -1570,7 +1584,7 @@
       "quick": false,
       "available": false,
       "knownSong": false,
-      "techniqueId": null,
+      "techniqueId": "griffbrett",
       "links": [],
       "songs": [],
       "targetSong": null
@@ -1587,7 +1601,7 @@
       "quick": false,
       "available": false,
       "knownSong": false,
-      "techniqueId": null,
+      "techniqueId": "griffbrett",
       "links": [],
       "songs": [],
       "targetSong": null
@@ -1604,7 +1618,7 @@
       "quick": false,
       "available": false,
       "knownSong": false,
-      "techniqueId": null,
+      "techniqueId": "griffbrett",
       "links": [
         {
           "to": "caged-e",
@@ -1626,7 +1640,7 @@
       "quick": false,
       "available": false,
       "knownSong": false,
-      "techniqueId": null,
+      "techniqueId": "griffbrett",
       "links": [],
       "songs": [],
       "targetSong": null
@@ -1643,7 +1657,7 @@
       "quick": false,
       "available": false,
       "knownSong": false,
-      "techniqueId": null,
+      "techniqueId": "griffbrett",
       "links": [],
       "songs": [],
       "targetSong": null
@@ -1677,7 +1691,7 @@
       "quick": false,
       "available": false,
       "knownSong": false,
-      "techniqueId": null,
+      "techniqueId": "griffbrett",
       "links": [],
       "songs": [],
       "targetSong": null

@@ -34,6 +34,8 @@ export const mapNodeSchema = z.object({
   links: z.array(z.object({ to: z.string().min(1), reason: z.string().min(1) })),
   songs: z.array(songTipSchema),
   targetSong: z.object({ title: z.string().min(1), artist: z.string().min(1) }).nullable(),
+  /** The player picks the target song from `songs` on this lesson. */
+  chooseTarget: z.boolean().default(false),
 });
 
 export type PathId = (typeof PATH_IDS)[number];

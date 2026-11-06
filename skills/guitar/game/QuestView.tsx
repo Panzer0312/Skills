@@ -245,12 +245,20 @@ function QuestRun({ quest, state, data }: { quest: QuestDefinition; state: GameS
           )
         ) : null}
         {quest.chords ? <Griffbild akkorde={quest.chords} /> : null}
-        {riff ? <RiffCard riff={riff} onTempo={setBpm} bpm={scaled.bpm ?? undefined} inQuest /> : null}
+        {riff ? <RiffCard
+            riff={riff}
+            onTempo={setBpm}
+            bpm={scaled.bpm ?? undefined}
+            inQuest
+            questId={quest.id}
+            tuningLinked={Boolean(quest.tuning)}
+          /> : null}
         {quest.fretboard ? (
           <FretOverlay
             root={quest.fretboard.root}
             scale={quest.fretboard.scale}
             box={quest.fretboard.box as 1 | 2 | 3 | 4 | 5 | undefined}
+            caged={quest.fretboard.caged}
           />
         ) : null}
         {pair ? (

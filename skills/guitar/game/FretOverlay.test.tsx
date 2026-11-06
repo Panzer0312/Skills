@@ -16,6 +16,16 @@ describe("FretOverlay", () => {
     expect(screen.getByTestId("fret-0-10")).toHaveAttribute("data-in-scale", "false");
   });
 
+  it("marks one CAGED shape, also high up the neck", () => {
+    render(<FretOverlay root="C#" scale="dur" caged="D" />);
+    expect(screen.getByTestId("fret-2-11")).toHaveAttribute("data-root", "true");
+    expect(screen.getByTestId("fret-3-13")).toHaveAttribute("data-in-scale", "true");
+    expect(screen.getByTestId("fret-4-14")).toHaveAttribute("data-in-scale", "true");
+    expect(screen.getByTestId("fret-5-13")).toHaveAttribute("data-in-scale", "true");
+    expect(screen.getByTestId("fret-3-12")).toHaveAttribute("data-in-scale", "false");
+    expect(screen.getByTestId("fret-0-2")).toHaveAttribute("data-in-scale", "false");
+  });
+
   it("is not clickable", () => {
     render(<FretOverlay root="A" scale="moll-pentatonik" />);
     expect(screen.queryAllByRole("button")).toHaveLength(0);

@@ -15,12 +15,21 @@ export function RiffCard({
   onTempo,
   bpm = riff.bpm,
   inQuest = false,
+  questId,
+  tuningLinked = false,
 }: {
   riff: Riff;
   onTempo: (bpm: number) => void;
   bpm?: number;
   inQuest?: boolean;
+  /** The quest the card sits in, so the Shrine can link back to it. */
+  questId?: string;
+  /** The page already links the Shrine, so the card adds no second link. */
+  tuningLinked?: boolean;
 }) {
+  const shrine = riff.tuning && !tuningLinked
+    ? `${GAME_BASE}/schrein?stimmung=${encodeURIComponent(riff.tuning)}${questId ? `&quest=${encodeURIComponent(questId)}` : ""}`
+    : null;
   return (
     <article className="riff-card" aria-label={riff.title}>
       {inQuest ? null : <h2>{riff.title}</h2>}
@@ -34,8 +43,8 @@ export function RiffCard({
           Lektion lesen
         </Link>
       )}
-      {riff.tuning ? (
-        <Link to={`${GAME_BASE}/schrein?stimmung=${encodeURIComponent(riff.tuning)}`} className="underline">
+      {shrine ? (
+        <Link to={shrine} className="underline">
           Stimmung: {riff.tuning}
         </Link>
       ) : null}

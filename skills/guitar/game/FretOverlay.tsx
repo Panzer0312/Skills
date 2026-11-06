@@ -1,9 +1,11 @@
 import {
   displayNote,
+  cagedShape,
   inScale,
   noteAt,
   pentatonicBox,
   TUNINGS,
+  type CagedShape,
   type FretPosition,
   type ScaleId,
   type Tuning,
@@ -29,8 +31,23 @@ export function scaleMarks(
 
 const STANDARD = TUNINGS.find((t) => t.name === "Standard")!;
 
-/** A read-only fretboard for a quest: the scale or one pentatonic box in the standard tuning. */
-export function FretOverlay({ root, scale, box }: { root: string; scale: ScaleId; box?: 1 | 2 | 3 | 4 | 5 }) {
-  const only = box !== undefined && scale === "moll-pentatonik" ? pentatonicBox(root, box) : undefined;
+/** A read-only fretboard for a quest: the scale, one pentatonic box or one CAGED shape in the standard tuning. */
+export function FretOverlay({
+  root,
+  scale,
+  box,
+  caged,
+}: {
+  root: string;
+  scale: ScaleId;
+  box?: 1 | 2 | 3 | 4 | 5;
+  caged?: CagedShape;
+}) {
+  const only =
+    caged !== undefined
+      ? cagedShape(root, caged)
+      : box !== undefined && scale === "moll-pentatonik"
+        ? pentatonicBox(root, box)
+        : undefined;
   return <FretboardGrid tuning={STANDARD} mark={scaleMarks(STANDARD, root, scale, only)} />;
 }

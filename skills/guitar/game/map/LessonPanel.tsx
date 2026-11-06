@@ -82,11 +82,14 @@ function TargetSong({
   targetSongId,
   busy,
   onSet,
+  heading = true,
 }: {
   song: NonNullable<MapNode["targetSong"]>;
   targetSongId: string | null;
   busy: boolean;
   onSet: (id: string) => void;
+  /** Off where a list of songs already sits under one heading. */
+  heading?: boolean;
 }) {
   const imported = useQuery({
     queryKey: ["songs"],
@@ -106,8 +109,8 @@ function TargetSong({
     .map((entry) => `db:${entry.id}`);
   const first = ids[0];
   return (
-    <div className="lesson-block">
-      <h3>Zielsong</h3>
+    <div className={heading ? "lesson-block" : "lesson-song"}>
+      {heading ? <h3>Zielsong</h3> : null}
       <p>
         {song.title} · {song.artist}
       </p>
@@ -328,7 +331,21 @@ export function LessonPanel({
         </details>
       ) : null}
 
-      {node.songs.length > 0 ? (
+      {node.chooseTarget && node.songs.length > 0 ? (
+        <div className="lesson-block">
+          <h3>Zielsong wählen</h3>
+          {node.songs.map((song) => (
+            <TargetSong
+              key={`${song.title}-${song.artist}`}
+              song={song}
+              heading={false}
+              targetSongId={state.targetSongId}
+              busy={busy}
+              onSet={(id) => void run(() => gameApi.setTargetSong(id))}
+            />
+          ))}
+        </div>
+      ) : node.songs.length > 0 ? (
         <div className="lesson-block">
           <h3>Songs dafür</h3>
           <ul>

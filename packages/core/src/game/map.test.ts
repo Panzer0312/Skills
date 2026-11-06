@@ -3,7 +3,7 @@ import { relations, roadPoints, type MapNode } from "./map.js";
 
 const node = (id: string, extra: Partial<MapNode> = {}): MapNode => ({
   id, title: id, description: id, path: "hafen", rank: 1, x: 0, y: 0, parent: null, quick: false,
-  available: true, knownSong: false, techniqueId: null, links: [], songs: [], targetSong: null, ...extra,
+  available: true, knownSong: false, techniqueId: null, links: [], songs: [], targetSong: null, chooseTarget: false, ...extra,
 });
 const nodes = [
   node("a"),

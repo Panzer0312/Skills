@@ -10,7 +10,8 @@
     { "id": "song", "title": "Songs" },
     { "id": "fingerpicking", "title": "Fingerpicking" },
     { "id": "metal", "title": "Metal" },
-    { "id": "jam", "title": "Jam" }
+    { "id": "jam", "title": "Jam" },
+    { "id": "griffbrett", "title": "Griffbrett" }
   ],
   "quests": [
     {

@@ -16,7 +16,7 @@ const q = (id: string, kind: QuestDefinition["kind"], minutes: number, lessonId:
 });
 const node = (id: string, extra: Partial<MapNode> = {}): MapNode => ({
   id, title: id, description: id, path: "hafen", rank: 1, x: 0, y: 0, parent: null, quick: false,
-  available: true, knownSong: false, techniqueId: null, links: [], songs: [], targetSong: null, ...extra,
+  available: true, knownSong: false, techniqueId: null, links: [], songs: [], targetSong: null, chooseTarget: false, ...extra,
 });
 const step = (lessonId: string, questId: string | null): RoadStep => ({ lessonId, questId, months: [1, 1], reason: "r" });
 // fixture: road la->lb->lc; quests a(10), b(10), c(10), wechsel(5), song(10), theorie(5), warm(5)
@@ -102,6 +102,49 @@ describe("buildDailyQuests fillers", () => {
   });
   it("still offers a chosen lesson past the best next", () => {
     expect(build({ minutes: 90, hasTargetSong: false, chosenLessonIds: ["lb"] })).toContain("b");
+  });
+});
+
+describe("buildDailyQuests off-road lessons", () => {
+  const offRoad: GameContent = {
+    ...content,
+    quests: [
+      q("a", "technik", 10, "la"),
+      q("b", "technik", 10, "lb"),
+      q("child", "technik", 10, "lchild"),
+      q("fast", "technik", 10, "lquick"),
+      q("later", "theorie", 5, "ltheorie"),
+    ],
+    nodes: [
+      node("la"),
+      node("lb"),
+      node("lchild", { parent: "la" }),
+      node("lquick", { parent: "lb", quick: true }),
+      node("ltheorie", { parent: "lb" }),
+    ],
+  };
+  const fill = (o: { statuses?: Record<string, LessonStatus>; chosenLessonIds?: string[] }) =>
+    buildDailyQuests({ minutes: 90, hasTargetSong: false, recentQuestIds: [], chosenLessonIds: [], statuses: {}, content: offRoad, ...o });
+
+  it("gives a beginner no off-road lesson that is neither quick nor chosen", () => {
+    const ids = fill({});
+    expect(ids).not.toContain("child");
+    expect(ids).not.toContain("later");
+  });
+  it("offers a quick off-road lesson at once", () => {
+    expect(fill({})).toContain("fast");
+  });
+  it("offers an off-road lesson once its parent is done", () => {
+    expect(fill({ statuses: { la: "gelernt" } })).toContain("child");
+    expect(fill({ statuses: { la: "gemeistert" } })).toContain("child");
+    expect(fill({ statuses: { la: "aktiv" } })).not.toContain("child");
+  });
+  it("offers off-road theory only once its parent is done", () => {
+    expect(fill({})).not.toContain("later");
+    expect(fill({ statuses: { la: "gelernt", lb: "gelernt" } })).toContain("later");
+  });
+  it("always offers a chosen off-road lesson", () => {
+    expect(fill({ chosenLessonIds: ["lchild"] })).toContain("child");
   });
 });
 
@@ -207,6 +250,20 @@ describe("parseGameContent", () => {
     });
     expect(() => parseGameContent(withBoard("H"))).toThrow(/fretboard/);
     expect(() => parseGameContent(withBoard("A"))).not.toThrow();
+  });
+  it("accepts a CAGED shape on a fretboard and rejects an unknown one", () => {
+    const withCaged = (caged: string) => ({
+      ...content,
+      road: [],
+      nodes: [node("la")],
+      quests: [{ ...q("a", "technik", 10, "la"), fretboard: { root: "C", scale: "dur", caged } }],
+    });
+    expect(parseGameContent(withCaged("E")).quests[0]!.fretboard?.caged).toBe("E");
+    expect(() => parseGameContent(withCaged("F"))).toThrow(/caged/);
+  });
+  it("defaults chooseTarget to false", () => {
+    const { chooseTarget: _unused, ...bare } = node("la");
+    expect(parseGameContent({ ...content, road: [], quests: [], nodes: [bare] }).nodes[0]!.chooseTarget).toBe(false);
   });
   it("rejects a quest with an unknown tuning", () => {
     const withTuning = (tuning: string) => ({
