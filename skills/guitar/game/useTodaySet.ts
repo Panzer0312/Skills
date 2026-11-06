@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { gameApi, gameContent, todaysQuests } from "./api.js";
 
 export const SESSION_LENGTHS = [10, 20, 30, 45];
-const DEFAULT_MINUTES = 30;
+export const DEFAULT_MINUTES = 30;
 const WRITE_KEY = ["game", "guitar", "today"];
 
 interface TodayWrite {
@@ -14,6 +14,18 @@ interface TodayWrite {
 
 export interface FailedSave extends TodayWrite {
   message: string;
+}
+
+/** The set the current state yields, which is also what a new day starts from. */
+export function plannedSet(state: GameState, minutes: number, recentQuestIds: string[]): string[] {
+  return buildDailyQuests({
+    minutes,
+    content: gameContent,
+    statuses: state.lessons,
+    hasTargetSong: state.targetSongId !== null,
+    recentQuestIds,
+    chosenLessonIds: state.chosenLessons,
+  });
 }
 
 /** Today's set for the village and the board, built by whichever the owner opens first. */
@@ -34,16 +46,19 @@ export function useTodaySet(state: GameState, fetching: boolean) {
   // Shared across screens: a write the village started must stop the board from building again.
   const writing = useIsMutating({ mutationKey: WRITE_KEY }) > 0;
 
-  async function save(length: number, questIds: string[]) {
-    if (savingRef.current) return;
+  /** Whether the set was written. */
+  async function save(length: number, questIds: string[]): Promise<boolean> {
+    if (savingRef.current) return false;
     savingRef.current = true;
     setSaving(true);
     setFailed(null);
     try {
       await mutateAsync({ minutes: length, questIds });
+      return true;
     } catch (e) {
       const message = e instanceof Error ? e.message : "Speichern fehlgeschlagen.";
       setFailed({ message, minutes: length, questIds });
+      return false;
     } finally {
       savingRef.current = false;
       setSaving(false);
@@ -51,17 +66,7 @@ export function useTodaySet(state: GameState, fetching: boolean) {
   }
 
   function build(length: number) {
-    return save(
-      length,
-      buildDailyQuests({
-        minutes: length,
-        content: gameContent,
-        statuses: state.lessons,
-        hasTargetSong: state.targetSongId !== null,
-        recentQuestIds: state.recentQuestIds,
-        chosenLessonIds: state.chosenLessons,
-      }),
-    );
+    return save(length, plannedSet(state, length, state.recentQuestIds));
   }
 
   useEffect(() => {

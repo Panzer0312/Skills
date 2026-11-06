@@ -1,7 +1,7 @@
 import { relations, type GameState, type MapNode, type MapPath, type RoadStep } from "@skills/core";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useId, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useId, useRef, useState, type MouseEvent } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { api, ApiError } from "../../../../packages/web/src/api/client.js";
 import { DEFAULT_LEVEL, GAME_BASE, gameApi, isDone, normalizeTitle } from "../api.js";
 
@@ -192,6 +192,7 @@ export function LessonPanel({
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [asking, setAsking] = useState(false);
+  const navigate = useNavigate();
 
   async function run(write: () => Promise<unknown>): Promise<boolean> {
     setBusy(true);
@@ -216,6 +217,19 @@ export function LessonPanel({
   const mainRoad = best?.lessonId;
   const actionable = node.available && !node.knownSong;
   const region = paths.find((path) => path.id === node.path);
+  const missingBasics =
+    node.quick || node.knownSong ? [] : buildsOn.filter((parent) => !isDone(state.lessons[parent.id]));
+
+  /** Without a set for today the next build includes the best next quest anyway. */
+  async function startBest(event: MouseEvent, questId: string) {
+    const today = state.today;
+    if (!today || today.questIds.includes(questId)) return;
+    event.preventDefault();
+    if (busy) return;
+    if (await run(() => gameApi.setToday(today.minutes, [...today.questIds, questId]))) {
+      navigate(`${GAME_BASE}/quest/${questId}`);
+    }
+  }
 
   return (
     <section className="lesson-panel game-panel" aria-label="Lektion">
@@ -239,6 +253,15 @@ export function LessonPanel({
             Lektion öffnen
           </Link>
           {isBest ? <span className="lesson-tag">Hauptweg</span> : null}
+          {best?.questId && isBest ? (
+            <Link
+              to={`${GAME_BASE}/quest/${best.questId}`}
+              className="game-button"
+              onClick={(event) => void startBest(event, best.questId!)}
+            >
+              Quest starten
+            </Link>
+          ) : null}
           {chosen ? (
             <button
               type="button"
@@ -273,6 +296,15 @@ export function LessonPanel({
           onChange={(level) => run(() => gameApi.setLevel(node.techniqueId!, level))}
         />
       ) : null}
+
+      {missingBasics.map((parent) => (
+        <p key={parent.id} className="lesson-note">
+          Dir fehlen noch Grundlagen:{" "}
+          <button type="button" className="map-text-button" onClick={() => onSelect(parent.id)}>
+            {parent.title}
+          </button>
+        </p>
+      ))}
 
       <NodeList title="Baut auf" nodes={buildsOn} onSelect={onSelect} />
       <NodeList title="Schaltet frei" nodes={unlocks} onSelect={onSelect} />

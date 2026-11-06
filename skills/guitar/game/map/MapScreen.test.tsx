@@ -226,6 +226,75 @@ describe("LessonPanel", () => {
     expect(within(box).queryByRole("button", { name: "Als Quest annehmen" })).not.toBeInTheDocument();
   });
 
+  it("starts the best next quest from the map", async () => {
+    const fetchMock = serve({ today: { minutes: 30, questIds: ["haltung-check"] } });
+    renderMap();
+    const start = await within(await panel()).findByRole("link", { name: "Quest starten" });
+    expect(start).toHaveAttribute("href", "/vollbild/guitar/spiel/quest/haltung-check");
+    await userEvent.click(start);
+    await waitFor(() =>
+      expect(screen.getByLabelText("Adresse")).toHaveTextContent("/vollbild/guitar/spiel/quest/haltung-check"),
+    );
+    expect(writes(fetchMock)).toEqual([]);
+  });
+
+  it("adds the best next quest to today's set when it is missing", async () => {
+    const fetchMock = serve({ today: { minutes: 20, questIds: ["wechsel-minute"] } });
+    renderMap();
+    await userEvent.click(await within(await panel()).findByRole("link", { name: "Quest starten" }));
+    await waitFor(() =>
+      expect(screen.getByLabelText("Adresse")).toHaveTextContent("/vollbild/guitar/spiel/quest/haltung-check"),
+    );
+    expect(writes(fetchMock)).toEqual([
+      {
+        url: "/api/game/guitar/today",
+        method: "PUT",
+        body: JSON.stringify({ minutes: 20, questIds: ["wechsel-minute", "haltung-check"] }),
+      },
+    ]);
+  });
+
+  it("offers Quest starten only on the best next lesson", async () => {
+    serve({});
+    renderMap(`/hafen/${OTHER}`);
+    const box = await panel();
+    await within(box).findByRole("link", { name: "Lektion öffnen" });
+    expect(within(box).queryByRole("link", { name: "Quest starten" })).not.toBeInTheDocument();
+  });
+
+  it("warns about an unfinished parent and links to it, without blocking", async () => {
+    const parent = nodeOf(OTHER).parent!;
+    serve({});
+    renderMap(`/hafen/${OTHER}`);
+    const box = await panel();
+    const note = (await within(box).findByText(/Dir fehlen noch Grundlagen:/)).closest("p")!;
+    expect(note).toHaveTextContent(`Dir fehlen noch Grundlagen: ${titleOf(parent)}`);
+    expect(within(box).getByRole("button", { name: "Als Quest annehmen" })).toBeEnabled();
+    await userEvent.click(within(note).getByRole("button", { name: titleOf(parent) }));
+    await waitFor(() =>
+      expect(screen.getByLabelText("Adresse")).toHaveTextContent(`/vollbild/guitar/spiel/hafen/${parent}`),
+    );
+  });
+
+  it("names no missing basics once the parent is finished", async () => {
+    serve({ lessons: { [nodeOf(OTHER).parent!]: "gelernt" } });
+    renderMap(`/hafen/${OTHER}`);
+    await within(await panel()).findByRole("link", { name: "Lektion öffnen" });
+    expect(screen.queryByText(/Dir fehlen noch Grundlagen/)).not.toBeInTheDocument();
+  });
+
+  it("exempts quick wins and known songs from the warning", async () => {
+    const known = gameContent.nodes.find((node) => node.knownSong && node.parent !== null)!;
+    expect(quick.parent).not.toBeNull();
+    for (const id of [quick.id, known.id]) {
+      serve({});
+      const { unmount } = renderMap(`/hafen/${id}`);
+      expect(await within(await panel()).findByRole("heading", { name: titleOf(id) })).toBeInTheDocument();
+      expect(screen.queryByText(/Dir fehlen noch Grundlagen/)).not.toBeInTheDocument();
+      unmount();
+    }
+  });
+
   it("takes a lesson as quest", async () => {
     const fetchMock = serve({});
     renderMap(`/hafen/${OTHER}`);
@@ -406,7 +475,7 @@ describe("LessonPanel", () => {
     renderMap(`/hafen/${OTHER}`);
     const box = await panel();
     fireEvent.change(await within(box).findByRole("slider", { name: "Deine Stufe" }), { target: { value: "8" } });
-    fireEvent.click(within(box).getByRole("button", { name: titleOf(nodeOf(OTHER).parent!) }));
+    fireEvent.click(within(box).getAllByRole("button", { name: titleOf(nodeOf(OTHER).parent!) })[0]!);
     await within(await panel()).findByRole("heading", { name: titleOf(nodeOf(OTHER).parent!) });
     expect(writes(fetchMock)).toEqual([
       { url: `/api/game/guitar/level/${techniqueId}`, method: "PUT", body: JSON.stringify({ level: 8 }) },

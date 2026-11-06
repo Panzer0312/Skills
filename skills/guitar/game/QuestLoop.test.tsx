@@ -207,6 +207,17 @@ describe("Quest Board", () => {
     expect(writes(fetchMock, "/today")).toEqual([]);
   });
 
+  it("promises Morgen dabei only for a quest that fits tomorrow's set", async () => {
+    // 5 + 5 for road and drill, 15 fits the default 30 minutes, the next 15 does not.
+    serve({ today: set, chosenLessons: ["song-bards-vorbereitung", "metal-erster-riff"] });
+    renderGame("/quests");
+    const side = (await screen.findByRole("heading", { name: "Nebenwege" })).closest("div")!;
+    const [fits, tooLong] = within(side).getAllByRole("listitem");
+    expect(fits).toHaveTextContent("Morgen dabei");
+    expect(tooLong).not.toHaveTextContent("Morgen dabei");
+    expect(within(tooLong!).getByRole("button", { name: /heute dazunehmen/ })).toBeInTheDocument();
+  });
+
   it("keeps the main-road lesson out of the Nebenwege", async () => {
     serve({ today: set, chosenLessons: ["01-haltung", "10-barre"] });
     renderGame("/quests");
@@ -273,13 +284,61 @@ describe("Quest Board", () => {
     expect(screen.getByText("Bester nächster Schritt")).toBeInTheDocument();
   });
 
-  it("names the change drill as next step once the road is finished", async () => {
-    const lessons = Object.fromEntries(gameContent.road.map((step) => [step.lessonId, "gelernt" as const]));
+  it("names the change drill and promises more while planned steps remain", async () => {
+    const written = gameContent.road.filter((step) => step.questId !== null);
+    const lessons = Object.fromEntries(written.map((step) => [step.lessonId, "gelernt" as const]));
     serve({ today: set, lessons });
     renderGame("/quests");
     const block = (await screen.findByText("Bester nächster Schritt")).closest("div")!;
     expect(block).toHaveTextContent("Wechsel pro Minute");
-    expect(block).toHaveTextContent("Hauptstraße");
+    expect(block).toHaveTextContent("Alle fertigen Lektionen auf dem Hauptweg sind geschafft. Weitere folgen.");
+    expect(block).not.toHaveTextContent("Der Hauptweg ist geschafft");
+  });
+
+  it("keeps the finished message for a truly finished road", async () => {
+    const road = gameContent.road;
+    gameContent.road = road.filter((step) => step.questId !== null);
+    try {
+      const lessons = Object.fromEntries(gameContent.road.map((step) => [step.lessonId, "gelernt" as const]));
+      serve({ today: set, lessons });
+      renderGame("/quests");
+      const block = (await screen.findByText("Bester nächster Schritt")).closest("div")!;
+      expect(block).toHaveTextContent("Wechsel pro Minute");
+      expect(block).toHaveTextContent("Der Hauptweg ist geschafft.");
+      expect(block).not.toHaveTextContent("Weitere folgen");
+    } finally {
+      gameContent.road = road;
+    }
+  });
+
+  it("starts the best next quest without a write when it is in today's set", async () => {
+    const fetchMock = serve({ today: { minutes: 30, questIds: ["haltung-check", "wechsel-minute"] } });
+    renderGame("/quests");
+    const start = await screen.findByRole("link", { name: "Quest starten" });
+    expect(start).toHaveAttribute("href", "/vollbild/guitar/spiel/quest/haltung-check");
+    await userEvent.click(start);
+    expect(await screen.findByRole("button", { name: "Fertig" })).toBeInTheDocument();
+    expect(writes(fetchMock, "/today")).toEqual([]);
+  });
+
+  it("adds a missing best next quest to today's set before starting it", async () => {
+    const fetchMock = serve({ today: { minutes: 20, questIds: ["wechsel-minute"] } });
+    renderGame("/quests");
+    await userEvent.click(await screen.findByRole("link", { name: "Quest starten" }));
+    expect(await screen.findByRole("button", { name: "Fertig" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Haltungs-Check" })).toBeInTheDocument();
+    expect(writes(fetchMock, "/today")).toEqual([{ minutes: 20, questIds: ["wechsel-minute", "haltung-check"] }]);
+  });
+
+  it("stays on the board when adding the best next quest fails", async () => {
+    serve(
+      { today: { minutes: 20, questIds: ["wechsel-minute"] } },
+      { today: () => json({ error: { message: "kaputt" } }, 500) },
+    );
+    renderGame("/quests");
+    await userEvent.click(await screen.findByRole("link", { name: "Quest starten" }));
+    expect(await screen.findByRole("alert")).toHaveTextContent("kaputt");
+    expect(screen.getByRole("heading", { name: "Quest Board" })).toBeInTheDocument();
   });
 
   it("links to the checkpoint when the next lesson is being practised", async () => {
