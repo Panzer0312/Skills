@@ -232,6 +232,16 @@ describe("game places", () => {
     expect(await screen.findByText(/Noch keine eigenen Songs/)).not.toHaveTextContent("Seitenleiste");
   });
 
+  it("lists recommendations in the Tavern, grouped by lesson", async () => {
+    serve({});
+    renderGame("/taverne");
+    expect(await screen.findByRole("heading", { name: "Empfehlungen" })).toBeInTheDocument();
+    const lesson = screen.getByRole("link", { name: "Power Chords" });
+    expect(lesson).toHaveAttribute("href", "/vollbild/guitar/spiel/hafen/09-powerchords");
+    const group = lesson.closest("li") as HTMLElement;
+    expect(within(group).getByText(/Paranoid/)).toBeInTheDocument();
+  });
+
   it("opens the map in the harbor", async () => {
     serve({});
     renderGame("/hafen");

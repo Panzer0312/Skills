@@ -171,7 +171,14 @@
       "knownSong": false,
       "techniqueId": "akkordwechsel",
       "links": [],
-      "songs": [],
+      "songs": [
+        {
+          "title": "Wish You Were Here",
+          "artist": "Pink Floyd",
+          "trains": "Offene Akkorde C, D, Am und G in der Strophe",
+          "source": "https://nationalguitaracademy.com/songs/wish-you-were-here-chords/"
+        }
+      ],
       "targetSong": null
     },
     {
@@ -193,7 +200,20 @@
           "reason": "The Bard's Song verlangt schnellere Wechsel."
         }
       ],
-      "songs": [],
+      "songs": [
+        {
+          "title": "Zombie",
+          "artist": "The Cranberries",
+          "trains": "Akkordwechsel Em, C, G, D",
+          "source": "https://www.andyguitar.co.uk/online-lessons/lessons/the-cranberries-zombie/"
+        },
+        {
+          "title": "Knockin' on Heaven's Door",
+          "artist": "Bob Dylan",
+          "trains": "Akkordwechsel G, D, Am, C",
+          "source": "https://songnotes.net/lessons/88/"
+        }
+      ],
       "targetSong": null
     },
     {
@@ -373,7 +393,14 @@
           "reason": "Der Barré-Griff ist die E-Form."
         }
       ],
-      "songs": [],
+      "songs": [
+        {
+          "title": "Creep",
+          "artist": "Radiohead",
+          "trains": "Barré-Akkorde G, B, C, Cm mit Grundton auf der E-Saite",
+          "source": "https://www.andyguitar.co.uk/lessons/radiohead-creep"
+        }
+      ],
       "targetSong": null
     },
     {
@@ -463,7 +490,14 @@
           "reason": "Gleiche Idee: Akkordtöne nacheinander. Beim Sweep übernimmt der Pick."
         }
       ],
-      "songs": [],
+      "songs": [
+        {
+          "title": "House of the Rising Sun",
+          "artist": "The Animals",
+          "trains": "Arpeggio-Fingerpicking über Akkorde",
+          "source": "https://www.guitarnoise.com/lesson/house-of-the-rising-sun/"
+        }
+      ],
       "targetSong": null
     },
     {
@@ -570,7 +604,14 @@
       "knownSong": false,
       "techniqueId": "fingerpicking",
       "links": [],
-      "songs": [],
+      "songs": [
+        {
+          "title": "Dust in the Wind",
+          "artist": "Kansas",
+          "trains": "Travis Picking mit gleichmäßigem Daumenbass",
+          "source": "https://www.guitarnoise.com/lessons/dust-in-the-wind/"
+        }
+      ],
       "targetSong": null
     },
     {
@@ -925,7 +966,20 @@
           "reason": "Beide Griffe verschiebst du nach dem Grundton auf der tiefen E-Saite."
         }
       ],
-      "songs": [],
+      "songs": [
+        {
+          "title": "Paranoid",
+          "artist": "Black Sabbath",
+          "trains": "Power Chords im Riff",
+          "source": "https://www.licklibrary.com/learn/lessons/black-sabbath/paranoid-riff"
+        },
+        {
+          "title": "Iron Man",
+          "artist": "Black Sabbath",
+          "trains": "Power Chords im Riff",
+          "source": "https://www.licklibrary.com/learn/lessons/black-sabbath/black-sabbath-iron-man-riff"
+        }
+      ],
       "targetSong": null
     },
     {
@@ -981,7 +1035,20 @@
           "reason": "Beide leben vom Dämpfen: Palm Mute mit der Anschlagshand, Funk mit der Greifhand."
         }
       ],
-      "songs": [],
+      "songs": [
+        {
+          "title": "Enter Sandman",
+          "artist": "Metallica",
+          "trains": "Palm Mute auf der tiefen E-Saite",
+          "source": "https://justinguitar.com/guitar-lessons/enter-sandman-bg-1205"
+        },
+        {
+          "title": "Paranoid",
+          "artist": "Black Sabbath",
+          "trains": "Palm Mute fast durchgehend, wenige Akkorde klingen frei aus",
+          "source": "https://eatsleepguitarrepeat.com/how-to-play-paranoid-by-black-sabbath-paranoid-guitar-tab-and-lesson"
+        }
+      ],
       "targetSong": null
     },
     {
@@ -1015,7 +1082,14 @@
       "knownSong": false,
       "techniqueId": "metal",
       "links": [],
-      "songs": [],
+      "songs": [
+        {
+          "title": "Master of Puppets",
+          "artist": "Metallica",
+          "trains": "Downpicking in Achteln bei rund 200 bpm",
+          "source": "https://www.guitarworld.com/lessons/techniques/downpicking"
+        }
+      ],
       "targetSong": null
     },
     {
@@ -1037,7 +1111,14 @@
           "reason": "Im Galopp triffst du die ersten Sechzehntel, hier werden sie zum durchgehenden Groove."
         }
       ],
-      "songs": [],
+      "songs": [
+        {
+          "title": "Run to the Hills",
+          "artist": "Iron Maiden",
+          "trains": "Galopp-Rhythmus mit Palm Mute und Wechselschlag",
+          "source": "https://www.licklibrary.com/learn/lessons/iron-maiden/run-to-the-hills"
+        }
+      ],
       "targetSong": null
     },
     {

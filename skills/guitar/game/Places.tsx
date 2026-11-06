@@ -23,6 +23,33 @@ export function ToolFrame({ title, children }: { title: string; children: ReactN
   );
 }
 
+function SongRecommendations() {
+  const nodes = gameContent.nodes.filter((node) => node.available && node.songs.length > 0);
+  if (nodes.length === 0) return null;
+  return (
+    <>
+      <h2 className="mt-6 text-lg font-semibold">Empfehlungen</h2>
+      <ul>
+        {nodes.map((node) => (
+          <li key={node.id} className="mt-2">
+            <Link to={`${GAME_BASE}/hafen/${node.id}`} className="underline">
+              {node.title}
+            </Link>
+            <ul>
+              {node.songs.map((song) => (
+                <li key={`${song.title}-${song.artist}`}>
+                  {song.title} · {song.artist}{" "}
+                  <small className="text-slate-600 dark:text-slate-400">{song.trains}</small>
+                </li>
+              ))}
+            </ul>
+          </li>
+        ))}
+      </ul>
+    </>
+  );
+}
+
 export function Tavern(props: WidgetProps) {
   return (
     <ToolFrame title="Taverne">
@@ -30,6 +57,7 @@ export function Tavern(props: WidgetProps) {
       <Link to="/songs/neu" className="mt-6 inline-block text-sm underline">
         Song hinzufügen
       </Link>
+      <SongRecommendations />
     </ToolFrame>
   );
 }

@@ -273,3 +273,15 @@ describe("daily quests on the real content", () => {
     expect(build(10, ["griffbrett-namen"])).not.toContain("stufenakkorde");
   });
 });
+
+describe("song recommendations", () => {
+  it("recommends at least twelve songs with a source URL", () => {
+    const songs = content.nodes.flatMap((n) => n.songs);
+    expect(songs.length).toBeGreaterThanOrEqual(12);
+    for (const song of songs) expect(song.source).toMatch(/^https:\/\//);
+  });
+  it("leans towards metal", () => {
+    const metal = content.nodes.filter((n) => n.path === "metal").flatMap((n) => n.songs);
+    expect(metal.length).toBeGreaterThanOrEqual(4);
+  });
+});
