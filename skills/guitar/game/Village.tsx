@@ -18,6 +18,7 @@ const MENU: { path: string; label: string; hint: string; sprite: SpriteName }[] 
   { path: "schmiede", label: "Forge", hint: "Akkordgriffe", sprite: "sword" },
   { path: "griffbrett", label: "Tower of CAGED", hint: "Griffbrett", sprite: "bow" },
   { path: "riffs", label: "Riffs", hint: "Tabs zum Üben", sprite: "shield" },
+  { path: "jam", label: "Jam Room", hint: "Begleitung", sprite: "potion" },
   { path: "chronik", label: "Chronicle", hint: "dein Fortschritt", sprite: "parchment" },
 ];
 

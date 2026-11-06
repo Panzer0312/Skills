@@ -427,3 +427,14 @@
   font-size: 28px;
   font-weight: 700;
 }
+
+.jam-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.jam-chords strong {
+  font-size: 28px;
+}
