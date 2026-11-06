@@ -52,6 +52,8 @@ export function useTodaySet(state: GameState, fetching: boolean) {
     // Past midnight the ids were built on yesterday's state, so let the fresh state rebuild them.
     if (state.day !== localDayKey(Date.now())) {
       void queryClient.invalidateQueries({ queryKey: ["game", "guitar"] });
+      // The fresh state may still lack a set, and then the auto-build has to run again.
+      built.current = false;
       return false;
     }
     if (savingRef.current) return false;

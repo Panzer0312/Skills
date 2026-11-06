@@ -334,6 +334,26 @@ describe("Quest Board", () => {
     expect(screen.queryByRole("button", { name: "Fertig" })).not.toBeInTheDocument();
   });
 
+  it("rebuilds today's set once the state is fresh", async () => {
+    const yesterday = localDayKey(Date.now() - 24 * 60 * 60 * 1000);
+    const fetchMock = serve({ day: yesterday, today: null });
+    const served = fetchMock.getMockImplementation()!;
+    let reads = 0;
+    let readsAtWrite = 0;
+    fetchMock.mockImplementation(async (input, init) => {
+      const response = await served(input, init);
+      if (String(input).endsWith("/today")) readsAtWrite = reads;
+      if (!String(input).endsWith("/state")) return response;
+      reads += 1;
+      const state = (await response.json()) as GameState;
+      return json(reads <= 2 ? state : { ...state, day: localDayKey(Date.now()) });
+    });
+    renderGame("/quests");
+    await waitFor(() => expect(writes(fetchMock, "/today")).toHaveLength(1));
+    // The first two reads are yesterday's, and nothing is written before the fresh one.
+    expect(readsAtWrite).toBeGreaterThan(2);
+  });
+
   it("adds a missing best next quest to today's set before starting it", async () => {
     const fetchMock = serve({ today: { minutes: 20, questIds: ["wechsel-minute"] } });
     renderGame("/quests");
