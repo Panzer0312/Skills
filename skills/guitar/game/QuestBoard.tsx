@@ -89,7 +89,7 @@ function Board({ state, fetching }: { state: GameState; fetching: boolean }) {
   const others = gameContent.quests.filter((quest) => !chosen.has(quest.id));
   const ids = quests.map((quest) => quest.id);
   // Chosen lessons join a set that is already built only on request, otherwise tomorrow's.
-  const sideRoads = state.chosenLessons.flatMap((lessonId) => {
+  const sideRoads = state.chosenLessons.filter((id) => id !== next?.lessonId).flatMap((lessonId) => {
     const node = gameContent.nodes.find((n) => n.id === lessonId);
     if (!node) return [];
     const sideQuest = gameContent.quests.find((q) => q.lessonId === lessonId);

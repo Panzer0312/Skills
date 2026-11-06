@@ -80,11 +80,17 @@ export const gameApi = {
     refreshing(api.post<{ ok: true }>(`/api/game/${SKILL}/placement`, body)),
   /**
    * Rejects with an ApiError of code `limit` when two lessons are chosen and `replace` is missing.
+   * `mainRoad` names the lesson on the gold road, which takes no slot.
    * The state is fresh by then, so whoever asks which lesson to pause lists the real ones.
    */
-  chooseLesson: async (id: string, replace?: string) => {
+  chooseLesson: async (id: string, replace?: string, mainRoad?: string) => {
     try {
-      return await refreshing(api.put<{ ok: true }>(`/api/game/${SKILL}/chosen/${id}`, replace ? { replace } : {}));
+      return await refreshing(
+        api.put<{ ok: true }>(`/api/game/${SKILL}/chosen/${id}`, {
+          ...(replace ? { replace } : {}),
+          ...(mainRoad ? { mainRoad } : {}),
+        }),
+      );
     } catch (e) {
       if (e instanceof ApiError && e.code === "limit") await queryClient.invalidateQueries({ queryKey: GAME_KEY });
       throw e;

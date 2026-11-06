@@ -45,7 +45,10 @@ const placementSchema = z.object({
   targetSongId: z.string().regex(/^(uebung|db):.+$/).nullable(),
 });
 
-const chosenBodySchema = z.object({ replace: z.string().min(1).optional() });
+const chosenBodySchema = z.object({
+  replace: z.string().min(1).optional(),
+  mainRoad: z.string().min(1).optional(),
+});
 const targetSongSchema = z.object({ targetSongId: z.string().regex(/^(uebung|db):.+$/).nullable() });
 
 const STATUS_READ: Record<string, LessonStatus> = {
@@ -321,7 +324,7 @@ gameRoutes.put("/api/game/:skillId/chosen/:lessonId", async (c) => {
   const raw = c.get("database").raw;
   const skillId = c.req.param("skillId");
   const lessonId = c.req.param("lessonId");
-  const { replace } = parsed.data;
+  const { replace, mainRoad } = parsed.data;
   const result = raw.transaction(() => {
     const rows = raw
       .prepare(
@@ -332,7 +335,10 @@ gameRoutes.put("/api/game/:skillId/chosen/:lessonId", async (c) => {
       .all(skillId) as { id: string }[];
     const active = rows.map((r) => r.id);
     const validReplace = replace !== undefined && replace !== lessonId && active.includes(replace);
-    if (!active.includes(lessonId) && active.length >= MAX_CHOSEN && !validReplace) return "limit" as const;
+    // The main-road lesson comes on top of the chosen ones and takes no slot.
+    const sideRoads = active.filter((id) => id !== mainRoad);
+    const newSideRoad = lessonId !== mainRoad && !active.includes(lessonId);
+    if (newSideRoad && sideRoads.length >= MAX_CHOSEN && !validReplace) return "limit" as const;
     if (validReplace) {
       raw
         .prepare("DELETE FROM game_chosen WHERE skill_id = ? AND lesson_id = ?")

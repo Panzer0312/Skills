@@ -207,6 +207,21 @@ describe("Quest Board", () => {
     expect(writes(fetchMock, "/today")).toEqual([]);
   });
 
+  it("keeps the main-road lesson out of the Nebenwege", async () => {
+    serve({ today: set, chosenLessons: ["01-haltung", "10-barre"] });
+    renderGame("/quests");
+    const side = (await screen.findByRole("heading", { name: "Nebenwege" })).closest("div")!;
+    expect(within(side).getAllByRole("listitem")).toHaveLength(1);
+    expect(side).toHaveTextContent("Barré");
+  });
+
+  it("shows no Nebenwege when only the main-road lesson is chosen", async () => {
+    serve({ today: set, chosenLessons: ["01-haltung"] });
+    renderGame("/quests");
+    await screen.findByText("Bester nächster Schritt");
+    expect(screen.queryByRole("heading", { name: "Nebenwege" })).not.toBeInTheDocument();
+  });
+
   it("appends a chosen lesson's quest with Heute dazunehmen", async () => {
     const fetchMock = serve({ today: set, chosenLessons: ["10-barre"] });
     renderGame("/quests");

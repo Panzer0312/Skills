@@ -53,10 +53,10 @@ function serve(state: Partial<GameState>, songs: { id: number; title: string }[]
     if (path.startsWith("/api/songs")) return json({ songs });
     if (path.includes("/chosen/")) {
       const id = path.split("/").pop()!;
-      const replace = (JSON.parse(String(init?.body ?? "{}")) as { replace?: string }).replace;
+      const { replace, mainRoad } = JSON.parse(String(init?.body ?? "{}")) as { replace?: string; mainRoad?: string };
       if (init?.method === "DELETE") {
         current.chosenLessons = current.chosenLessons.filter((lesson) => lesson !== id);
-      } else if (current.chosenLessons.length >= 2 && !replace) {
+      } else if (current.chosenLessons.filter((lesson) => lesson !== mainRoad).length >= 2 && !replace) {
         return json({ error: { code: "limit", message: "Höchstens 2" } }, 409);
       } else {
         current.chosenLessons = [...current.chosenLessons.filter((lesson) => lesson !== replace), id];
@@ -231,7 +231,31 @@ describe("LessonPanel", () => {
     renderMap(`/hafen/${OTHER}`);
     await userEvent.click(await within(await panel()).findByRole("button", { name: "Als Quest annehmen" }));
     expect(await within(await panel()).findByRole("button", { name: "Pausieren" })).toBeInTheDocument();
-    expect(writes(fetchMock)).toEqual([{ url: `/api/game/guitar/chosen/${OTHER}`, method: "PUT", body: "{}" }]);
+    expect(writes(fetchMock)).toEqual([
+      { url: `/api/game/guitar/chosen/${OTHER}`, method: "PUT", body: JSON.stringify({ mainRoad: FIRST }) },
+    ]);
+  });
+
+  it("does not spend a side slot on the main-road lesson", async () => {
+    const fetchMock = serve({ chosenLessons: [FIRST, CHOSEN[0]!] });
+    renderMap(`/hafen/${OTHER}`);
+    await userEvent.click(await within(await panel()).findByRole("button", { name: "Als Quest annehmen" }));
+    expect(await within(await panel()).findByRole("button", { name: "Pausieren" })).toBeInTheDocument();
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    expect(writes(fetchMock)).toEqual([
+      { url: `/api/game/guitar/chosen/${OTHER}`, method: "PUT", body: JSON.stringify({ mainRoad: FIRST }) },
+    ]);
+  });
+
+  it("leaves the main-road lesson out of the pause dialog", async () => {
+    serve({ chosenLessons: [FIRST, ...CHOSEN] });
+    renderMap(`/hafen/${OTHER}`);
+    await userEvent.click(await within(await panel()).findByRole("button", { name: "Als Quest annehmen" }));
+    const dialog = await screen.findByRole("dialog");
+    for (const id of CHOSEN) {
+      expect(within(dialog).getByRole("button", { name: titleOf(id) })).toBeInTheDocument();
+    }
+    expect(within(dialog).queryByRole("button", { name: titleOf(FIRST) })).not.toBeInTheDocument();
   });
 
   it("pauses a chosen lesson", async () => {
@@ -278,7 +302,7 @@ describe("LessonPanel", () => {
     expect(writes(fetchMock).at(-1)).toEqual({
       url: `/api/game/guitar/chosen/${OTHER}`,
       method: "PUT",
-      body: JSON.stringify({ replace: CHOSEN[0] }),
+      body: JSON.stringify({ replace: CHOSEN[0], mainRoad: FIRST }),
     });
   });
 
@@ -805,12 +829,14 @@ describe("gameApi map writes", () => {
     const fetchMock = serve({});
     await gameApi.chooseLesson("a");
     await gameApi.chooseLesson("b", "a");
+    await gameApi.chooseLesson("c", undefined, "road");
     await gameApi.pauseLesson("b");
     await gameApi.setTargetSong("db:1");
     await gameApi.setTargetSong(null);
     expect(writes(fetchMock)).toEqual([
       { url: "/api/game/guitar/chosen/a", method: "PUT", body: "{}" },
       { url: "/api/game/guitar/chosen/b", method: "PUT", body: JSON.stringify({ replace: "a" }) },
+      { url: "/api/game/guitar/chosen/c", method: "PUT", body: JSON.stringify({ mainRoad: "road" }) },
       { url: "/api/game/guitar/chosen/b", method: "DELETE", body: undefined },
       { url: "/api/game/guitar/target-song", method: "PUT", body: JSON.stringify({ targetSongId: "db:1" }) },
       { url: "/api/game/guitar/target-song", method: "PUT", body: JSON.stringify({ targetSongId: null }) },

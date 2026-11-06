@@ -158,6 +158,36 @@ describe("game api", () => {
       expect(s.lessons.c).toBeUndefined();
     });
 
+    it("does not count the main-road lesson towards the limit", async () => {
+      await choose("road");
+      await choose("a");
+      const r = await choose("b", { mainRoad: "road" });
+      expect(r.status).toBe(200);
+      expect((await state()).chosenLessons).toEqual(["road", "a", "b"]);
+    });
+
+    it("still refuses a third side lesson beside the main-road lesson", async () => {
+      await choose("road");
+      await choose("a");
+      await choose("b", { mainRoad: "road" });
+      const r = await choose("c", { mainRoad: "road" });
+      expect(r.status).toBe(409);
+      expect((await state()).chosenLessons).toEqual(["road", "a", "b"]);
+    });
+
+    it("lets the main-road lesson itself in at the limit", async () => {
+      await choose("a");
+      await choose("b");
+      expect((await choose("road", { mainRoad: "road" })).status).toBe(200);
+      expect((await state()).chosenLessons).toEqual(["a", "b", "road"]);
+    });
+
+    it("counts every chosen lesson when no main road is sent", async () => {
+      await choose("road");
+      await choose("a");
+      expect((await choose("b")).status).toBe(409);
+    });
+
     it("replaces a chosen lesson in one step", async () => {
       await choose("a");
       await choose("b");

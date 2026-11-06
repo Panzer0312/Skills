@@ -120,7 +120,7 @@ function MapView({ state }: { state: GameState }) {
             nodes={nodes}
             paths={paths}
             state={state}
-            isBest={selected.id === bestId}
+            best={tips.best}
             onSelect={select}
           />
         </div>

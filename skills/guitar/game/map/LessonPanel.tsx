@@ -1,4 +1,4 @@
-import { relations, type GameState, type MapNode, type MapPath } from "@skills/core";
+import { relations, type GameState, type MapNode, type MapPath, type RoadStep } from "@skills/core";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useId, useRef, useState } from "react";
 import { Link } from "react-router-dom";
@@ -179,14 +179,14 @@ export function LessonPanel({
   nodes,
   paths,
   state,
-  isBest,
+  best,
   onSelect,
 }: {
   node: MapNode;
   nodes: MapNode[];
   paths: MapPath[];
   state: GameState;
-  isBest: boolean;
+  best: RoadStep | null;
   onSelect: (id: string) => void;
 }) {
   const [busy, setBusy] = useState(false);
@@ -212,6 +212,8 @@ export function LessonPanel({
   const { buildsOn, unlocks, linked } = relations(nodes, node.id);
   const status = state.lessons[node.id];
   const chosen = state.chosenLessons.includes(node.id);
+  const isBest = best?.lessonId === node.id;
+  const mainRoad = best?.lessonId;
   const actionable = node.available && !node.knownSong;
   const region = paths.find((path) => path.id === node.path);
 
@@ -251,7 +253,7 @@ export function LessonPanel({
               type="button"
               className="game-button"
               disabled={busy}
-              onClick={() => void run(() => gameApi.chooseLesson(node.id))}
+              onClick={() => void run(() => gameApi.chooseLesson(node.id, undefined, mainRoad))}
             >
               Als Quest annehmen
             </button>
@@ -316,13 +318,15 @@ export function LessonPanel({
 
       {asking ? (
         <PauseDialog
-          chosen={state.chosenLessons.map((id) => ({
-            id,
-            title: nodes.find((entry) => entry.id === id)?.title ?? id,
-          }))}
+          chosen={state.chosenLessons
+            .filter((id) => id !== mainRoad)
+            .map((id) => ({
+              id,
+              title: nodes.find((entry) => entry.id === id)?.title ?? id,
+            }))}
           busy={busy}
           error={error}
-          onPick={(id) => void run(() => gameApi.chooseLesson(node.id, id))}
+          onPick={(id) => void run(() => gameApi.chooseLesson(node.id, id, mainRoad))}
           onCancel={() => {
             setAsking(false);
             setError(null);
