@@ -9,6 +9,7 @@ import Fretboard from "../widgets/Fretboard.js";
 import SongLibrary from "../widgets/SongLibrary.js";
 import Tuner from "../widgets/Tuner.js";
 import { ChordTrainer } from "./ChordTrainer.js";
+import { NoteFinder } from "./NoteFinder.js";
 import { GAME_BASE, gameContent, useGameState } from "./api.js";
 import { formatTime } from "./StatusBar.js";
 
@@ -121,6 +122,7 @@ export function FretboardPlace(props: WidgetProps) {
   return (
     <ToolFrame title="Griffbrett">
       <Fretboard {...props} />
+      <NoteFinder />
     </ToolFrame>
   );
 }

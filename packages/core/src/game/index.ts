@@ -5,3 +5,5 @@ export * from "./quests.js";
 export * from "./map.js";
 export * from "./tips.js";
 export * from "./api-types.js";
+export * from "./chronicle.js";
+export * from "./noteFinder.js";
