@@ -60,4 +60,11 @@ export {
   createHoldDetector,
   notePitchClass,
   type NoteTarget,
+  parseStory,
+  reachedBeats,
+  pendingBeat,
+  currentChapter,
+  type Story,
+  type Chapter,
+  type Beat,
 } from "./game/index.js";

@@ -27,6 +27,7 @@ const base: GameState = {
   chosenLessons: [],
   records: {},
   recentQuestIds: [],
+  storySeen: [],
   today: null,
 };
 

@@ -9,7 +9,8 @@ import SongLibrary from "../widgets/SongLibrary.js";
 import Tuner from "../widgets/Tuner.js";
 import { ChordTrainer } from "./ChordTrainer.js";
 import { NoteFinder } from "./NoteFinder.js";
-import { GAME_BASE, gameContent } from "./api.js";
+import { StoryLog } from "./StoryLog.js";
+import { GAME_BASE, gameContent, useGameState } from "./api.js";
 
 export function ToolFrame({ title, children }: { title: string; children: ReactNode }) {
   return (
@@ -61,6 +62,15 @@ export function Tavern(props: WidgetProps) {
   );
 }
 
+function metaTitles(meta: Record<string, unknown>): Record<string, string> {
+  return Object.fromEntries(Object.values(meta).map((entry) => [(entry as LessonMeta).id, (entry as LessonMeta).title]));
+}
+
+const LESSON_TITLES = {
+  ...metaTitles(import.meta.glob("../lessons/*.mdx", { eager: true, import: "meta" })),
+  ...metaTitles(import.meta.glob("../reference/*.mdx", { eager: true, import: "meta" })),
+};
+
 function metaIds(meta: Record<string, unknown>): Set<string> {
   return new Set(Object.values(meta).map((entry) => (entry as LessonMeta).id));
 }
@@ -81,9 +91,11 @@ const LIBRARY = [
 export function Library() {
   const { lessonId } = useParams();
   const navigate = useNavigate();
+  const { data: state } = useGameState();
   const owner = LIBRARY.find(({ ids }) => lessonId !== undefined && ids.has(lessonId));
   return (
     <ToolFrame title="Bibliothek">
+      {lessonId === undefined && state ? <StoryLog state={state} titles={LESSON_TITLES} /> : null}
       <div key={lessonId} className="space-y-8">
         {(owner ? [owner] : LIBRARY).map(({ folder, title }) => (
           <CourseRenderer

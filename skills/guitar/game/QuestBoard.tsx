@@ -3,6 +3,7 @@ import { useState, type MouseEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { GAME_BASE, gameContent, questLevel, useGameState } from "./api.js";
 import { spriteUrl } from "./assets.js";
+import { MentorCard } from "./MentorCard.js";
 import { MORE_COMING } from "./map/TipsBoard.js";
 import { LevelPicker } from "./ResultDialog.js";
 import { DEFAULT_MINUTES, plannedSet, SESSION_LENGTHS, useTodaySet } from "./useTodaySet.js";
@@ -140,6 +141,8 @@ function Board({ state, fetching }: { state: GameState; fetching: boolean }) {
           </button>
         </div>
       ) : null}
+
+      <MentorCard state={state} />
 
       <div className="quest-next">
         <h2>Bester nächster Schritt</h2>

@@ -1,0 +1,22 @@
+{
+  "mentor": { "name": "Meister Kai", "role": "dein Gitarrenlehrer" },
+  "chapters": [
+    {
+      "id": "kapitel-1",
+      "title": "Der Anfang",
+      "months": [1, 12],
+      "intro": "Du stehst am Anfang deiner Reise. Zuerst kommen Haltung und Grundlagen.",
+      "theoryLessons": ["03-saiten-buende"]
+    }
+  ],
+  "beats": [
+    {
+      "id": "willkommen",
+      "chapterId": "kapitel-1",
+      "when": "next",
+      "lessonId": "01-haltung",
+      "title": "Willkommen im Dorf",
+      "lines": ["Schön, dass du da bist. Wir beginnen mit deiner Haltung."]
+    }
+  ]
+}

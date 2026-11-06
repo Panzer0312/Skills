@@ -58,6 +58,7 @@ const songMetaSchema = z.object({
   tags: z.array(z.string().min(1).max(60)).max(40).optional(),
   played: z.literal(true).optional(),
 });
+const storySeenSchema = z.object({ beatIds: z.array(z.string().min(1)).max(200) });
 const SONG_KEY = /^(uebung|song):.+$/;
 
 const STATUS_READ: Record<string, LessonStatus> = {
@@ -139,6 +140,12 @@ gameRoutes.get("/api/game/:skillId/state", (c) => {
     .prepare("SELECT minutes, quest_ids_json FROM game_today WHERE skill_id = ? AND day = ?")
     .get(skillId, today) as { minutes: number; quest_ids_json: string } | undefined;
 
+  const storySeen = (
+    raw
+      .prepare("SELECT beat_id FROM game_story_seen WHERE skill_id = ? ORDER BY seen_at, rowid")
+      .all(skillId) as { beat_id: string }[]
+  ).map((r) => r.beat_id);
+
   const questIdsOn = (day: string) => [
     ...new Set(rows.filter((r) => r.day === day && r.quest_id !== null).map((r) => r.quest_id!)),
   ];
@@ -158,6 +165,7 @@ gameRoutes.get("/api/game/:skillId/state", (c) => {
     chosenLessons,
     records,
     recentQuestIds: questIdsOn(yesterday),
+    storySeen,
     today: todayRow
       ? { minutes: todayRow.minutes, questIds: JSON.parse(todayRow.quest_ids_json) as string[] }
       : null,
@@ -458,5 +466,20 @@ gameRoutes.put("/api/game/:skillId/song/:songKey", async (c) => {
       played ? Date.now() : null,
       tags ? JSON.stringify(tags) : null,
     );
+  return c.json({ ok: true });
+});
+
+gameRoutes.put("/api/game/:skillId/story/seen", async (c) => {
+  const parsed = storySeenSchema.safeParse(await c.req.json().catch(() => null));
+  if (!parsed.success) return invalid(c, parsed.error);
+  const raw = c.get("database").raw;
+  const skillId = c.req.param("skillId");
+  const insert = raw.prepare(
+    "INSERT OR IGNORE INTO game_story_seen (skill_id, beat_id, seen_at) VALUES (?, ?, ?)",
+  );
+  const now = Date.now();
+  raw.transaction(() => {
+    for (const beatId of parsed.data.beatIds) insert.run(skillId, beatId, now);
+  })();
   return c.json({ ok: true });
 });

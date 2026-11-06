@@ -340,4 +340,19 @@ describe("game api", () => {
       expect(await history("demo")).toEqual({ days: [], metrics: [] });
     });
   });
+
+  it("stores seen story beats once and reports them in the state", async () => {
+    expect((await state()).storySeen).toEqual([]);
+    expect((await send("PUT", "/api/game/guitar/story/seen", { beatIds: ["a", "b"] })).status).toBe(200);
+    await send("PUT", "/api/game/guitar/story/seen", { beatIds: ["b", "c"] });
+    expect((await state()).storySeen).toEqual(["a", "b", "c"]);
+    expect((await state("other")).storySeen).toEqual([]);
+  });
+
+  it("rejects too many or empty story beat ids", async () => {
+    const many = Array.from({ length: 201 }, (_, i) => `b${i}`);
+    expect((await send("PUT", "/api/game/guitar/story/seen", { beatIds: many })).status).toBe(400);
+    expect((await send("PUT", "/api/game/guitar/story/seen", { beatIds: [""] })).status).toBe(400);
+    expect((await send("PUT", "/api/game/guitar/story/seen", {})).status).toBe(400);
+  });
 });

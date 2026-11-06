@@ -29,6 +29,7 @@ const base: GameState = {
   chosenLessons: [],
   records: {},
   recentQuestIds: [],
+  storySeen: [],
   today: null,
 };
 
@@ -630,6 +631,56 @@ describe("target song", () => {
     serve({}, [{ id: 3, title: `${BARDS.title} (Chords)` }]);
     renderMap(`/hafen/${OTHER}`);
     expect(await within(await panel()).findByRole("button", { name: "Als Zielsong setzen" })).toBeInTheDocument();
+  });
+});
+
+describe("song choice", () => {
+  const CHOICE = "metal-ganzer-song";
+  const SONGS = [
+    { title: "Paranoid", artist: "Black Sabbath" },
+    { title: "Enter Sandman", artist: "Metallica" },
+  ];
+  const tipOf = (song: { title: string; artist: string }) => ({ ...song, trains: "x", source: "https://example.org" });
+  const setup = (state: Partial<GameState>, imported: { id: number; title: string }[]) => {
+    patchNode(CHOICE, { chooseTarget: true, songs: SONGS.map(tipOf), available: true });
+    return serve(state, imported);
+  };
+
+  it("lists the songs and sets the chosen one as the target", async () => {
+    const fetchMock = setup({}, [{ id: 4, title: "Paranoid" }]);
+    renderMap(`/hafen/${CHOICE}`);
+    const box = await panel();
+    await userEvent.click(await within(box).findByRole("button", { name: "Als Zielsong setzen" }));
+    expect(await within(box).findByText("Ist dein Zielsong")).toBeInTheDocument();
+    expect(writes(fetchMock)).toEqual([
+      { url: "/api/game/guitar/target-song", method: "PUT", body: JSON.stringify({ targetSongId: "db:4" }) },
+    ]);
+  });
+
+  it("marks the song that is already the target", async () => {
+    setup({ targetSongId: "db:5" }, [{ id: 5, title: "Enter Sandman" }]);
+    renderMap(`/hafen/${CHOICE}`);
+    const box = await panel();
+    expect(await within(box).findByText("Ist dein Zielsong")).toBeInTheDocument();
+    expect(within(box).queryByRole("button", { name: "Als Zielsong setzen" })).not.toBeInTheDocument();
+    expect(within(box).getByText(/Paranoid/)).toBeInTheDocument();
+  });
+
+  it("offers the import for a song that is not imported", async () => {
+    setup({}, []);
+    renderMap(`/hafen/${CHOICE}`);
+    const links = await within(await panel()).findAllByRole("link", {
+      name: "Importiere den Song, die Übungen funktionieren auch ohne",
+    });
+    expect(links).toHaveLength(2);
+  });
+
+  it("copes with a target song that was deleted", async () => {
+    setup({ targetSongId: "db:99" }, [{ id: 4, title: "Paranoid" }]);
+    renderMap(`/hafen/${CHOICE}`);
+    const box = await panel();
+    expect(await within(box).findByRole("button", { name: "Als Zielsong setzen" })).toBeInTheDocument();
+    expect(within(box).queryByText("Ist dein Zielsong")).not.toBeInTheDocument();
   });
 });
 

@@ -3,6 +3,7 @@ import type { CSSProperties } from "react";
 import { Link } from "react-router-dom";
 import { GAME_BASE, useGameState } from "./api.js";
 import { spriteUrl, type SpriteName } from "./assets.js";
+import { MentorCard } from "./MentorCard.js";
 import { useTodaySet } from "./useTodaySet.js";
 
 export const QUEST_SPRITE: Record<QuestDefinition["kind"], SpriteName> = {
@@ -81,6 +82,7 @@ function VillageView({ state, fetching }: { state: GameState; fetching: boolean 
   return (
     <div className="village">
       <TodayPanel state={state} quests={quests} failure={quests.length === 0 ? (failed?.message ?? null) : null} />
+      <MentorCard state={state} />
       <nav className="village-map" aria-label="Dorf">
         <img src={spriteUrl("village")} alt="" />
         <Sign

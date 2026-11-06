@@ -20,6 +20,8 @@ export interface GameState {
   chosenLessons: string[];
   records: Record<string, number>;
   recentQuestIds: string[];
+  /** Story beats the player has acknowledged. */
+  storySeen: string[];
   today: { minutes: number; questIds: string[] } | null;
 }
 

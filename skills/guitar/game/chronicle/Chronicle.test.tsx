@@ -24,6 +24,7 @@ const state: GameState = {
   chosenLessons: [],
   records: {},
   recentQuestIds: [],
+  storySeen: [],
   today: null,
 };
 

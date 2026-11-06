@@ -27,6 +27,7 @@ const base: GameState = {
   lessons: {},
   records: {},
   recentQuestIds: [],
+  storySeen: [],
   today: null,
 };
 
@@ -109,6 +110,27 @@ describe("RiffViewer", () => {
       "href",
       "/vollbild/guitar/spiel/schrein?stimmung=Drop%20D",
     );
+  });
+
+  it("links the Shrine back to the quest the card sits in", () => {
+    render(
+      <MemoryRouter>
+        <RiffCard riff={{ ...riff, tuning: "Drop D" }} onTempo={vi.fn()} inQuest questId="erstes-riff" />
+      </MemoryRouter>,
+    );
+    expect(screen.getByRole("link", { name: "Stimmung: Drop D" })).toHaveAttribute(
+      "href",
+      "/vollbild/guitar/spiel/schrein?stimmung=Drop%20D&quest=erstes-riff",
+    );
+  });
+
+  it("shows one Shrine link when quest and riff both have a tuning", () => {
+    render(
+      <MemoryRouter>
+        <RiffCard riff={{ ...riff, tuning: "Drop D" }} onTempo={vi.fn()} inQuest questId="q" tuningLinked />
+      </MemoryRouter>,
+    );
+    expect(screen.queryByRole("link", { name: /Stimmung/ })).not.toBeInTheDocument();
   });
 
   it("shows the riff inside its quest", async () => {

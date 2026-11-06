@@ -1,5 +1,6 @@
 import {
   parseGameContent,
+  parseStory,
   type GameContent,
   type GameState,
   type History,
@@ -8,6 +9,7 @@ import {
   type QuestDefinition,
   type SongMeta,
   type SongMetaPatch,
+  type Story,
 } from "@skills/core";
 import { useQuery, type UseQueryResult } from "@tanstack/react-query";
 import { api, ApiError } from "../../../packages/web/src/api/client.js";
@@ -16,6 +18,7 @@ import map from "./map.json";
 import quests from "./quests.json";
 import riffs from "./riffs.json";
 import road from "./road.json";
+import storyData from "./story.json";
 
 const SKILL = "guitar";
 const GAME_KEY = ["game", SKILL];
@@ -27,6 +30,8 @@ export const GAME_BASE = "/vollbild/guitar/spiel";
 export const DEFAULT_LEVEL = 3;
 
 export const gameContent: GameContent = parseGameContent({ ...quests, road, ...map, riffs });
+
+export const story: Story = parseStory(storyData, gameContent);
 
 export const isDone = (status: LessonStatus | undefined) => status === "gelernt" || status === "gemeistert";
 
@@ -123,6 +128,8 @@ export const gameApi = {
     await queryClient.invalidateQueries({ queryKey: SONG_META_KEY });
     return result;
   },
+  markStorySeen: (beatIds: string[]) =>
+    refreshing(api.put<{ ok: true }>(`/api/game/${SKILL}/story/seen`, { beatIds })),
   setTargetSong: (targetSongId: string | null) =>
     refreshing(api.put<{ ok: true }>(`/api/game/${SKILL}/target-song`, { targetSongId })),
 };

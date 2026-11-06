@@ -438,3 +438,14 @@
 .jam-chords strong {
   font-size: 28px;
 }
+
+.mentor-card h2 small {
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.mentor-card h3,
+.story-log h3 {
+  margin: 6px 0 4px;
+  font-weight: 700;
+}
