@@ -103,6 +103,37 @@
       "scale": { "bpm": [70, 110] }
     },
     {
+      "id": "sound-einstellen", "title": "Dein Metal-Sound",
+      "description": "Stelle den Startpunkt ein und spiele die Testphrase. Ändere immer nur einen Regler und notiere deine beste Einstellung.",
+      "kind": "technik", "techniqueId": "metal", "lessonId": "metal-sound", "minutes": 10, "icon": "flame", "scale": {}
+    },
+    {
+      "id": "saiten-stumm", "title": "Saiten stumm halten",
+      "description": "Spiele mit Verzerrung die Stopp-Übung und den Wisch-Test. Nur die gewollten Töne dürfen klingen.",
+      "kind": "technik", "techniqueId": "metal", "lessonId": "metal-stumm", "minutes": 10, "icon": "guitar",
+      "scale": { "bpm": [60, 100] }
+    },
+    {
+      "id": "palm-mute-akzente", "title": "Palm Mute mit Akzenten",
+      "description": "Wechsle zwischen offenen und gedämpften Tönen und setze Akzente. Trage am Ende dein höchstes sauberes Tempo ein.",
+      "kind": "technik", "techniqueId": "metal", "lessonId": "metal-palm-mute", "minutes": 10, "icon": "bolt",
+      "metricLabel": "Sauberes Tempo (BPM)", "masteryTarget": 120,
+      "scale": { "bpm": [70, 120] }
+    },
+    {
+      "id": "erstes-riff", "title": "Erstes Riff",
+      "description": "Lerne das Riff aus leerer E-Saite, G5 und A5 und spiele es zum Metronom. Die E-Saite bleibt gedämpft.",
+      "kind": "technik", "techniqueId": "metal", "lessonId": "metal-erster-riff", "minutes": 15, "icon": "bolt",
+      "scale": { "bpm": [70, 110] }
+    },
+    {
+      "id": "downpicking-ausdauer", "title": "Downpicking-Ausdauer",
+      "description": "Spiele Achtel nur mit Abschlägen in kurzen Runden mit Pausen. Bei Schmerz hörst du sofort auf. Trage dein höchstes sauberes Tempo ein.",
+      "kind": "technik", "techniqueId": "metal", "lessonId": "metal-downpicking", "minutes": 10, "icon": "pick",
+      "metricLabel": "Sauberes Tempo (BPM)", "masteryTarget": 160,
+      "scale": { "bpm": [80, 160] }
+    },
+    {
       "id": "barre-greifen", "title": "Barré-Akkord halten",
       "description": "Greife F oder Bm als Barré und prüfe jede Saite. Entspanne zwischendurch die Hand.",
       "kind": "technik", "techniqueId": "barre", "lessonId": "10-barre", "minutes": 10, "icon": "barre",

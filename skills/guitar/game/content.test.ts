@@ -27,7 +27,14 @@ const WRITTEN_IN_STAGE_2 = [
   "rhythmus-drei-akkorde",
   "lead-drei-toene",
   "jam-ein-akkord",
+  "metal-erster-riff",
+  "metal-sound",
+  "metal-stumm",
+  "metal-palm-mute",
+  "metal-downpicking",
 ];
+// A listening lesson: no tempo to scale, like its exemption in lessons.test.ts.
+const WITHOUT_SCALE = ["metal-sound"];
 
 describe("guitar game content", () => {
   it("references existing lesson files", () => {
@@ -156,7 +163,7 @@ describe("skill map content", () => {
       const quest = content.quests.find((q) => q.lessonId === id);
       expect(node?.available, id).toBe(true);
       expect(quest?.techniqueId, id).toBe(node?.techniqueId);
-      expect(Object.keys(quest?.scale ?? {}), id).not.toHaveLength(0);
+      if (!WITHOUT_SCALE.includes(id)) expect(Object.keys(quest?.scale ?? {}), id).not.toHaveLength(0);
       expect(node?.quick || onRoad.get(id)?.questId === quest?.id, id).toBe(true);
     }
   });

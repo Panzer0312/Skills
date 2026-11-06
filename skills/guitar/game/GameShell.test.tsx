@@ -185,7 +185,7 @@ describe("game places", () => {
   it("opens a locked lesson in the library", async () => {
     serve({});
     renderGame("/bibliothek");
-    const locked = await screen.findByRole("button", { name: /Saiten/ });
+    const locked = await screen.findByRole("button", { name: /Saiten, Bünde/ });
     expect(locked).toBeEnabled();
   });
 
