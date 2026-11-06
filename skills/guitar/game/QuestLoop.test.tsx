@@ -608,6 +608,48 @@ describe("quest view", () => {
     expect(screen.queryByRole("link", { name: "Lektion lesen" })).not.toBeInTheDocument();
   });
 
+  it("shows the lesson's own song, not the target song", async () => {
+    serve(
+      { targetSongId: "db:2", levels: { song: 6 } },
+      {
+        songs: [
+          { id: 2, title: "Creep" },
+          { id: 7, title: "The Bard's Song" },
+        ],
+      },
+    );
+    renderGame("/quest/bards-ganz");
+    expect(await screen.findByText("The Bard's Song")).toBeInTheDocument();
+    expect(screen.queryByText("Creep")).not.toBeInTheDocument();
+    expect(screen.getByText("Abschnitt: Ganzer Song · 3 Durchläufe · 67 % Tempo")).toBeInTheDocument();
+    expect(await screen.findByRole("link", { name: /Taverne/ })).toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: /Importiere den Song/ })).not.toBeInTheDocument();
+  });
+
+  it("offers the import when the lesson's song is missing, and keeps the plan", async () => {
+    serve({ targetSongId: null, levels: { song: 3 } }, { songs: [{ id: 2, title: "Creep" }] });
+    renderGame("/quest/bards-ganz");
+    expect(await screen.findByRole("link", { name: /Importiere den Song/ })).toHaveAttribute("href", "/songs/neu");
+    expect(screen.getByText("The Bard's Song")).toBeInTheDocument();
+    expect(screen.getByText("Abschnitt: Teil A · 2 Durchläufe · 57 % Tempo")).toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: /Zielsong wählen/ })).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: /Taverne/ })).not.toBeInTheDocument();
+  });
+
+  it("says so when the songs cannot be loaded for a lesson's song", async () => {
+    serve({});
+    const fetchMock = vi.mocked(fetch);
+    const answer = fetchMock.getMockImplementation()!;
+    fetchMock.mockImplementation(async (input, init) =>
+      String(input).startsWith("/api/songs")
+        ? json({ error: { message: "kaputt" } }, 500)
+        : answer(input as string, init),
+    );
+    renderGame("/quest/bards-ganz");
+    expect(await screen.findByRole("alert")).toHaveTextContent("Deine Songs konnten nicht geladen werden.");
+    expect(screen.getByText("The Bard's Song")).toBeInTheDocument();
+  });
+
   it("shows section, runs and tempo on a song quest", async () => {
     serve({ targetSongId: "uebung:wiege", levels: { song: 5 } });
     renderGame("/quest/song-ziel", [[{ id: "wiege", titel: "Eine Wiege" }]]);

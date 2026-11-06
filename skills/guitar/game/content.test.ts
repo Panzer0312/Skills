@@ -6,8 +6,10 @@ import {
   bestNext,
   buildDailyQuests,
   buildTips,
+  isMastered,
   lessonMasteryTarget,
   parseGameContent,
+  scaleQuest,
   type LessonStatus,
   type MapNode,
 } from "@skills/core";
@@ -248,6 +250,47 @@ describe("skill map content", () => {
     const finished = placed(written.map((step) => step.lessonId));
     expect(bestNext(content.road, finished)).toBeNull();
     expect(buildTips(content, finished, []).moreComing).toBe(true);
+  });
+});
+
+describe("The Bard's Song mastery", () => {
+  const quest = content.quests.find((q) => q.id === "bards-ganz")!;
+  const target = lessonMasteryTarget(content.quests, "song-bards-ganz");
+  const lesson = readFileSync(join(here, "../lessons/song-bards-ganz.mdx"), "utf8");
+  const days = ["2026-11-01", "2026-11-02", "2026-11-03"];
+
+  it("is not mastered by three passing quests without a metric", () => {
+    const entries = days.map((day) => ({ rating: "passt" as const, day, metricValue: null }));
+    expect(isMastered(entries, target)).toBe(false);
+  });
+  it("is not mastered by two full runs on each of three days", () => {
+    const entries = days.map((day) => ({ rating: "passt" as const, day, metricValue: 2 }));
+    expect(isMastered(entries, target)).toBe(false);
+  });
+  it("is mastered by three full runs", () => {
+    expect(isMastered([{ rating: "passt", day: days[0]!, metricValue: 3 }], target)).toBe(true);
+  });
+  it("asks for full runs", () => {
+    expect(quest.metricLabel).toBe("Ganze Durchläufe");
+    expect(quest.masteryTarget).toBe(3);
+  });
+  it("reaches the full song at level 6 and not before", () => {
+    const sections = Array.from({ length: 10 }, (_, i) => scaleQuest(quest, i + 1).section);
+    expect(sections.slice(0, 3)).toEqual(["Teil A", "Teil A", "Teil A"]);
+    expect(sections.slice(3, 5)).toEqual(["Teil B", "Teil B"]);
+    expect(new Set(sections.slice(5))).toEqual(new Set(["Ganzer Song"]));
+  });
+  it("tops out at 80 percent and drives the metronome from 50 to 100 BPM", () => {
+    expect(scaleQuest(quest, 1)).toMatchObject({ tempoPercent: 50, bpm: 50 });
+    expect(scaleQuest(quest, 10)).toMatchObject({ tempoPercent: 80, bpm: 100 });
+  });
+  it("tells the same story in the lesson", () => {
+    const flat = lesson.replace(/\s+/g, " ");
+    expect(flat).toContain("drei ganzen Durchläufen");
+    expect(flat).toContain("ab 6 der ganze Song");
+    expect(flat).toContain("80 %");
+    expect(flat).not.toContain("100 % = 100 BPM");
+    expect(quest.description).not.toContain("100 % = 100 BPM");
   });
 });
 

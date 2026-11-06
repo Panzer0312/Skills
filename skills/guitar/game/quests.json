@@ -194,9 +194,10 @@
     },
     {
       "id": "bards-ganz", "title": "The Bard's Song: ganz",
-      "description": "Spiele den genannten Abschnitt im genannten Tempo, ohne bei einem Fehler anzuhalten. 100 % ist dein Zieltempo aus der Lektion. Bis du es kennst, gilt 100 % = 100 BPM.",
+      "description": "Spiele den genannten Abschnitt im genannten Tempo, ohne bei einem Fehler anzuhalten. 100 % ist dein Zieltempo aus der Lektion. Bis du es kennst, spielst du zum eingestellten Metronom. Trage am Ende ein, wie viele ganze Durchläufe von vorn bis hinten dir gelungen sind.",
       "kind": "song", "techniqueId": "song", "lessonId": "song-bards-ganz", "minutes": 15, "icon": "song",
-      "scale": { "tempoPercent": [50, 100], "sections": ["Intro", "Teil A", "Teil B", "Zwischenspiel", "Teil C", "Ganzer Song"], "runs": [1, 4] }
+      "metricLabel": "Ganze Durchläufe", "masteryTarget": 3,
+      "scale": { "bpm": [50, 100], "tempoPercent": [50, 80], "sections": ["Teil A", "Teil B", "Ganzer Song", "Ganzer Song"], "runs": [1, 4] }
     }
   ]
 }

@@ -1,11 +1,11 @@
-import { scaleQuest, type GameState, type QuestDefinition, type ScaledQuest } from "@skills/core";
+import { scaleQuest, type GameState, type MapNode, type QuestDefinition, type ScaledQuest } from "@skills/core";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { api } from "../../../packages/web/src/api/client.js";
 import { useMetronome } from "../../../packages/web/src/audio/useMetronome.js";
 import type { WidgetProps } from "../../../packages/web/src/skills/widgets.js";
-import { GAME_BASE, gameContent, questLevel, useGameState } from "./api.js";
+import { GAME_BASE, gameContent, normalizeTitle, questLevel, useGameState } from "./api.js";
 import { ChordTrainer, changeMetricKey } from "./ChordTrainer.js";
 import { ToolFrame } from "./Places.js";
 import { ResultDialog } from "./ResultDialog.js";
@@ -86,12 +86,14 @@ function Metronome({ metronome }: { metronome: ReturnType<typeof useMetronome> }
   );
 }
 
+const fetchSongs = () => api.get<{ songs: { id: number; title: string }[] }>("/api/songs");
+
 function useTargetSongTitle(targetSongId: string | null, data: unknown[]) {
   const [source, ...rest] = (targetSongId ?? "").split(":");
   const id = rest.join(":");
   const imported = useQuery({
     queryKey: ["songs"],
-    queryFn: () => api.get<{ songs: { id: number; title: string }[] }>("/api/songs"),
+    queryFn: fetchSongs,
     enabled: source === "db",
   });
   if (source === "uebung") {
@@ -147,6 +149,32 @@ function SongPanel({
   );
 }
 
+/** A quest of a song lesson practises that song, whatever the target song is. */
+function LessonSongPanel({ song, scaled }: { song: NonNullable<MapNode["targetSong"]>; scaled: ScaledQuest }) {
+  const imported = useQuery({ queryKey: ["songs"], queryFn: fetchSongs });
+  const wanted = normalizeTitle(song.title);
+  const found = imported.data?.songs.some((entry) => normalizeTitle(entry.title) === wanted);
+  return (
+    <div>
+      <p className="font-semibold">{song.title}</p>
+      {songLine(scaled) ? <p>{songLine(scaled)}</p> : null}
+      {imported.isPending ? null : found ? (
+        <Link to={`${GAME_BASE}/taverne`} className="underline">
+          Zur Taverne
+        </Link>
+      ) : imported.data ? (
+        <Link to="/songs/neu" className="underline">
+          Importiere den Song, die Übungen funktionieren auch ohne
+        </Link>
+      ) : (
+        <p role="alert" className="game-error">
+          Deine Songs konnten nicht geladen werden.
+        </p>
+      )}
+    </div>
+  );
+}
+
 interface Finished {
   seconds: number;
   level: number;
@@ -164,6 +192,7 @@ function QuestRun({ quest, state, data }: { quest: QuestDefinition; state: GameS
   const level = questLevel(state, quest);
   const scaled = scaleQuest(quest, level);
   const pair = quest.kind === "wechsel" ? scaled.chordPair : null;
+  const lessonSong = gameContent.nodes.find((node) => node.id === quest.lessonId)?.targetSong ?? null;
 
   useEffect(() => {
     if (scaled.bpm !== null) setBpm(scaled.bpm);
@@ -223,7 +252,11 @@ function QuestRun({ quest, state, data }: { quest: QuestDefinition; state: GameS
           </Link>
         ) : null}
         {quest.kind === "song" ? (
-          <SongPanel targetSongId={state.targetSongId} scaled={scaled} data={data} />
+          lessonSong ? (
+            <LessonSongPanel song={lessonSong} scaled={scaled} />
+          ) : (
+            <SongPanel targetSongId={state.targetSongId} scaled={scaled} data={data} />
+          )
         ) : null}
         {pair ? (
           <ChordTrainer pair={pair} onResult={(n) => setTrainerValue((v) => Math.max(v ?? 0, n))} />
