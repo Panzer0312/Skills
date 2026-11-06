@@ -1,6 +1,7 @@
 export * from "./notes.js";
 export * from "./chords.js";
 export * from "./scales.js";
+export * from "./jam.js";
 export * from "./song.js";
 export * from "./detectFormat.js";
 export * from "./parseChordPro.js";
