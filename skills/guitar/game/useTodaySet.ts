@@ -38,6 +38,8 @@ export function useTodaySet(state: GameState, fetching: boolean) {
   const [failed, setFailed] = useState<FailedSave | null>(null);
   const savingRef = useRef(false);
   const built = useRef(false);
+  // The server day already refetched for, so a lasting mismatch (another timezone) refetches only once.
+  const refetchedFor = useRef<string | null>(null);
   const queryClient = useQueryClient();
   const { mutateAsync } = useMutation({
     mutationKey: WRITE_KEY,
@@ -50,7 +52,9 @@ export function useTodaySet(state: GameState, fetching: boolean) {
   /** Whether the set was written. */
   async function save(length: number, questIds: string[]): Promise<boolean> {
     // Past midnight the ids were built on yesterday's state, so let the fresh state rebuild them.
-    if (state.day !== localDayKey(Date.now())) {
+    // If the fresh state keeps the same day, the server's day wins and the write goes through.
+    if (state.day !== localDayKey(Date.now()) && state.day !== refetchedFor.current) {
+      refetchedFor.current = state.day;
       void queryClient.invalidateQueries({ queryKey: ["game", "guitar"] });
       // The fresh state may still lack a set, and then the auto-build has to run again.
       built.current = false;

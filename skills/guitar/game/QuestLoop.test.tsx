@@ -354,6 +354,16 @@ describe("Quest Board", () => {
     expect(readsAtWrite).toBeGreaterThan(2);
   });
 
+  it("writes after one refetch when browser and server days stay different", async () => {
+    // A phone in another timezone: the server's day never matches the browser's.
+    const tomorrow = localDayKey(Date.now() + 24 * 60 * 60 * 1000);
+    const fetchMock = serve({ day: tomorrow, today: null });
+    renderGame("/quests");
+    await waitFor(() => expect(writes(fetchMock, "/today")).toHaveLength(1));
+    const stateReads = fetchMock.mock.calls.filter(([url]) => String(url).endsWith("/state")).length;
+    expect(stateReads).toBeLessThan(5);
+  });
+
   it("adds a missing best next quest to today's set before starting it", async () => {
     const fetchMock = serve({ today: { minutes: 20, questIds: ["wechsel-minute"] } });
     renderGame("/quests");
