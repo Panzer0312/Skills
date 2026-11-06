@@ -11,7 +11,8 @@ const MAX_FRET = 12;
 const TOLERANCE_CENTS = 40;
 const DEFAULT_HOLD_MS = 200;
 
-function pitchClass(note: string): number {
+/** Semitone 0 to 11 of a note with or without octave. */
+export function notePitchClass(note: string): number {
   return noteToSemitone(note.replace(/-?\d+$/, ""));
 }
 
@@ -22,12 +23,12 @@ export function nextTarget(
   tuning: Tuning,
   random: () => number = Math.random,
 ): NoteTarget {
-  const avoid = previous ? pitchClass(previous.note) : null;
+  const avoid = previous ? notePitchClass(previous.note) : null;
   const candidates: NoteTarget[] = [];
   for (const stringIndex of strings) {
     for (let fret = 0; fret <= MAX_FRET; fret += 1) {
       const note = noteAt(tuning, stringIndex, fret);
-      if (pitchClass(note) !== avoid) candidates.push({ stringIndex, fret, note });
+      if (notePitchClass(note) !== avoid) candidates.push({ stringIndex, fret, note });
     }
   }
   const index = Math.min(candidates.length - 1, Math.floor(random() * candidates.length));

@@ -349,3 +349,12 @@ describe("song recommendations", () => {
     }
   });
 });
+
+describe("note game quest", () => {
+  it("pins noten-e-saite to the note game on the low E string", () => {
+    const quest = content.quests.find((q) => q.id === "noten-e-saite")!;
+    expect(quest.noteGame).toEqual({ strings: [0] });
+    expect(quest.metricLabel).toBe("Treffer pro Minute");
+    expect(content.quests.find((q) => q.id === "griffbrett-namen")!.noteGame).toBeUndefined();
+  });
+});

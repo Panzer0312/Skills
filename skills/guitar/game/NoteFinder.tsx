@@ -5,7 +5,7 @@ import {
   inputLevel,
   matchesTarget,
   nextTarget,
-  noteToSemitone,
+  notePitchClass,
   TUNINGS,
   type NoteTarget,
 } from "@skills/core";
@@ -39,15 +39,11 @@ function beep(kind: "start" | "ende") {
   }
 }
 
-function pitchClass(note: string): number {
-  return noteToSemitone(note.replace(/-?\d+$/, ""));
-}
-
 /** The pitch class counts on every fret of the string, so fret 12 is as good as the open string. */
 function isRight(target: NoteTarget, stringIndex: number, fret: number): boolean {
   if (stringIndex !== target.stringIndex) return false;
   const open = TUNING.strings[stringIndex]!;
-  return (pitchClass(open) + fret) % 12 === pitchClass(target.note);
+  return (notePitchClass(open) + fret) % 12 === notePitchClass(target.note);
 }
 
 export function NoteFinder({
@@ -86,30 +82,27 @@ export function NoteFinder({
     setRevealed(false);
   }
 
-  function score() {
-    hitsRef.current += 1;
-    setHits(hitsRef.current);
-    showTarget(nextTarget(strings, targetRef.current, TUNING));
-  }
-
-  const onBuffer = useCallback((buffer: Float32Array, sampleRate: number) => {
-    const current = targetRef.current;
-    if (phaseRef.current !== "run" || !current) return;
-    setLevel(inputLevel(buffer));
-    const frequency = detectPitch(buffer, sampleRate);
-    const matching = frequency !== null && matchesTarget(frequency, current);
-    if (holdRef.current(matching, Date.now())) {
-      hitsRef.current += 1;
-      setHits(hitsRef.current);
-      const next = nextTarget(stringsRef.current, current, TUNING);
-      targetRef.current = next;
-      holdRef.current = createHoldDetector();
-      setTarget(next);
-      setRevealed(false);
-    }
-  }, []);
   const stringsRef = useRef(strings);
   stringsRef.current = strings;
+
+  /** The one scoring path, for a click and for a held pitch alike. */
+  const score = useCallback(() => {
+    hitsRef.current += 1;
+    setHits(hitsRef.current);
+    showTarget(nextTarget(stringsRef.current, targetRef.current, TUNING));
+  }, []);
+
+  const onBuffer = useCallback(
+    (buffer: Float32Array, sampleRate: number) => {
+      const current = targetRef.current;
+      if (phaseRef.current !== "run" || !current) return;
+      setLevel(inputLevel(buffer));
+      const frequency = detectPitch(buffer, sampleRate);
+      const matching = frequency !== null && matchesTarget(frequency, current);
+      if (holdRef.current(matching, Date.now())) score();
+    },
+    [score],
+  );
 
   const mic = useMicrophone({ onBuffer, deviceId: inputs.deviceId, onDeviceLost: () => select(null) });
   useEffect(() => {
@@ -131,7 +124,7 @@ export function NoteFinder({
       setResult(
         await gameApi.log({
           kind: "frei",
-          seconds: 60,
+          seconds: ROUND_MS / 1000,
           level: 1,
           techniqueId: "theorie",
           metricKey: `notenfinder:${strings.join("-")}`,

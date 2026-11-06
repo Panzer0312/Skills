@@ -58,5 +58,6 @@ export {
   nextTarget,
   matchesTarget,
   createHoldDetector,
+  notePitchClass,
   type NoteTarget,
 } from "./game/index.js";

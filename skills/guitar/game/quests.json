@@ -27,13 +27,13 @@
     {
       "id": "griffbrett-namen", "title": "Saiten und Bünde",
       "description": "Nenne die Saitennamen vorwärts und rückwärts und zeige den 3., 5., 7. und 12. Bund ohne zu zählen.",
-      "kind": "theorie", "techniqueId": "theorie", "lessonId": "03-saiten-buende", "minutes": 5, "icon": "fretboard", "scale": {},
-      "metricLabel": "Treffer pro Minute", "noteGame": { "strings": [0] }
+      "kind": "theorie", "techniqueId": "theorie", "lessonId": "03-saiten-buende", "minutes": 5, "icon": "fretboard", "scale": {}
     },
     {
       "id": "noten-e-saite", "title": "Noten auf der E-Saite",
       "description": "Nenne die Töne auf der tiefen E-Saite und zeige sie: F im 1., G im 3., A im 5., H im 7., C im 8., D im 10. und E im 12. Bund. Danach rückwärts. Im Spiel findest du eine Minute lang so viele gefragte Töne wie möglich, per Klick oder auf der Gitarre.",
-      "kind": "theorie", "techniqueId": "theorie", "lessonId": "03-saiten-buende", "minutes": 5, "icon": "fretboard", "scale": {}
+      "kind": "theorie", "techniqueId": "theorie", "lessonId": "03-saiten-buende", "minutes": 5, "icon": "fretboard", "scale": {},
+      "metricLabel": "Treffer pro Minute", "noteGame": { "strings": [0] }
     },
     {
       "id": "aufwaermen-finger", "title": "Fingerübung zum Aufwärmen",

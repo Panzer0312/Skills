@@ -3,12 +3,22 @@ import { localDayKey } from "@skills/core";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { frequencyOf } from "@skills/core";
 import { queryClient } from "../../../packages/web/src/app/queryClient.js";
 import { NoteFinder } from "./NoteFinder.js";
 
-const mic = vi.hoisted(() => ({ state: "idle" as string, error: null as string | null, start: vi.fn(), stop: vi.fn() }));
+const mic = vi.hoisted(() => ({
+  state: "idle" as string,
+  error: null as string | null,
+  start: vi.fn(),
+  stop: vi.fn(),
+  onBuffer: null as null | ((buffer: Float32Array, sampleRate: number) => void),
+}));
 vi.mock("../../../packages/web/src/audio/useMicrophone.js", () => ({
-  useMicrophone: () => mic,
+  useMicrophone: (options: { onBuffer: (buffer: Float32Array, sampleRate: number) => void }) => {
+    mic.onBuffer = options.onBuffer;
+    return mic;
+  },
 }));
 vi.mock("../../../packages/web/src/audio/signalTone.js", () => ({ playSignal: vi.fn() }));
 
@@ -174,7 +184,26 @@ describe("NoteFinder", () => {
     renderFinder();
     fireEvent.click(screen.getByRole("button", { name: "Start" }));
     mic.stop.mockClear();
-    await tick(60_000);
-    expect(mic.stop).toHaveBeenCalled();
+    await tick(59_000);
+    expect(mic.stop).not.toHaveBeenCalled();
+    await tick(1_000);
+    expect(mic.stop).toHaveBeenCalledTimes(1);
+  });
+
+  it("scores a pitch held on the microphone", async () => {
+    serve();
+    renderFinder();
+    fireEvent.click(screen.getByRole("button", { name: "Start" }));
+    const name = /Finde (\S+) auf/.exec(screen.getByTestId("prompt").textContent!)![1]!;
+    const sampleRate = 44100;
+    // The octave does not matter: the match accepts one octave either way.
+    const frequency = frequencyOf(`${name === "H" ? "B" : name}2`);
+    const buffer = new Float32Array(4096);
+    for (let i = 0; i < buffer.length; i += 1) buffer[i] = 0.5 * Math.sin((2 * Math.PI * frequency * i) / sampleRate);
+    for (let ms = 0; ms <= 300; ms += 50) {
+      act(() => mic.onBuffer!(buffer, sampleRate));
+      await tick(50);
+    }
+    expect(screen.getByText("Treffer: 1")).toBeInTheDocument();
   });
 });
