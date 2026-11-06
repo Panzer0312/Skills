@@ -1,11 +1,16 @@
-import { readTuning, TUNINGS, type TuningReading } from "@skills/core";
-import { useCallback, useState } from "react";
+import { inputLevel, readTuning, TUNINGS, type TuningReading } from "@skills/core";
+import { useCallback, useEffect, useState } from "react";
 import { playReferenceTone } from "../../../packages/web/src/audio/referenceTone.js";
+import { useInputDevices } from "../../../packages/web/src/audio/useInputDevices.js";
 import { useMicrophone } from "../../../packages/web/src/audio/useMicrophone.js";
 import type { WidgetProps } from "../../../packages/web/src/skills/widgets.js";
+import { InputControls } from "../game/InputControls.js";
 
-export default function Tuner(_: WidgetProps) {
-  const [tuningName, setTuningName] = useState("Standard");
+export default function Tuner({ initialTuning }: WidgetProps & { initialTuning?: string }) {
+  const [tuningName, setTuningName] = useState(() =>
+    TUNINGS.some((t) => t.name === initialTuning) ? initialTuning! : "Standard",
+  );
+  const [level, setLevel] = useState(0);
   const [reading, setReading] = useState<TuningReading | null>(null);
   const [minRms, setMinRms] = useState(0.01);
 
@@ -13,12 +18,23 @@ export default function Tuner(_: WidgetProps) {
 
   const onBuffer = useCallback(
     (buffer: Float32Array, sampleRate: number) => {
+      setLevel(inputLevel(buffer));
       setReading(readTuning(buffer, sampleRate, tuning, { minRms }));
     },
     [tuning, minRms],
   );
 
-  const mic = useMicrophone({ onBuffer });
+  const inputs = useInputDevices();
+  const { select, refresh } = inputs;
+  const mic = useMicrophone({
+    onBuffer,
+    deviceId: inputs.deviceId,
+    onDeviceLost: () => select(null),
+  });
+  // Device names only appear after the microphone was allowed.
+  useEffect(() => {
+    if (mic.state === "running") void refresh();
+  }, [mic.state, refresh]);
   const inTune = reading !== null && Math.abs(reading.cents) <= 5;
 
   return (
@@ -58,6 +74,13 @@ export default function Tuner(_: WidgetProps) {
           </li>
         ))}
       </ol>
+
+      <InputControls
+        devices={inputs.devices}
+        deviceId={inputs.deviceId}
+        onSelect={inputs.select}
+        level={mic.state === "running" ? level : 0}
+      />
 
       <label className="block text-sm">
         <span className="mr-2">Rauschschwelle</span>

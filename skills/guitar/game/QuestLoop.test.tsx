@@ -605,6 +605,24 @@ describe("quest view", () => {
     expect(await screen.findByRole("timer")).toHaveTextContent(/^12:0\d$/);
   });
 
+  it("links a quest to its tuning in one click", async () => {
+    const fixture = { ...quest("anschlag-takt"), id: "drop-d-test", tuning: "Drop D" };
+    gameContent.quests.push(fixture);
+    try {
+      serve({});
+      startedMinutesAgo("drop-d-test", 7);
+      renderGame("/quest/drop-d-test");
+      const link = await screen.findByRole("link", { name: "Stimmung: Drop D" });
+      expect(link).toHaveAttribute("href", "/vollbild/guitar/spiel/schrein?stimmung=Drop%20D&quest=drop-d-test");
+      await userEvent.click(link);
+      expect(await screen.findByLabelText(/Stimmung/)).toHaveValue("Drop D");
+      await userEvent.click(screen.getByRole("link", { name: "Zurück zur Quest" }));
+      expect(await screen.findByRole("timer")).toHaveTextContent(/^7:0\d$/);
+    } finally {
+      gameContent.quests.pop();
+    }
+  });
+
   it("starts fresh when another quest was active", async () => {
     serve({});
     startedMinutesAgo("haltung-check", 12);

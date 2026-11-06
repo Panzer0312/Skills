@@ -1,6 +1,6 @@
 import type { GameState } from "@skills/core";
 import type { ReactNode } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import type { LessonMeta } from "../../../packages/web/src/mdx/lessons.js";
 import { CourseRenderer } from "../../../packages/web/src/renderers/CourseRenderer.js";
 import type { WidgetProps } from "../../../packages/web/src/skills/widgets.js";
@@ -103,9 +103,16 @@ export function Library() {
 }
 
 export function Shrine(props: WidgetProps) {
+  const [params] = useSearchParams();
+  const questId = params.get("quest");
   return (
     <ToolFrame title="Schrein">
-      <Tuner {...props} />
+      {questId ? (
+        <Link to={`${GAME_BASE}/quest/${encodeURIComponent(questId)}`} className="mb-4 inline-block underline">
+          Zurück zur Quest
+        </Link>
+      ) : null}
+      <Tuner {...props} initialTuning={params.get("stimmung") ?? undefined} />
     </ToolFrame>
   );
 }

@@ -5,7 +5,11 @@ export type MicState = "idle" | "requesting" | "running" | "denied" | "unsupport
 interface Options {
   onBuffer: (buffer: Float32Array, sampleRate: number) => void;
   fftSize?: number;
+  deviceId?: string | null;
+  onDeviceLost?: () => void;
 }
+
+const PROCESSING_OFF = { echoCancellation: false, noiseSuppression: false, autoGainControl: false };
 
 export function useMicrophone(options: Options) {
   const [state, setState] = useState<MicState>("idle");
@@ -16,6 +20,12 @@ export function useMicrophone(options: Options) {
   const frameRef = useRef<number | null>(null);
   const callbackRef = useRef(options.onBuffer);
   callbackRef.current = options.onBuffer;
+  const deviceRef = useRef(options.deviceId ?? null);
+  deviceRef.current = options.deviceId ?? null;
+  const lostRef = useRef(options.onDeviceLost);
+  lostRef.current = options.onDeviceLost;
+  // The device the open stream really uses; it differs from the choice after a fallback.
+  const activeDeviceRef = useRef<string | null>(null);
 
   const stop = useCallback(() => {
     if (frameRef.current !== null) cancelAnimationFrame(frameRef.current);
@@ -36,11 +46,25 @@ export function useMicrophone(options: Options) {
 
     setState("requesting");
     setError(null);
+    let lost = false;
 
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false },
-      });
+      const wanted = deviceRef.current;
+      let stream: MediaStream;
+      if (wanted === null) {
+        stream = await navigator.mediaDevices.getUserMedia({ audio: PROCESSING_OFF });
+      } else {
+        try {
+          stream = await navigator.mediaDevices.getUserMedia({ audio: { deviceId: { exact: wanted }, ...PROCESSING_OFF } });
+        } catch (e) {
+          if (!(e instanceof Error) || e.name !== "OverconstrainedError") throw e;
+          stream = await navigator.mediaDevices.getUserMedia({ audio: PROCESSING_OFF });
+          activeDeviceRef.current = null;
+          lostRef.current?.();
+          lost = true;
+        }
+      }
+      if (!lost) activeDeviceRef.current = wanted;
       streamRef.current = stream;
 
       const context = new AudioContext();
@@ -60,6 +84,7 @@ export function useMicrophone(options: Options) {
       frameRef.current = requestAnimationFrame(tick);
 
       setState("running");
+      if (lost) setError("Das gewählte Eingabegerät ist nicht da. Das Standardgerät wird benutzt.");
     } catch (e) {
       const name = e instanceof Error ? e.name : "";
       if (name === "NotAllowedError" || name === "SecurityError") {
@@ -78,6 +103,14 @@ export function useMicrophone(options: Options) {
   }, [options.fftSize]);
 
   useEffect(() => stop, [stop]);
+
+  // A new choice while the microphone runs moves it over to that device.
+  const wantedDevice = options.deviceId ?? null;
+  useEffect(() => {
+    if (streamRef.current === null || activeDeviceRef.current === wantedDevice) return;
+    stop();
+    void start();
+  }, [wantedDevice, start, stop]);
 
   return { state, error, start, stop };
 }

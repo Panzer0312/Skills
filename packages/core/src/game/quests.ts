@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { NOTES } from "../music/notes.js";
+import { NOTES, TUNINGS } from "../music/notes.js";
 import { mapNodeSchema, mapPathSchema } from "./map.js";
 
 const scaleSchema = z.object({
@@ -29,6 +29,7 @@ const questSchema = z.object({
   masteryTarget: z.number().positive().optional(),
   scale: scaleSchema,
   fretboard: fretboardSchema.optional(),
+  tuning: z.string().optional(),
 });
 
 const baseSchema = z.object({
@@ -70,6 +71,8 @@ const contentSchema = baseSchema.superRefine((content, ctx) => {
   content.quests.forEach((quest, i) => {
     if (quest.lessonId !== null && !nodeIds.has(quest.lessonId))
       fail(["quests", i, "lessonId"], `Die Lektion "${quest.lessonId}" existiert nicht.`);
+    if (quest.tuning !== undefined && !TUNINGS.some((t) => t.name === quest.tuning))
+      fail(["quests", i, "tuning"], `Die Stimmung "${quest.tuning}" ist unbekannt.`);
   });
   content.road.forEach((step, i) => {
     if (!nodeIds.has(step.lessonId)) fail(["road", i, "lessonId"], `Die Lektion "${step.lessonId}" existiert nicht.`);

@@ -207,6 +207,14 @@ describe("parseGameContent", () => {
     expect(() => parseGameContent(withBoard("H"))).toThrow(/fretboard/);
     expect(() => parseGameContent(withBoard("A"))).not.toThrow();
   });
+  it("rejects a quest with an unknown tuning", () => {
+    const withTuning = (tuning: string) => ({
+      ...content,
+      quests: content.quests.map((quest, i) => (i === 0 ? { ...quest, tuning } : quest)),
+    });
+    expect(() => parseGameContent(withTuning("Quinten"))).toThrow(/Stimmung/);
+    expect(() => parseGameContent(withTuning("Drop D"))).not.toThrow();
+  });
   it("throws a German message", () => {
     expect(() => parseGameContent({})).toThrow(/Spielinhalt/);
   });

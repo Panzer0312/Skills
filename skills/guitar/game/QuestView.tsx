@@ -225,6 +225,14 @@ function QuestRun({ quest, state, data }: { quest: QuestDefinition; state: GameS
             Auf der Karte
           </Link>
         ) : null}
+        {quest.tuning ? (
+          <Link
+            to={`${GAME_BASE}/schrein?stimmung=${encodeURIComponent(quest.tuning)}&quest=${encodeURIComponent(quest.id)}`}
+            className="underline"
+          >
+            Stimmung: {quest.tuning}
+          </Link>
+        ) : null}
         {quest.kind === "song" ? (
           lessonSong ? (
             <LessonSongPanel song={lessonSong} scaled={scaled} />

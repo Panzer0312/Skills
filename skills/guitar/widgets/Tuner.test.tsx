@@ -12,6 +12,10 @@ vi.mock("../../../packages/web/src/audio/useMicrophone.js", () => ({
   useMicrophone: () => ({ state: mocks.state, error: mocks.error, start: mocks.start, stop: vi.fn() }),
 }));
 
+vi.mock("../../../packages/web/src/audio/useInputDevices.js", () => ({
+  useInputDevices: () => ({ devices: [], deviceId: null, select: vi.fn(), refresh: vi.fn(async () => {}) }),
+}));
+
 vi.mock("../../../packages/web/src/audio/referenceTone.js", () => ({ playReferenceTone }));
 
 describe("Tuner", () => {
@@ -52,5 +56,27 @@ describe("Tuner", () => {
     mocks.error = null;
     render(<Tuner data={[]} progress={progress} settings={{}} />);
     expect(screen.getByLabelText(/Rauschschwelle/)).toBeInTheDocument();
+  });
+
+  it("opens with the tuning asked for", () => {
+    mocks.state = "idle";
+    mocks.error = null;
+    render(<Tuner data={[]} progress={progress} settings={{}} initialTuning="Drop D" />);
+    expect(screen.getByLabelText(/Stimmung/)).toHaveValue("Drop D");
+  });
+
+  it("falls back to Standard for an unknown tuning", () => {
+    mocks.state = "idle";
+    mocks.error = null;
+    render(<Tuner data={[]} progress={progress} settings={{}} initialTuning="Nirgendwo" />);
+    expect(screen.getByLabelText(/Stimmung/)).toHaveValue("Standard");
+  });
+
+  it("offers the input picker and a level meter", () => {
+    mocks.state = "running";
+    mocks.error = null;
+    render(<Tuner data={[]} progress={progress} settings={{}} />);
+    expect(screen.getByRole("meter", { name: "Eingangspegel" })).toBeInTheDocument();
+    expect(screen.getByLabelText("Eingang")).toBeInTheDocument();
   });
 });
