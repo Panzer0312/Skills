@@ -34,6 +34,10 @@ test.beforeEach(async ({ request }) => {
   await pauseChosen(request);
 });
 
+test.afterEach(async ({ request }) => {
+  await pauseChosen(request);
+});
+
 test("the map opens on best next and a lesson can be taken as quest", async ({ page }) => {
   await reachMap(page);
   const tips = page.getByRole("region", { name: "Tips Board" });
@@ -43,7 +47,11 @@ test("the map opens on best next and a lesson can be taken as quest", async ({ p
   await expect(lesson.getByText("Hauptweg")).toBeVisible();
 
   // The quick win is a side lesson, so it can be taken as a quest.
-  await tips.getByText(/Schneller Erfolg|Verfeinern/).locator("..").getByRole("button").click();
+  await tips
+    .locator(".tips-entry")
+    .filter({ has: page.getByRole("heading", { name: /Schneller Erfolg|Verfeinern/ }) })
+    .getByRole("button")
+    .click();
   const title = (await lesson.getByRole("heading", { level: 2 }).innerText()).trim();
   await lesson.getByRole("button", { name: "Als Quest annehmen" }).click();
   await expect(lesson.getByRole("button", { name: "Pausieren" })).toBeVisible();
@@ -72,11 +80,10 @@ test("a third side lesson asks which one to pause", async ({ page }) => {
   await expect(lesson.getByRole("button", { name: "Als Quest annehmen" })).toBeVisible();
 
   await lesson.getByRole("button", { name: "Als Quest annehmen" }).click();
-  await dialog.getByRole("button").first().click();
+  await dialog.getByRole("button", { name: "Solo aus drei Tönen", exact: true }).click();
   await expect(lesson.getByRole("button", { name: "Pausieren" })).toBeVisible();
   const state = await (await page.request.get(`${API}/state`)).json();
-  expect(state.chosenLessons).toHaveLength(2);
-  expect(state.chosenLessons).toContain("finger-daumen");
+  expect([...state.chosenLessons].sort()).toEqual(["11-pentatonik", "finger-daumen"]);
 });
 
 test("an unwritten lesson offers no way in", async ({ page }) => {
