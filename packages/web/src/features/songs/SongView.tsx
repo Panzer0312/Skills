@@ -6,8 +6,27 @@ import { ChordDiagramSingle } from "../../music/ChordDiagramSingle.js";
 import { ChordEditor } from "../../music/ChordEditor.js";
 import { useChordOverrides } from "../../music/useChordOverrides.js";
 import { resolveChordShape } from "../../music/userChords.js";
+import { nextScrollTop, type ScrollRange } from "./autoScroll.js";
 
 const CHORD_SAVE_FALLBACK_ERROR = "Der Griff konnte nicht gespeichert werden. Bitte später erneut versuchen.";
+
+/** Offset of an element from the top of the scrollable content, measured at call time. */
+function contentOffset(container: HTMLElement, element: HTMLElement): number {
+  return element.getBoundingClientRect().top - container.getBoundingClientRect().top + container.scrollTop;
+}
+
+function scrollRange(container: HTMLElement, sections: (HTMLElement | null)[], loopIndex: number | null): ScrollRange {
+  const viewport = container.clientHeight;
+  if (loopIndex === null) return { start: 0, end: container.scrollHeight, viewport, loop: false };
+  const current = sections[loopIndex];
+  const following = sections[loopIndex + 1];
+  return {
+    start: current ? contentOffset(container, current) : 0,
+    end: following ? contentOffset(container, following) : container.scrollHeight,
+    viewport,
+    loop: true,
+  };
+}
 
 function LineWithChords({ line }: { line: Song["sections"][number]["lines"][number] }) {
   if (line.chords.length === 0) {
@@ -34,7 +53,9 @@ export function SongView({ song, songKey }: { song: Song; songKey?: string }) {
   const [scrollSpeed, setScrollSpeed] = useState(30);
   const [editing, setEditing] = useState<string | null>(null);
   const [editError, setEditError] = useState<string | null>(null);
+  const [loopIndex, setLoopIndex] = useState<number | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const sectionRefs = useRef<(HTMLElement | null)[]>([]);
   const metronome = useMetronome();
   const { overrides, entries, save, reset } = useChordOverrides(songKey);
 
@@ -43,10 +64,27 @@ export function SongView({ song, songKey }: { song: Song; songKey?: string }) {
   useEffect(() => {
     if (!scrolling) return;
     const timer = setInterval(() => {
-      containerRef.current?.scrollBy({ top: 1 });
+      const container = containerRef.current;
+      if (!container) return;
+      const range = scrollRange(container, sectionRefs.current, loopIndex);
+      const { top, done } = nextScrollTop(container.scrollTop, 1, range);
+      container.scrollTop = top;
+      if (done) setScrolling(false);
     }, Math.max(10, 2000 / scrollSpeed));
     return () => clearInterval(timer);
-  }, [scrolling, scrollSpeed]);
+  }, [scrolling, scrollSpeed, loopIndex]);
+
+  function chooseLoop(value: string) {
+    if (value === "") {
+      setLoopIndex(null);
+      return;
+    }
+    const index = Number(value);
+    setLoopIndex(index);
+    const container = containerRef.current;
+    const element = sectionRefs.current[index];
+    if (container && element) container.scrollTop = contentOffset(container, element);
+  }
 
   return (
     <div className="space-y-4">
@@ -91,6 +129,23 @@ export function SongView({ song, songKey }: { song: Song; songKey?: string }) {
             aria-label="Scroll-Tempo"
           />
         </label>
+        {shown.sections.length > 1 ? (
+          <label className="flex items-center gap-2">
+            <span>Abschnitt wiederholen</span>
+            <select
+              value={loopIndex === null ? "" : String(loopIndex)}
+              onChange={(e) => chooseLoop(e.target.value)}
+              className="rounded border border-slate-300 px-2 py-1 dark:border-slate-700 dark:bg-slate-900"
+            >
+              <option value="">Ganzer Song</option>
+              {shown.sections.map((section, i) => (
+                <option key={i} value={i}>
+                  {`${i + 1}. ${section.name}`}
+                </option>
+              ))}
+            </select>
+          </label>
+        ) : null}
 
         <button
           type="button"
@@ -158,7 +213,13 @@ export function SongView({ song, songKey }: { song: Song; songKey?: string }) {
 
       <div ref={containerRef} className="max-h-[60vh] overflow-y-auto rounded border border-slate-200 p-4 dark:border-slate-800">
         {shown.sections.map((section, i) => (
-          <section key={i} className="mb-6">
+          <section
+            key={i}
+            ref={(element) => {
+              sectionRefs.current[i] = element;
+            }}
+            className="mb-6"
+          >
             <h2 className="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">
               {section.name}
             </h2>
