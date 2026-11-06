@@ -17,6 +17,7 @@ Oberfläche: http://localhost:5173 — Server: http://localhost:5174
 | --- | --- |
 | `npm run dev` | Server und Oberfläche gleichzeitig |
 | `npm test` | Unit-Tests |
+| `npm run dev:lan` | wie `dev`, aber im Heimnetz erreichbar (zum Üben am Handy); die App hat keine Anmeldung, also nur im eigenen Heimnetz nutzen und mit Strg+C beenden |
 | `npm run test:e2e` | Playwright-Rauchtest |
 | `npm run build` | statischer Build der Oberfläche |
 | `npm run typecheck` | TypeScript über alle Pakete |

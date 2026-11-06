@@ -10,6 +10,7 @@
   },
   "scripts": {
     "dev": "concurrently -n server,web -c blue,magenta \"npm run dev -w @skills/server\" \"npm run dev -w @skills/web\"",
+    "dev:lan": "tsx packages/server/src/devLan.ts",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
