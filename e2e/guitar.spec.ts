@@ -2,10 +2,10 @@ import { expect, test } from "@playwright/test";
 
 test("the fretboard switches from note names to intervals", async ({ page }) => {
   await page.goto("/skill/guitar/griffbrett");
-  await expect(page.getByTestId("fret-0-0").first()).toHaveText("E");
+  await expect(page.getByTestId("fret-0-0")).toHaveText("E");
   await page.getByLabel("Anzeige").selectOption("intervalle");
   await page.getByLabel("Grundton").selectOption("E");
-  await expect(page.getByTestId("fret-0-0").first()).toHaveText("1");
+  await expect(page.getByTestId("fret-0-0")).toHaveText("1");
 });
 
 test("a practice song opens and transposes", async ({ page }) => {
@@ -47,9 +47,9 @@ test("a chord shape edited for one song survives reopening it", async ({ page })
   await page.getByLabel("Anzeigename").fill("Em nach meiner Art");
   await page.getByRole("button", { name: "Nur in diesem Song" }).click();
 
-  await expect(page.getByText("Em nach meiner Art").first()).toBeVisible();
+  await expect(page.getByText("Em nach meiner Art")).toBeVisible();
 
   await page.getByRole("button", { name: /Zurück zur Bibliothek/ }).click();
   await page.getByRole("button", { name: /Zwei Akkorde, eine Wiege/ }).click();
-  await expect(page.getByText("Em nach meiner Art").first()).toBeVisible();
+  await expect(page.getByText("Em nach meiner Art")).toBeVisible();
 });

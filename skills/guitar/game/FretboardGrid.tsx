@@ -1,11 +1,11 @@
-import type { Tuning } from "@skills/core";
+import { MAX_FRET, type Tuning } from "@skills/core";
 
 export interface FretMark {
   label: string;
   state: "normal" | "dim" | "scale" | "root";
 }
 
-const FRET_COUNT = 15;
+const FRET_COUNT = MAX_FRET;
 const MARKERS = [3, 5, 7, 9, 12, 15];
 
 const STATE_CLASS: Record<FretMark["state"], string> = {
@@ -19,10 +19,13 @@ export function FretboardGrid({
   tuning,
   mark,
   onFret,
+  testIdPrefix = "fret",
 }: {
   tuning: Tuning;
   mark: (stringIndex: number, fret: number) => FretMark;
   onFret?: (stringIndex: number, fret: number) => void;
+  /** Prefix of the cell test ids, so two boards on one page stay apart. */
+  testIdPrefix?: string;
 }) {
   return (
     <div className="overflow-x-auto">
@@ -35,7 +38,7 @@ export function FretboardGrid({
                 {Array.from({ length: FRET_COUNT + 1 }, (_, fret) => {
                   const { label, state } = mark(stringIndex, fret);
                   const shared = {
-                    "data-testid": `fret-${stringIndex}-${fret}`,
+                    "data-testid": `${testIdPrefix}-${stringIndex}-${fret}`,
                     "data-in-scale": String(state !== "dim"),
                     "data-root": String(state === "root"),
                     className: `mx-auto flex h-8 w-9 items-center justify-center ${STATE_CLASS[state]}`,

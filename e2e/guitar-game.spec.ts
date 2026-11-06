@@ -1,4 +1,5 @@
 import { expect, type Page, test } from "@playwright/test";
+import { reachBoard, weekMinutes } from "./guitar-helpers";
 
 const BOARD = "/vollbild/guitar/spiel/quests";
 
@@ -6,28 +7,7 @@ const BOARD = "/vollbild/guitar/spiel/quests";
 async function readStatus(page: Page) {
   const level = Number((await page.locator(".game-hud b", { hasText: /^Level / }).innerText()).replace("Level ", ""));
   const xp = Number(await page.getByRole("progressbar", { name: "Erfahrung" }).getAttribute("aria-valuenow"));
-  const week = await page.locator(".game-stat", { hasText: "diese Woche" }).innerText();
-  const [, h, m] = /(\d+)h (\d+)m/.exec(week) ?? [];
-  return { score: level * 1_000_000 + xp, weekMinutes: Number(h) * 60 + Number(m) };
-}
-
-/** Passes the placement when an earlier run has not done it yet, then waits for the board. */
-async function reachBoard(page: Page, entry: string) {
-  await page.goto(entry);
-  const board = page.getByRole("heading", { name: "Quest Board" });
-  // A placed player lands in the village or on the board, a new one on the placement.
-  const placement = page.getByRole("heading", { name: "Einstufung" });
-  const village = page.getByRole("region", { name: "Heutige Quests" });
-  await expect(board.or(placement).or(village)).toBeVisible();
-  if (await placement.isVisible()) {
-    await page.getByLabel(/Haltung/).first().check();
-    await page.getByRole("button", { name: "Weiter" }).click();
-    await page.getByRole("button", { name: "Weiter" }).click();
-    await page.getByRole("button", { name: "Fertig" }).click();
-  }
-  if (!(await board.isVisible())) await page.goto(BOARD);
-  await expect(board).toBeVisible();
-  await expect(page.locator(".quest-list li").first()).toBeVisible();
+  return { score: level * 1_000_000 + xp, weekMinutes: await weekMinutes(page) };
 }
 
 test("a first session runs from placement to XP in the status bar", async ({ page }) => {

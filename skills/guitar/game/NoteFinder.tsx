@@ -94,9 +94,10 @@ export function NoteFinder({
 
   const onBuffer = useCallback(
     (buffer: Float32Array, sampleRate: number) => {
+      // The meter also moves before Start, so the owner can set the level first.
+      setLevel(inputLevel(buffer));
       const current = targetRef.current;
       if (phaseRef.current !== "run" || !current) return;
-      setLevel(inputLevel(buffer));
       const frequency = detectPitch(buffer, sampleRate);
       const matching = frequency !== null && matchesTarget(frequency, current);
       if (holdRef.current(matching, Date.now())) score();
@@ -127,8 +128,8 @@ export function NoteFinder({
           seconds: ROUND_MS / 1000,
           level: 1,
           techniqueId: "theorie",
-          metricKey: `notenfinder:${strings.join("-")}`,
-          metricValue: total,
+          // A round without hits is no result worth a chart point or a record.
+          ...(total > 0 ? { metricKey: `notenfinder:${strings.join("-")}`, metricValue: total } : {}),
         }),
       );
     } catch {
@@ -218,6 +219,7 @@ export function NoteFinder({
       <FretboardGrid
         key={stringsKey}
         tuning={TUNING}
+        testIdPrefix="finder"
         onFret={click}
         mark={(stringIndex, fret) => {
           const place = revealed && target && target.stringIndex === stringIndex && target.fret === fret;
@@ -252,9 +254,10 @@ export function NoteFinder({
       ) : null}
       {mic.error ? <p role="alert">{mic.error} Du kannst weiter auf das Griffbrett klicken.</p> : null}
       {error ? <p role="alert">{error}</p> : null}
+      {phase === "done" && hits === 0 ? <p>Keine Treffer in dieser Runde. Beim nächsten Mal klappt es.</p> : null}
       {phase === "done" && result ? (
         <div>
-          {result.isRecord ? <p className="font-bold">Neuer Rekord!</p> : null}
+          {result.isRecord && hits > 0 ? <p className="font-bold">Neuer Rekord!</p> : null}
           <p>+{result.xpGained} XP</p>
         </div>
       ) : null}

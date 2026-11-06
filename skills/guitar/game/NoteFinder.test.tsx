@@ -109,7 +109,7 @@ describe("NoteFinder", () => {
     renderFinder();
     fireEvent.click(screen.getByRole("button", { name: "Start" }));
     const before = screen.getByTestId("prompt").textContent;
-    fireEvent.click(screen.getByTestId(`fret-0-${targetFret()}`));
+    fireEvent.click(screen.getByTestId(`finder-0-${targetFret()}`));
     expect(screen.getByText("Treffer: 1")).toBeInTheDocument();
     expect(screen.getByTestId("prompt").textContent).not.toBe(before);
   });
@@ -119,16 +119,16 @@ describe("NoteFinder", () => {
     renderFinder();
     fireEvent.click(screen.getByRole("button", { name: "Start" }));
     const right = targetFret();
-    fireEvent.click(screen.getByTestId(`fret-0-${(right + 1) % 12}`));
+    fireEvent.click(screen.getByTestId(`finder-0-${(right + 1) % 12}`));
     expect(screen.getByText("Treffer: 0")).toBeInTheDocument();
-    expect(screen.getByTestId(`fret-0-${right}`)).toHaveAttribute("data-root", "true");
+    expect(screen.getByTestId(`finder-0-${right}`)).toHaveAttribute("data-root", "true");
   });
 
   it("hides note names during the round", () => {
     serve();
     renderFinder();
     fireEvent.click(screen.getByRole("button", { name: "Start" }));
-    for (const cell of screen.getAllByTestId(/^fret-/)) expect(cell).toHaveTextContent("");
+    for (const cell of screen.getAllByTestId(/^finder-/)) expect(cell).toHaveTextContent("");
   });
 
   it("offers the click mode when the microphone is denied", () => {
@@ -138,7 +138,7 @@ describe("NoteFinder", () => {
     renderFinder();
     fireEvent.click(screen.getByRole("button", { name: "Start" }));
     expect(screen.getByText(/abgelehnt/)).toBeInTheDocument();
-    fireEvent.click(screen.getByTestId(`fret-0-${targetFret()}`));
+    fireEvent.click(screen.getByTestId(`finder-0-${targetFret()}`));
     expect(screen.getByText("Treffer: 1")).toBeInTheDocument();
   });
 
@@ -154,7 +154,7 @@ describe("NoteFinder", () => {
     const fetchMock = serve();
     renderFinder();
     fireEvent.click(screen.getByRole("button", { name: "Start" }));
-    for (let i = 0; i < 3; i += 1) fireEvent.click(screen.getByTestId(`fret-0-${targetFret()}`));
+    for (let i = 0; i < 3; i += 1) fireEvent.click(screen.getByTestId(`finder-0-${targetFret()}`));
     await tick(60_000);
     const calls = fetchMock.mock.calls.filter(([url]) => String(url).includes("/log"));
     expect(calls).toHaveLength(1);
@@ -173,7 +173,7 @@ describe("NoteFinder", () => {
     const onResult = vi.fn();
     renderFinder({ strings: [0], onResult });
     fireEvent.click(screen.getByRole("button", { name: "Start" }));
-    fireEvent.click(screen.getByTestId(`fret-0-${targetFret()}`));
+    fireEvent.click(screen.getByTestId(`finder-0-${targetFret()}`));
     await tick(60_000);
     expect(onResult).toHaveBeenCalledWith(1);
     expect(fetchMock.mock.calls.filter(([url]) => String(url).includes("/log"))).toHaveLength(0);
@@ -205,5 +205,35 @@ describe("NoteFinder", () => {
       await tick(50);
     }
     expect(screen.getByText("Treffer: 1")).toBeInTheDocument();
+  });
+  it("moves the level meter before the round starts", () => {
+    serve();
+    mic.state = "running";
+    renderFinder();
+    const loud = new Float32Array(4096).fill(0.5);
+    act(() => mic.onBuffer!(loud, 44100));
+    expect(Number(screen.getByRole("meter").getAttribute("aria-valuenow"))).toBeGreaterThan(0);
+  });
+
+  it("logs the time of a round without hits but sends no result and shows no record", async () => {
+    const fetchMock = vi.fn(async (url: string, _init?: RequestInit) => {
+      if (String(url).includes("/state")) return json(base);
+      if (String(url).includes("/log")) return json({ xpGained: 5, suggestion: null, isRecord: true });
+      return json({ ok: true });
+    });
+    vi.stubGlobal("fetch", fetchMock);
+    renderFinder();
+    fireEvent.click(screen.getByRole("button", { name: "Start" }));
+    await tick(60_000);
+    const calls = fetchMock.mock.calls.filter(([url]) => String(url).includes("/log"));
+    expect(calls).toHaveLength(1);
+    expect(JSON.parse(String(calls[0]![1]?.body))).toEqual({
+      kind: "frei",
+      seconds: 60,
+      level: 1,
+      techniqueId: "theorie",
+    });
+    expect(screen.queryByText("Neuer Rekord!")).toBeNull();
+    expect(screen.getByText("Keine Treffer in dieser Runde. Beim nächsten Mal klappt es.")).toBeInTheDocument();
   });
 });
