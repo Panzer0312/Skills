@@ -1,0 +1,117 @@
+export const meta = { id: "finger-arpeggio", title: "Arpeggio-Muster", order: 112, requires: null };
+
+import { Tab } from "../game/visuals/index";
+
+<Ziel>Du zerlegst Em, Am, C und G in drei Zupfmuster und wechselst dabei im Takt.</Ziel>
+
+Ein Arpeggio ist ein Akkord, dessen Töne nacheinander klingen statt gleichzeitig. Die Greifhand hält
+den ganzen Akkord, die Anschlagshand spielt ihn Ton für Ton. Diese Idee kennst du schon aus House of
+the Rising Sun und Nothing Else Matters. Die drei Muster hier sind eigene Übungen und stammen aus
+keinem Song.
+
+Die Finger bleiben auf ihren Saiten wie in „Daumen und Finger": Zeigefinger G-Saite, Mittelfinger
+H-Saite, Ringfinger hohe E-Saite. Nur der Daumen muss wissen, wohin. Er spielt den Basston, und der
+hängt vom Akkord ab:
+
+- Em: tiefe E-Saite, leer
+- Am: A-Saite, leer
+- C: A-Saite, Bund 3
+- G: tiefe E-Saite, Bund 3
+
+**Muster 1: Treppe.** Vier Töne pro Takt, von unten nach oben: Daumen, Zeige-, Mittel-, Ringfinger.
+Ein Klick pro Ton.
+
+<Tab
+  titel="Muster 1 über Em, Am, C, G"
+  zeilen={[
+    "------0-|------0-|------0-|------3-",
+    "----0---|----1---|----1---|----3---",
+    "--0-----|--2-----|--0-----|--0-----",
+    "--------|--------|--------|--------",
+    "--------|0-------|3-------|--------",
+    "0-------|--------|--------|3-------",
+  ]}
+/>
+
+**Muster 2: Pendel.** Acht Töne pro Takt, gezählt wie in „Achtel im Fluss": 1 + 2 + 3 + 4 +. Auf den Zahlen
+spielen Daumen, Mittelfinger, Ringfinger, Mittelfinger. Auf jedem „+" spielt der Zeigefinger die
+G-Saite.
+
+<Tab
+  titel="Muster 2 über Em und Am"
+  zeilen={[
+    "--------0-------|--------0-------",
+    "----0-------0---|----1-------1---",
+    "--0---0---0---0-|--2---2---2---2-",
+    "----------------|----------------",
+    "----------------|0---------------",
+    "0---------------|----------------",
+  ]}
+/>
+
+<Tab
+  titel="Muster 2 über C und G"
+  zeilen={[
+    "--------0-------|--------3-------",
+    "----1-------1---|----3-------3---",
+    "--0---0---0---0-|--0---0---0---0-",
+    "----------------|----------------",
+    "3---------------|----------------",
+    "----------------|3---------------",
+  ]}
+/>
+
+**Muster 3: Zange.** Auf der 1 zupfen Daumen und Ringfinger gleichzeitig, wie eine Zange, die sich
+schließt. Danach spielt der Daumen nur noch auf der 3. Auf jedem „+" spielt der Mittelfinger, auf der
+2 und der 4 der Zeigefinger.
+
+<Tab
+  titel="Muster 3 über Em und Am"
+  zeilen={[
+    "0---------------|0---------------",
+    "--0---0---0---0-|--1---1---1---1-",
+    "----0-------0---|----2-------2---",
+    "----------------|----------------",
+    "----------------|0-------0-------",
+    "0-------0-------|----------------",
+  ]}
+/>
+
+<Tab
+  titel="Muster 3 über C und G"
+  zeilen={[
+    "0---------------|3---------------",
+    "--1---1---1---1-|--3---3---3---3-",
+    "----0-------0---|----0-------0---",
+    "----------------|----------------",
+    "3-------3-------|----------------",
+    "----------------|3-------3-------",
+  ]}
+/>
+
+<Handhaltung>
+Die Greifhand setzt den ganzen Akkord auf, bevor der Takt beginnt, auch wenn du nicht jede Saite
+zupfst. Lass die Töne so lange wie möglich klingen. Für den Wechsel löst du die Greifhand erst beim
+letzten Ton des Takts. Der darf ruhig kurz werden. Wichtig ist, dass der Basston auf der nächsten 1
+pünktlich und sauber kommt. Die Anschlagshand bleibt an ihrem Platz, nur der Daumen wandert.
+</Handhaltung>
+
+<Fehlerbild>
+Am Taktende entsteht eine Lücke, weil du wartest, bis der neue Akkord sitzt. Oder der Daumen trifft
+die falsche Bass-Saite, und der Akkord klingt schief. Bei Am und C darf die tiefe E-Saite nicht
+klingen. Prüfe: Spiele nur die Basstöne der vier Akkorde im Takt, ein Ton pro Takt. Erst wenn der
+Daumen blind trifft, kommen die Finger dazu.
+</Fehlerbild>
+
+<Merksatz>Der Bass kommt pünktlich. Alles andere richtet sich nach ihm.</Merksatz>
+
+<Uebung bpm={50}>
+Metronom auf 50, ein Klick pro Zahl. Spiele jedes Muster erst auf Em allein, bis es von selbst läuft.
+
+Dann die Akkorde in der Reihenfolge Em, Am, C, G, ein Takt pro Akkord. Wiederhole die Runde zwei
+Minuten lang, erst mit Muster 1, dann mit 2, dann mit 3.
+
+Steigere das Tempo erst, wenn eine Runde ohne Lücke läuft.
+</Uebung>
+
+<Checkpoint>Du spielst Muster 2 über Em, Am, C und G viermal hintereinander bei 50 BPM, der Daumen trifft jeden Basston und am Taktende entsteht keine Lücke.</Checkpoint>

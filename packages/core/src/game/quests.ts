@@ -123,8 +123,10 @@ export function buildDailyQuests(input: {
     return at !== -1 && at <= nextIndex;
   };
   const onRoad = (quest: QuestDefinition) => content.road.some((step) => step.lessonId === quest.lessonId);
-  const fillable = (quest: QuestDefinition) =>
-    quest.kind === "theorie" || quest.kind === "aufwaermen" || onRoad(quest) ? reached(quest) : true;
+  const fillable = (quest: QuestDefinition) => {
+    if (quest.kind === "song" && !input.hasTargetSong) return false;
+    return quest.kind === "theorie" || quest.kind === "aufwaermen" || onRoad(quest) ? reached(quest) : true;
+  };
   const slot = (kind: QuestDefinition["kind"]) => {
     const ofKind = content.quests.filter((quest) => quest.kind === kind);
     return (

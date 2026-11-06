@@ -437,7 +437,7 @@
       "y": 445,
       "parent": "05-erste-toene",
       "quick": false,
-      "available": false,
+      "available": true,
       "knownSong": false,
       "techniqueId": "fingerpicking",
       "links": [],
@@ -454,7 +454,7 @@
       "y": 365,
       "parent": "finger-daumen",
       "quick": false,
-      "available": false,
+      "available": true,
       "knownSong": false,
       "techniqueId": "fingerpicking",
       "links": [
@@ -515,12 +515,12 @@
       "y": 400,
       "parent": "finger-arpeggio",
       "quick": false,
-      "available": false,
+      "available": true,
       "knownSong": false,
       "techniqueId": "song",
       "links": [],
       "songs": [],
-      "targetSong": null
+      "targetSong": { "title": "The Bard's Song", "artist": "Blind Guardian" }
     },
     {
       "id": "song-bards-ganz",
@@ -532,12 +532,12 @@
       "y": 345,
       "parent": "song-bards-vorbereitung",
       "quick": false,
-      "available": false,
+      "available": true,
       "knownSong": false,
       "techniqueId": "song",
       "links": [],
       "songs": [],
-      "targetSong": null
+      "targetSong": { "title": "The Bard's Song", "artist": "Blind Guardian" }
     },
     {
       "id": "finger-wechselbass",

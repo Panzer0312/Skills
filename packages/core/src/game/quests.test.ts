@@ -41,6 +41,14 @@ describe("buildDailyQuests", () => {
   it("skips the song quest without a target song", () => {
     expect(build({ minutes: 30, hasTargetSong: false })).toEqual(["a", "wechsel", "theorie", "warm"]);
   });
+  it("keeps a song quest out of the fillers without a target song", () => {
+    expect(build({ minutes: 120, hasTargetSong: false })).not.toContain("song");
+  });
+  it("keeps a song quest that is the best next without a target song", () => {
+    const c = { ...content, road: [step("la", "song")] };
+    const r = buildDailyQuests({ minutes: 30, hasTargetSong: false, statuses: {}, recentQuestIds: [], chosenLessonIds: [], content: c });
+    expect(r[0]).toBe("song");
+  });
   it("trims to the most important item for a short session", () => {
     expect(build({ minutes: 10 })).toEqual(["a"]);
   });

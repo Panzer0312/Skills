@@ -1,0 +1,84 @@
+export const meta = { id: "finger-daumen", title: "Daumen und Finger", order: 111, requires: null };
+
+import { GriffbrettBild, Tab } from "../game/visuals/index";
+
+<Ziel>Du zupfst die drei tiefen Saiten mit dem Daumen und die drei hohen mit den Fingern, gleichmäßig und ohne hinzuschauen.</Ziel>
+
+Bisher hat der Pick jeden Ton gespielt. Beim Zupfen teilen sich die Finger die Arbeit, und jede
+Saite bekommt ihren festen Finger. So kannst du mehrere Saiten nacheinander oder gleichzeitig
+spielen, ohne dass die Hand springen muss.
+
+Die Buchstaben im Bild zeigen die Finger der Anschlagshand: D Daumen, Z Zeigefinger, M Mittelfinger,
+R Ringfinger. Der kleine Finger zupft nicht.
+
+<GriffbrettBild
+  bis={3}
+  punkte={[
+    { saite: 6, bund: 0, text: "D" },
+    { saite: 5, bund: 0, text: "D" },
+    { saite: 4, bund: 0, text: "D" },
+    { saite: 3, bund: 0, text: "Z" },
+    { saite: 2, bund: 0, text: "M" },
+    { saite: 1, bund: 0, text: "R" },
+  ]}
+/>
+
+- Daumen: tiefe E-Saite, A-Saite, D-Saite
+- Zeigefinger: G-Saite
+- Mittelfinger: H-Saite
+- Ringfinger: hohe E-Saite
+
+**Ohne Pick.** Das ist der Standard, und damit fängst du an. Leg den Pick zur Seite.
+
+**Mit Pick.** Willst du den Pick in der Hand behalten, hältst du ihn wie gewohnt zwischen Daumen und
+Zeigefinger. Er übernimmt die Saiten des Daumens. Der Zeigefinger ist damit besetzt, also rücken die
+anderen auf: Mittelfinger auf die G-Saite, Ringfinger auf die H-Saite, kleiner Finger auf die hohe
+E-Saite. Das geht, ist aber schwerer, weil der kleine Finger schwach ist. Nimm es nur, wenn du im
+selben Stück schnell zum Pick zurück musst.
+
+**Auf der E-Gitarre.** Stelle einen cleanen Sound ein, also den cleanen Kanal oder Gain auf fast 0. Mit
+Verzerrung verschwimmen Töne, die zusammen klingen. Wenn deine Gitarre einen Hals-Tonabnehmer hat,
+nimm ihn: Er klingt weicher als der am Steg. Die Saiten sind dünner und liegen näher am Korpus als
+auf einer Akustikgitarre. Du brauchst also wenig Kraft.
+
+<Handhaltung>
+Der Unterarm liegt wie gewohnt auf der Korpuskante. Die Hand schwebt über den Saiten, das Handgelenk
+ist locker. Der Handballen liegt nicht auf den Saiten, sonst dämpft er wie beim Palm Mute. Lege Zeige-,
+Mittel- und Ringfinger auf ihre Saiten. Der Daumen steht weiter zum Hals hin als die Finger, damit
+er ihnen nicht in die Quere kommt. Der Daumen drückt nach unten zum Boden, die Finger ziehen nach
+oben zur Handfläche. Die Bewegung kommt aus den Fingern, nicht aus dem Handgelenk.
+</Handhaltung>
+
+<Fehlerbild>
+Die ganze Hand hüpft bei jedem Ton mit. Dann verlieren die Finger ihre Saiten, und du musst
+hinschauen. Ein zweiter Fehler: Du reißt die Saite nach oben weg. Sie schlägt dann auf die Bünde und
+knallt. Prüfe: Lege die Finger auf ihre Saiten, zupfe einen Ton und schaue auf den Handrücken. Er
+darf sich nicht bewegen. Knallt es, zupfe flacher und leiser.
+</Fehlerbild>
+
+<Merksatz>Jeder Finger hat seine Saite. Die Hand bleibt, nur die Finger arbeiten.</Merksatz>
+
+<Tab
+  titel="Leere Saiten: Daumen, Finger, beide"
+  zeilen={[
+    "--------|----0---|------0-",
+    "--------|--0---0-|----0---",
+    "--------|0-------|--0-----",
+    "----0---|--------|--------",
+    "--0---0-|--------|--------",
+    "0-------|--------|0-------",
+  ]}
+/>
+
+<Uebung bpm={50}>
+Metronom auf 50, ein Klick pro Ton. Die Greifhand hat Pause, alle Saiten klingen leer.
+
+- Takt 1, zwei Minuten: nur der Daumen, tiefe E-, A-, D-, A-Saite.
+- Takt 2, zwei Minuten: nur die Finger, Zeige-, Mittel-, Ring-, Mittelfinger.
+- Takt 3, zwei Minuten: beide zusammen, Daumen, Zeige-, Mittel-, Ringfinger.
+- Alle drei Takte hintereinander, zwei Minuten lang.
+
+Schaue dabei nicht auf die Hand. Steigere das Tempo erst, wenn jeder Ton gleich laut klingt.
+</Uebung>
+
+<Checkpoint>Du spielst alle drei Takte eine Minute lang bei 50 BPM, ohne auf die Hand zu schauen, und jeder Ton klingt gleich laut.</Checkpoint>

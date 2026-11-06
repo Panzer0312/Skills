@@ -32,6 +32,10 @@ const WRITTEN_IN_STAGE_2 = [
   "metal-stumm",
   "metal-palm-mute",
   "metal-downpicking",
+  "finger-daumen",
+  "finger-arpeggio",
+  "song-bards-vorbereitung",
+  "song-bards-ganz",
 ];
 // A listening lesson: no tempo to scale, like its exemption in lessons.test.ts.
 const WITHOUT_SCALE = ["metal-sound"];
@@ -189,6 +193,18 @@ describe("skill map content", () => {
       expect(quest?.techniqueId, id).toBe(node?.techniqueId);
       if (!WITHOUT_SCALE.includes(id)) expect(Object.keys(quest?.scale ?? {}), id).not.toHaveLength(0);
       expect(node?.quick || onRoad.get(id)?.questId === quest?.id, id).toBe(true);
+    }
+  });
+  it("names The Bard's Song as target on both of its lessons", () => {
+    for (const id of ["song-bards-vorbereitung", "song-bards-ganz"]) {
+      expect(byId.get(id)?.targetSong, id).toEqual({ title: "The Bard's Song", artist: "Blind Guardian" });
+    }
+  });
+  it("keeps pasted sheets out of the song lessons", () => {
+    for (const id of ["song-bards-vorbereitung", "song-bards-ganz"]) {
+      const source = readFileSync(join(here, "../lessons", `${id}.mdx`), "utf8");
+      expect(source, id).not.toContain("{start_of_verse}");
+      expect(source, id).not.toMatch(/\[[A-H][#b]?(m|maj|sus|add|dim|aug)?\d*(\/[A-H][#b]?)?\]/);
     }
   });
   it("orders road months without going backwards", () => {

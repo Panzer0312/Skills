@@ -1,0 +1,134 @@
+export const meta = { id: "song-bards-ganz", title: "The Bard's Song: ganz spielen", order: 114, requires: null };
+
+import { Griffbild, GriffbrettBild } from "../game/visuals/index";
+
+<Ziel>Du spielst The Bard's Song einmal von vorn bis hinten durch, ohne anzuhalten.</Ziel>
+
+Alle Griffe kennst du jetzt. Jetzt geht es um den Weg durch das Lied, einen Abschnitt nach dem
+anderen. Das ist die Reihenfolge aus deinem Liedblatt:
+
+Intro, Teil A, Teil B, Zwischenspiel, Teil A, Teil B mit zweitem Ende, Teil C.
+
+Nur das Intro heißt dort so. Die anderen Namen sind neutrale Bezeichnungen dieser Lektion. Eine
+Runde ist eine Zeile der Liste.
+
+**Intro**, viermal:
+
+- Am–G–Em7–Am
+
+**Teil A:**
+
+- Am–G–Em7–Am, dreimal
+- Am–G–Em7–Dm
+- C–G–Am–G, zweimal
+
+**Teil B:**
+
+- Dm–Am–Dm–Am–Dm–Am
+- Dm–F–G–Dm
+- F–G–Am
+- Dm–Am–Dm–Am–Dm–Am
+- Erstes Ende: Am–F–C–G–Em–C–G–Am–G
+
+**Zwischenspiel**, viermal: wie das Intro.
+
+**Teil A** kommt danach genauso noch einmal.
+
+**Teil B mit zweitem Ende:** Die ersten vier Zeilen bleiben gleich. Statt des ersten Endes kommt:
+
+- Dm–F–G–Dm
+- F–G–Am–G–Am–G–Am
+
+**Teil C:**
+
+- C–G–Am, viermal
+- C–G–Em7
+
+Neu sind nur zwei Wechsel im ersten Ende, und in beiden bleibt der Zeigefinger auf der H-Saite, Bund 1.
+
+**Am zu F.** Der Zeigefinger legt sich zusätzlich über die hohe E-Saite. Mittel- und Ringfinger
+tauschen: Der Mittelfinger geht von der D- auf die G-Saite, der Ringfinger von der G-Saite auf die
+D-Saite, Bund 3.
+
+**F zu C.** Der Zeigefinger gibt die hohe E-Saite frei. Mittel- und Ringfinger rücken je eine Saite
+tiefer: G-Saite, Bund 2 → D-Saite, Bund 2 und D-Saite, Bund 3 → A-Saite, Bund 3.
+
+Im ersten Ende steht einmal Em statt Em7, so zeigt es dein Blatt.
+
+<Griffbild akkorde={["Am", "G", "Em", "C", "Dm"]} />
+
+**Em7** (022030) zum Nachschlagen:
+
+<GriffbrettBild
+  bis={4}
+  punkte={[
+    { saite: 6, bund: 0 },
+    { saite: 5, bund: 2, text: "1" },
+    { saite: 4, bund: 2, text: "2" },
+    { saite: 3, bund: 0 },
+    { saite: 2, bund: 3, text: "3" },
+    { saite: 1, bund: 0 },
+  ]}
+/>
+
+**Kleines F** (xx3211) zum Nachschlagen:
+
+<GriffbrettBild
+  bis={4}
+  punkte={[
+    { saite: 4, bund: 3, text: "3" },
+    { saite: 3, bund: 2, text: "2" },
+    { saite: 2, bund: 1, text: "1" },
+    { saite: 1, bund: 1, text: "1" },
+  ]}
+/>
+
+**Dein Tempoplan.** Dein Blatt nennt weder Tempo noch die Länge der Akkorde. Deshalb gehst du in drei
+Stufen vor:
+
+- Stufe 1: vier Klicks pro Akkord bei 50 BPM, jeder Abschnitt für sich.
+- Stufe 2: zwei Klicks pro Akkord bei 50 BPM, dann schrittweise schneller.
+- Stufe 3: die Akkordlängen der Aufnahme. Höre einen Abschnitt, zähle mit und spiele ihn dann nach.
+
+Für Stufe 3 suchst du dein Zieltempo: Lass die Aufnahme laufen und stelle das Metronom so ein, dass
+die Klicks zum Lied passen. Diese Zahl ist deine 100 %. Die Quest nennt dir Abschnitt, Durchläufe und
+Prozent. Bei 100 BPM wären 60 % also 60 BPM.
+
+<Hinweis>Klingt die Aufnahme gegen deine Gitarre schief, obwohl du gestimmt bist, ist sie vermutlich
+anders gestimmt. Spiele dann zum Metronom statt zur Aufnahme.</Hinweis>
+
+**Deine Anschlagshand.** Nimm Muster 1 aus „Arpeggio-Muster", später Muster 2. Das sind deine eigenen
+Übungsmuster, nicht die Stimme der Aufnahme. Wird es bei Dm–Am zu eng, schlage den Akkord einfach
+einmal abwärts an und zupfe erst beim nächsten längeren Akkord weiter. Die Basstöne für den Daumen:
+
+- Am und C: A-Saite
+- G, Em und Em7: tiefe E-Saite
+- Dm und F: D-Saite
+
+<Handhaltung>
+Die Augen sind schon beim nächsten Akkord, bevor die Hand dort ist. Lies die Liste eine Zeile voraus.
+Die Greifhand löst sich beim letzten Ton vor dem Wechsel. Anker bleiben liegen wie in der Vorbereitung.
+Die Anschlagshand bleibt an ihrem Platz, nur der Daumen sucht den Basston.
+</Handhaltung>
+
+<Fehlerbild>
+Du hältst bei jedem Fehler an und fängst von vorn an. Dann lernst du nur den Anfang. Ein zweiter
+Fehler: Du erhöhst das Tempo, bevor der schwächste Abschnitt sitzt. Prüfe: Läuft Teil B genauso ruhig
+wie das Intro? Wenn nicht, bleibt das Tempo, wo es ist. Passiert ein Fehler, spiele den nächsten
+Akkord pünktlich weiter. Ein Durchlauf zählt, wenn du am Ende ankommst.
+</Fehlerbild>
+
+<Merksatz>Bleib im Takt, auch wenn ein Akkord danebengeht. Der nächste kommt pünktlich.</Merksatz>
+
+<Uebung bpm={50}>
+Metronom auf 50, vier Klicks pro Akkord, Muster 1.
+
+Woche für Woche ein Abschnitt mehr: erst Intro und Teil A, dann Teil B, dann Zwischenspiel und Teil
+A, dann das zweite Ende und Teil C. Hänge jeden neuen Abschnitt an den vorigen an, damit auch die
+Übergänge sitzen.
+
+Dein erster ganzer Durchlauf: alle Abschnitte in der Reihenfolge der Liste, bei 50 BPM, ohne
+anzuhalten. Dass dabei ein Akkord danebengeht, ist erlaubt. Anhalten nicht.
+</Uebung>
+
+<Checkpoint>Du spielst das ganze Lied einmal von vorn bis hinten zum Metronom, ohne anzuhalten.</Checkpoint>

@@ -86,7 +86,7 @@
     },
     {
       "id": "schlagmuster", "title": "Schlagmuster üben",
-      "description": "Spiele ein Schlagmuster auf einem Akkord, bis die Schlaghand von allein läuft. Das Metronom gibt den Takt vor.",
+      "description": "Spiele ein Schlagmuster auf einem Akkord, bis die Anschlagshand von allein läuft. Das Metronom gibt den Takt vor.",
       "kind": "technik", "techniqueId": "rhythmus", "lessonId": "08-schlagmuster", "minutes": 10, "icon": "strum",
       "scale": { "bpm": [60, 100] }
     },
@@ -119,6 +119,24 @@
       "kind": "technik", "techniqueId": "metal", "lessonId": "metal-palm-mute", "minutes": 10, "icon": "bolt",
       "metricLabel": "Sauberes Tempo (BPM)", "masteryTarget": 120,
       "scale": { "bpm": [70, 120] }
+    },
+    {
+      "id": "daumen-finger", "title": "Daumen und Finger",
+      "description": "Zupfe zum Metronom erst mit dem Daumen die tiefen Saiten, dann mit den Fingern die hohen, dann beides im Wechsel. Die Hand bleibt ruhig an ihrem Platz.",
+      "kind": "technik", "techniqueId": "fingerpicking", "lessonId": "finger-daumen", "minutes": 10, "icon": "note",
+      "scale": { "bpm": [50, 90] }
+    },
+    {
+      "id": "arpeggio-muster", "title": "Arpeggio-Muster",
+      "description": "Spiele die drei Zupfmuster über Em, Am, C und G, einen Takt pro Akkord. Der Daumen trifft die richtige Bass-Saite, und zwischen den Takten entsteht keine Lücke.",
+      "kind": "technik", "techniqueId": "fingerpicking", "lessonId": "finger-arpeggio", "minutes": 10, "icon": "note",
+      "scale": { "bpm": [50, 90] }
+    },
+    {
+      "id": "bards-wechsel", "title": "The Bard's Song: Wechsel",
+      "description": "Übe die neuen Wechsel einzeln im Takt: Em7–Dm, Dm–C, Am–Dm, Dm–F und F–G. Spiele danach die Kette Am, Dm, F, G, vier Klicks pro Akkord.",
+      "kind": "technik", "techniqueId": "song", "lessonId": "song-bards-vorbereitung", "minutes": 10, "icon": "chord",
+      "scale": { "bpm": [50, 90] }
     },
     {
       "id": "erstes-riff", "title": "Erstes Riff",
@@ -173,6 +191,12 @@
       "description": "Übe deinen Zielsong abschnittsweise. Beginne langsam und steigere das Tempo, sobald es sauber läuft.",
       "kind": "song", "techniqueId": "song", "lessonId": null, "minutes": 10, "icon": "song",
       "scale": { "tempoPercent": [50, 100], "sections": ["Intro", "Strophe", "Refrain", "Bridge", "Ganzer Song"], "runs": [2, 5] }
+    },
+    {
+      "id": "bards-ganz", "title": "The Bard's Song: ganz",
+      "description": "Spiele den genannten Abschnitt im genannten Tempo, ohne bei einem Fehler anzuhalten. 100 % ist das Tempo, das du in der Lektion ermittelt hast.",
+      "kind": "song", "techniqueId": "song", "lessonId": "song-bards-ganz", "minutes": 15, "icon": "song",
+      "scale": { "tempoPercent": [50, 100], "sections": ["Intro", "Teil A", "Teil B", "Zwischenspiel", "Teil C", "Ganzer Song"], "runs": [1, 4] }
     }
   ]
 }
