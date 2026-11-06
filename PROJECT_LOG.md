@@ -356,8 +356,12 @@ Dieses Dokument ist die zentrale Stelle für Stand, Probleme und Ideen.
   weil Audio das nicht zuverlässig trennt. Der Klick auf das Griffbrett bleibt immer als Ausweg.
 - 2026-11-06 — `npm run dev:lan` ist der einzige Weg ins Heimnetz und gibt nur Vite frei; der Server
   bleibt auf localhost und wird über den Vite-Proxy erreicht. Der Standardstart bleibt rein lokal, denn die App hat keine Anmeldung.
-- 2026-11-06 — Die Griffbrett-Seite zeigt nun zwei Raster (Anzeige und Notenfinder) mit gleichen
-  `data-testid`; `e2e/guitar.spec.ts` nimmt deshalb `.first()`.
+- 2026-11-06 — Die Griffbrett-Seite zeigt zwei Raster (Anzeige und Notenfinder). `FretboardGrid` hat
+  dafür `testIdPrefix`: die Anzeige nutzt `fret-`, der Notenfinder `finder-`, damit die Test-IDs eindeutig bleiben.
+- 2026-11-06 — Quests haben das optionale Feld `chords` (Liste von Akkordnamen). `QuestRun` zeigt dazu die
+  Griffbilder; die Namen stammen aus der Lektion der Quest. Der Akkord-Editor gehört nicht dazu.
+- 2026-11-06 — Eine Notenfinder-Runde ohne einen einzigen Treffer schreibt nichts ins Log, damit
+  Nichtstun keine XP bringt.
 - Offen für den Besitzer: Der Hörtest des Jam Room (Klang von Schlagzeug und Bass, Lautstärke, Taktgefühl)
   ist noch nicht gemacht; die Tests prüfen nur Start, Stopp und Tonleiter.
 

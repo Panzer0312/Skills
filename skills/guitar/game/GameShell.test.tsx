@@ -149,6 +149,12 @@ describe("GameShell", () => {
     }
   });
 
+  it("heads the note finder on the Tower", async () => {
+    serve({});
+    renderGame("/griffbrett");
+    expect(await screen.findByRole("heading", { name: "Noten finden" })).toBeInTheDocument();
+  });
+
   it("starts today's quest with one click from the village", async () => {
     const quest = gameContent.quests[0]!;
     serve({ today: { minutes: 30, questIds: [quest.id] } });

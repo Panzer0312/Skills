@@ -120,6 +120,7 @@ export function FretboardPlace(props: WidgetProps) {
   return (
     <ToolFrame title="Griffbrett">
       <Fretboard {...props} />
+      <h2 className="mt-6 text-lg font-semibold">Noten finden</h2>
       <NoteFinder />
     </ToolFrame>
   );
