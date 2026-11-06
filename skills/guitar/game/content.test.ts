@@ -280,17 +280,21 @@ describe("The Bard's Song mastery", () => {
     expect(sections.slice(3, 5)).toEqual(["Teil B", "Teil B"]);
     expect(new Set(sections.slice(5))).toEqual(new Set(["Ganzer Song"]));
   });
-  it("tops out at 80 percent and drives the metronome from 50 to 100 BPM", () => {
+  it("tops out at 80 percent with a metronome that matches at every level", () => {
     expect(scaleQuest(quest, 1)).toMatchObject({ tempoPercent: 50, bpm: 50 });
-    expect(scaleQuest(quest, 10)).toMatchObject({ tempoPercent: 80, bpm: 100 });
+    expect(scaleQuest(quest, 10)).toMatchObject({ tempoPercent: 80, bpm: 80 });
+    for (let level = 1; level <= 10; level += 1) {
+      const { tempoPercent, bpm } = scaleQuest(quest, level);
+      expect(bpm, `Stufe ${level}`).toBe(tempoPercent);
+    }
   });
   it("tells the same story in the lesson", () => {
     const flat = lesson.replace(/\s+/g, " ");
     expect(flat).toContain("drei ganzen Durchläufen");
     expect(flat).toContain("ab 6 der ganze Song");
     expect(flat).toContain("80 %");
-    expect(flat).not.toContain("100 % = 100 BPM");
-    expect(quest.description).not.toContain("100 % = 100 BPM");
+    expect(flat).toContain("100 % = 100 BPM");
+    expect(quest.description).toContain("100 % = 100 BPM");
   });
 });
 
