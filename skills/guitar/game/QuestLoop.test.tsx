@@ -17,6 +17,11 @@ vi.mock("./ChordTrainer.js", async (original) => ({
   ),
 }));
 
+vi.mock("../../../packages/web/src/audio/useMicrophone.js", () => ({
+  useMicrophone: () => ({ state: "idle", error: null, start: vi.fn(), stop: vi.fn() }),
+}));
+vi.mock("../../../packages/web/src/audio/signalTone.js", () => ({ playSignal: vi.fn() }));
+
 const ACTIVE = "game.activeQuest";
 
 const base: GameState = {
@@ -614,6 +619,59 @@ describe("quest view", () => {
     renderGame("/quest/haltung-check");
     await screen.findByRole("button", { name: "Fertig" });
     expect(screen.queryByRole("group", { name: /Griffbilder/ })).not.toBeInTheDocument();
+  });
+
+  it("sets the riff's tempo button to the quest's scaled BPM and drops repeated links", async () => {
+    serve({ levels: { metal: 10 } });
+    renderGame("/quest/erstes-riff");
+    await userEvent.click(await screen.findByRole("button", { name: "Metronom auf 110 BPM stellen" }));
+    await waitFor(() => expect(screen.getByRole("slider", { name: "BPM" })).toHaveValue("110"));
+    expect(screen.getAllByRole("heading", { name: "Erstes Riff" })).toHaveLength(1);
+    expect(screen.getAllByRole("link", { name: "Lektion lesen" })).toHaveLength(1);
+  });
+
+  it("runs the note game inside the quest and fills the dialog from the best round", async () => {
+    const fetchMock = serve({});
+    renderGame("/quest/noten-e-saite");
+    await screen.findByRole("button", { name: "Start", exact: true });
+    const pitches = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "H"];
+    vi.useFakeTimers({ toFake: ["setInterval", "clearInterval", "Date"] });
+    try {
+      fireEvent.click(screen.getByRole("button", { name: "Start", exact: true }));
+      for (let i = 0; i < 2; i += 1) {
+        const name = /Finde (\S+) auf/.exec(screen.getByTestId("prompt").textContent!)![1]!;
+        fireEvent.click(screen.getByTestId(`finder-0-${(pitches.indexOf(name) - 4 + 12) % 12}`));
+      }
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(60_000);
+      });
+    } finally {
+      vi.useRealTimers();
+    }
+    expect(await screen.findByText(/Beste Runde: 2/)).toBeInTheDocument();
+    expect(writes(fetchMock, "/log")).toHaveLength(0);
+    await finish();
+    expect(screen.getByLabelText("Treffer pro Minute")).toHaveValue(2);
+    await userEvent.click(screen.getByRole("button", { name: "Passt" }));
+    await userEvent.click(screen.getByRole("button", { name: "Speichern" }));
+    await waitFor(() => expect(writes(fetchMock, "/log")).toHaveLength(1));
+    expect(writes(fetchMock, "/log")[0]).toMatchObject({
+      kind: "quest",
+      questId: "noten-e-saite",
+      metricKey: "noten-e-saite",
+      metricValue: 2,
+    });
+  });
+
+  it("marks the scale on the quest's fretboard overlay", async () => {
+    serve({});
+    renderGame("/quest/pentatonik-box1");
+    const overlay = quest("pentatonik-box1").fretboard!;
+    expect(overlay).toMatchObject({ root: "A", scale: "moll-pentatonik", box: 1 });
+    expect(await screen.findByTestId("fret-0-5")).toHaveAttribute("data-root", "true");
+    expect(screen.getByTestId("fret-0-8")).toHaveAttribute("data-in-scale", "true");
+    expect(screen.getByTestId("fret-0-6")).toHaveAttribute("data-in-scale", "false");
+    expect(screen.queryByTestId("finder-0-5")).not.toBeInTheDocument();
   });
 
   it("starts the timer and resumes it after a reload", async () => {

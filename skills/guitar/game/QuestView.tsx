@@ -245,7 +245,7 @@ function QuestRun({ quest, state, data }: { quest: QuestDefinition; state: GameS
           )
         ) : null}
         {quest.chords ? <Griffbild akkorde={quest.chords} /> : null}
-        {riff ? <RiffCard riff={riff} onTempo={setBpm} /> : null}
+        {riff ? <RiffCard riff={riff} onTempo={setBpm} bpm={scaled.bpm ?? undefined} inQuest /> : null}
         {quest.fretboard ? (
           <FretOverlay
             root={quest.fretboard.root}
