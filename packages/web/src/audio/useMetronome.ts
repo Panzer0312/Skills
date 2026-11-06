@@ -13,7 +13,10 @@ import { startLookahead } from "./lookahead.js";
 const MIN_BPM = 20;
 const MAX_BPM = 300;
 
-const CLICKS: Record<Exclude<ClickLevel, "stumm">, { frequency: number; gain: number }> = {
+const CLICKS: Record<
+  Exclude<ClickLevel, "stumm">,
+  { frequency: number; gain: number }
+> = {
   betont: { frequency: 1600, gain: 0.6 },
   schlag: { frequency: 900, gain: 0.6 },
   unter: { frequency: 600, gain: 0.3 },
@@ -26,7 +29,9 @@ export function useMetronome() {
   const [currentBeat, setCurrentBeat] = useState(0);
   const [subdivision, setSubdivision] = useState<Subdivision>("viertel");
   const [accents, setAccents] = useState<boolean[]>(() => defaultAccents(4));
-  const [speedTrainer, setSpeedTrainerRaw] = useState<SpeedTrainer | null>(null);
+  const [speedTrainer, setSpeedTrainerRaw] = useState<SpeedTrainer | null>(
+    null,
+  );
 
   const contextRef = useRef<AudioContext | null>(null);
   const stopLookaheadRef = useRef<(() => void) | null>(null);
@@ -43,8 +48,12 @@ export function useMetronome() {
   const trainerRef = useRef(speedTrainer);
   trainerRef.current = speedTrainer;
 
+  const barsRef = useRef(0);
+  const trainerStartBarRef = useRef(0);
+
   const setSpeedTrainer = useCallback((value: SpeedTrainer | null) => {
     trainerRef.current = value;
+    trainerStartBarRef.current = barsRef.current;
     setSpeedTrainerRaw(value);
   }, []);
 
@@ -63,7 +72,9 @@ export function useMetronome() {
   }, []);
 
   const toggleAccent = useCallback((beat: number) => {
-    setAccents((current) => current.map((on, index) => (index === beat ? !on : on)));
+    setAccents((current) =>
+      current.map((on, index) => (index === beat ? !on : on)),
+    );
   }, []);
 
   const click = useCallback((time: number, level: ClickLevel) => {
@@ -99,23 +110,31 @@ export function useMetronome() {
 
     let stepInBeat = 0;
     let beat = 0;
-    let bars = 0;
+    barsRef.current = 0;
+    trainerStartBarRef.current = 0;
     stopLookaheadRef.current = startLookahead({
       context,
-      stepSeconds: () => 60 / bpmRef.current / SUBDIVISIONS[subdivisionRef.current].pattern.length,
+      stepSeconds: () =>
+        60 /
+        bpmRef.current /
+        SUBDIVISIONS[subdivisionRef.current].pattern.length,
       onStep: (time) => {
-        const stepsPerBeat = SUBDIVISIONS[subdivisionRef.current].pattern.length;
+        const stepsPerBeat =
+          SUBDIVISIONS[subdivisionRef.current].pattern.length;
         if (stepInBeat >= stepsPerBeat) {
           stepInBeat = 0;
           beat += 1;
         }
         if (beat >= beatsRef.current) {
           beat = 0;
-          bars += 1;
+          barsRef.current += 1;
         }
         const trainer = trainerRef.current;
         if (trainer && beat === 0 && stepInBeat === 0) {
-          const next = speedTrainerBpm(trainer, bars);
+          const next = speedTrainerBpm(
+            trainer,
+            barsRef.current - trainerStartBarRef.current,
+          );
           if (next !== bpmRef.current) {
             bpmRef.current = next;
             setBpmRaw(next);

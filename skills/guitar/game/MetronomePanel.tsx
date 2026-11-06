@@ -4,7 +4,11 @@ import type { useMetronome } from "../../../packages/web/src/audio/useMetronome.
 
 const BEAT_OPTIONS = [2, 3, 4, 5, 6, 7];
 
-export function MetronomePanel({ metronome }: { metronome: ReturnType<typeof useMetronome> }) {
+export function MetronomePanel({
+  metronome,
+}: {
+  metronome: ReturnType<typeof useMetronome>;
+}) {
   const [targetBpm, setTargetBpm] = useState(100);
   const [stepBpm, setStepBpm] = useState(4);
   const [everyBars, setEveryBars] = useState(2);
@@ -45,7 +49,9 @@ export function MetronomePanel({ metronome }: { metronome: ReturnType<typeof use
         Takt
         <select
           value={metronome.beatsPerBar}
-          onChange={(event) => metronome.setBeatsPerBar(Number(event.target.value))}
+          onChange={(event) =>
+            metronome.setBeatsPerBar(Number(event.target.value))
+          }
         >
           {BEAT_OPTIONS.map((beats) => (
             <option key={beats} value={beats}>
@@ -58,7 +64,9 @@ export function MetronomePanel({ metronome }: { metronome: ReturnType<typeof use
         Unterteilung
         <select
           value={metronome.subdivision}
-          onChange={(event) => metronome.setSubdivision(event.target.value as Subdivision)}
+          onChange={(event) =>
+            metronome.setSubdivision(event.target.value as Subdivision)
+          }
         >
           {(Object.keys(SUBDIVISIONS) as Subdivision[]).map((key) => (
             <option key={key} value={key}>
@@ -82,55 +90,66 @@ export function MetronomePanel({ metronome }: { metronome: ReturnType<typeof use
           </button>
         ))}
       </div>
+      {speedTrainer ? (
+        <div className="quest-field">
+          <p>
+            Tempotrainer: {bpm} → {speedTrainer.targetBpm} BPM
+          </p>
+          <button
+            type="button"
+            className="game-button"
+            onClick={() => metronome.setSpeedTrainer(null)}
+          >
+            Tempotrainer stoppen
+          </button>
+        </div>
+      ) : null}
       <details className="quest-trainer">
         <summary>Tempotrainer</summary>
-        {speedTrainer ? (
-          <div className="quest-field">
-            <p>
-              Tempotrainer: {bpm} → {speedTrainer.targetBpm} BPM
-            </p>
-            <button type="button" className="game-button" onClick={() => metronome.setSpeedTrainer(null)}>
-              Tempotrainer stoppen
-            </button>
-          </div>
-        ) : (
-          <div className="quest-field">
-            <label>
-              Bis
-              <input
-                type="number"
-                min={21}
-                max={300}
-                value={targetBpm}
-                onChange={(event) => setTargetBpm(Number(event.target.value))}
-              />
-            </label>
-            <label>
-              Plus
-              <input
-                type="number"
-                min={1}
-                max={50}
-                value={stepBpm}
-                onChange={(event) => setStepBpm(Number(event.target.value))}
-              />
-            </label>
-            <label>
-              Alle (Takte)
-              <input
-                type="number"
-                min={1}
-                max={32}
-                value={everyBars}
-                onChange={(event) => setEveryBars(Number(event.target.value))}
-              />
-            </label>
-            {targetTooLow ? <p role="alert">Das Ziel muss über dem aktuellen Tempo liegen.</p> : null}
-            <button type="button" className="game-button" disabled={!valid} onClick={startTrainer}>
-              Tempotrainer starten
-            </button>
-          </div>
-        )}
+
+        <div className="quest-field">
+          <label>
+            Bis
+            <input
+              type="number"
+              min={21}
+              max={300}
+              value={targetBpm}
+              onChange={(event) => setTargetBpm(Number(event.target.value))}
+            />
+          </label>
+          <label>
+            Plus
+            <input
+              type="number"
+              min={1}
+              max={50}
+              value={stepBpm}
+              onChange={(event) => setStepBpm(Number(event.target.value))}
+            />
+          </label>
+          <label>
+            Alle (Takte)
+            <input
+              type="number"
+              min={1}
+              max={32}
+              value={everyBars}
+              onChange={(event) => setEveryBars(Number(event.target.value))}
+            />
+          </label>
+          {targetTooLow ? (
+            <p role="alert">Das Ziel muss über dem aktuellen Tempo liegen.</p>
+          ) : null}
+          <button
+            type="button"
+            className="game-button"
+            disabled={!valid}
+            onClick={startTrainer}
+          >
+            Tempotrainer starten
+          </button>
+        </div>
       </details>
     </section>
   );

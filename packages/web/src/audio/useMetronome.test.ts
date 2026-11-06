@@ -38,7 +38,14 @@ beforeEach(() => {
         };
       }
       createGain() {
-        return { gain: { value: 0, setValueAtTime: vi.fn(), exponentialRampToValueAtTime: vi.fn() }, connect: vi.fn() };
+        return {
+          gain: {
+            value: 0,
+            setValueAtTime: vi.fn(),
+            exponentialRampToValueAtTime: vi.fn(),
+          },
+          connect: vi.fn(),
+        };
       }
       close = vi.fn(async () => {});
       resume = vi.fn(async () => {});
@@ -109,7 +116,14 @@ describe("useMetronome", () => {
   it("raises the tempo bar by bar with the speed trainer", () => {
     const { result } = renderHook(() => useMetronome());
     act(() => result.current.setBpm(60));
-    act(() => result.current.setSpeedTrainer({ startBpm: 60, targetBpm: 68, stepBpm: 4, everyBars: 1 }));
+    act(() =>
+      result.current.setSpeedTrainer({
+        startBpm: 60,
+        targetBpm: 68,
+        stepBpm: 4,
+        everyBars: 1,
+      }),
+    );
     act(() => result.current.start());
     const seen: number[] = [];
     for (let i = 0; i < 8; i += 1) {
@@ -120,9 +134,35 @@ describe("useMetronome", () => {
     expect(seen).toEqual([...seen].sort((a, b) => a - b));
   });
 
+  it("counts trainer bars from the moment the trainer is set", () => {
+    const { result } = renderHook(() => useMetronome());
+    act(() => result.current.setBpm(60));
+    act(() => result.current.start());
+    play(13); // a few bars at 60 bpm, four seconds each
+    act(() =>
+      result.current.setSpeedTrainer({
+        startBpm: 60,
+        targetBpm: 80,
+        stepBpm: 4,
+        everyBars: 3,
+      }),
+    );
+    play(5); // crosses the next bar line only
+    expect(result.current.bpm).toBe(60);
+    play(12);
+    expect(result.current.bpm).toBe(64);
+  });
+
   it("ends the speed trainer when the tempo is set by hand", () => {
     const { result } = renderHook(() => useMetronome());
-    act(() => result.current.setSpeedTrainer({ startBpm: 60, targetBpm: 68, stepBpm: 4, everyBars: 1 }));
+    act(() =>
+      result.current.setSpeedTrainer({
+        startBpm: 60,
+        targetBpm: 68,
+        stepBpm: 4,
+        everyBars: 1,
+      }),
+    );
     act(() => result.current.start());
     act(() => result.current.setBpm(100));
     expect(result.current.speedTrainer).toBeNull();
@@ -131,7 +171,14 @@ describe("useMetronome", () => {
 
   it("ends the speed trainer on tap", () => {
     const { result } = renderHook(() => useMetronome());
-    act(() => result.current.setSpeedTrainer({ startBpm: 60, targetBpm: 68, stepBpm: 4, everyBars: 1 }));
+    act(() =>
+      result.current.setSpeedTrainer({
+        startBpm: 60,
+        targetBpm: 68,
+        stepBpm: 4,
+        everyBars: 1,
+      }),
+    );
     act(() => result.current.tap());
     act(() => {
       vi.advanceTimersByTime(500);

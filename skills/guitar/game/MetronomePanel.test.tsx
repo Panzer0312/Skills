@@ -19,10 +19,21 @@ beforeEach(() => {
       currentTime = 0;
       destination = {};
       createOscillator() {
-        return { frequency: { value: 0 }, connect: vi.fn(), start: vi.fn(), stop: vi.fn() };
+        return {
+          frequency: { value: 0 },
+          connect: vi.fn(),
+          start: vi.fn(),
+          stop: vi.fn(),
+        };
       }
       createGain() {
-        return { gain: { setValueAtTime: vi.fn(), exponentialRampToValueAtTime: vi.fn() }, connect: vi.fn() };
+        return {
+          gain: {
+            setValueAtTime: vi.fn(),
+            exponentialRampToValueAtTime: vi.fn(),
+          },
+          connect: vi.fn(),
+        };
       }
       close = vi.fn(async () => {});
       resume = vi.fn(async () => {});
@@ -40,17 +51,34 @@ describe("MetronomePanel", () => {
   it("offers every subdivision", () => {
     render(<Harness />);
     const select = screen.getByLabelText("Unterteilung");
-    const labels = Array.from(select.querySelectorAll("option")).map((o) => o.textContent);
-    expect(labels).toEqual(["Viertel", "Achtel", "Triolen", "Sechzehntel", "Galopp"]);
+    const labels = Array.from(select.querySelectorAll("option")).map(
+      (o) => o.textContent,
+    );
+    expect(labels).toEqual([
+      "Viertel",
+      "Achtel",
+      "Triolen",
+      "Sechzehntel",
+      "Galopp",
+    ]);
   });
 
   it("toggles an accent per beat", async () => {
     const user = userEvent.setup();
     render(<Harness />);
-    const buttons = [1, 2, 3, 4].map((n) => screen.getByRole("button", { name: `Betonung Schlag ${n}` }));
-    expect(buttons.map((b) => b.getAttribute("aria-pressed"))).toEqual(["true", "false", "false", "false"]);
+    const buttons = [1, 2, 3, 4].map((n) =>
+      screen.getByRole("button", { name: `Betonung Schlag ${n}` }),
+    );
+    expect(buttons.map((b) => b.getAttribute("aria-pressed"))).toEqual([
+      "true",
+      "false",
+      "false",
+      "false",
+    ]);
     await user.click(buttons[1]!);
-    expect(screen.getByRole("button", { name: "Betonung Schlag 2" })).toHaveAttribute("aria-pressed", "true");
+    expect(
+      screen.getByRole("button", { name: "Betonung Schlag 2" }),
+    ).toHaveAttribute("aria-pressed", "true");
   });
 
   it("starts the speed trainer from the current tempo", async () => {
@@ -63,8 +91,15 @@ describe("MetronomePanel", () => {
     await user.type(screen.getByLabelText("Plus"), "4");
     await user.clear(screen.getByLabelText("Alle (Takte)"));
     await user.type(screen.getByLabelText("Alle (Takte)"), "2");
-    await user.click(screen.getByRole("button", { name: "Tempotrainer starten" }));
-    expect(latest.speedTrainer).toEqual({ startBpm: 80, targetBpm: 100, stepBpm: 4, everyBars: 2 });
+    await user.click(
+      screen.getByRole("button", { name: "Tempotrainer starten" }),
+    );
+    expect(latest.speedTrainer).toEqual({
+      startBpm: 80,
+      targetBpm: 100,
+      stepBpm: 4,
+      everyBars: 2,
+    });
     expect(latest.running).toBe(true);
     expect(screen.getByText("Tempotrainer: 80 → 100 BPM")).toBeInTheDocument();
   });
@@ -75,7 +110,27 @@ describe("MetronomePanel", () => {
     await openTrainer(user);
     await user.clear(screen.getByLabelText("Bis"));
     await user.type(screen.getByLabelText("Bis"), "60");
-    expect(screen.getByRole("button", { name: "Tempotrainer starten" })).toBeDisabled();
-    expect(screen.getByText("Das Ziel muss über dem aktuellen Tempo liegen.")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Tempotrainer starten" }),
+    ).toBeDisabled();
+    expect(
+      screen.getByText("Das Ziel muss über dem aktuellen Tempo liegen."),
+    ).toBeInTheDocument();
+  });
+
+  it("keeps the trainer status visible and stops it", async () => {
+    const user = userEvent.setup();
+    render(<Harness />);
+    await openTrainer(user);
+    await user.click(
+      screen.getByRole("button", { name: "Tempotrainer starten" }),
+    );
+    await user.click(screen.getByText("Tempotrainer", { selector: "summary" }));
+    expect(screen.getByText("Tempotrainer: 80 → 100 BPM")).toBeVisible();
+    await user.click(
+      screen.getByRole("button", { name: "Tempotrainer stoppen" }),
+    );
+    expect(latest.speedTrainer).toBeNull();
+    expect(screen.queryByText(/Tempotrainer: /)).toBeNull();
   });
 });
