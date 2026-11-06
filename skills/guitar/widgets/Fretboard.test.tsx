@@ -21,6 +21,13 @@ describe("Fretboard", () => {
     expect(screen.getByTestId("fret-0-7")).toHaveTextContent("5");
   });
 
+  it("names the root in German in the interval hint", async () => {
+    render(<Fretboard data={[]} progress={progress} settings={{}} />);
+    await userEvent.selectOptions(screen.getByLabelText(/Anzeige/), "intervalle");
+    await userEvent.selectOptions(screen.getByLabelText(/Grundton/), "B");
+    expect(screen.getByText(/vom Grundton H aus/)).toBeInTheDocument();
+  });
+
   it("changes the open strings when the tuning changes", async () => {
     render(<Fretboard data={[]} progress={progress} settings={{}} />);
     await userEvent.selectOptions(screen.getByLabelText(/Stimmung/), "Drop D");

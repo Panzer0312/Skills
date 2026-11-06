@@ -1,4 +1,4 @@
-import { inputLevel, readTuning, TUNINGS, type TuningReading } from "@skills/core";
+import { displayNote, inputLevel, readTuning, TUNINGS, type TuningReading } from "@skills/core";
 import { useCallback, useEffect, useState } from "react";
 import { playReferenceTone } from "../../../packages/web/src/audio/referenceTone.js";
 import { useInputDevices } from "../../../packages/web/src/audio/useInputDevices.js";
@@ -61,7 +61,7 @@ export default function Tuner({ initialTuning }: WidgetProps & { initialTuning?:
           <li key={index}>
             <button
               type="button"
-              aria-label={`${note} anspielen`}
+              aria-label={`${displayNote(note)} anspielen`}
               onClick={() => playReferenceTone(note)}
               className={`rounded px-2 py-1 ${
                 reading?.targetString === index
@@ -69,7 +69,7 @@ export default function Tuner({ initialTuning }: WidgetProps & { initialTuning?:
                   : "hover:bg-slate-100 dark:hover:bg-slate-900"
               }`}
             >
-              {note}
+              {displayNote(note)}
             </button>
           </li>
         ))}
@@ -101,7 +101,7 @@ export default function Tuner({ initialTuning }: WidgetProps & { initialTuning?:
         <div className="rounded-lg border border-slate-200 p-8 text-center dark:border-slate-800">
           {reading ? (
             <>
-              <div className="text-5xl">{reading.note}</div>
+              <div className="text-5xl">{displayNote(reading.note)}</div>
               <div className={`mt-3 text-2xl ${inTune ? "text-emerald-600" : "text-amber-600"}`}>
                 {reading.cents > 0 ? `+${reading.cents}` : reading.cents} Cent
               </div>

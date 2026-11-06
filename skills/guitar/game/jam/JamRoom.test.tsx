@@ -83,6 +83,21 @@ describe("JamRoom", () => {
     expect(screen.getByTestId("fret-0-5")).toHaveAttribute("data-root", "true");
   });
 
+  it("shows German note names for B", async () => {
+    const user = userEvent.setup();
+    render(<JamRoom />);
+    expect(screen.getByRole("option", { name: "H" })).toHaveValue("B");
+    await user.selectOptions(screen.getByLabelText("Tonart"), "B");
+    await user.selectOptions(screen.getByLabelText("Stil"), "blues");
+    expect(screen.getByText(/Spiele dazu: H /)).toBeInTheDocument();
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    await user.click(screen.getByRole("button", { name: "Starten" }));
+    await act(async () => {
+      vi.advanceTimersByTime(100);
+    });
+    expect(screen.getByTestId("jam-chord")).toHaveTextContent("H7");
+  });
+
   it("says an unsupported browser cannot play", () => {
     vi.unstubAllGlobals();
     vi.stubGlobal("AudioContext", undefined);

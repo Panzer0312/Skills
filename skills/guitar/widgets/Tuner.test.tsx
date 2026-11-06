@@ -43,6 +43,13 @@ describe("Tuner", () => {
     expect(screen.getByText("D2")).toBeInTheDocument();
   });
 
+  it("shows the B string as H", () => {
+    mocks.state = "idle";
+    mocks.error = null;
+    render(<Tuner data={[]} progress={progress} settings={{}} />);
+    expect(screen.getByRole("button", { name: "H3 anspielen" })).toBeInTheDocument();
+  });
+
   it("plays a reference tone for the clicked string", async () => {
     mocks.state = "idle";
     mocks.error = null;

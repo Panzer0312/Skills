@@ -1,4 +1,4 @@
-import { JAM_STYLES, NOTES, SCALES, type JamStyle } from "@skills/core";
+import { displayNote, JAM_STYLES, NOTES, SCALES, type JamStyle } from "@skills/core";
 import { useState } from "react";
 import { FretOverlay } from "../FretOverlay.js";
 import { ToolFrame } from "../Places.js";
@@ -34,7 +34,7 @@ export function JamRoom() {
             <select value={root} onChange={(event) => setRoot(event.target.value)}>
               {NOTES.map((note) => (
                 <option key={note} value={note}>
-                  {note}
+                  {displayNote(note)}
                 </option>
               ))}
             </select>
@@ -99,11 +99,11 @@ export function JamRoom() {
           </button>
         </div>
         <p className="jam-chords" aria-live="off">
-          Akkord: <strong data-testid="jam-chord">{chord ?? "–"}</strong> · Danach:{" "}
-          <span data-testid="jam-next">{nextChord ?? "–"}</span>
+          Akkord: <strong data-testid="jam-chord">{chord ? displayNote(chord) : "–"}</strong> · Danach:{" "}
+          <span data-testid="jam-next">{nextChord ? displayNote(nextChord) : "–"}</span>
         </p>
         <p>
-          Spiele dazu: {root} {SCALES[scale].label}
+          Spiele dazu: {displayNote(root)} {SCALES[scale].label}
         </p>
         <FretOverlay root={root} scale={scale} box={pentatonic ? box : undefined} />
       </section>

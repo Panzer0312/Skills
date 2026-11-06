@@ -141,7 +141,7 @@ export default function Fretboard(_: WidgetProps) {
 
       {mode === "intervalle" ? (
         <p className="text-sm text-slate-600 dark:text-slate-400">
-          Die Zahlen zählen vom Grundton {root} aus. 5 ist die {intervalName(7)}, 3 die {intervalName(4)}.
+          Die Zahlen zählen vom Grundton {displayNote(root)} aus. 5 ist die {intervalName(7)}, 3 die {intervalName(4)}.
         </p>
       ) : null}
     </div>
