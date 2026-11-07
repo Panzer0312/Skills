@@ -11,6 +11,8 @@ export async function skipIntro(request: APIRequestContext) {
 /** Back to defaults: every pref unset, so the intro shows again. */
 export async function resetPrefs(request: APIRequestContext) {
   expect((await request.delete(PREFS)).ok()).toBe(true);
+  // Reset-all keeps the internal intro flag, so it is cleared on its own.
+  expect((await request.delete(`${PREFS}/intro.gesehen`)).ok()).toBe(true);
 }
 
 const BOARD = "/vollbild/guitar/spiel/quests";

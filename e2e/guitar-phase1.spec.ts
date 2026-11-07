@@ -35,13 +35,19 @@ test("a changed pref survives reload", async ({ page, request }) => {
   await skipIntro(request);
   await page.goto(`${GAME}/studierstube`);
   await page.getByRole("tab", { name: "Geräte" }).click();
-  const select = page.getByLabel("Gitarre über Mikrofon oder Interface");
-  await select.selectOption("ja");
+  // The device check owns this choice on the Geräte tab.
+  await page.getByLabel("Ja", { exact: true }).click();
   await expect.poll(async () => ((await (await request.get(PREFS)).json()) as { prefs: Record<string, unknown> }).prefs["geraete.gitarreAmMikro"]).toBe("ja");
 
   await page.reload();
   await page.getByRole("tab", { name: "Geräte" }).click();
-  await expect(page.getByLabel("Gitarre über Mikrofon oder Interface")).toHaveValue("ja");
+  await expect(page.getByLabel("Ja", { exact: true })).toBeChecked();
+});
+
+test("?tab=geraete opens the Geräte tab", async ({ page, request }) => {
+  await skipIntro(request);
+  await page.goto(`${GAME}/studierstube?tab=geraete`);
+  await expect(page.getByRole("tab", { name: "Geräte" })).toHaveAttribute("aria-selected", "true");
 });
 
 test("device Nein hides microphone buttons in the Note Finder", async ({ page, request }) => {

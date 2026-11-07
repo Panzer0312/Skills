@@ -44,13 +44,18 @@ test("the sound toggle is saved", async ({ page }) => {
   const toggle = page.locator(".game-hud").getByRole("button", { name: /^Klang (an|aus)$/ });
   await expect(toggle).toBeVisible();
   const wasOn = (await toggle.getAttribute("aria-pressed")) === "true";
+  // Pref writes are sent shortly after the click; reload only once the server has it.
+  const saved = page.waitForResponse((r) => r.url().includes("/prefs") && r.request().method() === "PUT");
   await toggle.click();
   await expect(toggle).toHaveAttribute("aria-pressed", String(!wasOn));
+  await saved;
   await page.reload();
   await expect(toggle).toHaveAttribute("aria-pressed", String(!wasOn));
   // Leave it off for later runs and for the owner.
   if (!wasOn) {
+    const off = page.waitForResponse((r) => r.url().includes("/prefs") && r.request().method() === "PUT");
     await toggle.click();
     await expect(toggle).toHaveAttribute("aria-pressed", "false");
+    await off;
   }
 });
