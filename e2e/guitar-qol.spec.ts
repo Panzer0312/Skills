@@ -16,6 +16,7 @@ test("free practice entry raises week time and can be undone", async ({ page }) 
 
   await panel.getByRole("button", { name: "Rückgängig" }).click();
   await expect(panel.getByText("Eintrag entfernt.")).toBeVisible();
+  await expect(panel.getByText(/\+\d+ XP · \+\d+ Gold/)).toHaveCount(0);
   await expect.poll(() => weekMinutes(page)).toBeLessThanOrEqual(afterSave - 5);
 });
 

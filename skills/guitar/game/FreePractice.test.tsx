@@ -3,7 +3,13 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { gameApi } from "./api.js";
 import { FreePractice } from "./FreePractice.js";
 
-vi.mock("./UndoButton.js", () => ({ UndoButton: () => <button type="button">Rückgängig</button> }));
+vi.mock("./UndoButton.js", () => ({
+  UndoButton: ({ onUndone }: { onUndone?: () => void }) => (
+    <button type="button" onClick={onUndone}>
+      Rückgängig
+    </button>
+  ),
+}));
 
 const result = { xpGained: 12, goldGained: 3, logId: 9 };
 
@@ -34,6 +40,20 @@ describe("FreePractice", () => {
     await waitFor(() => expect(log).toHaveBeenCalledWith({ kind: "frei", seconds: 1200, level: 1, techniqueId: "song" }));
     expect(await screen.findByText("+12 XP · +3 Gold")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Rückgängig" })).toBeInTheDocument();
+  });
+
+  it("hides the gains once the entry is undone and shows them for the next save", async () => {
+    vi.spyOn(gameApi, "log").mockResolvedValue(result as never);
+    render(<FreePractice />);
+    open();
+    fireEvent.change(screen.getByLabelText("Minuten"), { target: { value: "20" } });
+    fireEvent.click(screen.getByRole("button", { name: "Eintragen" }));
+    await screen.findByText("+12 XP · +3 Gold");
+    fireEvent.click(screen.getByRole("button", { name: "Rückgängig" }));
+    expect(screen.queryByText("+12 XP · +3 Gold")).toBeNull();
+    fireEvent.change(screen.getByLabelText("Minuten"), { target: { value: "20" } });
+    fireEvent.click(screen.getByRole("button", { name: "Eintragen" }));
+    expect(await screen.findByText("+12 XP · +3 Gold")).toBeInTheDocument();
   });
 
   it("uses the chosen kind", async () => {

@@ -91,6 +91,7 @@ export function ChordTrainer({
   const [count, setCount] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<LogResult | null>(null);
+  const [undone, setUndone] = useState(false);
   const [saving, setSaving] = useState(false);
   const savingRef = useRef(false);
   const deadline = useRef(0);
@@ -141,6 +142,7 @@ export function ChordTrainer({
     setCount("");
     setError(null);
     setResult(null);
+    setUndone(false);
     setPhase("countin");
   }
 
@@ -317,10 +319,14 @@ export function ChordTrainer({
 
       {phase === "done" && result ? (
         <div>
-          {result.isRecord ? <p className="font-bold">Neuer Rekord!</p> : null}
-          <p>+{result.xpGained} XP</p>
-          {result.goldGained > 0 ? <p>+{result.goldGained} Gold</p> : null}
-          <UndoButton logId={result.logId} />
+          {undone ? null : (
+            <>
+              {result.isRecord ? <p className="font-bold">Neuer Rekord!</p> : null}
+              <p>+{result.xpGained} XP</p>
+              {result.goldGained > 0 ? <p>+{result.goldGained} Gold</p> : null}
+            </>
+          )}
+          <UndoButton logId={result.logId} onUndone={() => setUndone(true)} />
         </div>
       ) : null}
     </div>

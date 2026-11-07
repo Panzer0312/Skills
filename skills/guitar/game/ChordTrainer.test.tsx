@@ -170,6 +170,23 @@ describe("ChordTrainer", () => {
     expect(screen.getByText("Neuer Rekord!")).toBeInTheDocument();
   });
 
+  it("hides the gains once the result is undone", async () => {
+    serve({}, true);
+    renderTrainer({ pair: ["Am", "Em"] });
+    await runRound();
+    fireEvent.change(screen.getByLabelText("Wie viele saubere Wechsel?"), {
+      target: { value: "40" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "Speichern" }));
+    await tick(0);
+    expect(screen.getByText("+5 XP")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Rückgängig" }));
+    await tick(0);
+    expect(screen.getByText("Eintrag entfernt.")).toBeInTheDocument();
+    expect(screen.queryByText("+5 XP")).toBeNull();
+    expect(screen.queryByText("Neuer Rekord!")).toBeNull();
+  });
+
   it("hands the number to onResult in a quest and logs nothing", async () => {
     const fetchMock = serve();
     const onResult = vi.fn();

@@ -82,6 +82,7 @@ export function NoteFinder({
   const [level, setLevel] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<LogResult | null>(null);
+  const [undone, setUndone] = useState(false);
 
   const deadline = useRef(0);
   const hitsRef = useRef(0);
@@ -177,6 +178,7 @@ export function NoteFinder({
     setHits(0);
     setError(null);
     setResult(null);
+    setUndone(false);
     deadline.current = Date.now() + ROUND_MS;
     setRemainingMs(ROUND_MS);
     phaseRef.current = "run";
@@ -290,10 +292,14 @@ export function NoteFinder({
       {phase === "done" && hits === 0 ? <p>Keine Treffer in dieser Runde. Beim nächsten Mal klappt es.</p> : null}
       {phase === "done" && result ? (
         <div>
-          {result.isRecord && hits > 0 ? <p className="font-bold">Neuer Rekord!</p> : null}
-          <p>+{result.xpGained} XP</p>
-          {result.goldGained > 0 ? <p>+{result.goldGained} Gold</p> : null}
-          <UndoButton logId={result.logId} />
+          {undone ? null : (
+            <>
+              {result.isRecord && hits > 0 ? <p className="font-bold">Neuer Rekord!</p> : null}
+              <p>+{result.xpGained} XP</p>
+              {result.goldGained > 0 ? <p>+{result.goldGained} Gold</p> : null}
+            </>
+          )}
+          <UndoButton logId={result.logId} onUndone={() => setUndone(true)} />
         </div>
       ) : null}
     </div>

@@ -68,7 +68,7 @@ export function FreePractice() {
   const [minutes, setMinutes] = useState("");
   const [now, setNow] = useState(() => Date.now());
   const [note, setNote] = useState<string | null>(null);
-  const [saved, setSaved] = useState<{ xp: number; gold: number; logId: number } | null>(null);
+  const [saved, setSaved] = useState<{ xp: number; gold: number; logId: number; undone?: boolean } | null>(null);
   const [failed, setFailed] = useState(false);
   const [busy, setBusy] = useState(false);
   const busyRef = useRef(false);
@@ -257,10 +257,16 @@ export function FreePractice() {
           ) : null}
           {saved ? (
             <div className="free-practice-saved">
-              <p>
-                +{saved.xp} XP · +{saved.gold} Gold
-              </p>
-              <UndoButton key={saved.logId} logId={saved.logId} />
+              {saved.undone ? null : (
+                <p>
+                  +{saved.xp} XP · +{saved.gold} Gold
+                </p>
+              )}
+              <UndoButton
+                key={saved.logId}
+                logId={saved.logId}
+                onUndone={() => setSaved((s) => (s ? { ...s, undone: true } : s))}
+              />
             </div>
           ) : null}
         </section>

@@ -174,6 +174,19 @@ describe("NoteFinder", () => {
     });
   });
 
+  it("hides the gains once the round is undone", async () => {
+    serve();
+    renderFinder();
+    fireEvent.click(screen.getByRole("button", { name: "Start" }));
+    for (let i = 0; i < 3; i += 1) fireEvent.click(screen.getByTestId(`finder-0-${targetFret()}`));
+    await tick(60_000);
+    expect(screen.getByText("+5 XP")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Rückgängig" }));
+    await tick(0);
+    expect(screen.getByText("Eintrag entfernt.")).toBeInTheDocument();
+    expect(screen.queryByText("+5 XP")).toBeNull();
+  });
+
   it("hands the result to the quest", async () => {
     const fetchMock = serve();
     const onResult = vi.fn();
