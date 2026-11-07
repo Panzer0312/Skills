@@ -8,6 +8,7 @@ import { Market } from "./market/Market.js";
 import { Forge, FretboardPlace, Library, Shrine, Tavern } from "./Places.js";
 import { QuestBoard } from "./QuestBoard.js";
 import { Riffs } from "./RiffViewer.js";
+import { Studierstube } from "./settings/Studierstube.js";
 
 export interface PlaceDef {
   id: string;
@@ -143,6 +144,16 @@ export const PLACES: PlaceDef[] = [
     inMenu: true,
     gated: false,
     ambience: true,
+  },
+  {
+    id: "studierstube",
+    path: "studierstube",
+    label: "Studierstube",
+    hint: "Einstellungen",
+    sprite: "key",
+    element: () => <Studierstube />,
+    inMenu: true,
+    gated: false,
   },
 ];
 

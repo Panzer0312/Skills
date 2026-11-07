@@ -14,6 +14,7 @@ describe("places registry", () => {
       ["riffs", "Riffs", "Tabs zum Üben", "shield"],
       ["jam", "Jam Room", "Begleitung", "potion"],
       ["chronik", "Chronicle", "dein Fortschritt", "parchment"],
+      ["studierstube", "Studierstube", "Einstellungen", "key"],
     ]);
   });
 
@@ -30,6 +31,7 @@ describe("places registry", () => {
         "riffs",
         "schmiede",
         "schrein",
+        "studierstube",
         "taverne",
       ].sort(),
     );

@@ -43,6 +43,11 @@ describe("StatusBar", () => {
     expect(screen.getByRole("link", { name: "Zur App" })).toHaveAttribute("href", "/");
   });
 
+  it("links to the settings screen", () => {
+    bar();
+    expect(screen.getByRole("link", { name: "Einstellungen" })).toHaveAttribute("href", "/vollbild/guitar/spiel/studierstube");
+  });
+
   it("shows gold and the sound toggle", () => {
     bar();
     expect(screen.getByText("42")).toBeInTheDocument();

@@ -1,0 +1,58 @@
+.studier-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.studier-tabs [role="tab"] {
+  padding: 6px 12px;
+  border: 2px solid #2b1d12;
+  background: #e4d2a4;
+  color: #3b2a1a;
+  font-weight: 600;
+}
+
+.studier-tabs [role="tab"][aria-selected="true"] {
+  background: #3b2a1a;
+  color: #f3e6c4;
+}
+
+.studier-field {
+  padding: 8px 0;
+  border-bottom: 1px dashed #b89a62;
+}
+
+.studier-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+}
+
+.studier-row > label:first-child {
+  flex: 1 1 14rem;
+}
+
+.studier-number input {
+  width: 5rem;
+}
+
+.studier-help {
+  margin-top: 4px;
+  font-size: 14px;
+  color: #6a4f2c;
+}
+
+.studier-reset,
+.studier-button {
+  display: inline-block;
+  padding: 4px 10px;
+  border: 2px solid #2b1d12;
+  background: #e4d2a4;
+  color: #3b2a1a;
+}
+
+.studier-data p {
+  margin-top: 12px;
+}

@@ -50,6 +50,9 @@ export function StatusBar({ state }: { state: GameState | undefined }) {
         </>
       ) : null}
       <SoundToggle />
+      <Link to={`${GAME_BASE}/studierstube`} className="game-home" aria-label="Einstellungen" title="Einstellungen">
+        <span aria-hidden="true">⚙</span>
+      </Link>
       <Link to={GAME_BASE} className="game-home">
         Zum Dorf
       </Link>
