@@ -44,7 +44,8 @@ describe("prefs routes", () => {
     expect((await prefs())["intro.gesehen"]).toBe(false);
     await send("PUT", "/api/game/guitar/prefs", { key: "intro.gesehen", value: true });
     expect(await (await send("DELETE", "/api/game/guitar/prefs")).json()).toEqual({ ok: true });
-    expect((await prefs())["intro.gesehen"]).toBe(false);
+    // reset-all keeps the internal intro flag (see its own test below)
+    expect((await prefs())["intro.gesehen"]).toBe(true);
   });
 
   it("prefs are scoped by skill", async () => {
@@ -83,5 +84,14 @@ describe("prefs routes", () => {
       expect((await prefs())["klang.an"]).toBe(false);
       expect(database.raw.prepare("SELECT sound FROM game_settings").get()).toEqual({ sound: 0 });
     });
+  });
+
+  it("reset-all keeps the internal intro.gesehen flag", async () => {
+    await send("PUT", "/api/game/guitar/prefs", { key: "intro.gesehen", value: true });
+    await send("PUT", "/api/game/guitar/prefs", { key: "klang.an", value: true });
+    await send("DELETE", "/api/game/guitar/prefs");
+    const p = await prefs();
+    expect(p["intro.gesehen"]).toBe(true);
+    expect(p["klang.an"]).toBe(false);
   });
 });

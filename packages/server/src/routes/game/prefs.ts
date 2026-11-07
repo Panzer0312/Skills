@@ -61,7 +61,7 @@ router.put("/api/game/:skillId/prefs", async (c) => {
 
 router.delete("/api/game/:skillId/prefs", (c) => {
   const raw = c.get("database").raw;
-  raw.prepare("DELETE FROM game_prefs WHERE skill_id = ?").run(c.req.param("skillId"));
+  raw.prepare("DELETE FROM game_prefs WHERE skill_id = ? AND key <> 'intro.gesehen'").run(c.req.param("skillId"));
   raw.prepare("UPDATE game_settings SET sound = 0 WHERE skill_id = ?").run(c.req.param("skillId"));
   return c.json({ ok: true });
 });
