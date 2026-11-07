@@ -89,4 +89,19 @@ describe("usePracticeKeys", () => {
     document.body.dispatchEvent(new KeyboardEvent("keydown", { key: "p", bubbles: true }));
     expect(fn).toHaveBeenCalledTimes(1);
   });
+
+  it("practice keys ignore links and role=button elements", () => {
+    const fn = vi.fn();
+    renderHook(() => usePracticeKeys({ Enter: fn }));
+    const link = document.createElement("a");
+    link.href = "/x";
+    const div = document.createElement("div");
+    div.setAttribute("role", "button");
+    document.body.append(link, div);
+    link.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+    div.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+    expect(fn).not.toHaveBeenCalled();
+    link.remove();
+    div.remove();
+  });
 });

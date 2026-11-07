@@ -1140,15 +1140,40 @@ describe("pause and keys", () => {
     expect(await screen.findByRole("dialog")).toBeInTheDocument();
   });
 
-  it("keys do nothing while typing in the result minutes field", async () => {
+  it("keys are inert while the result dialog shows", async () => {
     serve({});
+    stubAudio();
     renderGame("/quest/anschlag-takt");
     await finish();
-    const field = screen.getByLabelText("Geübte Minuten");
-    fireEvent.keyDown(field, { key: " " });
-    fireEvent.keyDown(field, { key: "p" });
-    fireEvent.keyDown(field, { key: "Enter" });
+    fireEvent.keyDown(document.body, { key: " " });
+    fireEvent.keyDown(document.body, { key: "p" });
+    fireEvent.keyDown(document.body, { key: "Enter" });
     expect(screen.getByRole("dialog")).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Metronom stoppen" })).not.toBeInTheDocument();
+  });
+
+  it("keys do nothing while typing in a quest input", async () => {
+    serve({});
+    stubAudio();
+    renderGame("/quest/anschlag-takt");
+    const bpm = await screen.findByRole("slider", { name: "BPM" });
+    bpm.focus();
+    fireEvent.keyDown(bpm, { key: "p" });
+    fireEvent.keyDown(bpm, { key: "Enter" });
+    fireEvent.keyDown(bpm, { key: " " });
     expect(screen.queryByRole("button", { name: "Weiter" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Metronom starten" })).toBeInTheDocument();
+  });
+
+  it("space does not start the metronome while paused", async () => {
+    serve({});
+    stubAudio();
+    renderGame("/quest/anschlag-takt");
+    await screen.findByRole("button", { name: "Pause" });
+    fireEvent.keyDown(document.body, { key: "p" });
+    await screen.findByRole("button", { name: "Weiter" });
+    fireEvent.keyDown(document.body, { key: " " });
+    expect(screen.getByRole("button", { name: "Metronom starten" })).toBeInTheDocument();
   });
 });

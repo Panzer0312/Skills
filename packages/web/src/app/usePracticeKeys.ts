@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-const IGNORED = "input, textarea, select, button, [contenteditable]";
+const IGNORED = "input, textarea, select, button, a, [role=button], [contenteditable]";
 
 export function usePracticeKeys(bindings: Record<string, () => void>, enabled = true): void {
   const ref = useRef(bindings);

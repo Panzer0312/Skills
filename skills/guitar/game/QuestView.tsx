@@ -227,7 +227,7 @@ function QuestRun({ quest, state, data }: { quest: QuestDefinition; state: GameS
 
   usePracticeKeys(
     {
-      " ": () => (running ? stop() : start()),
+      " ": () => (running ? stop() : paused ? undefined : start()),
       p: togglePause,
       Enter: finish,
     },
