@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it } from "vitest";
-import { computeStreak, levelFromXp, titleForLevel, xpForEntry } from "./progression.js";
+import { computeStreak, goldForEntry, levelFromXp, titleForLevel, xpForEntry } from "./progression.js";
 
 describe("xpForEntry", () => {
   it("pays by real time and level", () => {
@@ -52,5 +52,16 @@ describe("computeStreak", () => {
       expect(new Date(2026, 9, 26).getTime() - new Date(2026, 9, 25).getTime()).toBe(25 * 3_600_000);
       expect(computeStreak(["2026-10-24", "2026-10-25", "2026-10-26"], "2026-10-26")).toBe(3);
     });
+  });
+});
+
+describe("goldForEntry", () => {
+  it("is a fifth of the XP, rounded down", () => {
+    const e = { kind: "quest" as const, seconds: 1800, level: 3, rating: "passt" as const };
+    expect(goldForEntry(e)).toBe(Math.floor(xpForEntry(e) / 5));
+    expect(goldForEntry(e)).toBeGreaterThan(0);
+  });
+  it("is zero for no practice", () => {
+    expect(goldForEntry({ kind: "quest", seconds: 0, level: 3, rating: "passt" })).toBe(0);
   });
 });

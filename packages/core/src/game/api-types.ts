@@ -1,3 +1,4 @@
+import type { GearSlot } from "./gear.js";
 import type { Rating } from "./progression.js";
 import type { LessonStatus } from "./quests.js";
 
@@ -25,6 +26,12 @@ export interface GameState {
   /** Story beats the player has acknowledged. */
   storySeen: string[];
   today: { minutes: number; questIds: string[] } | null;
+  /** Gold earned from practice minus gold spent. */
+  gold: number;
+  /** Purchased items plus milestone items whose lesson is done. */
+  owned: string[];
+  equipped: Partial<Record<GearSlot, string>>;
+  sound: boolean;
 }
 
 export interface LogBody {

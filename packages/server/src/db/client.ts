@@ -129,6 +129,9 @@ CREATE TABLE IF NOT EXISTS game_profile (skill_id TEXT PRIMARY KEY, placed_at IN
 CREATE TABLE IF NOT EXISTS game_chosen (skill_id TEXT NOT NULL, lesson_id TEXT NOT NULL, chosen_at INTEGER NOT NULL, PRIMARY KEY (skill_id, lesson_id));
 CREATE TABLE IF NOT EXISTS game_songs (skill_id TEXT NOT NULL, song_key TEXT NOT NULL, stars INTEGER NOT NULL DEFAULT 0, last_played INTEGER, tags_json TEXT NOT NULL DEFAULT '[]', PRIMARY KEY (skill_id, song_key));
 CREATE TABLE IF NOT EXISTS game_story_seen (skill_id TEXT NOT NULL, beat_id TEXT NOT NULL, seen_at INTEGER NOT NULL, PRIMARY KEY (skill_id, beat_id));
+CREATE TABLE IF NOT EXISTS game_inventory (skill_id TEXT NOT NULL, item_id TEXT NOT NULL, price INTEGER NOT NULL, acquired_at INTEGER NOT NULL, PRIMARY KEY (skill_id, item_id));
+CREATE TABLE IF NOT EXISTS game_equipped (skill_id TEXT NOT NULL, slot TEXT NOT NULL, item_id TEXT NOT NULL, PRIMARY KEY (skill_id, slot));
+CREATE TABLE IF NOT EXISTS game_settings (skill_id TEXT PRIMARY KEY, sound INTEGER NOT NULL DEFAULT 0);
 `;
 
 export function openDatabase(path: string): AppDatabase {

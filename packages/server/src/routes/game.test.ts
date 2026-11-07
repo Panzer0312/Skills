@@ -356,3 +356,134 @@ describe("game api", () => {
     expect((await send("PUT", "/api/game/guitar/story/seen", {})).status).toBe(400);
   });
 });
+
+describe("game gear api", () => {
+  let database: AppDatabase;
+  let app: ReturnType<typeof createApp>;
+  const send = (method: string, path: string, body?: unknown) =>
+    app.request(path, {
+      method,
+      headers: { "content-type": "application/json" },
+      body: body === undefined ? undefined : JSON.stringify(body),
+    });
+  const state = async () => (await (await app.request("/api/game/guitar/state")).json()) as GameState;
+  const addGold = (gold: number) =>
+    database.raw
+      .prepare(
+        "INSERT INTO game_log (skill_id, day, at, kind, seconds, level) VALUES ('guitar','2026-01-01',1,'frei',?,1)",
+      )
+      .run(gold * 75); // 75 s of free play = 5 XP = 1 gold
+  const buy = (itemId: string) => send("POST", "/api/game/guitar/market/buy", { itemId });
+  const setLesson = (id: string, status: string) => send("PUT", `/api/game/guitar/lesson/${id}`, { status });
+
+  beforeEach(() => {
+    database = openDatabase(":memory:");
+    app = createApp(database);
+  });
+
+  it("starts with no gold, nothing owned, sound off", async () => {
+    const s = await state();
+    expect(s.gold).toBe(0);
+    expect(s.owned).toEqual([]);
+    expect(s.equipped).toEqual({});
+    expect(s.sound).toBe(false);
+  });
+
+  it("pays gold for logged practice", async () => {
+    const res = (await (await send("POST", "/api/game/guitar/log", { kind: "frei", seconds: 750, level: 1 })).json()) as {
+      goldGained: number;
+    };
+    expect(res.goldGained).toBe(10);
+    expect((await state()).gold).toBe(10);
+  });
+
+  it("buys an item and lowers gold", async () => {
+    addGold(100);
+    const res = await buy("wanderdolch");
+    expect(res.status).toBe(200);
+    expect(await res.json()).toEqual({ gold: 70 });
+    const s = await state();
+    expect(s.gold).toBe(70);
+    expect(s.owned).toEqual(["wanderdolch"]);
+  });
+
+  it("charges once when the same item is bought twice", async () => {
+    addGold(100);
+    expect((await buy("wanderdolch")).status).toBe(200);
+    const second = await buy("wanderdolch");
+    expect(second.status).toBe(409);
+    expect(await second.json()).toEqual({ error: "Schon in deinem Besitz", reason: "schon-besessen" });
+    expect((await state()).gold).toBe(70);
+  });
+
+  it("never pushes gold below zero", async () => {
+    addGold(100);
+    const res = await buy("eisenhelm"); // costs 120
+    expect(res.status).toBe(409);
+    expect(((await res.json()) as { reason: string }).reason).toBe("zu-wenig-gold");
+    expect((await state()).gold).toBe(100);
+  });
+
+  it("refuses a second item when the sum exceeds gold", async () => {
+    addGold(130);
+    expect((await buy("eisenhelm")).status).toBe(200);
+    const second = await buy("kurzschwert");
+    expect(second.status).toBe(409);
+    expect(((await second.json()) as { reason: string }).reason).toBe("zu-wenig-gold");
+    expect((await state()).gold).toBe(10);
+  });
+
+  it("refuses milestone and unknown items", async () => {
+    addGold(1000);
+    const m = await buy("barre-urkunde");
+    expect(m.status).toBe(409);
+    expect(((await m.json()) as { reason: string }).reason).toBe("nicht-kaeuflich");
+    const u = await buy("quatsch");
+    expect(u.status).toBe(409);
+    expect(((await u.json()) as { reason: string }).reason).toBe("unbekannt");
+    expect((await state()).gold).toBe(1000);
+  });
+
+  it("equips, replaces and unequips", async () => {
+    addGold(500);
+    await buy("wanderdolch");
+    await buy("kurzschwert");
+    expect((await send("PUT", "/api/game/guitar/equip", { slot: "waffe", itemId: "wanderdolch" })).status).toBe(200);
+    expect((await state()).equipped).toEqual({ waffe: "wanderdolch" });
+    await send("PUT", "/api/game/guitar/equip", { slot: "waffe", itemId: "kurzschwert" });
+    expect((await state()).equipped).toEqual({ waffe: "kurzschwert" });
+    expect((await send("PUT", "/api/game/guitar/equip", { slot: "waffe", itemId: null })).status).toBe(200);
+    expect((await state()).equipped).toEqual({});
+  });
+
+  it("rejects the wrong slot and unowned items", async () => {
+    addGold(500);
+    await buy("wanderdolch");
+    const wrong = await send("PUT", "/api/game/guitar/equip", { slot: "kopf", itemId: "wanderdolch" });
+    expect(wrong.status).toBe(400);
+    const unowned = await send("PUT", "/api/game/guitar/equip", { slot: "waffe", itemId: "kurzschwert" });
+    expect(unowned.status).toBe(400);
+    const bad = await send("PUT", "/api/game/guitar/equip", { slot: "hut", itemId: null });
+    expect(bad.status).toBe(400);
+  });
+
+  it("hides an equipped milestone item when its lesson goes back to aktiv", async () => {
+    await setLesson("10-barre", "gelernt");
+    expect((await send("PUT", "/api/game/guitar/equip", { slot: "talisman", itemId: "barre-urkunde" })).status).toBe(200);
+    expect((await state()).equipped).toEqual({ talisman: "barre-urkunde" });
+    await setLesson("10-barre", "aktiv");
+    const s = await state();
+    expect(s.equipped).toEqual({});
+    expect(s.owned).toEqual([]);
+    await setLesson("10-barre", "gelernt");
+    expect((await state()).equipped).toEqual({ talisman: "barre-urkunde" });
+  });
+
+  it("round trips the sound setting", async () => {
+    expect((await send("PUT", "/api/game/guitar/settings", { sound: true })).status).toBe(200);
+    expect((await state()).sound).toBe(true);
+    await send("PUT", "/api/game/guitar/settings", { sound: false });
+    expect((await state()).sound).toBe(false);
+    expect((await send("PUT", "/api/game/guitar/settings", { sound: "ja" })).status).toBe(400);
+  });
+});

@@ -1,7 +1,14 @@
 import { Hono } from "hono";
 import { z } from "zod";
 import {
+  buyCheck,
+  BUY_REFUSAL_TEXT,
   computeStreak,
+  GEAR_SLOTS,
+  gearItem,
+  goldForEntry,
+  ownedItems,
+  type GearSlot,
   isMastered,
   levelFromXp,
   MAX_CHOSEN,
@@ -59,6 +66,12 @@ const songMetaSchema = z.object({
   played: z.literal(true).optional(),
 });
 const storySeenSchema = z.object({ beatIds: z.array(z.string().min(1)).max(200) });
+const buyBodySchema = z.object({ itemId: z.string().min(1) });
+const equipBodySchema = z.object({
+  slot: z.enum(["kopf", "waffe", "schild", "ring", "talisman"]),
+  itemId: z.string().min(1).nullable(),
+});
+const settingsSchema = z.object({ sound: z.boolean() });
 const SONG_KEY = /^(uebung|song):.+$/;
 
 const STATUS_READ: Record<string, LessonStatus> = {
@@ -89,6 +102,33 @@ interface LogRow {
   rating: PracticeRating | null;
   metric_key: string | null;
   metric_value: number | null;
+}
+
+function logRows(raw: import("better-sqlite3").Database, skillId: string) {
+  return raw
+    .prepare("SELECT kind, seconds, level, rating FROM game_log WHERE skill_id = ?")
+    .all(skillId) as { kind: "quest" | "frei"; seconds: number; level: number; rating: PracticeRating | null }[];
+}
+
+/** Gold earned minus gold spent, plus the owned item ids. Call inside a transaction when acting on it. */
+function wallet(raw: import("better-sqlite3").Database, skillId: string) {
+  const earned = logRows(raw, skillId).reduce((sum, r) => sum + goldForEntry(r), 0);
+  const bought = raw
+    .prepare("SELECT item_id, price FROM game_inventory WHERE skill_id = ?")
+    .all(skillId) as { item_id: string; price: number }[];
+  const lessons: Record<string, LessonStatus> = {};
+  for (const r of raw
+    .prepare("SELECT lesson_id, status FROM lesson_progress WHERE skill_id = ?")
+    .all(skillId) as { lesson_id: string; status: string }[]) {
+    lessons[r.lesson_id] = STATUS_READ[r.status] ?? "offen";
+  }
+  return {
+    gold: Math.max(0, earned - bought.reduce((sum, r) => sum + r.price, 0)),
+    owned: ownedItems(
+      bought.map((r) => r.item_id),
+      lessons,
+    ),
+  };
 }
 
 gameRoutes.get("/api/game/:skillId/state", (c) => {
@@ -153,6 +193,17 @@ gameRoutes.get("/api/game/:skillId/state", (c) => {
   const questIdsOn = (day: string) => [
     ...new Set(rows.filter((r) => r.day === day && r.quest_id !== null).map((r) => r.quest_id!)),
   ];
+  const { gold, owned } = wallet(raw, skillId);
+  const equipped: Partial<Record<GearSlot, string>> = {};
+  for (const r of raw
+    .prepare("SELECT slot, item_id FROM game_equipped WHERE skill_id = ?")
+    .all(skillId) as { slot: string; item_id: string }[]) {
+    const item = gearItem(r.item_id);
+    if (item && item.slot === r.slot && owned.includes(item.id)) equipped[item.slot] = item.id;
+  }
+  const soundRow = raw.prepare("SELECT sound FROM game_settings WHERE skill_id = ?").get(skillId) as
+    | { sound: number }
+    | undefined;
   const state: GameState = {
     day: today,
     placed: profile?.placed_at != null,
@@ -174,6 +225,10 @@ gameRoutes.get("/api/game/:skillId/state", (c) => {
     today: todayRow
       ? { minutes: todayRow.minutes, questIds: JSON.parse(todayRow.quest_ids_json) as string[] }
       : null,
+    gold,
+    owned,
+    equipped,
+    sound: soundRow?.sound === 1,
   };
   return c.json(state);
 });
@@ -279,7 +334,13 @@ gameRoutes.post("/api/game/:skillId/log", async (c) => {
     level: body.level,
     rating: body.rating ?? null,
   });
-  return c.json({ xpGained, suggestion, isRecord });
+  const goldGained = goldForEntry({
+    kind: body.kind,
+    seconds: body.seconds,
+    level: body.level,
+    rating: body.rating ?? null,
+  });
+  return c.json({ xpGained, goldGained, suggestion, isRecord });
 });
 
 function setLesson(raw: import("better-sqlite3").Database, skillId: string, lessonId: string, status: LessonStatus) {
@@ -486,5 +547,70 @@ gameRoutes.put("/api/game/:skillId/story/seen", async (c) => {
   raw.transaction(() => {
     for (const beatId of parsed.data.beatIds) insert.run(skillId, beatId, now);
   })();
+  return c.json({ ok: true });
+});
+
+gameRoutes.post("/api/game/:skillId/market/buy", async (c) => {
+  const parsed = buyBodySchema.safeParse(await c.req.json().catch(() => null));
+  if (!parsed.success) return invalid(c, parsed.error);
+  const raw = c.get("database").raw;
+  const skillId = c.req.param("skillId");
+  const { itemId } = parsed.data;
+  // One transaction: gold and ownership are read and the purchase written together.
+  const result = raw.transaction(() => {
+    const { gold, owned } = wallet(raw, skillId);
+    const refusal = buyCheck(itemId, gold, owned);
+    if (refusal) return { refusal, gold: null };
+    const price = gearItem(itemId)!.price!;
+    raw
+      .prepare("INSERT INTO game_inventory (skill_id, item_id, price, acquired_at) VALUES (?, ?, ?, ?)")
+      .run(skillId, itemId, price, Date.now());
+    return { refusal: null, gold: gold - price };
+  }).immediate();
+  if (result.refusal !== null) {
+    return c.json({ error: BUY_REFUSAL_TEXT[result.refusal], reason: result.refusal }, 409);
+  }
+  return c.json({ gold: result.gold });
+});
+
+gameRoutes.put("/api/game/:skillId/equip", async (c) => {
+  const parsed = equipBodySchema.safeParse(await c.req.json().catch(() => null));
+  if (!parsed.success) return invalid(c, parsed.error);
+  const raw = c.get("database").raw;
+  const skillId = c.req.param("skillId");
+  const { slot, itemId } = parsed.data;
+  if (itemId === null) {
+    raw.prepare("DELETE FROM game_equipped WHERE skill_id = ? AND slot = ?").run(skillId, slot);
+    return c.json({ ok: true });
+  }
+  const item = gearItem(itemId);
+  const slotName = GEAR_SLOTS.find((s) => s.id === slot)?.name ?? slot;
+  if (!item || item.slot !== slot) {
+    return c.json(
+      { error: { code: "invalid_body", message: `Dieser Gegenstand passt nicht in den Platz ${slotName}.` } },
+      400,
+    );
+  }
+  if (!wallet(raw, skillId).owned.includes(itemId)) {
+    return c.json({ error: { code: "invalid_body", message: "Diesen Gegenstand besitzt du noch nicht." } }, 400);
+  }
+  raw
+    .prepare(
+      `INSERT INTO game_equipped (skill_id, slot, item_id) VALUES (?, ?, ?)
+       ON CONFLICT(skill_id, slot) DO UPDATE SET item_id = excluded.item_id`,
+    )
+    .run(skillId, slot, itemId);
+  return c.json({ ok: true });
+});
+
+gameRoutes.put("/api/game/:skillId/settings", async (c) => {
+  const parsed = settingsSchema.safeParse(await c.req.json().catch(() => null));
+  if (!parsed.success) return invalid(c, parsed.error);
+  c.get("database")
+    .raw.prepare(
+      `INSERT INTO game_settings (skill_id, sound) VALUES (?, ?)
+       ON CONFLICT(skill_id) DO UPDATE SET sound = excluded.sound`,
+    )
+    .run(c.req.param("skillId"), parsed.data.sound ? 1 : 0);
   return c.json({ ok: true });
 });

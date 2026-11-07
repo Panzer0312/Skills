@@ -8,3 +8,4 @@ export * from "./api-types.js";
 export * from "./chronicle.js";
 export * from "./noteFinder.js";
 export * from "./story.js";
+export * from "./gear.js";

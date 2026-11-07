@@ -16,6 +16,11 @@ export function xpForEntry(entry: PracticeEntry): number {
   return base + bonus;
 }
 
+/** Gold comes only from logged practice: a fifth of the XP, rounded down. */
+export function goldForEntry(entry: PracticeEntry): number {
+  return Math.floor(xpForEntry(entry) / 5);
+}
+
 export function levelFromXp(xp: number): { level: number; xpIntoLevel: number; xpForNext: number } {
   let level = 1;
   let rest = Math.max(0, xp);
