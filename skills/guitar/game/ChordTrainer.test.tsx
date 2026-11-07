@@ -5,7 +5,10 @@ import { act, fireEvent, render, screen } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { queryClient } from "../../../packages/web/src/app/queryClient.js";
-import { playClick, playSignal } from "../../../packages/web/src/audio/signalTone.js";
+import {
+  playClick,
+  playSignal,
+} from "../../../packages/web/src/audio/signalTone.js";
 import GameApp from "../widgets/GameApp.js";
 import { changeMetricKey, ChordTrainer } from "./ChordTrainer.js";
 
@@ -292,8 +295,12 @@ describe("ChordTrainer count-in and custom pair", () => {
     fireEvent.change(screen.getByLabelText("Akkordpaar"), {
       target: { value: "custom" },
     });
-    fireEvent.change(screen.getByLabelText("Erster Akkord"), { target: { value: a } });
-    fireEvent.change(screen.getByLabelText("Zweiter Akkord"), { target: { value: b } });
+    fireEvent.change(screen.getByLabelText("Erster Akkord"), {
+      target: { value: a },
+    });
+    fireEvent.change(screen.getByLabelText("Zweiter Akkord"), {
+      target: { value: b },
+    });
   }
 
   it("custom pair logs its metric key", async () => {
@@ -307,7 +314,65 @@ describe("ChordTrainer count-in and custom pair", () => {
     fireEvent.click(screen.getByRole("button", { name: "Speichern" }));
     await tick(0);
     const calls = logCalls(fetchMock);
-    expect(JSON.parse(String(calls[0]![1]?.body)).metricKey).toBe("wechsel:C-G7");
+    expect(JSON.parse(String(calls[0]![1]?.body)).metricKey).toBe(
+      "wechsel:C-G7",
+    );
+  });
+
+  it("trims whitespace around custom chords", async () => {
+    const fetchMock = serve();
+    renderTrainer();
+    await pickCustom(" C", "G7 ");
+    await runRound();
+    fireEvent.change(screen.getByLabelText("Wie viele saubere Wechsel?"), {
+      target: { value: "5" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "Speichern" }));
+    await tick(0);
+    expect(JSON.parse(String(logCalls(fetchMock)[0]![1]?.body)).metricKey).toBe(
+      "wechsel:C-G7",
+    );
+  });
+
+  it("rejects identical custom chords", async () => {
+    serve();
+    renderTrainer();
+    await pickCustom("C", " C");
+    expect(screen.getByRole("button", { name: "Start" })).toBeDisabled();
+    expect(
+      screen.getByText("Zwei verschiedene Akkorde wählen"),
+    ).toBeInTheDocument();
+  });
+
+  it("clicks at exact beat times at 80 BPM", async () => {
+    serve();
+    renderTrainer({ pair: ["Am", "Em"] });
+    fireEvent.click(screen.getByRole("button", { name: "Start" }));
+    expect(playClick).toHaveBeenCalledTimes(1);
+    await tick(749);
+    expect(playClick).toHaveBeenCalledTimes(1);
+    await tick(1);
+    expect(playClick).toHaveBeenCalledTimes(2);
+    await tick(750);
+    expect(playClick).toHaveBeenCalledTimes(3);
+    await tick(749);
+    expect(playClick).toHaveBeenCalledTimes(3);
+    await tick(1);
+    expect(playClick).toHaveBeenCalledTimes(4);
+    expect(playSignal).not.toHaveBeenCalledWith("start");
+    await tick(750);
+    expect(playSignal).toHaveBeenCalledWith("start");
+  });
+
+  it("cancel during count-in stops clicks and the start signal", async () => {
+    serve();
+    renderTrainer({ pair: ["Am", "Em"] });
+    fireEvent.click(screen.getByRole("button", { name: "Start" }));
+    await tick(800);
+    fireEvent.click(screen.getByRole("button", { name: "Abbrechen" }));
+    await tick(5000);
+    expect(playClick).toHaveBeenCalledTimes(2);
+    expect(playSignal).not.toHaveBeenCalled();
   });
 
   it("unknown custom chord disables start", async () => {
@@ -332,7 +397,9 @@ describe("ChordTrainer in a quest", () => {
   async function renderQuest() {
     render(
       <QueryClientProvider client={queryClient}>
-        <MemoryRouter initialEntries={["/vollbild/guitar/spiel/quest/wechsel-minute"]}>
+        <MemoryRouter
+          initialEntries={["/vollbild/guitar/spiel/quest/wechsel-minute"]}
+        >
           <Routes>
             <Route
               path="/vollbild/:skillId/:moduleId/*"
@@ -373,7 +440,9 @@ describe("ChordTrainer in a quest", () => {
     await tick(0);
     const calls = logCalls(fetchMock);
     expect(calls).toHaveLength(1);
-    expect(JSON.parse(String(calls[0]![1]?.body))).toMatchObject({ metricValue: 14 });
+    expect(JSON.parse(String(calls[0]![1]?.body))).toMatchObject({
+      metricValue: 14,
+    });
   });
 
   it("raises the best round when a later one beats it", async () => {

@@ -79,9 +79,12 @@ export function ChordTrainer({
     isPairOfStrings,
   );
   const useCustom = !pair && custom;
-  const chosen: Pair =
+  const rawChosen: Pair =
     pair ?? (custom ? customPair : (pairs[index] ?? ["Am", "Em"]));
-  const chosenValid = chosen.every((name) => chordShape(name.trim()) !== null);
+  const chosen: Pair = [rawChosen[0].trim(), rawChosen[1].trim()];
+  const known = chosen.every((name) => chordShape(name) !== null);
+  const distinct = chosen[0] !== chosen[1];
+  const chosenValid = known && distinct;
   const [phase, setPhase] = useState<Phase>("pick");
   const [remainingMs, setRemainingMs] = useState(countInMs);
   const [count, setCount] = useState("");
@@ -90,7 +93,6 @@ export function ChordTrainer({
   const [saving, setSaving] = useState(false);
   const savingRef = useRef(false);
   const deadline = useRef(0);
-  const clicked = useRef(0);
   const { overrides } = useChordOverrides();
   const { data: state } = useGameState();
 
@@ -98,40 +100,41 @@ export function ChordTrainer({
   const record = state?.records[key];
 
   useEffect(() => {
-    if (phase !== "countin" && phase !== "run") return;
-    const timer = setInterval(() => {
-      const left = deadline.current - Date.now();
-      if (phase === "countin") {
-        const beat = Math.min(
-          COUNT_IN_BEATS,
-          Math.floor((countInMs - left) / beatMs) + 1,
-        );
-        while (clicked.current < beat) {
-          clicked.current += 1;
-          click(clicked.current === 1);
-        }
-      }
-      if (left > 0) {
-        setRemainingMs(left);
-        return;
-      }
-      if (phase === "countin") {
+    if (phase !== "countin") return;
+    const timers: ReturnType<typeof setTimeout>[] = [];
+    for (let beat = 1; beat < COUNT_IN_BEATS; beat += 1) {
+      timers.push(setTimeout(() => click(false), beat * beatMs));
+    }
+    timers.push(
+      setTimeout(() => {
         beep("start");
         deadline.current = Date.now() + ROUND_MS;
         setRemainingMs(ROUND_MS);
         setPhase("run");
-      } else {
+      }, countInMs),
+    );
+    return () => timers.forEach(clearTimeout);
+  }, [phase, countInMs, beatMs]);
+
+  useEffect(() => {
+    if (phase !== "countin" && phase !== "run") return;
+    const timer = setInterval(() => {
+      const left = deadline.current - Date.now();
+      if (left > 0) {
+        setRemainingMs(left);
+        return;
+      }
+      if (phase === "run") {
         beep("ende");
         setPhase("ask");
       }
     }, TICK_MS);
     return () => clearInterval(timer);
-  }, [phase, countInMs, beatMs]);
+  }, [phase]);
 
   function start() {
     if (!chosenValid) return;
     deadline.current = Date.now() + countInMs;
-    clicked.current = 1;
     click(true);
     setRemainingMs(countInMs);
     setCount("");
@@ -266,7 +269,10 @@ export function ChordTrainer({
           Start
         </button>
       ) : null}
-      {canStart && !chosenValid ? <p>Unbekannter Akkord</p> : null}
+      {canStart && !known ? <p>Unbekannter Akkord</p> : null}
+      {canStart && known && !distinct ? (
+        <p>Zwei verschiedene Akkorde wählen</p>
+      ) : null}
       {running ? (
         <button
           type="button"
