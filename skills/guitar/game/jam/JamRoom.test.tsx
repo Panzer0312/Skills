@@ -15,6 +15,7 @@ const param = () => ({
 });
 
 beforeEach(() => {
+  localStorage.clear();
   vi.stubGlobal(
     "AudioContext",
     class {
@@ -104,5 +105,36 @@ describe("JamRoom", () => {
     render(<JamRoom />);
     expect(screen.getByRole("alert")).toHaveTextContent("Dein Browser kann keinen Ton erzeugen");
     expect(screen.getByRole("button", { name: "Starten" })).toBeDisabled();
+  });
+
+  it("jam restores style and bpm", () => {
+    localStorage.setItem(
+      "guitar.jam",
+      JSON.stringify({ root: "A", style: "blues", bpm: 120, volume: 0.4 }),
+    );
+    render(<JamRoom />);
+    expect(screen.getByLabelText("Tonart")).toHaveValue("A");
+    expect(screen.getByLabelText("Stil")).toHaveValue("blues");
+    expect(screen.getByText("120 BPM")).toBeInTheDocument();
+  });
+
+  it("jam ignores unknown stored style", () => {
+    localStorage.setItem(
+      "guitar.jam",
+      JSON.stringify({ root: "A", style: "polka", bpm: 120, volume: 0.4 }),
+    );
+    render(<JamRoom />);
+    expect(screen.getByLabelText("Stil")).toHaveValue("rock");
+    expect(screen.getByText("90 BPM")).toBeInTheDocument();
+  });
+
+  it("jam space starts and stops", async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+    render(<JamRoom />);
+    await user.keyboard(" ");
+    expect(screen.getByRole("button", { name: "Stoppen" })).toBeInTheDocument();
+    await user.keyboard(" ");
+    expect(screen.getByRole("button", { name: "Starten" })).toBeInTheDocument();
   });
 });

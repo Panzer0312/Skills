@@ -1,8 +1,44 @@
-import { SUBDIVISIONS, type Subdivision } from "@skills/core";
-import { useState } from "react";
+import { defaultAccents, SUBDIVISIONS, type Subdivision } from "@skills/core";
+import { useEffect, useRef, useState } from "react";
+import { usePersistentState } from "../../../packages/web/src/app/usePersistentState.js";
 import type { useMetronome } from "../../../packages/web/src/audio/useMetronome.js";
 
 const BEAT_OPTIONS = [2, 3, 4, 5, 6, 7];
+
+interface StoredMetronome {
+  beatsPerBar: number;
+  subdivision: Subdivision;
+  accents: boolean[];
+  stepBpm: number;
+  everyBars: number;
+}
+
+const DEFAULTS: StoredMetronome = {
+  beatsPerBar: 4,
+  subdivision: "viertel",
+  accents: defaultAccents(4),
+  stepBpm: 4,
+  everyBars: 2,
+};
+
+function isStoredMetronome(raw: unknown): raw is StoredMetronome {
+  if (typeof raw !== "object" || raw === null) return false;
+  const r = raw as Record<string, unknown>;
+  return (
+    typeof r.beatsPerBar === "number" &&
+    BEAT_OPTIONS.includes(r.beatsPerBar) &&
+    typeof r.subdivision === "string" &&
+    r.subdivision in SUBDIVISIONS &&
+    Array.isArray(r.accents) &&
+    r.accents.every((a) => typeof a === "boolean") &&
+    typeof r.stepBpm === "number" &&
+    r.stepBpm >= 1 &&
+    r.stepBpm <= 50 &&
+    typeof r.everyBars === "number" &&
+    r.everyBars >= 1 &&
+    r.everyBars <= 32
+  );
+}
 
 export function MetronomePanel({
   metronome,
@@ -10,13 +46,48 @@ export function MetronomePanel({
   metronome: ReturnType<typeof useMetronome>;
 }) {
   const [targetBpm, setTargetBpm] = useState(() => metronome.bpm + 20);
-  const [stepBpm, setStepBpm] = useState(4);
-  const [everyBars, setEveryBars] = useState(2);
+  const [stored, setStored] = usePersistentState("guitar.metronome", DEFAULTS, isStoredMetronome);
+  const [stepBpm, setStepBpmRaw] = useState(stored.stepBpm);
+  const [everyBars, setEveryBarsRaw] = useState(stored.everyBars);
   const { bpm, running, speedTrainer, error } = metronome;
 
   // While a run is on, the live tempo climbs towards the target and must not trigger this.
   const targetTooLow = !speedTrainer && targetBpm <= bpm;
   const valid = !targetTooLow && stepBpm >= 1 && everyBars >= 1;
+
+  // Apply the remembered setup once; setBeatsPerBar resets the accents, so toggle afterwards.
+  const applied = useRef(false);
+  useEffect(() => {
+    if (applied.current) return;
+    applied.current = true;
+    metronome.setBeatsPerBar(stored.beatsPerBar);
+    metronome.setSubdivision(stored.subdivision);
+    if (stored.accents.length === stored.beatsPerBar) {
+      const base = defaultAccents(stored.beatsPerBar);
+      stored.accents.forEach((on, beat) => {
+        if (on !== base[beat]) metronome.toggleAccent(beat);
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const remember = (patch: Partial<StoredMetronome>) =>
+    setStored({
+      beatsPerBar: metronome.beatsPerBar,
+      subdivision: metronome.subdivision,
+      accents: metronome.accents,
+      stepBpm,
+      everyBars,
+      ...patch,
+    });
+  const setStepBpm = (value: number) => {
+    setStepBpmRaw(value);
+    remember({ stepBpm: value });
+  };
+  const setEveryBars = (value: number) => {
+    setEveryBarsRaw(value);
+    remember({ everyBars: value });
+  };
 
   const startTrainer = () => {
     metronome.setSpeedTrainer({ startBpm: bpm, targetBpm, stepBpm, everyBars });
@@ -51,9 +122,11 @@ export function MetronomePanel({
         Takt
         <select
           value={metronome.beatsPerBar}
-          onChange={(event) =>
-            metronome.setBeatsPerBar(Number(event.target.value))
-          }
+          onChange={(event) => {
+            const beats = Number(event.target.value);
+            metronome.setBeatsPerBar(beats);
+            remember({ beatsPerBar: beats, accents: defaultAccents(beats) });
+          }}
         >
           {BEAT_OPTIONS.map((beats) => (
             <option key={beats} value={beats}>
@@ -66,9 +139,11 @@ export function MetronomePanel({
         Unterteilung
         <select
           value={metronome.subdivision}
-          onChange={(event) =>
-            metronome.setSubdivision(event.target.value as Subdivision)
-          }
+          onChange={(event) => {
+            const subdivision = event.target.value as Subdivision;
+            metronome.setSubdivision(subdivision);
+            remember({ subdivision });
+          }}
         >
           {(Object.keys(SUBDIVISIONS) as Subdivision[]).map((key) => (
             <option key={key} value={key}>
@@ -86,7 +161,12 @@ export function MetronomePanel({
             className="game-button quest-accent"
             aria-pressed={on}
             aria-label={`Betonung Schlag ${beat + 1}`}
-            onClick={() => metronome.toggleAccent(beat)}
+            onClick={() => {
+              metronome.toggleAccent(beat);
+              remember({
+                accents: metronome.accents.map((a, i) => (i === beat ? !a : a)),
+              });
+            }}
           >
             {beat + 1}
           </button>

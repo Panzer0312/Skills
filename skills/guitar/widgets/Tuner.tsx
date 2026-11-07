@@ -3,12 +3,19 @@ import { useCallback, useEffect, useState } from "react";
 import { playReferenceTone } from "../../../packages/web/src/audio/referenceTone.js";
 import { useInputDevices } from "../../../packages/web/src/audio/useInputDevices.js";
 import { useMicrophone } from "../../../packages/web/src/audio/useMicrophone.js";
+import { usePersistentState } from "../../../packages/web/src/app/usePersistentState.js";
 import type { WidgetProps } from "../../../packages/web/src/skills/widgets.js";
 import { InputControls } from "../game/InputControls.js";
 
 export default function Tuner({ initialTuning }: WidgetProps & { initialTuning?: string }) {
+  const [storedTuning, setStoredTuning] = usePersistentState<string>(
+    "guitar.tuner.tuning",
+    "Standard",
+    (raw): raw is string => typeof raw === "string" && TUNINGS.some((t) => t.name === raw),
+  );
+  // A tuning asked for in the URL wins over the remembered one.
   const [tuningName, setTuningName] = useState(() =>
-    TUNINGS.some((t) => t.name === initialTuning) ? initialTuning! : "Standard",
+    TUNINGS.some((t) => t.name === initialTuning) ? initialTuning! : storedTuning,
   );
   const [level, setLevel] = useState(0);
   const [reading, setReading] = useState<TuningReading | null>(null);
@@ -45,7 +52,10 @@ export default function Tuner({ initialTuning }: WidgetProps & { initialTuning?:
         <span className="mr-2">Stimmung</span>
         <select
           value={tuningName}
-          onChange={(e) => setTuningName(e.target.value)}
+          onChange={(e) => {
+            setTuningName(e.target.value);
+            setStoredTuning(e.target.value);
+          }}
           className="rounded border border-slate-300 px-2 py-1 dark:border-slate-700 dark:bg-slate-900"
         >
           {TUNINGS.map((t) => (

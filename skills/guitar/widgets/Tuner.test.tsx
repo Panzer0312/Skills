@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import Tuner from "./Tuner.js";
 
 const progress = { record: vi.fn(), get: () => null, complete: vi.fn(async () => {}) };
@@ -19,6 +19,8 @@ vi.mock("../../../packages/web/src/audio/useInputDevices.js", () => ({
 vi.mock("../../../packages/web/src/audio/referenceTone.js", () => ({ playReferenceTone }));
 
 describe("Tuner", () => {
+  beforeEach(() => localStorage.clear());
+
   it("offers to start the microphone", async () => {
     mocks.state = "idle";
     mocks.error = null;
@@ -85,5 +87,29 @@ describe("Tuner", () => {
     render(<Tuner data={[]} progress={progress} settings={{}} />);
     expect(screen.getByRole("meter", { name: "Eingangspegel" })).toBeInTheDocument();
     expect(screen.getByLabelText("Eingang")).toBeInTheDocument();
+  });
+
+  it("tuner url tuning beats stored tuning", () => {
+    localStorage.setItem("guitar.tuner.tuning", JSON.stringify("Drop D"));
+    mocks.state = "idle";
+    mocks.error = null;
+    render(<Tuner data={[]} progress={progress} settings={{}} initialTuning="Standard" />);
+    expect(screen.getByLabelText(/Stimmung/)).toHaveValue("Standard");
+  });
+
+  it("tuner restores stored tuning", async () => {
+    mocks.state = "idle";
+    mocks.error = null;
+    localStorage.setItem("guitar.tuner.tuning", JSON.stringify("Drop D"));
+    render(<Tuner data={[]} progress={progress} settings={{}} />);
+    expect(screen.getByLabelText(/Stimmung/)).toHaveValue("Drop D");
+  });
+
+  it("stores a picked tuning", async () => {
+    mocks.state = "idle";
+    mocks.error = null;
+    render(<Tuner data={[]} progress={progress} settings={{}} />);
+    await userEvent.selectOptions(screen.getByLabelText(/Stimmung/), "Drop D");
+    expect(JSON.parse(localStorage.getItem("guitar.tuner.tuning")!)).toBe("Drop D");
   });
 });

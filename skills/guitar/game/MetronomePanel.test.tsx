@@ -13,6 +13,7 @@ function Harness() {
 }
 
 beforeEach(() => {
+  localStorage.clear();
   vi.stubGlobal(
     "AudioContext",
     class {
@@ -162,5 +163,38 @@ describe("MetronomePanel", () => {
     render(<Harness />);
     await user.click(screen.getByRole("button", { name: "Metronom starten" }));
     expect(screen.getByRole("alert")).toHaveTextContent(/Ton/);
+  });
+
+  it("metronome restores beats and accents", () => {
+    localStorage.setItem(
+      "guitar.metronome",
+      JSON.stringify({ beatsPerBar: 3, subdivision: "achtel", accents: [true, false, true], stepBpm: 6, everyBars: 3 }),
+    );
+    render(<Harness />);
+    expect(latest.beatsPerBar).toBe(3);
+    expect(latest.subdivision).toBe("achtel");
+    expect(latest.accents).toEqual([true, false, true]);
+    expect(latest.bpm).toBe(80);
+  });
+
+  it("stale accents are ignored", () => {
+    localStorage.setItem(
+      "guitar.metronome",
+      JSON.stringify({ beatsPerBar: 3, subdivision: "viertel", accents: [true, true, true, true], stepBpm: 4, everyBars: 2 }),
+    );
+    render(<Harness />);
+    expect(latest.beatsPerBar).toBe(3);
+    expect(latest.accents).toEqual([true, false, false]);
+  });
+
+  it("stores a changed beat count and accent", async () => {
+    const user = userEvent.setup();
+    render(<Harness />);
+    await user.selectOptions(screen.getByLabelText("Takt"), "3");
+    await user.click(screen.getByRole("button", { name: "Betonung Schlag 2" }));
+    expect(JSON.parse(localStorage.getItem("guitar.metronome")!)).toMatchObject({
+      beatsPerBar: 3,
+      accents: [true, true, false],
+    });
   });
 });
