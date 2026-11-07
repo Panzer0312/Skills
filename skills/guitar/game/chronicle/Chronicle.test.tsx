@@ -1,3 +1,4 @@
+import { DayCalendar } from "./DayCalendar.js";
 import { localDayKey, type GameState, type History, type RecentLogEntry } from "@skills/core";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { cleanup, fireEvent, render, screen, within } from "@testing-library/react";
@@ -325,6 +326,26 @@ describe("Chronicle", () => {
       expect(document.activeElement).toBe(screen.getByRole("gridcell", { name: "17. Aug. 2026: 0 min" }));
       fireEvent.keyDown(document.activeElement!, { key: "End" });
       expect(document.activeElement).toBe(today);
+    });
+
+    it("modifier keys are left to the browser", async () => {
+      serve({ days: [], metrics: [] });
+      renderIt();
+      const today = await screen.findByRole("gridcell", { name: "7. Nov. 2026: 0 min" });
+      for (const mod of ["altKey", "ctrlKey", "metaKey"]) {
+        const event = new KeyboardEvent("keydown", { key: "ArrowLeft", bubbles: true, cancelable: true, [mod]: true });
+        today.dispatchEvent(event);
+        expect(event.defaultPrevented, mod).toBe(false);
+      }
+      expect(document.activeElement).not.toBe(screen.getByRole("gridcell", { name: "31. Okt. 2026: 0 min" }));
+    });
+
+    it("a stale selection falls back to today as the tabbable cell", () => {
+      const view = render(<DayCalendar days={[]} today="2026-03-01" />);
+      fireEvent.focus(screen.getByRole("gridcell", { name: "1. März 2026: 0 min" }));
+      view.rerender(<DayCalendar days={[]} today="2026-11-07" />);
+      expect(document.querySelectorAll("[role=gridcell][tabindex='0']")).toHaveLength(1);
+      expect(screen.getByRole("gridcell", { name: "7. Nov. 2026: 0 min" }).getAttribute("tabindex")).toBe("0");
     });
 
     it("focused day shows its tooltip", async () => {

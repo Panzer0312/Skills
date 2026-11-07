@@ -28,6 +28,8 @@ export function DayCalendar({ days, today }: { days: History["days"]; today: str
   const cells = grid.flat();
   const minutesOf = new Map(cells.map(({ day, minutes }) => [day, minutes]));
   const [selected, setSelected] = useState(today);
+  // A selection that scrolled out of the grid (a new day began) falls back to today.
+  const tabbable = minutesOf.has(selected) ? selected : today;
   const [focused, setFocused] = useState<string | null>(null);
   const gridRef = useRef<HTMLDivElement>(null);
 
@@ -36,6 +38,7 @@ export function DayCalendar({ days, today }: { days: History["days"]; today: str
   };
 
   const onKeyDown = (event: KeyboardEvent<HTMLSpanElement>, day: string) => {
+    if (event.altKey || event.ctrlKey || event.metaKey) return;
     let target: string | undefined;
     if (event.key in STEPS) target = shiftDay(day, STEPS[event.key]!);
     else if (event.key === "Home") target = cells[0]!.day;
@@ -80,7 +83,7 @@ export function DayCalendar({ days, today }: { days: History["days"]; today: str
                 <span
                   key={day}
                   role="gridcell"
-                  tabIndex={day === selected ? 0 : -1}
+                  tabIndex={day === tabbable ? 0 : -1}
                   data-day={day}
                   title={dayLabel(day, minutes)}
                   aria-label={dayLabel(day, minutes)}
