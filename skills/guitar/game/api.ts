@@ -96,6 +96,16 @@ export interface PlacementBody {
   targetSongId: string | null;
 }
 
+/** Like `refreshing`, but a refusal also refetches, so a stale view does not keep offering a failing action. */
+async function refreshingOnError<T>(write: Promise<T>): Promise<T> {
+  try {
+    return await refreshing(write);
+  } catch (e) {
+    await queryClient.invalidateQueries({ queryKey: GAME_KEY });
+    throw e;
+  }
+}
+
 export const gameApi = {
   history: () => api.get<History>(`/api/game/${SKILL}/history`),
   log: (body: LogBody) => refreshing(api.post<LogResult>(`/api/game/${SKILL}/log`, body)),
@@ -163,7 +173,7 @@ async function postBuy(itemId: string): Promise<{ gold: number }> {
 /** Buys one Market item. Rejects with the server's German refusal as the error message. */
 export function useBuyItem(): UseMutationResult<{ gold: number }, Error, string> {
   return useMutation({
-    mutationFn: (itemId: string) => refreshing(postBuy(itemId)),
+    mutationFn: (itemId: string) => refreshingOnError(postBuy(itemId)),
   });
 }
 
@@ -171,12 +181,12 @@ export function useBuyItem(): UseMutationResult<{ gold: number }, Error, string>
 export function useEquip(): UseMutationResult<{ ok: true }, Error, { slot: GearSlot; itemId: string | null }> {
   return useMutation({
     mutationFn: (body: { slot: GearSlot; itemId: string | null }) =>
-      refreshing(api.put<{ ok: true }>(`/api/game/${SKILL}/equip`, body)),
+      refreshingOnError(api.put<{ ok: true }>(`/api/game/${SKILL}/equip`, body)),
   });
 }
 
 export function useSoundSetting(): UseMutationResult<{ ok: true }, Error, boolean> {
   return useMutation({
-    mutationFn: (sound: boolean) => refreshing(api.put<{ ok: true }>(`/api/game/${SKILL}/settings`, { sound })),
+    mutationFn: (sound: boolean) => refreshingOnError(api.put<{ ok: true }>(`/api/game/${SKILL}/settings`, { sound })),
   });
 }

@@ -257,6 +257,14 @@
   background-color: #e4d3a6;
 }
 
+.dark .game-root .tool-frame-inner .dark\:bg-slate-100 {
+  background-color: #2b1d12;
+}
+
+.dark .game-root .tool-frame-inner .dark\:text-slate-900 {
+  color: #f3e6c4;
+}
+
 .dark .game-root .tool-frame-inner .dark\:hover\:bg-slate-900:hover {
   background-color: #e4d3a6;
 }

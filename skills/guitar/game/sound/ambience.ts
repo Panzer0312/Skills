@@ -1,6 +1,6 @@
 import { GAME_BASE } from "../api.js";
 
-const ALLOWED = new Set(["", "markt", "taverne", "bibliothek", "hafen", "chronik"]);
+const ALLOWED = new Set(["", "markt", "bibliothek", "hafen", "chronik"]);
 const ALLOWED_WITH_SUBPATH = new Set(["bibliothek", "hafen"]);
 
 /** Ambience plays only on the calm places, never on quests or tool places. */

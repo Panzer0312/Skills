@@ -40,7 +40,7 @@ Bibliothek (82 Lektionen), Karte (Hafen: 82 Lektionen und drei bekannte Songs au
 Serie; es gibt keine Strafen. Der Akkordwechsel-Trainer zählt eine Minute lang saubere Wechsel.
 Meister Orlo, ein alter Hafenbarde, begleitet den Weg als Mentor: Eine Karte im Dorf und auf dem Quest Board erzählt in vier Kapiteln, was als Nächstes ansteht, und die Bibliothek zeigt das aktuelle Kapitel mit der passenden Theorie. Nichts ist gesperrt, alle Werkzeuge sind jederzeit erreichbar. Griffbilder lassen sich direkt im
 Song ändern — wahlweise nur für diesen Song oder für alle.
-Im Markt gibt es Ausrüstung: Üben bringt Gold, damit kauft man Helm, Waffen, Schilde, Ringe und Talismane; Meilensteine des Hauptwegs schenken einzigartige Stücke. Die Ausrüstung ist nur Schmuck und erscheint in der Statusleiste. Über „Klang an/aus“ in der Statusleiste lassen sich leise Hafengeräusche und kurze Effekte einschalten (Standard: aus); in Quests, Schrein, Griffbrett, Schmiede, Riffs und Jam Room bleibt es still.
+Im Markt gibt es Ausrüstung: Üben bringt Gold, damit kauft man Helm, Waffen, Schilde, Ringe und Talismane; Meilensteine des Hauptwegs schenken einzigartige Stücke. Die Ausrüstung ist nur Schmuck und erscheint in der Statusleiste. Über „Klang an/aus“ in der Statusleiste lassen sich leise Hafengeräusche und kurze Effekte einschalten (Standard: aus); in Quests, Taverne, Schrein, Griffbrett, Schmiede, Riffs und Jam Room bleibt es still.
 
 ## Neuen Lernbereich hinzufügen
 

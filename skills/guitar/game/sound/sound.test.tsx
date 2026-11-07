@@ -73,11 +73,11 @@ afterEach(() => {
 });
 
 describe("ambienceAllowed", () => {
-  it.each(["", "/markt", "/taverne", "/bibliothek", "/bibliothek/x", "/hafen", "/hafen/x", "/chronik", "/"])(
+  it.each(["", "/markt", "/bibliothek", "/bibliothek/x", "/hafen", "/hafen/x", "/chronik", "/"])(
     "allows %j",
     (rest) => expect(ambienceAllowed(BASE + rest)).toBe(true),
   );
-  it.each(["/quests", "/quest/x", "/schrein", "/schmiede", "/griffbrett", "/riffs", "/jam", "/einstufung", "/unbekannt"])(
+  it.each(["/quests", "/quest/x", "/taverne", "/schrein", "/schmiede", "/griffbrett", "/riffs", "/jam", "/einstufung", "/unbekannt"])(
     "blocks %s",
     (rest) => expect(ambienceAllowed(BASE + rest)).toBe(false),
   );
@@ -112,8 +112,32 @@ describe("useAmbience", () => {
   });
 
   it("does not resume on return when sound was turned off", () => {
-    mount(`${BASE}/jam`);
-    expect(contexts).toHaveLength(0);
+    const { rerender } = mount();
+    expect(started()).toBe(1);
+    go(`${BASE}/quest/x`);
+    gameState = { sound: false };
+    rerender(
+      <MemoryRouter initialEntries={[BASE]}>
+        <Probe />
+      </MemoryRouter>,
+    );
+    go(BASE);
+    expect(started()).toBe(1);
+  });
+
+  it("suspended context: resumes on first keydown and removes both listeners", () => {
+    initialState = "suspended";
+    mount();
+    const ctx = contexts[0]!;
+    act(() => {
+      document.dispatchEvent(new Event("keydown"));
+    });
+    expect(ctx.resume).toHaveBeenCalledTimes(1);
+    act(() => {
+      document.dispatchEvent(new Event("keydown"));
+      document.dispatchEvent(new Event("pointerdown"));
+    });
+    expect(ctx.resume).toHaveBeenCalledTimes(1);
   });
 
   it("suspended context: no throw, resumes on first pointerdown", () => {

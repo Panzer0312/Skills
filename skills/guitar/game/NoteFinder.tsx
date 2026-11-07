@@ -261,6 +261,7 @@ export function NoteFinder({
         <div>
           {result.isRecord && hits > 0 ? <p className="font-bold">Neuer Rekord!</p> : null}
           <p>+{result.xpGained} XP</p>
+          {result.goldGained > 0 ? <p>+{result.goldGained} Gold</p> : null}
         </div>
       ) : null}
     </div>

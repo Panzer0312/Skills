@@ -119,6 +119,15 @@ describe("Market", () => {
     expect(playEffect).not.toHaveBeenCalled();
   });
 
+  it("refetches the state after a 409 so a stale view corrects itself", async () => {
+    const fetchMock = serve({ gold: 500 }, () => json({ error: "Schon in deinem Besitz", reason: "schon-besessen" }, 409));
+    const stateCalls = () => fetchMock.mock.calls.filter(([url]) => String(url).endsWith("/state")).length;
+    renderMarket();
+    await userEvent.click(await screen.findByRole("button", { name: "Wanderdolch kaufen" }));
+    await screen.findByRole("alert");
+    await waitFor(() => expect(stateCalls()).toBeGreaterThanOrEqual(2));
+  });
+
   it("equips an owned item and unequips it from the slot tile", async () => {
     const fetchMock = serve({ owned: ["wanderdolch"], equipped: { waffe: "wanderdolch" } });
     renderMarket();

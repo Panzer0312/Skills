@@ -62,11 +62,15 @@ export function useAmbience(): void {
         /* still blocked */
       }
     };
-    const onPointer = () => {
+    const onGesture = () => {
       resume();
-      document.removeEventListener("pointerdown", onPointer);
+      document.removeEventListener("pointerdown", onGesture);
+      document.removeEventListener("keydown", onGesture);
     };
-    if (live.state === "suspended") document.addEventListener("pointerdown", onPointer);
+    if (live.state === "suspended") {
+      document.addEventListener("pointerdown", onGesture);
+      document.addEventListener("keydown", onGesture);
+    }
     let stop: (() => void) | undefined;
     try {
       stop = startAmbience(live);
@@ -74,7 +78,8 @@ export function useAmbience(): void {
       /* ambience is optional */
     }
     return () => {
-      document.removeEventListener("pointerdown", onPointer);
+      document.removeEventListener("pointerdown", onGesture);
+      document.removeEventListener("keydown", onGesture);
       stop?.();
     };
   }, [running]);
