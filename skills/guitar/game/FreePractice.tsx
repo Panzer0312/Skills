@@ -6,7 +6,7 @@ import { UndoButton } from "./UndoButton.js";
 const KINDS = [
   { id: "song", label: "Song" },
   { id: "frei-technik", label: "Technik" },
-  { id: "jam", label: "Jammen" },
+  { id: "jam", label: "Jammen (ohne Jam Room)" },
   { id: "frei", label: "Sonstiges" },
 ] as const;
 
@@ -154,8 +154,36 @@ export function FreePractice() {
       setNote("Unter einer Minute, nichts gespeichert.");
       return;
     }
+    if (busyRef.current) return;
+    // Jam Room, quests and trainers log their own time; count only what they did not.
+    busyRef.current = true;
+    setBusy(true);
+    setFailed(false);
+    setNote(null);
+    let counted = 0;
+    try {
+      const { entries } = await gameApi.recentLog();
+      counted = entries.filter((e) => e.at >= timer.startedAt).reduce((sum, e) => sum + e.seconds, 0);
+    } catch {
+      setSaved(null);
+      setFailed(true);
+      return;
+    } finally {
+      busyRef.current = false;
+      setBusy(false);
+    }
+    const remaining = seconds - counted;
+    if (remaining < 60) {
+      setTimer(null);
+      setSaved(null);
+      setNote("Die Zeit wurde schon von anderen Übungen gezählt.");
+      return;
+    }
     // keep the record until the entry is saved, so a failed request loses nothing
-    if (await save(seconds, timer.techniqueId)) setTimer(null);
+    if (await save(remaining, timer.techniqueId)) {
+      setTimer(null);
+      if (counted > 0) setNote(`Davon schon gezählt: ${Math.max(1, Math.round(counted / 60))} min.`);
+    }
   }
 
   async function submitManual() {

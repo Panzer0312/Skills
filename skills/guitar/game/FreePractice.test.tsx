@@ -13,7 +13,12 @@ function open() {
 
 beforeEach(() => {
   localStorage.clear();
+  vi.spyOn(gameApi, "recentLog").mockResolvedValue({ entries: [] });
 });
+
+function entry(at: number, seconds: number) {
+  return { id: 1, at, day: "2026-11-07", kind: "quest" as const, questId: null, techniqueId: null, seconds, metricKey: null, metricValue: null };
+}
 afterEach(() => {
   vi.useRealTimers();
   vi.restoreAllMocks();
@@ -164,5 +169,51 @@ describe("FreePractice", () => {
     open();
     expect(screen.getByText("+12 XP · +3 Gold")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Rückgängig" })).toBeInTheDocument();
+  });
+
+  it("subtracts time other exercises logged while the timer ran", async () => {
+    const log = vi.spyOn(gameApi, "log").mockResolvedValue(result as never);
+    const startedAt = Date.now() - 600_000;
+    vi.spyOn(gameApi, "recentLog").mockResolvedValue({
+      entries: [entry(startedAt + 60_000, 120), entry(startedAt + 300_000, 60), entry(startedAt - 1000, 900)],
+    });
+    localStorage.setItem("guitar.freeTimer", JSON.stringify({ startedAt, techniqueId: "song" }));
+    render(<FreePractice />);
+    open();
+    fireEvent.click(screen.getByRole("button", { name: "Timer stoppen und speichern" }));
+    await waitFor(() => expect(log).toHaveBeenCalled());
+    expect(Math.abs(log.mock.calls[0]![0].seconds - 420)).toBeLessThan(5);
+    expect(await screen.findByText("Davon schon gezählt: 3 min.")).toBeInTheDocument();
+  });
+
+  it("logs nothing when other exercises already counted the time", async () => {
+    const log = vi.spyOn(gameApi, "log").mockResolvedValue(result as never);
+    const startedAt = Date.now() - 600_000;
+    vi.spyOn(gameApi, "recentLog").mockResolvedValue({ entries: [entry(startedAt + 10_000, 580)] });
+    localStorage.setItem("guitar.freeTimer", JSON.stringify({ startedAt, techniqueId: "song" }));
+    render(<FreePractice />);
+    open();
+    fireEvent.click(screen.getByRole("button", { name: "Timer stoppen und speichern" }));
+    expect(await screen.findByText("Die Zeit wurde schon von anderen Übungen gezählt.")).toBeInTheDocument();
+    expect(log).not.toHaveBeenCalled();
+    expect(JSON.parse(localStorage.getItem("guitar.freeTimer") ?? "null")).toBeNull();
+  });
+
+  it("keeps the timer when the recent log cannot be read", async () => {
+    const log = vi.spyOn(gameApi, "log").mockResolvedValue(result as never);
+    vi.spyOn(gameApi, "recentLog").mockRejectedValue(new Error("offline"));
+    localStorage.setItem("guitar.freeTimer", JSON.stringify({ startedAt: Date.now() - 600_000, techniqueId: "song" }));
+    render(<FreePractice />);
+    open();
+    fireEvent.click(screen.getByRole("button", { name: "Timer stoppen und speichern" }));
+    expect(await screen.findByRole("alert")).toBeInTheDocument();
+    expect(log).not.toHaveBeenCalled();
+    expect(JSON.parse(localStorage.getItem("guitar.freeTimer") ?? "null")).not.toBeNull();
+  });
+
+  it("labels the jam option apart from the Jam Room", () => {
+    render(<FreePractice />);
+    open();
+    expect(screen.getByRole("option", { name: "Jammen (ohne Jam Room)" })).toHaveValue("jam");
   });
 });
