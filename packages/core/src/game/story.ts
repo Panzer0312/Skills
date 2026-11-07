@@ -65,7 +65,8 @@ export function reachedBeats(story: Story, road: RoadStep[], statuses: Record<st
     const here = story.beats.filter((beat) => beat.lessonId === step.lessonId);
     for (const beat of here.filter((b) => b.when === "next")) if (index <= nextIndex) reached.push(beat);
     for (const beat of here.filter((b) => b.when === "done")) {
-      if (!isUnfinished(statuses[step.lessonId])) reached.push(beat);
+      // A tick on a later lesson alone must not play the ending before the road gets there.
+      if (index < nextIndex && !isUnfinished(statuses[step.lessonId])) reached.push(beat);
     }
   });
   return reached;

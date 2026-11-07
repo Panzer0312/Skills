@@ -9,12 +9,12 @@
     {
       "id": "kapitel-2", "title": "Wege ins Land", "months": [4, 6],
       "intro": "Die Hände sind warm, jetzt gehst du weiter hinaus. Jede Straße gibt ein Stück zurück.",
-      "theoryLessons": ["theorie-dur-tonleiter", "theorie-intervalle", "theorie-akkordbau", "13-theorie", "theorie-moll"]
+      "theoryLessons": ["theorie-dur-tonleiter", "theorie-intervalle", "theorie-akkordbau", "13-theorie"]
     },
     {
       "id": "kapitel-3", "title": "Der Turm wird sichtbar", "months": [7, 9],
       "intro": "Das Griffbrett wirkt nicht mehr wie ein Labyrinth. Die Formen fangen an, einander zu kennen.",
-      "theoryLessons": ["theorie-tonarten", "theorie-akkordfolgen", "theorie-analyse", "theorie-riff-hoeren"]
+      "theoryLessons": ["theorie-moll", "theorie-tonarten", "theorie-akkordfolgen", "theorie-analyse", "theorie-riff-hoeren"]
     },
     {
       "id": "kapitel-4", "title": "Alles zurück nach Hause", "months": [10, 12],

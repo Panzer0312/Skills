@@ -20,6 +20,8 @@ export interface GameState {
   chosenLessons: string[];
   records: Record<string, number>;
   recentQuestIds: string[];
+  /** Quest id to the last local day it was logged. */
+  questDays: Record<string, string>;
   /** Story beats the player has acknowledged. */
   storySeen: string[];
   today: { minutes: number; questIds: string[] } | null;

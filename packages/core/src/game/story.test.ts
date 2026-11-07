@@ -53,6 +53,18 @@ describe("reachedBeats", () => {
   });
 });
 
+describe("done beats", () => {
+  it("are not reached by a tick on a later lesson alone", () => {
+    expect(ids(reachedBeats(story, road, st({ d: "gelernt" })))).toEqual(["b-a-next"]);
+    expect(ids(reachedBeats(story, road, st({ a: "gelernt", c: "gelernt" })))).toEqual(["b-a-next", "b-a-done"]);
+  });
+  it("wait until the road gets past their step", () => {
+    const tail = parseStory({ ...raw, beats: [{ ...raw.beats[0]!, lessonId: "d" }] }, content);
+    expect(ids(reachedBeats(tail, road, st({ a: "gelernt", b: "gelernt", c: "gelernt" })))).toEqual([]);
+    expect(ids(reachedBeats(tail, road, st({ a: "gelernt", b: "gelernt", c: "gelernt", d: "gelernt" })))).toEqual(["b-a-done"]);
+  });
+});
+
 describe("pendingBeat", () => {
   it("is the last reached beat that is not seen", () => {
     const s = st({ a: "gelernt", b: "gelernt" });

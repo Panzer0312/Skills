@@ -146,6 +146,10 @@ gameRoutes.get("/api/game/:skillId/state", (c) => {
       .all(skillId) as { beat_id: string }[]
   ).map((r) => r.beat_id);
 
+  const questDays: Record<string, string> = {};
+  for (const r of rows) {
+    if (r.quest_id !== null && r.day > (questDays[r.quest_id] ?? "")) questDays[r.quest_id] = r.day;
+  }
   const questIdsOn = (day: string) => [
     ...new Set(rows.filter((r) => r.day === day && r.quest_id !== null).map((r) => r.quest_id!)),
   ];
@@ -165,6 +169,7 @@ gameRoutes.get("/api/game/:skillId/state", (c) => {
     chosenLessons,
     records,
     recentQuestIds: questIdsOn(yesterday),
+    questDays,
     storySeen,
     today: todayRow
       ? { minutes: todayRow.minutes, questIds: JSON.parse(todayRow.quest_ids_json) as string[] }

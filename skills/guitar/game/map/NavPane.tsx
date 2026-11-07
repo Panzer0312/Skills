@@ -68,6 +68,10 @@ function Legend() {
         Als Quest angenommen
       </li>
       <li>
+        <i className="map-swatch" style={{ background: "#77756c" }} />
+        Bekannter Song
+      </li>
+      <li>
         <span className="map-legend-mark is-star">★</span>Schneller Erfolg
       </li>
       <li>

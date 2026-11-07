@@ -24,6 +24,7 @@ export function plannedSet(state: GameState, minutes: number, recentQuestIds: st
     statuses: state.lessons,
     hasTargetSong: state.targetSongId !== null,
     recentQuestIds,
+    questDays: state.questDays,
     chosenLessonIds: state.chosenLessons,
   });
 }

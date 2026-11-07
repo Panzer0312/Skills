@@ -396,8 +396,8 @@ export function SkillMap({ nodes, paths, road, statuses, chosen, selectedId, bes
             const shape = {
               className: "map-shape",
               fill: !node.available ? UNAVAILABLE_FILL : node.quick ? "#ffd34d" : tierColor,
-              stroke: node.available ? "#1c1009" : node.quick ? "#ffd34d" : tierColor,
-              strokeDasharray: node.available ? undefined : node.quick ? "4 2" : "6 4",
+              stroke: node.available ? "#1c1009" : tierColor,
+              strokeDasharray: node.available ? undefined : "6 4",
             };
             const classes = ["map-node", node.id === selectedId && "is-selected", related.has(node.id) && "is-related"];
             return (

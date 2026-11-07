@@ -10,6 +10,7 @@ import {
   lessonMasteryTarget,
   parseGameContent,
   parseStory,
+  reachedBeats,
   scaleQuest,
   type LessonStatus,
   type MapNode,
@@ -459,6 +460,114 @@ describe("daily quests on the real content", () => {
   it("does not reach lesson 13 theory at lesson 07", () => {
     expect(build(45)).not.toContain("stufenakkorde");
     expect(build(10, ["griffbrett-namen"])).not.toContain("stufenakkorde");
+  });
+});
+
+describe("daily quests over two weeks at every road position", () => {
+  const nodeById = new Map(content.nodes.map((n) => [n.id, n]));
+  const questById = new Map(content.quests.map((quest) => [quest.id, quest]));
+  const day = (n: number) => `2026-11-${String(n).padStart(2, "0")}`;
+  const lessonDone = (statuses: Record<string, LessonStatus>, id: string) =>
+    statuses[id] === "gelernt" || statuses[id] === "gemeistert";
+  /** Independent of the builder: whether the quest's lesson has been taught at this road position. */
+  function taught(quest: (typeof content.quests)[number], statuses: Record<string, LessonStatus>): boolean {
+    // The change drill is the fixed slot of every session, from the first day on.
+    if (quest.lessonId === null || quest.kind === "wechsel") return true;
+    const next = bestNext(content.road, statuses);
+    if (!next) return true;
+    const at = content.road.findIndex((step) => step.lessonId === quest.lessonId);
+    if (at !== -1) return at <= content.road.indexOf(next);
+    const parent = nodeById.get(quest.lessonId)?.parent ?? null;
+    return parent === null || lessonDone(statuses, parent);
+  }
+  function simulate(position: number, minutes: number, hasTargetSong: boolean) {
+    const statuses: Record<string, LessonStatus> = Object.fromEntries(
+      content.road.slice(0, position).map((step) => [step.lessonId, "gelernt"]),
+    );
+    const questDays: Record<string, string> = {};
+    let recentQuestIds: string[] = [];
+    const sets: string[][] = [];
+    for (let d = 1; d <= 14; d++) {
+      const set = buildDailyQuests({ minutes, content, statuses, hasTargetSong, recentQuestIds, questDays, chosenLessonIds: [] });
+      set.forEach((id) => (questDays[id] = day(d)));
+      recentQuestIds = set;
+      sets.push(set);
+    }
+    return { statuses, sets };
+  }
+
+  for (const hasTargetSong of [false, true]) {
+    for (const minutes of [10, 20, 30, 45, 60]) {
+      it(`schedules only taught quests without duplicates at ${minutes} minutes${hasTargetSong ? " with a target song" : ""}`, () => {
+        for (let position = 0; position <= content.road.length; position++) {
+          const { statuses, sets } = simulate(position, minutes, hasTargetSong);
+          sets.forEach((set, d) => {
+            const where = `Position ${position}, Tag ${d + 1}`;
+            expect(set.length, where).toBeGreaterThan(0);
+            expect(new Set(set).size, where).toBe(set.length);
+            for (const id of set) expect(taught(questById.get(id)!, statuses), `${where}: ${id}`).toBe(true);
+            const total = set.reduce((sum, id) => sum + questById.get(id)!.minutes, 0);
+            expect(set.length === 1 || total <= minutes, `${where}: ${total} Minuten`).toBe(true);
+          });
+        }
+      });
+    }
+  }
+
+  it("brings theory up at least twice in 14 days at 30 minutes with a target song", () => {
+    const failures: string[] = [];
+    for (let position = 10; position <= content.road.length; position++) {
+      const { statuses, sets } = simulate(position, 30, true);
+      // The road quest, the change drill and the target song come first. Where they already fill
+      // the 30 minutes (a 15 minute road quest), no theory quest has room, which the brief's
+      // "10 minutes or less" does not cover.
+      const next = bestNext(content.road, statuses);
+      const nextQuest = next?.questId ? questById.get(next.questId) : undefined;
+      const fixed =
+        (nextQuest?.minutes ?? 0) +
+        questById.get("wechsel-minute")!.minutes +
+        (nextQuest?.kind === "song" ? 0 : questById.get("song-ziel")!.minutes);
+      const reachable = content.quests.some(
+        (quest) =>
+          quest.kind === "theorie" && quest.minutes <= Math.min(10, 30 - fixed) && taught(quest, statuses),
+      );
+      if (!reachable) continue;
+      const days = sets.filter((set) => set.some((id) => questById.get(id)!.kind === "theorie")).length;
+      if (days < 2) failures.push(`Position ${position}: ${days}`);
+    }
+    expect(failures).toEqual([]);
+  });
+  it("shows every pentatonic box over a month at the lead-boxen step", () => {
+    const position = content.road.findIndex((step) => step.lessonId === "lead-boxen");
+    const { sets } = simulate(position, 60, false);
+    const seen = new Set(sets.flat());
+    for (const box of ["pentatonik-box2", "pentatonik-box3", "pentatonik-box4", "pentatonik-box5"]) {
+      expect(seen.has(box), box).toBe(true);
+    }
+  });
+  it("does not hand a month 9 player the posture check", () => {
+    const position = content.road.findIndex((step) => step.lessonId === "caged-g");
+    const { sets } = simulate(position, 45, false);
+    expect(sets[0]).not.toContain("haltung-check");
+  });
+});
+
+describe("story endings on the real content", () => {
+  const story = parseStory(read("story.json"), content);
+  const beatIds = (statuses: Record<string, LessonStatus>) => reachedBeats(story, content.road, statuses).map((b) => b.id);
+
+  it("does not show the ending for a lone tick on jam-frei", () => {
+    expect(beatIds({ "jam-frei": "gelernt" })).not.toContain("ende");
+  });
+  it("does not show the ending for a save at rhythmus-moll-barre", () => {
+    const at = content.road.findIndex((step) => step.lessonId === "rhythmus-moll-barre");
+    const statuses = Object.fromEntries(content.road.slice(0, at).map((s) => [s.lessonId, "gelernt"])) as Record<string, LessonStatus>;
+    expect(beatIds(statuses)).not.toContain("ende");
+    expect(beatIds({ ...statuses, "jam-frei": "gelernt" })).not.toContain("ende");
+  });
+  it("shows the ending once the road is finished", () => {
+    const all = Object.fromEntries(content.road.map((s) => [s.lessonId, "gelernt"])) as Record<string, LessonStatus>;
+    expect(beatIds(all)).toContain("ende");
   });
 });
 

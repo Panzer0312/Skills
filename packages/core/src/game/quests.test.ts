@@ -131,8 +131,10 @@ describe("buildDailyQuests off-road lessons", () => {
     expect(ids).not.toContain("child");
     expect(ids).not.toContain("later");
   });
-  it("offers a quick off-road lesson at once", () => {
-    expect(fill({})).toContain("fast");
+  it("offers a quick off-road lesson only when chosen or its parent is done", () => {
+    expect(fill({})).not.toContain("fast");
+    expect(fill({ chosenLessonIds: ["lquick"] })).toContain("fast");
+    expect(fill({ statuses: { lb: "gelernt" } })).toContain("fast");
   });
   it("offers an off-road lesson once its parent is done", () => {
     expect(fill({ statuses: { la: "gelernt" } })).toContain("child");
@@ -297,5 +299,103 @@ describe("parseGameContent", () => {
   });
   it("throws a German message", () => {
     expect(() => parseGameContent({})).toThrow(/Spielinhalt/);
+  });
+});
+
+describe("buildDailyQuests rotation and fit", () => {
+  const day = (n: number) => `2026-11-${String(n).padStart(2, "0")}`;
+  const ids = ["la", "lt1", "lt2", "lt3", "lbig"];
+  const rotating: GameContent = {
+    ...content,
+    quests: [
+      q("a", "technik", 10, "la"),
+      q("theorie-gross", "theorie", 10, "lbig"),
+      q("theorie-1", "theorie", 5, "lt1"),
+      q("theorie-2", "theorie", 5, "lt2"),
+      q("theorie-3", "theorie", 5, "lt3"),
+      q("wechsel", "wechsel", 5),
+      q("song", "song", 10),
+    ],
+    road: ids.map((id) => step(id, "a")),
+    nodes: ids.map((id) => node(id)),
+  };
+  const all = Object.fromEntries(ids.map((id) => [id, "gelernt"])) as Record<string, LessonStatus>;
+  const run = (days: number, minutes: number, hasTargetSong = true) => {
+    const questDays: Record<string, string> = {};
+    let recentQuestIds: string[] = [];
+    const sets: string[][] = [];
+    for (let d = 1; d <= days; d++) {
+      const set = buildDailyQuests({
+        minutes, hasTargetSong, statuses: all, recentQuestIds, questDays, chosenLessonIds: [], content: rotating,
+      });
+      set.forEach((id) => (questDays[id] = day(d)));
+      recentQuestIds = set;
+      sets.push(set);
+    }
+    return sets;
+  };
+
+  it("picks the first theory quest that fits the remaining minutes", () => {
+    const set = buildDailyQuests({
+      minutes: 30, hasTargetSong: true, statuses: { ...all, la: "aktiv" }, recentQuestIds: [], chosenLessonIds: [], content: rotating,
+    });
+    expect(set).toEqual(["a", "wechsel", "song"]);
+    const theory = set.filter((id) => id.startsWith("theorie"));
+    expect(theory.length).toBeLessThanOrEqual(1);
+  });
+  it("rotates all theory on a finished road instead of a two-cycle", () => {
+    const seen = run(9, 45).flatMap((set) => set.filter((id) => id.startsWith("theorie")));
+    expect(new Set(seen)).toEqual(new Set(["theorie-gross", "theorie-1", "theorie-2", "theorie-3"]));
+  });
+  it("lets a theory quest that does not fit step aside for one that does", () => {
+    const sets = run(8, 30);
+    for (const set of sets) expect(set.reduce((n, id) => n + rotating.quests.find((x) => x.id === id)!.minutes, 0)).toBeLessThanOrEqual(30);
+    expect(sets.filter((set) => set.some((id) => id.startsWith("theorie"))).length).toBeGreaterThanOrEqual(2);
+  });
+  it("picks the quest done longest ago", () => {
+    const questDays = { "theorie-1": day(5), "theorie-2": day(2), "theorie-3": day(9), "theorie-gross": day(7) };
+    const set = buildDailyQuests({
+      minutes: 45, hasTargetSong: false, statuses: all, recentQuestIds: [], questDays, chosenLessonIds: [], content: rotating,
+    });
+    expect(set.find((id) => id.startsWith("theorie"))).toBe("theorie-2");
+  });
+});
+
+describe("buildDailyQuests siblings", () => {
+  const ids = ["la", "lm", "ln"];
+  const multi: GameContent = {
+    ...content,
+    quests: [
+      q("a", "technik", 10, "la"),
+      q("m1", "technik", 10, "lm"),
+      q("m2", "technik", 10, "lm"),
+      q("m3", "technik", 10, "lm"),
+      q("n", "technik", 10, "ln"),
+      q("alt", "technik", 5, "la"),
+    ],
+    road: ids.map((id) => step(id, id === "la" ? "a" : id === "lm" ? "m1" : "n")),
+    nodes: ids.map((id) => node(id)),
+  };
+  const fill = (o: { statuses?: Record<string, LessonStatus>; questDays?: Record<string, string>; chosenLessonIds?: string[]; minutes?: number }) =>
+    buildDailyQuests({ minutes: 25, hasTargetSong: false, recentQuestIds: [], statuses: {}, chosenLessonIds: [], content: multi, ...o });
+
+  it("adds a sibling of the best next lesson right after the road quest", () => {
+    expect(fill({ minutes: 15 })).toEqual(["a", "alt"]);
+  });
+  it("keeps the road quest first and rotates the sibling", () => {
+    const set = fill({ statuses: { la: "gelernt" }, questDays: { m2: "2026-11-02" } });
+    expect(set[0]).toBe("m1");
+    expect(set).toContain("m3");
+    expect(set).not.toContain("m2");
+  });
+  it("rotates the quest of a chosen lesson", () => {
+    const set = fill({ statuses: { la: "gelernt", lm: "gelernt" }, chosenLessonIds: ["lm"], questDays: { m1: "2026-11-03", m2: "2026-11-01" }, minutes: 40 });
+    expect(set.slice(0, 2)).toEqual(["n", "m3"]);
+    expect(set).toContain("m2");
+  });
+  it("lets the newest road step fill first", () => {
+    const set = fill({ statuses: { la: "gelernt" }, minutes: 80 });
+    expect(set[0]).toBe("m1");
+    expect(set.indexOf("m3")).toBeLessThan(set.indexOf("a"));
   });
 });
