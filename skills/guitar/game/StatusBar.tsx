@@ -2,6 +2,7 @@ import type { GameState } from "@skills/core";
 import { Link } from "react-router-dom";
 import { GAME_BASE } from "./api.js";
 import { spriteUrl } from "./assets.js";
+import { FreePractice } from "./FreePractice.js";
 import { GearStrip } from "./GearStrip.js";
 import { SoundToggle } from "./sound/SoundToggle.js";
 
@@ -45,6 +46,7 @@ export function StatusBar({ state }: { state: GameState | undefined }) {
           <span className="game-stat">
             <b>{formatTime(state.weekSeconds)}</b> diese Woche
           </span>
+          <FreePractice />
         </>
       ) : null}
       <SoundToggle />

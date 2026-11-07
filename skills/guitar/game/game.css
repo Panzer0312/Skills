@@ -639,3 +639,54 @@
     display: none;
   }
 }
+
+/* Free practice */
+.game-hud:has(.free-practice) {
+  position: relative;
+}
+
+.free-practice-panel {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  display: grid;
+  gap: 12px;
+  justify-items: start;
+  padding: 12px;
+  background: var(--parch2);
+  border: 4px solid var(--wood);
+  color: var(--ink);
+}
+
+.free-practice-panel label {
+  display: grid;
+  gap: 4px;
+}
+
+.free-practice-manual {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 8px;
+}
+
+.free-practice-saved {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.free-practice-saved p {
+  margin: 0;
+}
+
+@media (min-width: 640px) {
+  .free-practice-panel {
+    left: auto;
+    right: 12px;
+    width: 340px;
+  }
+}
