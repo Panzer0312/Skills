@@ -3,6 +3,7 @@ import { useWakeLock } from "../../../packages/web/src/app/useWakeLock.js";
 import { gameApi } from "./api.js";
 import { setFreeTimerRunning } from "./freeTimerStore.js";
 import { UndoButton } from "./UndoButton.js";
+import { usePref } from "./usePref.js";
 
 const KINDS = [
   { id: "song", label: "Song" },
@@ -12,6 +13,7 @@ const KINDS = [
 ] as const;
 
 const MAX_SECONDS = 14400;
+const MAX_MINUTES = 240;
 
 interface TimerRecord {
   startedAt: number;
@@ -58,6 +60,8 @@ function clock(ms: number): string {
 }
 
 export function FreePractice() {
+  const [askAfter] = usePref("freiUeben.nachfragenAbMinuten");
+  const [confirm, setConfirm] = useState<{ minutes: string; techniqueId: string; counted: number } | null>(null);
   const [timer, setTimerState] = useState<TimerRecord | null>(readTimer);
   const setTimer = (next: TimerRecord | null) => {
     setTimerState(next);
@@ -125,11 +129,13 @@ export function FreePractice() {
   }
 
   function discard() {
+    setConfirm(null);
     setTimer(null);
     setNote(null);
   }
 
   function start() {
+    setConfirm(null);
     setSaved(null);
     setNote(null);
     setFailed(false);
@@ -167,7 +173,7 @@ export function FreePractice() {
     setNote(null);
     let counted = 0;
     try {
-      const { entries } = await gameApi.recentLog();
+      const { entries } = await gameApi.recentLog(timer.startedAt);
       counted = entries.filter((e) => e.at >= timer.startedAt).reduce((sum, e) => sum + e.seconds, 0);
     } catch {
       setSaved(null);
@@ -184,11 +190,35 @@ export function FreePractice() {
       setNote("Die Zeit wurde schon von anderen Übungen gezählt.");
       return;
     }
-    // keep the record until the entry is saved, so a failed request loses nothing
-    if (await save(remaining, timer.techniqueId)) {
-      setTimer(null);
-      if (counted > 0) setNote(`Davon schon gezählt: ${Math.max(1, Math.round(counted / 60))} min.`);
+    // A timer that ran suspiciously long was probably forgotten: ask for the real minutes.
+    if (remaining / 60 > askAfter) {
+      setConfirm({
+        minutes: String(Math.min(MAX_MINUTES, Math.max(1, Math.round(remaining / 60)))),
+        techniqueId: timer.techniqueId,
+        counted,
+      });
+      return;
     }
+    await finish(remaining, timer.techniqueId, counted);
+  }
+
+  // keep the record until the entry is saved, so a failed request loses nothing
+  async function finish(seconds: number, techniqueId: string, counted: number): Promise<boolean> {
+    if (!(await save(seconds, techniqueId))) return false;
+    setTimer(null);
+    if (counted > 0) setNote(`Davon schon gezählt: ${Math.max(1, Math.round(counted / 60))} min.`);
+    return true;
+  }
+
+  async function submitConfirm() {
+    if (!confirm) return;
+    const m = Number(confirm.minutes);
+    if (confirm.minutes.trim() === "" || !Number.isInteger(m) || m < 1 || m > MAX_MINUTES) {
+      setSaved(null);
+      setNote("Bitte 1 bis 240 Minuten eintragen.");
+      return;
+    }
+    if (await finish(m * 60, confirm.techniqueId, confirm.counted)) setConfirm(null);
   }
 
   async function submitManual() {
@@ -223,7 +253,34 @@ export function FreePractice() {
               ))}
             </select>
           </label>
-          {running ? (
+          {running && confirm ? (
+            <form
+              className="free-practice-confirm"
+              onSubmit={(e) => {
+                e.preventDefault();
+                void submitConfirm();
+              }}
+            >
+              <p>Wie lange hast du wirklich geübt?</p>
+              <label>
+                Echte Minuten
+                <input
+                  type="number"
+                  inputMode="numeric"
+                  min={1}
+                  max={MAX_MINUTES}
+                  value={confirm.minutes}
+                  onChange={(e) => setConfirm({ ...confirm, minutes: e.target.value })}
+                />
+              </label>
+              <button type="submit" className="game-button" disabled={busy}>
+                Speichern
+              </button>
+              <button type="button" className="game-button" disabled={busy} onClick={discard}>
+                Verwerfen
+              </button>
+            </form>
+          ) : running ? (
             <>
               <button type="button" className="game-button" disabled={busy} onClick={() => void stop()}>
                 Timer stoppen und speichern

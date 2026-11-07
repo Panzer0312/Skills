@@ -5,6 +5,7 @@ import { gameApi } from "./api.js";
 export function UndoButton({ logId, onUndone }: { logId: number; onUndone?: () => void }) {
   const [busy, setBusy] = useState(false);
   const [undone, setUndone] = useState(false);
+  const [forgiven, setForgiven] = useState(0);
   const [failed, setFailed] = useState(false);
   const busyRef = useRef(false);
 
@@ -15,7 +16,8 @@ export function UndoButton({ logId, onUndone }: { logId: number; onUndone?: () =
     setFailed(false);
     try {
       try {
-        await gameApi.deleteLog(logId);
+        const r = await gameApi.deleteLog(logId);
+        setForgiven(r?.goldForgiven ?? 0);
       } catch (error) {
         // Already removed, e.g. from the chronicle or another tab: the goal is reached.
         if (!(error instanceof ApiError && error.code === "not_found")) throw error;
@@ -30,7 +32,13 @@ export function UndoButton({ logId, onUndone }: { logId: number; onUndone?: () =
     }
   }
 
-  if (undone) return <p>Eintrag entfernt.</p>;
+  if (undone) {
+    return forgiven > 0 ? (
+      <p>Eintrag entfernt. Du hattest das Gold schon ausgegeben – es bleibt bei dir, dein Gold steht jetzt auf 0.</p>
+    ) : (
+      <p>Eintrag entfernt.</p>
+    );
+  }
   return (
     <>
       <button type="button" className="game-button" disabled={busy} onClick={() => void undo()}>

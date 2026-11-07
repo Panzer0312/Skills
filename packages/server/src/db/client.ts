@@ -134,6 +134,8 @@ CREATE TABLE IF NOT EXISTS game_equipped (skill_id TEXT NOT NULL, slot TEXT NOT 
 CREATE TABLE IF NOT EXISTS game_settings (skill_id TEXT PRIMARY KEY, sound INTEGER NOT NULL DEFAULT 0);
 -- prefs
 CREATE TABLE IF NOT EXISTS game_prefs (skill_id TEXT NOT NULL, key TEXT NOT NULL, value_json TEXT NOT NULL, PRIMARY KEY (skill_id, key));
+-- gold forgiveness
+CREATE TABLE IF NOT EXISTS game_gold_adjust (skill_id TEXT NOT NULL, at INTEGER NOT NULL, amount INTEGER NOT NULL);
 `;
 
 export function openDatabase(path: string): AppDatabase {

@@ -70,4 +70,15 @@ describe("UndoButton", () => {
     expect(onUndone).toHaveBeenCalledTimes(1);
     expect(screen.queryByRole("alert")).toBeNull();
   });
+
+  it("undo shows the forgiven-gold note", async () => {
+    vi.stubGlobal("fetch", vi.fn(async () => json({ ok: true, goldForgiven: 12 })));
+    renderButton();
+    fireEvent.click(screen.getByRole("button", { name: "Rückgängig" }));
+    expect(
+      await screen.findByText(
+        "Eintrag entfernt. Du hattest das Gold schon ausgegeben – es bleibt bei dir, dein Gold steht jetzt auf 0.",
+      ),
+    ).toBeTruthy();
+  });
 });

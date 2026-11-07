@@ -10,7 +10,7 @@ import {
   type RecentLogEntry,
 } from "@skills/core";
 import type { AppEnv } from "../../app.js";
-import { invalid, logSchema, RANK, setLesson, STATUS_READ } from "./shared.js";
+import { goldAdjust, invalid, logRows, logSchema, RANK, setLesson, STATUS_READ } from "./shared.js";
 
 export const router = new Hono<AppEnv>();
 
@@ -109,25 +109,43 @@ router.post("/api/game/:skillId/log", async (c) => {
 });
 
 router.get("/api/game/:skillId/log/recent", (c) => {
+  const sinceRaw = c.req.query("since");
+  const since = sinceRaw !== undefined && /^\d+$/.test(sinceRaw) ? Number(sinceRaw) : null;
   const rows = c
     .get("database")
     .raw.prepare(
       `SELECT id, at, day, kind, quest_id AS questId, technique_id AS techniqueId, seconds,
               metric_key AS metricKey, metric_value AS metricValue
-       FROM game_log WHERE skill_id = ? ORDER BY at DESC, id DESC LIMIT 20`,
+       FROM game_log WHERE skill_id = ? AND at >= ? ORDER BY at DESC, id DESC LIMIT ?`,
     )
-    .all(c.req.param("skillId")) as RecentLogEntry[];
+    .all(c.req.param("skillId"), since ?? 0, since === null ? 20 : 500) as RecentLogEntry[];
   return c.json({ entries: rows });
 });
 
 // Lesson statuses the deleted entry already raised stay: a status never goes down.
+// Gold already spent is forgiven: the balance floors at 0 instead of staying in debt.
 router.delete("/api/game/:skillId/log/:id", (c) => {
-  const id = Number(c.req.param("id"));
-  const result = Number.isInteger(id)
-    ? c.get("database").raw.prepare("DELETE FROM game_log WHERE id = ? AND skill_id = ?").run(id, c.req.param("skillId"))
-    : { changes: 0 };
-  if (result.changes === 0) {
+  const idText = c.req.param("id");
+  const skillId = c.req.param("skillId");
+  const raw = c.get("database").raw;
+  const run = raw.transaction(() => {
+    if (!/^\d+$/.test(idText)) return null;
+    const result = raw.prepare("DELETE FROM game_log WHERE id = ? AND skill_id = ?").run(Number(idText), skillId);
+    if (result.changes === 0) return null;
+    const earned = logRows(raw, skillId).reduce((sum, r) => sum + goldForEntry(r), 0) + goldAdjust(raw, skillId);
+    const spent = (
+      raw.prepare("SELECT COALESCE(SUM(price), 0) AS s FROM game_inventory WHERE skill_id = ?").get(skillId) as {
+        s: number;
+      }
+    ).s;
+    const balance = earned - spent;
+    if (balance >= 0) return 0;
+    raw.prepare("INSERT INTO game_gold_adjust (skill_id, at, amount) VALUES (?, ?, ?)").run(skillId, Date.now(), -balance);
+    return -balance;
+  });
+  const goldForgiven = run();
+  if (goldForgiven === null) {
     return c.json({ error: { code: "not_found", message: "Eintrag nicht gefunden." } }, 404);
   }
-  return c.json({ ok: true });
+  return c.json({ ok: true, goldForgiven });
 });

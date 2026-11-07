@@ -5,7 +5,10 @@ import { GAME_KEY, SKILL } from "./client.js";
 
 export const stateApi = {
   history: () => api.get<History>(`/api/game/${SKILL}/history`),
-  recentLog: () => api.get<{ entries: RecentLogEntry[] }>(`/api/game/${SKILL}/log/recent`),
+  recentLog: (since?: number) =>
+    api.get<{ entries: RecentLogEntry[] }>(
+      `/api/game/${SKILL}/log/recent${since === undefined ? "" : `?since=${Math.floor(since)}`}`,
+    ),
 };
 
 export function useGameState(): UseQueryResult<GameState> {
@@ -28,7 +31,7 @@ export function useGameHistory(): UseQueryResult<History> {
 export function useRecentLog(): UseQueryResult<{ entries: RecentLogEntry[] }> {
   return useQuery({
     queryKey: [...GAME_KEY, "recent"],
-    queryFn: stateApi.recentLog,
+    queryFn: () => stateApi.recentLog(),
     retry: false,
     refetchOnWindowFocus: "always",
   });

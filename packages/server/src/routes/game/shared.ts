@@ -82,9 +82,18 @@ export function logRows(raw: import("better-sqlite3").Database, skillId: string)
     .all(skillId) as { kind: "quest" | "frei"; seconds: number; level: number; rating: PracticeRating | null }[];
 }
 
+/** Sum of gold forgiven after undoing an entry whose gold was already spent. */
+export function goldAdjust(raw: import("better-sqlite3").Database, skillId: string): number {
+  return (
+    raw.prepare("SELECT COALESCE(SUM(amount), 0) AS s FROM game_gold_adjust WHERE skill_id = ?").get(skillId) as {
+      s: number;
+    }
+  ).s;
+}
+
 /** Gold earned minus gold spent, plus the owned item ids. Call inside a transaction when acting on it. */
 export function wallet(raw: import("better-sqlite3").Database, skillId: string) {
-  const earned = logRows(raw, skillId).reduce((sum, r) => sum + goldForEntry(r), 0);
+  const earned = logRows(raw, skillId).reduce((sum, r) => sum + goldForEntry(r), 0) + goldAdjust(raw, skillId);
   const bought = raw
     .prepare("SELECT item_id, price FROM game_inventory WHERE skill_id = ?")
     .all(skillId) as { item_id: string; price: number }[];

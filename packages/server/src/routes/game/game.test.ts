@@ -528,7 +528,7 @@ describe("game log undo and export", () => {
     const { logId } = await log({ kind: "frei", seconds: 600, level: 1 });
     const res = await send("DELETE", `/api/game/guitar/log/${logId}`);
     expect(res.status).toBe(200);
-    expect(await res.json()).toEqual({ ok: true });
+    expect(await res.json()).toEqual({ ok: true, goldForgiven: 0 });
     const s = await state();
     expect(s.totalSeconds).toBe(0);
     expect(s.xp).toBe(0);
@@ -564,5 +564,62 @@ describe("game log undo and export", () => {
     expect(body.skillId).toBe("guitar");
     expect(body.tables.game_log).toHaveLength(1);
     expect(body.tables.lesson_progress).toEqual([]);
+  });
+});
+
+describe("game log forgiveness, since and strict id", () => {
+  let app: ReturnType<typeof createApp>;
+  const send = (method: string, path: string, body?: unknown) =>
+    app.request(path, {
+      method,
+      headers: { "content-type": "application/json" },
+      body: body === undefined ? undefined : JSON.stringify(body),
+    });
+  const state = async () => (await (await app.request("/api/game/guitar/state")).json()) as GameState;
+  const log = async (body: object) =>
+    (await (await send("POST", "/api/game/guitar/log", body)).json()) as { logId: number };
+
+  beforeEach(() => {
+    app = createApp(openDatabase(":memory:"));
+  });
+
+  it("undo after spending forgives the debt and future gold counts again", async () => {
+    const { logId } = await log({ kind: "frei", seconds: 75 * 40, level: 1 }); // 40 gold
+    await send("POST", "/api/game/guitar/market/buy", { itemId: "wanderdolch" });
+    await send("DELETE", `/api/game/guitar/log/${logId}`);
+    expect((await state()).gold).toBe(0);
+    const next = await send("POST", "/api/game/guitar/log", { kind: "frei", seconds: 75 * 10, level: 1 });
+    const { goldGained } = (await next.json()) as { goldGained: number };
+    expect(goldGained).toBeGreaterThan(0);
+    expect((await state()).gold).toBe(goldGained);
+  });
+
+  it("delete reports goldForgiven", async () => {
+    const plain = await log({ kind: "frei", seconds: 600, level: 1 });
+    const res = await send("DELETE", `/api/game/guitar/log/${plain.logId}`);
+    expect(await res.json()).toEqual({ ok: true, goldForgiven: 0 });
+    const big = await log({ kind: "frei", seconds: 75 * 40, level: 1 });
+    await send("POST", "/api/game/guitar/market/buy", { itemId: "wanderdolch" });
+    const body = (await (await send("DELETE", `/api/game/guitar/log/${big.logId}`)).json()) as { goldForgiven: number };
+    expect(body.goldForgiven).toBeGreaterThan(0);
+  });
+
+  it("recent since returns all entries since a time", async () => {
+    for (let i = 0; i < 25; i++) await log({ kind: "frei", seconds: 60, level: 1 });
+    const all = (await (await app.request("/api/game/guitar/log/recent")).json()) as { entries: unknown[] };
+    expect(all.entries).toHaveLength(20);
+    const since = (await (await app.request("/api/game/guitar/log/recent?since=0")).json()) as {
+      entries: { at: number }[];
+    };
+    expect(since.entries).toHaveLength(25);
+    const future = (await (await app.request(`/api/game/guitar/log/recent?since=${Date.now() + 100000}`)).json()) as {
+      entries: unknown[];
+    };
+    expect(future.entries).toHaveLength(0);
+  });
+
+  it("id 1e0 is not found", async () => {
+    await log({ kind: "frei", seconds: 60, level: 1 });
+    expect((await send("DELETE", "/api/game/guitar/log/1e0")).status).toBe(404);
   });
 });
