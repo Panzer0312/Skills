@@ -19,6 +19,7 @@ export function DeviceCheck() {
   const inputs = useInputDevices();
   const [level, setLevel] = useState(0);
   const [testing, setTesting] = useState(false);
+  const [savedInput, setSavedInput] = useState(false);
 
   const onBuffer = useCallback((buffer: Float32Array) => setLevel(inputLevel(buffer)), []);
   const mic = useMicrophone({
@@ -85,11 +86,13 @@ export function DeviceCheck() {
               onClick={() => {
                 setStored(inputs.deviceId);
                 setTesting(false);
+                setSavedInput(true);
               }}
               className="rounded border border-slate-300 px-3 py-1 dark:border-slate-700"
             >
               Passt
             </button>
+            {savedInput ? <span role="status">Gespeichert.</span> : null}
           </div>
         </div>
       ) : null}

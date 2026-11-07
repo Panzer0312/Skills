@@ -159,7 +159,7 @@ export const PLACES: PlaceDef[] = [
 
 /**
  * First path segments where ambience may play ("" is the village), and those
- * that also allow deeper subpaths. Same semantics as ALLOWED / ALLOWED_WITH_SUBPATH in sound/ambience.ts.
+ * that also allow deeper subpaths. Derived from the places flagged `ambience`.
  */
 export function ambiencePaths(): {
   paths: Set<string>;

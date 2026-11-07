@@ -261,7 +261,7 @@ export function FreePractice() {
                 void submitConfirm();
               }}
             >
-              <p>Wie lange hast du wirklich geübt?</p>
+              <p>{confirm.counted > 0 ? "Wie lange hast du zusätzlich zu den Quests geübt?" : "Wie lange hast du wirklich geübt?"}</p>
               <label>
                 Echte Minuten
                 <input

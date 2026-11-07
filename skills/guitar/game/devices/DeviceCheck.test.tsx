@@ -34,6 +34,14 @@ describe("DeviceCheck", () => {
     expect(setStored).toHaveBeenCalledWith("dev-1");
   });
 
+  it("Passt confirms with Gespeichert.", () => {
+    guitar = "ja";
+    render(<DeviceCheck />);
+    expect(screen.queryByText("Gespeichert.")).toBeNull();
+    fireEvent.click(screen.getByRole("button", { name: "Passt" }));
+    expect(screen.getByText("Gespeichert.")).toBeTruthy();
+  });
+
   it("shows the no-device line for nein", () => {
     guitar = "nein";
     render(<DeviceCheck />);

@@ -279,6 +279,19 @@ describe("FreePractice", () => {
     expect(JSON.parse(localStorage.getItem("guitar.freeTimer") ?? "null")).toBeNull();
   });
 
+  it("confirm asks for the extra minutes when other exercises already counted", async () => {
+    vi.spyOn(gameApi, "log").mockResolvedValue(result as never);
+    askAfter = 15;
+    const startedAt = Date.now() - 40 * 60_000;
+    vi.spyOn(gameApi, "recentLog").mockResolvedValue({ entries: [entry(startedAt + 60_000, 180)] });
+    localStorage.setItem("guitar.freeTimer", JSON.stringify({ startedAt, techniqueId: "song" }));
+    render(<FreePractice />);
+    open();
+    fireEvent.click(screen.getByRole("button", { name: "Timer stoppen und speichern" }));
+    expect(await screen.findByText("Wie lange hast du zusätzlich zu den Quests geübt?")).toBeInTheDocument();
+    expect(screen.queryByText("Wie lange hast du wirklich geübt?")).toBeNull();
+  });
+
   it("confirm saves the typed minutes", async () => {
     const log = vi.spyOn(gameApi, "log").mockResolvedValue(result as never);
     askAfter = 15;
