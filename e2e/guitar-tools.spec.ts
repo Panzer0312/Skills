@@ -142,8 +142,10 @@ test("Chronik: ein Wechsel-Ergebnis erscheint im Graphen", async ({ page, reques
   await page.clock.install();
   await reachBoard(page);
   const before = await weekMinutes(page);
-  // A value no earlier run can have left behind, so stale history cannot pass.
-  const unique = 100 + (Date.now() % 900);
+  // History keeps the highest value per day and the e2e database survives runs,
+  // so only a value above all earlier ones can show up, and stale history cannot pass.
+  const earlier = await (await request.get(`${API}/game/guitar/history`)).json();
+  const unique = Math.max(100, ...(earlier.metrics as { value: number }[]).map((m) => m.value)) + 1;
 
   await page.goto(`${BASE}/quest/wechsel-minute`);
   await page.getByRole("button", { name: "Start", exact: true }).click();
