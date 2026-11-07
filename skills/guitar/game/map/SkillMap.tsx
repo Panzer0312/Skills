@@ -94,6 +94,15 @@ const SCENERY: Record<PathId, { sprites: SpriteName[]; density: number }> = {
   griffbrett: { sprites: ["oak", "stump", "log", "mushroom"], density: 0.45 },
 };
 
+// One landmark per region, drawn once near the region's centre.
+export const LANDMARKS: Partial<Record<PathId, SpriteName>> = {
+  metal: "peak",
+  lead: "hills",
+  griffbrett: "tower",
+  theorie: "library",
+};
+const LANDMARK_SIZE = 72;
+
 const overlaps = (a: Box, b: Box) => a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom;
 
 /** The estimate content.test.ts checks collisions on. */
@@ -136,8 +145,38 @@ function seeded(seed: number): () => number {
   };
 }
 
+/** Each landmark at the free spot nearest its region's centre, clear of nodes, labels, titles and lines. */
+function placeLandmarks(nodes: MapNode[], blocked: Box[], lines: (readonly [MapNode, MapNode])[]): Sprite[] {
+  const landmarks: Sprite[] = [];
+  for (const [id, name] of Object.entries(LANDMARKS) as [PathId, SpriteName][]) {
+    const members = nodes.filter((node) => node.path === id);
+    if (members.length === 0) continue;
+    const cx = members.reduce((sum, node) => sum + node.x, 0) / members.length;
+    const cy = members.reduce((sum, node) => sum + node.y, 0) / members.length;
+    const free = (x: number, y: number): Sprite | null => {
+      const box = { left: x - LANDMARK_SIZE / 2, right: x + LANDMARK_SIZE / 2, top: y - LANDMARK_SIZE / 2, bottom: y + LANDMARK_SIZE / 2 };
+      if (box.left < 0 || box.right > FULL_VIEW.width || box.top < 0 || box.bottom > FULL_VIEW.height) return null;
+      if (blocked.some((other) => overlaps(box, other)) || landmarks.some((other) => overlaps(box, { left: other.x, right: other.x + other.width, top: other.y, bottom: other.y + other.height }))) return null;
+      if (lines.some(([a, b]) => lineHits(a, b, box))) return null;
+      return { name, x: box.left, y: box.top, width: LANDMARK_SIZE, height: LANDMARK_SIZE };
+    };
+    search: for (let radius = 0; radius <= 600; radius += 10) {
+      const steps = radius === 0 ? 1 : Math.ceil((2 * Math.PI * radius) / 24);
+      for (let i = 0; i < steps; i += 1) {
+        const angle = (i / steps) * 2 * Math.PI;
+        const found = free(cx + radius * Math.cos(angle), cy + radius * Math.sin(angle));
+        if (found) {
+          landmarks.push(found);
+          break search;
+        }
+      }
+    }
+  }
+  return landmarks;
+}
+
 /** Sprites on a jittered grid around each path, the same on every render. */
-function scatter(nodes: MapNode[], paths: MapPath[]): Sprite[] {
+function scatter(nodes: MapNode[], paths: MapPath[]): { sprites: Sprite[]; landmarks: Sprite[] } {
   const random = seeded(7);
   const byId = new Map(nodes.map((node) => [node.id, node]));
   const blocked = [...nodes.flatMap(nodeBoxes), ...paths.map(titleBox)];
@@ -145,8 +184,9 @@ function scatter(nodes: MapNode[], paths: MapPath[]): Sprite[] {
     const parent = node.parent ? byId.get(node.parent) : undefined;
     return parent ? [[node, parent] as const] : [];
   });
+  const landmarks = placeLandmarks(nodes, blocked, lines);
   const sprites: Sprite[] = [];
-  const placed: Box[] = [];
+  const placed: Box[] = landmarks.map((l) => ({ left: l.x, right: l.x + l.width, top: l.y, bottom: l.y + l.height }));
   for (let gridY = 30; gridY < FULL_VIEW.height; gridY += 44) {
     for (let gridX = 20; gridX < FULL_VIEW.width; gridX += 44) {
       const x = gridX + random() * 30;
@@ -178,7 +218,7 @@ function scatter(nodes: MapNode[], paths: MapPath[]): Sprite[] {
     }
   }
   // Painter's order: what stands lower on the map is in front.
-  return sprites.sort((a, b) => a.y + a.height - (b.y + b.height));
+  return { sprites: sprites.sort((a, b) => a.y + a.height - (b.y + b.height)), landmarks };
 }
 
 /** Soft tints from gradient circles: a blur filter costs far too much on every pan frame. */
@@ -201,9 +241,12 @@ function Regions({ nodes, paths }: { nodes: MapNode[]; paths: MapPath[] }) {
   );
 }
 
-function Decor({ sprites }: { sprites: Sprite[] }) {
+function Decor({ sprites, landmarks }: { sprites: Sprite[]; landmarks: Sprite[] }) {
   return (
     <g data-layer="decor">
+      {landmarks.map((sprite) => (
+        <image key={sprite.name} className="map-sprite map-landmark" href={spriteUrl(sprite.name)} x={sprite.x} y={sprite.y} width={sprite.width} height={sprite.height} />
+      ))}
       {sprites.map((sprite, i) => (
         <image key={i} className="map-sprite" href={spriteUrl(sprite.name)} x={sprite.x} y={sprite.y} width={sprite.width} height={sprite.height} />
       ))}
@@ -237,7 +280,7 @@ export function SkillMap({ nodes, paths, road, statuses, chosen, selectedId, bes
     () => (
       <>
         <Regions nodes={nodes} paths={paths} />
-        <Decor sprites={scatter(nodes, paths)} />
+        <Decor {...scatter(nodes, paths)} />
       </>
     ),
     [nodes, paths],

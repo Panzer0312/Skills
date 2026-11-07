@@ -3,7 +3,8 @@ import { act, fireEvent, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { gameContent } from "../api.js";
-import { SkillMap, type MapFilter } from "./SkillMap.js";
+import { spriteUrl, type SpriteName } from "../assets.js";
+import { LANDMARKS, SkillMap, type MapFilter } from "./SkillMap.js";
 
 const node = (id: string, extra: Partial<MapNode> = {}): MapNode => ({
   id, title: id, description: id, path: "hafen", rank: 2, x: 100, y: 100, parent: null, quick: false,
@@ -420,5 +421,25 @@ describe("SkillMap decoration", () => {
         expect(hit, JSON.stringify({ image, b })).toBe(false);
       }
     }
+  });
+
+  it("draws one landmark per path, clear of every node", () => {
+    const { container } = setup({ nodes: gameContent.nodes, paths: gameContent.paths, road: gameContent.road });
+    const boxes = gameContent.nodes.flatMap((n) => {
+      const half = (n.title.length * 6.4) / 2;
+      return [
+        { left: n.x - half, right: n.x + half, top: n.y + 16, bottom: n.y + 32 },
+        { left: n.x - 18, right: n.x + 18, top: n.y - 18, bottom: n.y + 18 },
+      ];
+    });
+    for (const [pathId, name] of Object.entries(LANDMARKS)) {
+      const url = spriteUrl(name as SpriteName);
+      expect(url, pathId).not.toBe("");
+      const found = Array.from(container.querySelectorAll("image.map-landmark")).filter((image) => image.getAttribute("href") === url);
+      expect(found, pathId).toHaveLength(1);
+      const [x, y, w, h] = ["x", "y", "width", "height"].map((attr) => Number(found[0]!.getAttribute(attr))) as [number, number, number, number];
+      for (const b of boxes) expect(x < b.right && b.left < x + w && y < b.bottom && b.top < y + h, `${pathId} ${JSON.stringify(b)}`).toBe(false);
+    }
+    expect(container.querySelectorAll("image.map-landmark")).toHaveLength(4);
   });
 });
