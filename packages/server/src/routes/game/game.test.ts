@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { createApp } from "../app.js";
-import { openDatabase, type AppDatabase } from "../db/client.js";
+import { createApp } from "../../app.js";
+import { openDatabase, type AppDatabase } from "../../db/client.js";
 import { localDayKey, type GameState } from "@skills/core";
 
 describe("game api", () => {

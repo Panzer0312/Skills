@@ -4,7 +4,7 @@ import type { AppDatabase } from "./db/client.js";
 import { ankiRoutes } from "./routes/anki.js";
 import { backupRoutes } from "./routes/backup.js";
 import { chordRoutes } from "./routes/chords.js";
-import { gameRoutes } from "./routes/game.js";
+import { gameRoutes } from "./routes/game/index.js";
 import { progressRoutes } from "./routes/progress.js";
 import { reviewRoutes } from "./routes/reviews.js";
 import { settingsRoutes } from "./routes/settings.js";
