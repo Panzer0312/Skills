@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { story } from "../api.js";
 import { usePref } from "../usePref.js";
+import { dismissIntro, resetIntroDismissed, useIntroDismissed } from "./dismissed.js";
 import { onIntroStep } from "./helpBus.js";
 import data from "./intro.json";
 import "./intro.css";
@@ -40,7 +41,15 @@ export function IntroTour() {
   const dialogRef = useRef<HTMLDivElement>(null);
   const nextRef = useRef<HTMLButtonElement>(null);
 
-  const touring = !loading && !seen;
+  const dismissed = useIntroDismissed();
+  const touring = !loading && !seen && !dismissed;
+
+  // Replay (seen turned false again) clears the local dismissal.
+  const prevSeen = useRef(seen);
+  useEffect(() => {
+    if (prevSeen.current && !seen) resetIntroDismissed();
+    prevSeen.current = seen;
+  }, [seen]);
   const active = help !== null ? help : touring ? index : null;
   const step = active !== null ? STEPS[active] : undefined;
 
@@ -55,6 +64,7 @@ export function IntroTour() {
 
   const finish = useCallback(() => {
     setIndex(0);
+    dismissIntro();
     setSeen(true);
   }, [setSeen]);
   const close = useCallback(() => {
@@ -70,15 +80,75 @@ export function IntroTour() {
       : null;
     if (typeof el?.scrollIntoView === "function")
       el.scrollIntoView({ block: "center", behavior: "auto" });
-    const update = () => setBox(measure(step.target));
+    let retries = 0;
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const update = () => {
+      const next = measure(step.target);
+      setBox(next);
+      // The target may mount a moment later (route change, data load).
+      if (!next && step.target && retries++ < 15) timer = setTimeout(update, 200);
+    };
     update();
     window.addEventListener("resize", update);
     window.addEventListener("scroll", update, true);
     return () => {
+      clearTimeout(timer);
       window.removeEventListener("resize", update);
       window.removeEventListener("scroll", update, true);
     };
   }, [step]);
+
+  // Restore focus to where it was when the tour opened.
+  const isOpen = step !== undefined;
+  useEffect(() => {
+    if (!isOpen) return;
+    const before = document.activeElement as HTMLElement | null;
+    return () => {
+      if (before && before.isConnected && typeof before.focus === "function") before.focus();
+    };
+  }, [isOpen]);
+
+  // While open: Esc/Tab are handled at document level, and no key reaches page handlers.
+  const closeRef = useRef(() => {});
+  closeRef.current = close;
+  useEffect(() => {
+    if (!isOpen) return;
+    const items = () =>
+      Array.from(dialogRef.current?.querySelectorAll<HTMLElement>("button:not([disabled])") ?? []);
+    const onKey = (event: KeyboardEvent) => {
+      event.stopPropagation();
+      if (event.key === "Escape") {
+        event.preventDefault();
+        closeRef.current();
+        return;
+      }
+      if (event.key !== "Tab") return;
+      const list = items();
+      if (list.length === 0) return;
+      const first = list[0]!;
+      const final = list[list.length - 1]!;
+      const active = document.activeElement as HTMLElement | null;
+      const inside = !!active && !!dialogRef.current?.contains(active);
+      if (!inside || (event.shiftKey && active === first)) {
+        event.preventDefault();
+        (event.shiftKey ? final : first).focus();
+      } else if (!event.shiftKey && active === final) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+    const onFocusIn = (event: FocusEvent) => {
+      if (dialogRef.current && !dialogRef.current.contains(event.target as Node)) nextRef.current?.focus();
+    };
+    document.addEventListener("keydown", onKey, true);
+    document.addEventListener("keyup", onKey, true);
+    document.addEventListener("focusin", onFocusIn);
+    return () => {
+      document.removeEventListener("keydown", onKey, true);
+      document.removeEventListener("keyup", onKey, true);
+      document.removeEventListener("focusin", onFocusIn);
+    };
+  }, [isOpen]);
 
   // Focus starts on Weiter (or Schließen in help mode) at every step.
   useEffect(() => {
@@ -88,32 +158,8 @@ export function IntroTour() {
   if (!step || active === null) return null;
   const last = active === STEPS.length - 1;
 
-  const onKeyDown = (event: React.KeyboardEvent) => {
-    if (event.key === "Escape") {
-      event.stopPropagation();
-      close();
-      return;
-    }
-    if (event.key !== "Tab") return;
-    const items = Array.from(
-      dialogRef.current?.querySelectorAll<HTMLElement>(
-        "button:not([disabled])",
-      ) ?? [],
-    );
-    if (items.length === 0) return;
-    const first = items[0]!;
-    const final = items[items.length - 1]!;
-    if (event.shiftKey && document.activeElement === first) {
-      event.preventDefault();
-      final.focus();
-    } else if (!event.shiftKey && document.activeElement === final) {
-      event.preventDefault();
-      first.focus();
-    }
-  };
-
   return (
-    <div className="intro-layer" onKeyDown={onKeyDown}>
+    <div className="intro-layer">
       {box ? (
         <div
           className="intro-spot"

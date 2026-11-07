@@ -4,6 +4,7 @@ import { Navigate, Outlet } from "react-router-dom";
 import { GAME_BASE, useGameState } from "./api.js";
 import { PREFS_KEY } from "./api/prefs.js";
 import { migrateLocalPrefs } from "./migrateLocalPrefs.js";
+import { useIntroDismissed } from "./intro/dismissed.js";
 import { IntroTour } from "./intro/IntroTour.js";
 import { StatusBar } from "./StatusBar.js";
 import { useAmbience } from "./sound/useAmbience.js";
@@ -41,9 +42,10 @@ export function GameShell() {
 export function PlacementGate() {
   const state = useGameState();
   const [introSeen, , { loading }] = usePref("intro.gesehen");
+  const dismissed = useIntroDismissed();
   if (state.isPending || loading) return <p className="game-note">Wird geladen…</p>;
   if (!state.data) return null;
   // Meister Orlo speaks first; the placement follows once the tour is done or skipped.
-  if (!state.data.placed && introSeen) return <Navigate to={`${GAME_BASE}/einstufung`} replace />;
+  if (!state.data.placed && (introSeen || dismissed)) return <Navigate to={`${GAME_BASE}/einstufung`} replace />;
   return <Outlet />;
 }

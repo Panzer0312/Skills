@@ -95,7 +95,7 @@ function VillageView({ state, fetching }: { state: GameState; fetching: boolean 
       </nav>
       <nav className="village-menu" aria-label="Werkzeuge" data-intro="werkzeuge">
         {PLACES.filter((place) => place.inMenu).map((item) => (
-          <Link key={item.path} to={`${GAME_BASE}/${item.path}`} className="game-quest">
+          <Link key={item.path} to={`${GAME_BASE}/${item.path}`} className="game-quest" data-intro={item.id}>
             <img src={spriteUrl(item.sprite)} alt="" />
             <span>
               {item.label}

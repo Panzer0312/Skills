@@ -12,12 +12,21 @@ import {
   testPref,
 } from "../testPrefs.js";
 import { IntroTour } from "./IntroTour.js";
+import { resetIntroDismissed } from "./dismissed.js";
 import { openIntroStep } from "./helpBus.js";
 import intro from "./intro.json";
 
-vi.mock("../usePref.js", async () => ({
-  usePref: (await import("../testPrefs.js")).usePref,
-}));
+const failWrites = vi.hoisted(() => ({ value: false }));
+vi.mock("../usePref.js", async () => {
+  const { usePref } = await import("../testPrefs.js");
+  return {
+    usePref: (key: Parameters<typeof usePref>[0]) => {
+      const [value, set, meta] = usePref(key);
+      // A refused write rolls back: the value never changes.
+      return [value, failWrites.value ? () => {} : set, meta] as ReturnType<typeof usePref>;
+    },
+  };
+});
 const placed = { value: false };
 vi.mock("../api.js", async (orig) => ({
   ...(await orig<typeof import("../api.js")>()),
@@ -45,6 +54,8 @@ function renderTour() {
 
 beforeEach(() => {
   placed.value = true;
+  failWrites.value = false;
+  resetIntroDismissed();
   resetTestPrefs();
 });
 
@@ -117,5 +128,52 @@ describe("IntroTour", () => {
     expect(
       await screen.findByRole("heading", { name: "Einstufung" }),
     ).toBeInTheDocument();
+  });
+
+  it("a failing pref write still closes the tour for the session and lets placement happen", async () => {
+    failWrites.value = true;
+    placed.value = false;
+    renderTour();
+    await userEvent.click(screen.getByRole("button", { name: "Überspringen" }));
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: "Einstufung" })).toBeInTheDocument();
+  });
+
+  it("escape works after focus moved to the body, and tab wraps inside", async () => {
+    renderTour();
+    (document.activeElement as HTMLElement).blur();
+    expect(document.body).toHaveFocus();
+    await userEvent.tab();
+    expect(screen.getByRole("dialog")).toContainElement(document.activeElement as HTMLElement);
+    const buttons = screen.getAllByRole("button").filter((b) => !(b as HTMLButtonElement).disabled);
+    buttons.at(-1)!.focus();
+    await userEvent.tab();
+    expect(screen.getByRole("dialog")).toContainElement(document.activeElement as HTMLElement);
+    expect(document.activeElement).toBe(buttons[0]);
+    document.body.focus();
+    (document.activeElement as HTMLElement).blur();
+    await userEvent.keyboard("{Escape}");
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+  });
+
+  it("keys do not reach page handlers while open", async () => {
+    const seen = vi.fn();
+    window.addEventListener("keydown", seen);
+    renderTour();
+    await userEvent.keyboard("x");
+    window.removeEventListener("keydown", seen);
+    expect(seen).not.toHaveBeenCalled();
+  });
+
+  it("restores focus on close, also in help mode", async () => {
+    resetTestPrefs({ "intro.gesehen": true });
+    render(<button type="button">Ausloeser</button>);
+    renderTour();
+    const trigger = screen.getByRole("button", { name: "Ausloeser" });
+    trigger.focus();
+    act(() => openIntroStep("chronik"));
+    expect(trigger).not.toHaveFocus();
+    await userEvent.click(screen.getByRole("button", { name: "Schließen" }));
+    expect(trigger).toHaveFocus();
   });
 });

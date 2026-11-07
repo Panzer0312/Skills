@@ -1,10 +1,5 @@
 import type { ReactNode } from "react";
-import {
-  Link,
-  useNavigate,
-  useParams,
-  useSearchParams,
-} from "react-router-dom";
+import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import type { LessonMeta } from "../../../packages/web/src/mdx/lessons.js";
 import { CourseRenderer } from "../../../packages/web/src/renderers/CourseRenderer.js";
 import type { WidgetProps } from "../../../packages/web/src/skills/widgets.js";
@@ -43,15 +38,15 @@ export function ToolFrame({
           ?
         </button>
       ) : null}
-      <div className="tool-frame-inner">{children}</div>
+      <div className="tool-frame-inner">
+        {children}
+      </div>
     </section>
   );
 }
 
 function SongRecommendations() {
-  const nodes = gameContent.nodes.filter(
-    (node) => node.available && node.songs.length > 0,
-  );
+  const nodes = gameContent.nodes.filter((node) => node.available && node.songs.length > 0);
   if (nodes.length === 0) return null;
   return (
     <>
@@ -90,21 +85,12 @@ export function Tavern(props: WidgetProps) {
 }
 
 function metaTitles(meta: Record<string, unknown>): Record<string, string> {
-  return Object.fromEntries(
-    Object.values(meta).map((entry) => [
-      (entry as LessonMeta).id,
-      (entry as LessonMeta).title,
-    ]),
-  );
+  return Object.fromEntries(Object.values(meta).map((entry) => [(entry as LessonMeta).id, (entry as LessonMeta).title]));
 }
 
 const LESSON_TITLES = {
-  ...metaTitles(
-    import.meta.glob("../lessons/*.mdx", { eager: true, import: "meta" }),
-  ),
-  ...metaTitles(
-    import.meta.glob("../reference/*.mdx", { eager: true, import: "meta" }),
-  ),
+  ...metaTitles(import.meta.glob("../lessons/*.mdx", { eager: true, import: "meta" })),
+  ...metaTitles(import.meta.glob("../reference/*.mdx", { eager: true, import: "meta" })),
 };
 
 function metaIds(meta: Record<string, unknown>): Set<string> {
@@ -115,16 +101,12 @@ const LIBRARY = [
   {
     folder: "lessons",
     title: "Lektionen",
-    ids: metaIds(
-      import.meta.glob("../lessons/*.mdx", { eager: true, import: "meta" }),
-    ),
+    ids: metaIds(import.meta.glob("../lessons/*.mdx", { eager: true, import: "meta" })),
   },
   {
     folder: "reference",
     title: "Nachschlagen",
-    ids: metaIds(
-      import.meta.glob("../reference/*.mdx", { eager: true, import: "meta" }),
-    ),
+    ids: metaIds(import.meta.glob("../reference/*.mdx", { eager: true, import: "meta" })),
   },
 ];
 
@@ -132,14 +114,10 @@ export function Library() {
   const { lessonId } = useParams();
   const navigate = useNavigate();
   const { data: state } = useGameState();
-  const owner = LIBRARY.find(
-    ({ ids }) => lessonId !== undefined && ids.has(lessonId),
-  );
+  const owner = LIBRARY.find(({ ids }) => lessonId !== undefined && ids.has(lessonId));
   return (
     <ToolFrame title="Bibliothek">
-      {lessonId === undefined && state ? (
-        <StoryLog state={state} titles={LESSON_TITLES} />
-      ) : null}
+      {lessonId === undefined && state ? <StoryLog state={state} titles={LESSON_TITLES} /> : null}
       <div key={lessonId} className="space-y-8">
         {(owner ? [owner] : LIBRARY).map(({ folder, title }) => (
           <CourseRenderer
@@ -149,9 +127,7 @@ export function Library() {
             folder={folder}
             ignoreLocks
             initialLessonId={lessonId}
-            onOpen={(id) =>
-              navigate(`${GAME_BASE}/bibliothek${id ? `/${id}` : ""}`)
-            }
+            onOpen={(id) => navigate(`${GAME_BASE}/bibliothek${id ? `/${id}` : ""}`)}
           />
         ))}
       </div>
@@ -165,10 +141,7 @@ export function Shrine(props: WidgetProps) {
   return (
     <ToolFrame title="Schrein" helpStepId="werkzeuge">
       {questId ? (
-        <Link
-          to={`${GAME_BASE}/quest/${encodeURIComponent(questId)}`}
-          className="mb-4 inline-block underline"
-        >
+        <Link to={`${GAME_BASE}/quest/${encodeURIComponent(questId)}`} className="mb-4 inline-block underline">
           Zurück zur Quest
         </Link>
       ) : null}
