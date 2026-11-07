@@ -1,5 +1,7 @@
 import { PREFS, type PrefKey } from "@skills/core";
+import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useId, useState } from "react";
+import { gameApi, PREFS_KEY } from "../api.js";
 import { usePref } from "../usePref.js";
 
 function clamp(n: number, min: number, max: number): number {
@@ -30,6 +32,9 @@ function NumberInput({ prefKey, id }: { prefKey: PrefKey; id: string }) {
         value={draft}
         onChange={(e) => setDraft(e.target.value)}
         onBlur={commit}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") commit();
+        }}
       />
       {unit ? <span> {unit}</span> : null}
     </span>
@@ -40,7 +45,15 @@ function NumberInput({ prefKey, id }: { prefKey: PrefKey; id: string }) {
 export function PrefField({ prefKey }: { prefKey: PrefKey }) {
   const def = PREFS[prefKey];
   const id = useId();
+  const client = useQueryClient();
   const [value, setValue] = usePref(prefKey);
+  const reset = async () => {
+    try {
+      await gameApi.resetPref(prefKey);
+    } finally {
+      void client.invalidateQueries({ queryKey: PREFS_KEY });
+    }
+  };
   if (def.ui.kind === "hidden") return null;
   const set = setValue as (v: unknown) => void;
   const helpId = `${id}-help`;
@@ -70,7 +83,7 @@ export function PrefField({ prefKey }: { prefKey: PrefKey }) {
           </select>
         ) : null}
         {def.ui.kind === "number" ? <NumberInput prefKey={prefKey} id={id} /> : null}
-        <button type="button" className="studier-reset" onClick={() => set(def.default)}>
+        <button type="button" className="studier-reset" onClick={() => void reset().catch(() => undefined)}>
           Zurücksetzen
         </button>
       </div>

@@ -4,7 +4,7 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { queryClient } from "../../../../packages/web/src/app/queryClient.js";
-import { gameApi } from "../api.js";
+import { gameApi, PREFS_KEY } from "../api.js";
 import { prefWrites, resetTestPrefs, testPref } from "../testPrefs.js";
 import { Studierstube } from "./Studierstube.js";
 
@@ -66,12 +66,51 @@ describe("Studierstube", () => {
     expect(input).toHaveValue(240);
   });
 
-  it("reset one field restores the default", () => {
-    resetTestPrefs({ "freiUeben.nachfragenAbMinuten": 30 });
+  it("does not save on change alone, clamps below min, reverts garbage, commits on Enter", () => {
+    screenUnderTest();
+    fireEvent.click(screen.getByRole("tab", { name: "Üben" }));
+    const input = screen.getByLabelText(/ab wie vielen Minuten/);
+    fireEvent.change(input, { target: { value: "120" } });
+    expect(prefWrites).toEqual([]);
+    fireEvent.change(input, { target: { value: "1" } });
+    fireEvent.blur(input);
+    expect(prefWrites.at(-1)).toEqual({ key: "freiUeben.nachfragenAbMinuten", value: 15 });
+    const count = prefWrites.length;
+    fireEvent.change(input, { target: { value: "" } });
+    fireEvent.blur(input);
+    expect(input).toHaveValue(15);
+    expect(prefWrites).toHaveLength(count);
+    fireEvent.change(input, { target: { value: "100" } });
+    fireEvent.keyDown(input, { key: "Enter" });
+    expect(prefWrites.at(-1)).toEqual({ key: "freiUeben.nachfragenAbMinuten", value: 100 });
+  });
+
+  it("reset one field calls resetPref and refreshes", async () => {
+    const reset = vi.spyOn(gameApi, "resetPref").mockResolvedValue({ ok: true });
+    const invalidate = vi.spyOn(queryClient, "invalidateQueries");
     screenUnderTest();
     fireEvent.click(screen.getByRole("tab", { name: "Üben" }));
     fireEvent.click(screen.getByRole("button", { name: "Zurücksetzen" }));
-    expect(testPref("freiUeben.nachfragenAbMinuten")).toBe(90);
+    await waitFor(() => expect(reset).toHaveBeenCalledWith("freiUeben.nachfragenAbMinuten"));
+    await waitFor(() => expect(invalidate).toHaveBeenCalledWith({ queryKey: PREFS_KEY }));
+  });
+
+  it("moves between tabs with arrow keys, Home and End", () => {
+    screenUnderTest();
+    const tabs = screen.getAllByRole("tab");
+    expect(tabs[0]).toHaveAttribute("tabindex", "0");
+    expect(tabs[1]).toHaveAttribute("tabindex", "-1");
+    fireEvent.keyDown(tabs[0]!, { key: "ArrowRight" });
+    expect(tabs[1]).toHaveAttribute("aria-selected", "true");
+    fireEvent.keyDown(tabs[1]!, { key: "End" });
+    expect(tabs.at(-1)).toHaveAttribute("aria-selected", "true");
+    fireEvent.keyDown(tabs.at(-1)!, { key: "ArrowRight" });
+    expect(tabs[0]).toHaveAttribute("aria-selected", "true");
+    fireEvent.keyDown(tabs[0]!, { key: "ArrowLeft" });
+    expect(tabs.at(-1)).toHaveAttribute("aria-selected", "true");
+    fireEvent.keyDown(tabs.at(-1)!, { key: "Home" });
+    expect(tabs[0]).toHaveAttribute("aria-selected", "true");
+    expect(screen.getByRole("tabpanel")).toHaveAttribute("tabindex", "0");
   });
 
   it("embeds the device check in the Geräte tab", () => {
@@ -82,6 +121,7 @@ describe("Studierstube", () => {
 
   it("reset all asks first", async () => {
     const reset = vi.spyOn(gameApi, "resetPrefs").mockResolvedValue({ ok: true });
+    const invalidate = vi.spyOn(queryClient, "invalidateQueries");
     const confirm = vi.spyOn(window, "confirm").mockReturnValueOnce(false).mockReturnValueOnce(true);
     screenUnderTest();
     fireEvent.click(screen.getByRole("tab", { name: "Daten" }));
@@ -90,6 +130,16 @@ describe("Studierstube", () => {
     fireEvent.click(screen.getByRole("button", { name: "Alle Einstellungen zurücksetzen" }));
     await waitFor(() => expect(reset).toHaveBeenCalledTimes(1));
     expect(confirm).toHaveBeenCalledTimes(2);
+    await waitFor(() => expect(invalidate).toHaveBeenCalledWith({ queryKey: PREFS_KEY }));
+  });
+
+  it("shows an error when reset all fails", async () => {
+    vi.spyOn(gameApi, "resetPrefs").mockRejectedValue(new Error("x"));
+    vi.spyOn(window, "confirm").mockReturnValue(true);
+    screenUnderTest();
+    fireEvent.click(screen.getByRole("tab", { name: "Daten" }));
+    fireEvent.click(screen.getByRole("button", { name: "Alle Einstellungen zurücksetzen" }));
+    expect(await screen.findByText("Zurücksetzen fehlgeschlagen.")).toBeInTheDocument();
   });
 
   it("offers the data export", () => {

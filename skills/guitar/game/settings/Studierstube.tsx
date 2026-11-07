@@ -1,6 +1,6 @@
 import { PREFS, type PrefGroup, type PrefKey } from "@skills/core";
 import { useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { DeviceCheck } from "../devices/DeviceCheck.js";
 import { GAME_BASE, gameApi, PREFS_KEY } from "../api.js";
@@ -29,11 +29,15 @@ function DataTab() {
   const navigate = useNavigate();
   const [, setIntroSeen] = usePref("intro.gesehen");
   const [busy, setBusy] = useState(false);
+  const [failed, setFailed] = useState(false);
   const resetAll = async () => {
     if (!window.confirm("Wirklich alle Einstellungen auf die Standardwerte zurücksetzen?")) return;
     setBusy(true);
+    setFailed(false);
     try {
       await gameApi.resetPrefs();
+    } catch {
+      setFailed(true);
     } finally {
       setBusy(false);
       void client.invalidateQueries({ queryKey: PREFS_KEY });
@@ -54,6 +58,7 @@ function DataTab() {
           Alle Einstellungen zurücksetzen
         </button>
       </p>
+      {failed ? <p role="alert">Zurücksetzen fehlgeschlagen.</p> : null}
       <p>
         <button
           type="button"
@@ -74,15 +79,34 @@ export function Studierstube() {
   const tabs = GROUPS.filter((g) => g.group === "daten" || visibleKeys(g.group).length > 0);
   const [active, setActive] = useState<PrefGroup>(tabs[0]?.group ?? "daten");
   const current = tabs.some((t) => t.group === active) ? active : "daten";
+  const refs = useRef<Record<string, HTMLButtonElement | null>>({});
+  const onKeyDown = (e: React.KeyboardEvent) => {
+    const i = tabs.findIndex((t) => t.group === current);
+    const next =
+      e.key === "ArrowRight" ? (i + 1) % tabs.length
+      : e.key === "ArrowLeft" ? (i - 1 + tabs.length) % tabs.length
+      : e.key === "Home" ? 0
+      : e.key === "End" ? tabs.length - 1
+      : -1;
+    if (next < 0) return;
+    e.preventDefault();
+    const target = tabs[next]!.group;
+    setActive(target);
+    refs.current[target]?.focus();
+  };
   return (
     <ToolFrame title="Studierstube">
-      <div className="studier" >
-        <div role="tablist" aria-label="Einstellungen" className="studier-tabs">
+      <div className="studier">
+        <div role="tablist" aria-label="Einstellungen" className="studier-tabs" onKeyDown={onKeyDown}>
           {tabs.map((t) => (
             <button
               key={t.group}
               type="button"
               role="tab"
+              ref={(el) => {
+                refs.current[t.group] = el;
+              }}
+              tabIndex={current === t.group ? 0 : -1}
               id={`studier-tab-${t.group}`}
               aria-selected={current === t.group}
               aria-controls="studier-panel"
@@ -92,7 +116,7 @@ export function Studierstube() {
             </button>
           ))}
         </div>
-        <div role="tabpanel" id="studier-panel" aria-labelledby={`studier-tab-${current}`} className="studier-panel">
+        <div role="tabpanel" id="studier-panel" aria-labelledby={`studier-tab-${current}`} className="studier-panel" tabIndex={0}>
           {current === "daten" ? (
             <DataTab />
           ) : (
