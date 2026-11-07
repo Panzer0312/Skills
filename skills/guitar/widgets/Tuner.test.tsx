@@ -1,7 +1,8 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { MemoryRouter } from "react-router-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { resetTestPrefs, testPref } from "../game/testPrefs.js";
+import { prefWrites, resetTestPrefs, testPref } from "../game/testPrefs.js";
 import Tuner from "./Tuner.js";
 
 vi.mock("../game/usePref.js", async () => ({ usePref: (await import("../game/testPrefs.js")).usePref }));
@@ -27,9 +28,35 @@ describe("Tuner", () => {
   it("offers to start the microphone", async () => {
     mocks.state = "idle";
     mocks.error = null;
-    render(<Tuner data={[]} progress={progress} settings={{}} />);
+    render(
+      <MemoryRouter>
+        <Tuner data={[]} progress={progress} settings={{}} />
+      </MemoryRouter>,
+    );
     await userEvent.click(screen.getByRole("button", { name: /Stimmgerät starten/ }));
+    expect(mocks.start).not.toHaveBeenCalled();
+    await userEvent.click(screen.getByRole("button", { name: "Ja" }));
+    expect(prefWrites).toContainEqual({ key: "geraete.gitarreAmMikro", value: "ja" });
     expect(mocks.start).toHaveBeenCalled();
+  });
+
+  it("tuner keeps reference tones without device", async () => {
+    mocks.state = "idle";
+    mocks.error = null;
+    resetTestPrefs({ "geraete.gitarreAmMikro": "nein" });
+    render(
+      <MemoryRouter>
+        <Tuner data={[]} progress={progress} settings={{}} />
+      </MemoryRouter>,
+    );
+    expect(screen.queryByRole("button", { name: /Stimmgerät starten/ })).toBeNull();
+    expect(screen.queryByLabelText(/Rauschschwelle/)).toBeNull();
+    expect(screen.getByRole("link", { name: "Gerät einrichten" })).toHaveAttribute(
+      "href",
+      "/vollbild/guitar/spiel/studierstube?tab=geraete",
+    );
+    await userEvent.click(screen.getByRole("button", { name: "E2 anspielen" }));
+    expect(playReferenceTone).toHaveBeenCalledWith("E2");
   });
 
   it("explains a denied permission without hiding the rest", () => {

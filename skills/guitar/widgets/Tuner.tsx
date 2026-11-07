@@ -1,14 +1,22 @@
 import { displayNote, inputLevel, readTuning, TUNINGS, type TuningReading } from "@skills/core";
 import { useCallback, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { playReferenceTone } from "../../../packages/web/src/audio/referenceTone.js";
 import { useInputDevices } from "../../../packages/web/src/audio/useInputDevices.js";
 import { useMicrophone } from "../../../packages/web/src/audio/useMicrophone.js";
+import { GAME_BASE } from "../game/api.js";
+import { useDevices } from "../game/devices/useDevices.js";
 import { usePref } from "../game/usePref.js";
 import type { WidgetProps } from "../../../packages/web/src/skills/widgets.js";
 import { InputControls } from "../game/InputControls.js";
 
 export default function Tuner({ initialTuning }: WidgetProps & { initialTuning?: string }) {
   const [storedTuning, setStoredTuning] = usePref("werkzeuge.stimmgeraet.stimmung");
+  const [guitar, setGuitar] = usePref("geraete.gitarreAmMikro");
+  const { canUse } = useDevices();
+  const [asking, setAsking] = useState(false);
+  // Reference tones stay for everyone; the microphone parts need the device choice.
+  const showMic = canUse("mic") || guitar === "spaeter";
   // A tuning asked for in the URL wins over the remembered one, until the user picks one.
   const [picked, setPicked] = useState<string | null>(null);
   const tuningName =
@@ -81,27 +89,31 @@ export default function Tuner({ initialTuning }: WidgetProps & { initialTuning?:
         ))}
       </ol>
 
-      <InputControls
-        devices={inputs.devices}
-        deviceId={inputs.deviceId}
-        onSelect={inputs.select}
-        level={mic.state === "running" ? level : 0}
-      />
+      {showMic ? (
+        <>
+          <InputControls
+            devices={inputs.devices}
+            deviceId={inputs.deviceId}
+            onSelect={inputs.select}
+            level={mic.state === "running" ? level : 0}
+          />
 
-      <label className="block text-sm">
-        <span className="mr-2">Rauschschwelle</span>
-        <input
-          type="range"
-          min={1}
-          max={100}
-          value={Math.round(minRms * 1000)}
-          onChange={(e) => setMinRms(Number(e.target.value) / 1000)}
-          aria-label="Rauschschwelle"
-        />
-        <span className="ml-2 text-slate-500">
-          Höher stellen, wenn die Anzeige in einem lauten Raum zappelt.
-        </span>
-      </label>
+          <label className="block text-sm">
+            <span className="mr-2">Rauschschwelle</span>
+            <input
+              type="range"
+              min={1}
+              max={100}
+              value={Math.round(minRms * 1000)}
+              onChange={(e) => setMinRms(Number(e.target.value) / 1000)}
+              aria-label="Rauschschwelle"
+            />
+            <span className="ml-2 text-slate-500">
+              Höher stellen, wenn die Anzeige in einem lauten Raum zappelt.
+            </span>
+          </label>
+        </>
+      ) : null}
 
       {mic.state === "running" ? (
         <div className="rounded-lg border border-slate-200 p-8 text-center dark:border-slate-800">
@@ -141,10 +153,42 @@ export default function Tuner({ initialTuning }: WidgetProps & { initialTuning?:
         >
           Stimmgerät stoppen
         </button>
+      ) : !showMic ? (
+        <Link to={`${GAME_BASE}/studierstube?tab=geraete`} className="block text-center text-sm underline">
+          Gerät einrichten
+        </Link>
+      ) : asking ? (
+        <div className="flex flex-wrap items-center justify-center gap-2">
+          <p>Spielst du mit Gitarre am Mikrofon?</p>
+          <button
+            type="button"
+            onClick={() => {
+              setAsking(false);
+              setGuitar("ja");
+              void mic.start();
+            }}
+            className="rounded border border-slate-300 px-4 py-2 dark:border-slate-700"
+          >
+            Ja
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setAsking(false);
+              setGuitar("nein");
+            }}
+            className="rounded border border-slate-300 px-4 py-2 dark:border-slate-700"
+          >
+            Nein
+          </button>
+        </div>
       ) : (
         <button
           type="button"
-          onClick={() => void mic.start()}
+          onClick={() => {
+            if (guitar === "spaeter") setAsking(true);
+            else void mic.start();
+          }}
           className="w-full rounded bg-slate-900 px-4 py-2 text-white dark:bg-slate-100 dark:text-slate-900"
         >
           Stimmgerät starten

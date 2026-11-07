@@ -11,15 +11,17 @@ import {
   type Tuning,
 } from "@skills/core";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import { playSignal } from "../../../packages/web/src/audio/signalTone.js";
 import { useInputDevices } from "../../../packages/web/src/audio/useInputDevices.js";
 import { useMicrophone } from "../../../packages/web/src/audio/useMicrophone.js";
 import { findTuning, stringLabel, stringsLabel } from "./tuningLabels.js";
 import { UndoButton } from "./UndoButton.js";
-import { gameApi, type LogResult } from "./api.js";
+import { GAME_BASE, gameApi, type LogResult } from "./api.js";
 import { FretboardGrid } from "./FretboardGrid.js";
 import { InputControls } from "./InputControls.js";
 import { usePref } from "./usePref.js";
+import { useDevices } from "./devices/useDevices.js";
 
 const ROUND_MS = 60_000;
 const TICK_MS = 100;
@@ -88,6 +90,11 @@ export function NoteFinder({
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<LogResult | null>(null);
   const [undone, setUndone] = useState(false);
+  const [asking, setAsking] = useState(false);
+  const { canUse } = useDevices();
+  const [guitar, setGuitar] = usePref("geraete.gitarreAmMikro");
+  // "spaeter" keeps the button and asks once; "nein" or a denied microphone leaves no mic UI.
+  const showMic = canUse("mic") || guitar === "spaeter";
 
   const deadline = useRef(0);
   const hitsRef = useRef(0);
@@ -295,14 +302,51 @@ export function NoteFinder({
             Abbrechen
           </button>
         )}
-        <button
-          type="button"
-          onClick={() => (micOn ? mic.stop() : void mic.start())}
-          className="rounded border px-3 py-1"
-        >
-          {micOn ? "Mikrofon aus" : "Mit Gitarre spielen"}
-        </button>
+        {showMic ? (
+          <button
+            type="button"
+            onClick={() => {
+              if (micOn) mic.stop();
+              else if (guitar === "spaeter") setAsking(true);
+              else void mic.start();
+            }}
+            className="rounded border px-3 py-1"
+          >
+            {micOn ? "Mikrofon aus" : "Mit Gitarre spielen"}
+          </button>
+        ) : (
+          <Link to={`${GAME_BASE}/studierstube?tab=geraete`} className="self-center text-sm underline">
+            Gerät einrichten
+          </Link>
+        )}
       </div>
+
+      {asking && showMic && !micOn ? (
+        <div className="flex flex-wrap items-center gap-2">
+          <p>Spielst du mit Gitarre am Mikrofon?</p>
+          <button
+            type="button"
+            onClick={() => {
+              setAsking(false);
+              setGuitar("ja");
+              void mic.start();
+            }}
+            className="rounded border px-3 py-1"
+          >
+            Ja
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setAsking(false);
+              setGuitar("nein");
+            }}
+            className="rounded border px-3 py-1"
+          >
+            Nein
+          </button>
+        </div>
+      ) : null}
 
       {micOn ? (
         <InputControls devices={inputs.devices} deviceId={inputs.deviceId} onSelect={select} level={level} />

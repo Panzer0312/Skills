@@ -1,12 +1,13 @@
 import type { GameState } from "@skills/core";
 import { localDayKey } from "@skills/core";
 import { QueryClientProvider } from "@tanstack/react-query";
+import { MemoryRouter } from "react-router-dom";
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { frequencyOf } from "@skills/core";
 import { queryClient } from "../../../packages/web/src/app/queryClient.js";
 vi.mock("./usePref.js", async () => ({ usePref: (await import("./testPrefs.js")).usePref }));
-import { resetTestPrefs, testPref } from "./testPrefs.js";
+import { prefWrites, resetTestPrefs, testPref } from "./testPrefs.js";
 import { NoteFinder } from "./NoteFinder.js";
 
 const mic = vi.hoisted(() => ({
@@ -69,7 +70,9 @@ async function tick(ms: number) {
 function renderFinder(props: Parameters<typeof NoteFinder>[0] = { strings: [0] }) {
   return render(
     <QueryClientProvider client={queryClient}>
-      <NoteFinder {...props} />
+      <MemoryRouter>
+        <NoteFinder {...props} />
+      </MemoryRouter>
     </QueryClientProvider>,
   );
 }
@@ -93,8 +96,11 @@ beforeEach(() => {
   mic.start.mockClear();
   mic.stop.mockClear();
   resetTestPrefs();
+  // A browser with a microphone; without it the device check reports "unsupported".
+  Object.defineProperty(navigator, "mediaDevices", { value: { getUserMedia: vi.fn() }, configurable: true });
 });
 afterEach(() => {
+  delete (navigator as { mediaDevices?: unknown }).mediaDevices;
   vi.useRealTimers();
   vi.restoreAllMocks();
   vi.unstubAllGlobals();
@@ -151,6 +157,8 @@ describe("NoteFinder", () => {
     renderFinder();
     expect(mic.start).not.toHaveBeenCalled();
     fireEvent.click(screen.getByRole("button", { name: "Mit Gitarre spielen" }));
+    expect(mic.start).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole("button", { name: "Ja" }));
     expect(mic.start).toHaveBeenCalled();
   });
 
@@ -305,5 +313,45 @@ describe("NoteFinder", () => {
     expect(screen.getByLabelText("Stimmung")).toHaveValue("Drop D");
     fireEvent.change(screen.getByLabelText("Stimmung"), { target: { value: "Standard" } });
     expect(testPref("werkzeuge.notenfinder.stimmung")).toBe("Standard");
+  });
+
+  it("note finder hides mic with device nein", () => {
+    serve();
+    resetTestPrefs({ "geraete.gitarreAmMikro": "nein" });
+    renderFinder();
+    expect(screen.queryByRole("button", { name: "Mit Gitarre spielen" })).toBeNull();
+    expect(screen.getByRole("link", { name: "Gerät einrichten" })).toHaveAttribute(
+      "href",
+      "/vollbild/guitar/spiel/studierstube?tab=geraete",
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Start" }));
+    fireEvent.click(screen.getByTestId(`finder-0-${targetFret()}`));
+    expect(screen.getByText("Treffer: 1")).toBeInTheDocument();
+    expect(mic.start).not.toHaveBeenCalled();
+  });
+
+  it("spaeter asks once then remembers", () => {
+    serve();
+    renderFinder();
+    fireEvent.click(screen.getByRole("button", { name: "Mit Gitarre spielen" }));
+    expect(screen.getByText("Spielst du mit Gitarre am Mikrofon?")).toBeInTheDocument();
+    expect(mic.start).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole("button", { name: "Ja" }));
+    expect(prefWrites).toContainEqual({ key: "geraete.gitarreAmMikro", value: "ja" });
+    expect(mic.start).toHaveBeenCalledTimes(1);
+    expect(screen.queryByText("Spielst du mit Gitarre am Mikrofon?")).toBeNull();
+    fireEvent.click(screen.getByRole("button", { name: "Mit Gitarre spielen" }));
+    expect(screen.queryByText("Spielst du mit Gitarre am Mikrofon?")).toBeNull();
+    expect(mic.start).toHaveBeenCalledTimes(2);
+  });
+
+  it("spaeter with Nein stores nein and starts no microphone", () => {
+    serve();
+    renderFinder();
+    fireEvent.click(screen.getByRole("button", { name: "Mit Gitarre spielen" }));
+    fireEvent.click(screen.getByRole("button", { name: "Nein" }));
+    expect(prefWrites).toContainEqual({ key: "geraete.gitarreAmMikro", value: "nein" });
+    expect(mic.start).not.toHaveBeenCalled();
+    expect(screen.queryByRole("button", { name: "Mit Gitarre spielen" })).toBeNull();
   });
 });

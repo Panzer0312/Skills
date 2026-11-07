@@ -1,14 +1,13 @@
 import { GAME_BASE } from "../api.js";
-
-const ALLOWED = new Set(["", "markt", "bibliothek", "hafen", "chronik"]);
-const ALLOWED_WITH_SUBPATH = new Set(["bibliothek", "hafen"]);
+import { ambiencePaths } from "../placeRegistry.js";
 
 /** Ambience plays only on the calm places, never on quests or tool places. */
 export function ambienceAllowed(pathname: string): boolean {
   if (pathname !== GAME_BASE && !pathname.startsWith(`${GAME_BASE}/`)) return false;
   const [first = "", ...rest] = pathname.slice(GAME_BASE.length).split("/").filter(Boolean);
-  if (!ALLOWED.has(first)) return false;
-  return rest.length === 0 || ALLOWED_WITH_SUBPATH.has(first);
+  const { paths, withSubpath } = ambiencePaths();
+  if (!paths.has(first)) return false;
+  return rest.length === 0 || withSubpath.has(first);
 }
 
 const MASTER_GAIN = 0.08;
