@@ -23,10 +23,10 @@ const LABELS: Record<PrefGroup, string> = {
   daten: "Daten",
 };
 
-function screenUnderTest() {
+function screenUnderTest(entry = "/studierstube") {
   return render(
     <QueryClientProvider client={queryClient}>
-      <MemoryRouter initialEntries={["/studierstube"]}>
+      <MemoryRouter initialEntries={[entry]}>
         <Routes>
           <Route path="/studierstube" element={<Studierstube />} />
           <Route path="*" element={<p>Dorf</p>} />
@@ -123,6 +123,21 @@ describe("Studierstube", () => {
     screenUnderTest();
     fireEvent.click(screen.getByRole("tab", { name: "Geräte" }));
     expect(screen.getByText("Geraetepruefung")).toBeInTheDocument();
+  });
+
+  it("does not repeat the guitar-at-mic choice that the device check owns", () => {
+    screenUnderTest();
+    fireEvent.click(screen.getByRole("tab", { name: "Geräte" }));
+    expect(screen.queryByLabelText(PREFS["geraete.gitarreAmMikro"].label)).not.toBeInTheDocument();
+  });
+
+  it("opens the tab named in ?tab= and ignores unknown ones", () => {
+    const first = screenUnderTest("/studierstube?tab=geraete");
+    expect(screen.getByRole("tab", { name: "Geräte" })).toHaveAttribute("aria-selected", "true");
+    expect(screen.getByText("Geraetepruefung")).toBeInTheDocument();
+    first.unmount();
+    screenUnderTest("/studierstube?tab=gibtsnicht");
+    expect(screen.getAllByRole("tab")[0]).toHaveAttribute("aria-selected", "true");
   });
 
   it("reset all asks first", async () => {

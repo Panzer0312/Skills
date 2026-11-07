@@ -1,7 +1,7 @@
 import { PREFS, type PrefGroup, type PrefKey } from "@skills/core";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { DeviceCheck } from "../devices/DeviceCheck.js";
 import { GAME_BASE, gameApi, PREFS_KEY } from "../api.js";
 import { resetIntroDismissed } from "../intro/dismissed.js";
@@ -79,7 +79,9 @@ function DataTab() {
 
 export function Studierstube() {
   const tabs = GROUPS.filter((g) => g.group === "daten" || visibleKeys(g.group).length > 0);
-  const [active, setActive] = useState<PrefGroup>(tabs[0]?.group ?? "daten");
+  const [params] = useSearchParams();
+  const wanted = tabs.find((t) => t.group === params.get("tab"))?.group;
+  const [active, setActive] = useState<PrefGroup>(wanted ?? tabs[0]?.group ?? "daten");
   const current = tabs.some((t) => t.group === active) ? active : "daten";
   const refs = useRef<Record<string, HTMLButtonElement | null>>({});
   const onKeyDown = (e: React.KeyboardEvent) => {
@@ -123,9 +125,12 @@ export function Studierstube() {
             <DataTab />
           ) : (
             <>
-              {visibleKeys(current).map((k) => (
-                <PrefField key={k} prefKey={k} />
-              ))}
+              {visibleKeys(current)
+                // The device check below asks this one itself.
+                .filter((k) => !(current === "geraete" && k === "geraete.gitarreAmMikro"))
+                .map((k) => (
+                  <PrefField key={k} prefKey={k} />
+                ))}
               {current === "geraete" ? <DeviceCheck /> : null}
             </>
           )}
