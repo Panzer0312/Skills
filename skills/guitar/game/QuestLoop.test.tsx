@@ -1256,4 +1256,15 @@ describe("pause and keys", () => {
     expect(screen.getByTestId("cancel-signal")).toHaveTextContent("0");
     expect(screen.getByRole("button", { name: "Pause" })).toBeInTheDocument();
   });
+
+  it("the Pause button asks and cancels a running round like the p key", async () => {
+    serve({});
+    const confirm = vi.spyOn(window, "confirm").mockReturnValue(true);
+    renderGame("/quest/wechsel-minute");
+    await userEvent.click(await screen.findByRole("button", { name: "Runde starten" }));
+    await userEvent.click(screen.getByRole("button", { name: "Pause" }));
+    expect(confirm).toHaveBeenCalledWith("Laufende Runde abbrechen und pausieren?");
+    expect(screen.getByTestId("cancel-signal")).toHaveTextContent("1");
+    expect(await screen.findByRole("button", { name: "Weiter" })).toBeInTheDocument();
+  });
 });

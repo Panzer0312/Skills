@@ -315,7 +315,7 @@ function QuestRun({ quest, state, data }: { quest: QuestDefinition; state: GameS
         ) : null}
         <MetronomePanel metronome={metronome} />
         <div className="quest-buttons">
-          <button type="button" className="game-button" onClick={togglePause}>
+          <button type="button" className="game-button" onClick={pauseKey}>
             {paused ? "Weiter" : "Pause"}
           </button>
           <button type="button" className="game-button" onClick={finish}>
