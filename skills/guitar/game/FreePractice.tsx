@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useWakeLock } from "../../../packages/web/src/app/useWakeLock.js";
 import { gameApi } from "./api.js";
+import { setFreeTimerRunning } from "./freeTimerStore.js";
 import { UndoButton } from "./UndoButton.js";
 
 const KINDS = [
@@ -75,6 +76,10 @@ export function FreePractice() {
 
   const running = timer !== null;
   useWakeLock(running);
+
+  useEffect(() => {
+    setFreeTimerRunning(running);
+  }, [running]);
 
   useEffect(() => {
     if (!running) return;

@@ -1,13 +1,16 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { useLocation } from "react-router-dom";
 import { useGameState } from "../api.js";
+import { getFreeTimerRunning, subscribeFreeTimer } from "../freeTimerStore.js";
 import { ambienceAllowed, startAmbience } from "./ambience.js";
 import { setSoundEnabled } from "./effects.js";
 
 export function useAmbience(): void {
   const sound = useGameState().data?.sound === true;
   const { pathname } = useLocation();
-  const allowed = sound && ambienceAllowed(pathname);
+  // Free practice is practice too, wherever the timer is started from.
+  const freeTimerRunning = useSyncExternalStore(subscribeFreeTimer, getFreeTimerRunning);
+  const allowed = sound && ambienceAllowed(pathname) && !freeTimerRunning;
   const [visible, setVisible] = useState(() => document.visibilityState === "visible");
   const ctxRef = useRef<AudioContext | null>(null);
 

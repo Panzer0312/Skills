@@ -11,6 +11,7 @@ vi.mock("../api.js", () => ({
 
 import { ambienceAllowed } from "./ambience.js";
 import { playEffect, setSoundEnabled } from "./effects.js";
+import { setFreeTimerRunning } from "../freeTimerStore.js";
 import { useAmbience } from "./useAmbience.js";
 
 class FakeNode {
@@ -67,6 +68,7 @@ beforeEach(() => {
 });
 afterEach(() => {
   cleanup();
+  setFreeTimerRunning(false);
   setSoundEnabled(false);
   vi.useRealTimers();
   vi.unstubAllGlobals();
@@ -109,6 +111,22 @@ describe("useAmbience", () => {
     const master = contexts[0]!.createGain.mock.results[0]!.value as FakeNode;
     go(`${BASE}/${p}`);
     expect(master.gain.linearRampToValueAtTime).toHaveBeenLastCalledWith(0, 0.3);
+  });
+
+  it("stops while the free practice timer runs and returns after it", () => {
+    mount();
+    expect(started()).toBe(1);
+    const master = contexts[0]!.createGain.mock.results[0]!.value as FakeNode;
+    act(() => setFreeTimerRunning(true));
+    expect(master.gain.linearRampToValueAtTime).toHaveBeenLastCalledWith(0, 0.3);
+    act(() => setFreeTimerRunning(false));
+    expect(started()).toBe(2);
+  });
+
+  it("stays silent when the page opens with a running free timer", () => {
+    setFreeTimerRunning(true);
+    mount();
+    expect(started()).toBe(0);
   });
 
   it("does not resume on return when sound was turned off", () => {

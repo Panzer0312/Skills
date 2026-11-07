@@ -2,6 +2,7 @@ import { act, fireEvent, render, screen, waitFor } from "@testing-library/react"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { gameApi } from "./api.js";
 import { FreePractice } from "./FreePractice.js";
+import { getFreeTimerRunning } from "./freeTimerStore.js";
 
 vi.mock("./UndoButton.js", () => ({
   UndoButton: ({ onUndone }: { onUndone?: () => void }) => (
@@ -54,6 +55,15 @@ describe("FreePractice", () => {
     fireEvent.change(screen.getByLabelText("Minuten"), { target: { value: "20" } });
     fireEvent.click(screen.getByRole("button", { name: "Eintragen" }));
     expect(await screen.findByText("+12 XP · +3 Gold")).toBeInTheDocument();
+  });
+
+  it("tells the ambience while the timer runs", () => {
+    render(<FreePractice />);
+    open();
+    fireEvent.click(screen.getByRole("button", { name: "Timer starten" }));
+    expect(getFreeTimerRunning()).toBe(true);
+    fireEvent.click(screen.getByRole("button", { name: "Verwerfen" }));
+    expect(getFreeTimerRunning()).toBe(false);
   });
 
   it("uses the chosen kind", async () => {
