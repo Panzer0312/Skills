@@ -6,6 +6,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { queryClient } from "../../../../packages/web/src/app/queryClient.js";
 import { gameApi, PREFS_KEY } from "../api.js";
 import { prefWrites, resetTestPrefs, testPref } from "../testPrefs.js";
+import { dismissIntro } from "../intro/dismissed.js";
 import { Studierstube } from "./Studierstube.js";
 
 vi.mock("../usePref.js", async () => ({ usePref: (await import("../testPrefs.js")).usePref }));
@@ -160,5 +161,16 @@ describe("Studierstube", () => {
     fireEvent.click(screen.getByRole("button", { name: "Intro erneut ansehen" }));
     expect(testPref("intro.gesehen")).toBe(false);
     expect(screen.getByText("Dorf")).toBeInTheDocument();
+  });
+
+  it("replay clears a local dismissal so the tour shows again", () => {
+    dismissIntro();
+    expect(sessionStorage.getItem("guitar.intro.dismissed")).toBe("1");
+    resetTestPrefs({ "intro.gesehen": true });
+    screenUnderTest();
+    fireEvent.click(screen.getByRole("tab", { name: "Daten" }));
+    fireEvent.click(screen.getByRole("button", { name: "Intro erneut ansehen" }));
+    expect(sessionStorage.getItem("guitar.intro.dismissed")).toBeNull();
+    expect(testPref("intro.gesehen")).toBe(false);
   });
 });

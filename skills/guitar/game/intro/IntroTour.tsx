@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { story } from "../api.js";
 import { usePref } from "../usePref.js";
-import { dismissIntro, resetIntroDismissed, useIntroDismissed } from "./dismissed.js";
+import { dismissIntro, useIntroDismissed } from "./dismissed.js";
 import { onIntroStep } from "./helpBus.js";
 import data from "./intro.json";
 import "./intro.css";
@@ -44,12 +44,6 @@ export function IntroTour() {
   const dismissed = useIntroDismissed();
   const touring = !loading && !seen && !dismissed;
 
-  // Replay (seen turned false again) clears the local dismissal.
-  const prevSeen = useRef(seen);
-  useEffect(() => {
-    if (prevSeen.current && !seen) resetIntroDismissed();
-    prevSeen.current = seen;
-  }, [seen]);
   const active = help !== null ? help : touring ? index : null;
   const step = active !== null ? STEPS[active] : undefined;
 

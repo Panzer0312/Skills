@@ -16,12 +16,16 @@ import { resetIntroDismissed } from "./dismissed.js";
 import { openIntroStep } from "./helpBus.js";
 import intro from "./intro.json";
 
-const failWrites = vi.hoisted(() => ({ value: false }));
+const failWrites = vi.hoisted(() => ({ value: false, rollback: false }));
 vi.mock("../usePref.js", async () => {
   const { usePref } = await import("../testPrefs.js");
   return {
     usePref: (key: Parameters<typeof usePref>[0]) => {
       const [value, set, meta] = usePref(key);
+      if (failWrites.rollback) {
+        // Optimistic write, then the server refuses and the value goes back.
+        return [value, (v: never) => { set(v); queueMicrotask(() => set(value as never)); }, meta] as ReturnType<typeof usePref>;
+      }
       // A refused write rolls back: the value never changes.
       return [value, failWrites.value ? () => {} : set, meta] as ReturnType<typeof usePref>;
     },
@@ -55,6 +59,7 @@ function renderTour() {
 beforeEach(() => {
   placed.value = true;
   failWrites.value = false;
+  failWrites.rollback = false;
   resetIntroDismissed();
   resetTestPrefs();
 });
@@ -175,5 +180,15 @@ describe("IntroTour", () => {
     expect(trigger).not.toHaveFocus();
     await userEvent.click(screen.getByRole("button", { name: "Schließen" }));
     expect(trigger).toHaveFocus();
+  });
+
+  it("an optimistic write that rolls back keeps the tour closed and placement happens", async () => {
+    failWrites.rollback = true;
+    placed.value = false;
+    renderTour();
+    await userEvent.click(screen.getByRole("button", { name: "Überspringen" }));
+    expect(await screen.findByRole("heading", { name: "Einstufung" })).toBeInTheDocument();
+    expect(testPref("intro.gesehen")).toBe(false);
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   });
 });

@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { DeviceCheck } from "../devices/DeviceCheck.js";
 import { GAME_BASE, gameApi, PREFS_KEY } from "../api.js";
+import { resetIntroDismissed } from "../intro/dismissed.js";
 import { ToolFrame } from "../Places.js";
 import { usePref } from "../usePref.js";
 import { PrefField } from "./PrefField.js";
@@ -64,6 +65,7 @@ function DataTab() {
           type="button"
           className="studier-button"
           onClick={() => {
+            resetIntroDismissed();
             setIntroSeen(false);
             navigate(GAME_BASE);
           }}
