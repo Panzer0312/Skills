@@ -98,6 +98,7 @@ export function LineChart({ name, series }: { name: string; series: LineSeries[]
                   onFocus={show(s.label, p)}
                   onPointerDown={show(s.label, p)}
                   onBlur={() => setHover(null)}
+                  onPointerLeave={() => setHover(null)}
                 />
               ))}
             </g>

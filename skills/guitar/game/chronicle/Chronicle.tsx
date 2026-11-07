@@ -1,14 +1,13 @@
 import { localDayKey, metricGroup, metricSeries, weeklyMinutes, type GameState, type History } from "@skills/core";
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { GAME_BASE, gameContent, useGameHistory, useGameState } from "../api.js";
+import { GAME_BASE, gameApi, gameContent, useGameHistory, useGameState } from "../api.js";
 import { ToolFrame } from "../Places.js";
 import { formatTime } from "../StatusBar.js";
 import { DayCalendar } from "./DayCalendar.js";
 import { LineChart, type LineSeries } from "./LineChart.js";
 import { MinutesBars } from "./MinutesBars.js";
 import { RecentLog } from "./RecentLog.js";
-import { gameApi } from "../api.js";
 
 const MAX_LINES = 4;
 

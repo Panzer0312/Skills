@@ -1,10 +1,9 @@
-import type { GameState, History, RecentLogEntry } from "@skills/core";
+import { localDayKey, type GameState, type History, type RecentLogEntry } from "@skills/core";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { queryClient } from "../../../../packages/web/src/app/queryClient.js";
-import { localDayKey } from "@skills/core";
 import { Chronicle } from "./Chronicle.js";
 
 const state: GameState = {
@@ -34,9 +33,15 @@ const json = (body: unknown, status = 200) =>
 
 let recent: RecentLogEntry[] = [];
 
+let recentFails = false;
+let deleteFails = false;
+
 function serve(history: History | "error") {
   const mock = vi.fn(async (url: string) => {
-    if (String(url).includes("/log/recent")) return json({ entries: recent });
+    if (String(url).includes("/log/recent")) {
+      return recentFails ? json({ error: { code: "x", message: "kaputt" } }, 500) : json({ entries: recent });
+    }
+    if (deleteFails && String(url).includes("/log/")) return json({ error: { code: "x", message: "kaputt" } }, 500);
     if (String(url).includes("/history")) {
       return history === "error" ? json({ error: { code: "x", message: "kaputt" } }, 500) : json(history);
     }
@@ -68,6 +73,8 @@ describe("Chronicle", () => {
   beforeEach(() => {
     queryClient.clear();
     recent = [];
+    recentFails = false;
+    deleteFails = false;
   });
   afterEach(() => {
     cleanup();
@@ -216,5 +223,27 @@ describe("Chronicle", () => {
     const link = await screen.findByRole("link", { name: "Daten exportieren" });
     expect(link.getAttribute("href")).toBe("/api/game/guitar/export");
     expect(link.hasAttribute("download")).toBe(true);
+  });
+
+  it("shows loading and error states for the recent log, not an empty list", async () => {
+    recentFails = true;
+    serve({ days: [], metrics: [] });
+    renderIt();
+    expect(screen.queryByText("Noch keine Einträge.")).toBeNull();
+    expect(await screen.findByText("Die letzten Einträge konnten nicht geladen werden.")).toBeTruthy();
+    expect(screen.queryByText("Noch keine Einträge.")).toBeNull();
+    expect(screen.getAllByRole("button", { name: "Erneut versuchen" }).length).toBeGreaterThan(0);
+  });
+
+  it("tells when deleting an entry fails", async () => {
+    recent = [
+      { id: 7, at: 1, day: "2026-11-05", kind: "frei", questId: null, techniqueId: "jam", seconds: 600, metricKey: null, metricValue: null },
+    ];
+    deleteFails = true;
+    serve({ days: [], metrics: [] });
+    vi.stubGlobal("confirm", () => true);
+    renderIt();
+    fireEvent.click(await screen.findByRole("button", { name: "Löschen" }));
+    expect(await screen.findByText("Der Eintrag konnte nicht gelöscht werden.")).toBeTruthy();
   });
 });
