@@ -7,21 +7,12 @@ import { formatTime } from "../StatusBar.js";
 import { DayCalendar } from "./DayCalendar.js";
 import { LineChart, type LineSeries } from "./LineChart.js";
 import { MinutesBars } from "./MinutesBars.js";
+import { noteRoundLabel } from "../tuningLabels.js";
 import { RecentLog } from "./RecentLog.js";
 
 const MAX_LINES = 4;
 
 const pairLabel = (key: string) => key.slice("wechsel:".length).replace("-", "–");
-
-const NOTE_CHOICES: Record<string, string> = {
-  "0": "E-Saite",
-  "1": "A-Saite",
-  "0-1": "E und A",
-  "0-1-2-3-4-5": "Alle",
-};
-
-/** The strings a note finder round was played on, in German. */
-const noteRoundLabel = (key: string) => NOTE_CHOICES[key.slice("notenfinder:".length)] ?? "Eigene Saiten";
 
 function recordLabel(key: string): string {
   if (key.startsWith("wechsel:")) return `Wechsel ${pairLabel(key)}`;

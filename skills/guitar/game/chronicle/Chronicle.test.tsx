@@ -142,6 +142,22 @@ describe("Chronicle", () => {
     expect(screen.getByText("Noten finden, A-Saite")).toBeTruthy();
   });
 
+  it("names the strings of a note finder record in its tuning", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async (url: string) =>
+        String(url).includes("/history")
+          ? json({ days: [], metrics: [] })
+          : json({ ...state, records: { "notenfinder:Drop D:0": 14, "notenfinder:Drop D:0-1": 8, "notenfinder:0": 5 } }),
+      ),
+    );
+    renderIt();
+    expect(await screen.findByText("Noten finden, Drop D, D-Saite")).toBeTruthy();
+    expect(screen.getByText("Noten finden, Drop D, D und A")).toBeTruthy();
+    expect(screen.getByText("Noten finden, E-Saite")).toBeTruthy();
+    expect(screen.queryByText(/Eigene Saiten/)).toBeNull();
+  });
+
   it("says so when nothing is measured yet", async () => {
     serve({ days: [], metrics: [] });
     renderIt();

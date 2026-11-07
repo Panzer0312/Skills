@@ -15,6 +15,7 @@ import { playSignal } from "../../../packages/web/src/audio/signalTone.js";
 import { usePersistentState } from "../../../packages/web/src/app/usePersistentState.js";
 import { useInputDevices } from "../../../packages/web/src/audio/useInputDevices.js";
 import { useMicrophone } from "../../../packages/web/src/audio/useMicrophone.js";
+import { findTuning, stringLabel, stringsLabel } from "./tuningLabels.js";
 import { UndoButton } from "./UndoButton.js";
 import { gameApi, type LogResult } from "./api.js";
 import { FretboardGrid } from "./FretboardGrid.js";
@@ -27,23 +28,14 @@ function isTuningName(raw: unknown): raw is string {
   return typeof raw === "string" && TUNINGS.some((t) => t.name === raw);
 }
 
-function findTuning(name: string): Tuning {
-  return TUNINGS.find((t) => t.name === name) ?? TUNINGS[0]!;
+function tuningFor(name: string): Tuning {
+  return findTuning(name) ?? TUNINGS[0]!;
 }
 
-/** Label of a string: the open note without its octave, the high string in lower case. */
-function stringLabel(tuning: Tuning, index: number): string {
-  const name = displayNote(tuning.strings[index]!.replace(/-?\d+$/, ""));
-  return index === 5 ? name.toLowerCase() : name;
-}
+const CHOICES = [[0], [1], [0, 1], [0, 1, 2, 3, 4, 5]];
 
 function choicesFor(tuning: Tuning): { label: string; strings: number[] }[] {
-  return [
-    { label: `${stringLabel(tuning, 0)}-Saite`, strings: [0] },
-    { label: `${stringLabel(tuning, 1)}-Saite`, strings: [1] },
-    { label: `${stringLabel(tuning, 0)} und ${stringLabel(tuning, 1)}`, strings: [0, 1] },
-    { label: "Alle", strings: [0, 1, 2, 3, 4, 5] },
-  ];
+  return CHOICES.map((strings) => ({ label: stringsLabel(tuning, strings), strings }));
 }
 
 type Phase = "pick" | "run" | "done";
@@ -75,7 +67,7 @@ export function NoteFinder({
   const [choice, setChoice] = useState(0);
   const [storedTuning, setStoredTuning] = usePersistentState("guitar.notefinder.tuning", "Standard", isTuningName);
   const tuningName = fixedTuning !== undefined && isTuningName(fixedTuning) ? fixedTuning : fixedTuning ? "Standard" : storedTuning;
-  const tuning = findTuning(tuningName);
+  const tuning = tuningFor(tuningName);
   const tuningRef = useRef(tuning);
   tuningRef.current = tuning;
   const choices = choicesFor(tuning);
