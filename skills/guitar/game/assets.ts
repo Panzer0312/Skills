@@ -24,6 +24,16 @@ export const SPRITE_NAMES = [
   "log",
   "stump",
   "village",
+  "shield-wood",
+  "shield-blue",
+  "sword-ice",
+  "dagger",
+  "dagger-gold",
+  "staff-red",
+  "ring-gem",
+  "ring-fire",
+  "ring-pink",
+  "chest-blue",
 ] as const;
 
 export type SpriteName = (typeof SPRITE_NAMES)[number];
