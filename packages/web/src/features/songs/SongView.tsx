@@ -1,5 +1,7 @@
 import { transposeSong, type Song } from "@skills/core";
 import { useEffect, useRef, useState } from "react";
+import { usePersistentState } from "../../app/usePersistentState.js";
+import { useWakeLock } from "../../app/useWakeLock.js";
 import { ApiError } from "../../api/client.js";
 import { useMetronome } from "../../audio/useMetronome.js";
 import { ChordDiagramSingle } from "../../music/ChordDiagramSingle.js";
@@ -7,6 +9,12 @@ import { ChordEditor } from "../../music/ChordEditor.js";
 import { useChordOverrides } from "../../music/useChordOverrides.js";
 import { resolveChordShape } from "../../music/userChords.js";
 import { nextScrollTop, type ScrollRange } from "./autoScroll.js";
+
+const MIN_BPM = 40;
+const MAX_BPM = 240;
+const clampBpm = (value: number) => Math.min(MAX_BPM, Math.max(MIN_BPM, Math.round(value)));
+const isScrollSpeed = (raw: unknown): raw is number =>
+  typeof raw === "number" && Number.isFinite(raw) && raw >= 5 && raw <= 100;
 
 const CHORD_SAVE_FALLBACK_ERROR = "Der Griff konnte nicht gespeichert werden. Bitte später erneut versuchen.";
 
@@ -50,7 +58,9 @@ function LineWithChords({ line }: { line: Song["sections"][number]["lines"][numb
 export function SongView({ song, songKey }: { song: Song; songKey?: string }) {
   const [steps, setSteps] = useState(0);
   const [scrolling, setScrolling] = useState(false);
-  const [scrollSpeed, setScrollSpeed] = useState(30);
+  const [scrollSpeed, setScrollSpeed] = usePersistentState<number>("songs.scrollSpeed", 30, isScrollSpeed);
+  const [countingIn, setCountingIn] = useState(false);
+  const countInTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [editing, setEditing] = useState<string | null>(null);
   const [editError, setEditError] = useState<string | null>(null);
   const [loopIndex, setLoopIndex] = useState<number | null>(null);
@@ -58,6 +68,34 @@ export function SongView({ song, songKey }: { song: Song; songKey?: string }) {
   const sectionRefs = useRef<(HTMLElement | null)[]>([]);
   const metronome = useMetronome();
   const { overrides, entries, save, reset } = useChordOverrides(songKey);
+
+  useWakeLock(scrolling || metronome.running);
+
+  function clearCountIn() {
+    if (countInTimer.current !== null) {
+      clearTimeout(countInTimer.current);
+      countInTimer.current = null;
+    }
+    setCountingIn(false);
+  }
+  useEffect(() => clearCountIn, []);
+
+  function toggleScroll() {
+    const wasCountingIn = countingIn;
+    clearCountIn();
+    setScrolling((v) => (wasCountingIn ? false : !v));
+  }
+
+  function countInAndScroll() {
+    clearCountIn();
+    if (!metronome.running) metronome.start();
+    setCountingIn(true);
+    countInTimer.current = setTimeout(() => {
+      countInTimer.current = null;
+      setCountingIn(false);
+      setScrolling(true);
+    }, (metronome.beatsPerBar * 60000) / metronome.bpm);
+  }
 
   const shown = steps === 0 ? song : transposeSong(song, steps);
   // A new song prop may have fewer sections than the loop pointed at.
@@ -115,10 +153,10 @@ export function SongView({ song, songKey }: { song: Song; songKey?: string }) {
 
         <button
           type="button"
-          onClick={() => setScrolling((v) => !v)}
+          onClick={toggleScroll}
           className="rounded border border-slate-300 px-3 py-1 dark:border-slate-700"
         >
-          {scrolling ? "Auto-Scroll stoppen" : "Auto-Scroll starten"}
+          {scrolling || countingIn ? "Auto-Scroll stoppen" : "Auto-Scroll starten"}
         </button>
         <label className="flex items-center gap-2">
           <span>Tempo</span>
@@ -155,6 +193,39 @@ export function SongView({ song, songKey }: { song: Song; songKey?: string }) {
           className="rounded border border-slate-300 px-3 py-1 dark:border-slate-700"
         >
           Metronom {metronome.running ? "aus" : "an"} ({metronome.bpm})
+        </button>
+        <button
+          type="button"
+          onClick={() => metronome.setBpm(clampBpm(metronome.bpm - 5))}
+          className="rounded border border-slate-300 px-3 py-1 dark:border-slate-700"
+        >
+          −5
+        </button>
+        <input
+          type="number"
+          min={MIN_BPM}
+          max={MAX_BPM}
+          value={metronome.bpm}
+          onChange={(e) => {
+            const value = Number(e.target.value);
+            if (Number.isFinite(value) && e.target.value !== "") metronome.setBpm(clampBpm(value));
+          }}
+          aria-label="Metronom-BPM"
+          className="w-20 rounded border border-slate-300 px-2 py-1 dark:border-slate-700 dark:bg-slate-900"
+        />
+        <button
+          type="button"
+          onClick={() => metronome.setBpm(clampBpm(metronome.bpm + 5))}
+          className="rounded border border-slate-300 px-3 py-1 dark:border-slate-700"
+        >
+          +5
+        </button>
+        <button
+          type="button"
+          onClick={countInAndScroll}
+          className="rounded border border-slate-300 px-3 py-1 dark:border-slate-700"
+        >
+          Einzählen und scrollen
         </button>
       </div>
 

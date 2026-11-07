@@ -1,14 +1,17 @@
 import { parseSong } from "@skills/core";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { render, screen, waitFor, within } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { SongView } from "./SongView.js";
 
+const metro = vi.hoisted(() => ({
+  bpm: 80, setBpm: vi.fn(), start: vi.fn(), stop: vi.fn(), running: false,
+}));
 vi.mock("../../audio/useMetronome.js", () => ({
   useMetronome: () => ({
-    bpm: 80, setBpm: vi.fn(), beatsPerBar: 4, setBeatsPerBar: vi.fn(),
-    running: false, start: vi.fn(), stop: vi.fn(), tap: vi.fn(), currentBeat: 0,
+    bpm: metro.bpm, setBpm: metro.setBpm, beatsPerBar: 4, setBeatsPerBar: vi.fn(),
+    running: metro.running, start: metro.start, stop: metro.stop, tap: vi.fn(), currentBeat: 0,
   }),
 }));
 
@@ -26,7 +29,13 @@ function renderSong(props: { songKey?: string } = {}) {
   );
 }
 
-afterEach(() => vi.unstubAllGlobals());
+afterEach(() => {
+  vi.unstubAllGlobals();
+  vi.useRealTimers();
+  try { localStorage.clear(); } catch { /* ignore */ }
+  metro.bpm = 80;
+  metro.setBpm.mockClear(); metro.start.mockClear(); metro.stop.mockClear();
+});
 
 describe("SongView", () => {
   it("shows the title, the chords and the lyrics", () => {
@@ -186,5 +195,47 @@ describe("SongView", () => {
   it("keeps working without sections", () => {
     renderSong();
     expect(screen.queryByRole("combobox", { name: "Abschnitt wiederholen" })).not.toBeInTheDocument();
+  });
+
+  it("bpm buttons change the metronome tempo", async () => {
+    renderSong();
+    await userEvent.click(screen.getByRole("button", { name: "+5" }));
+    expect(metro.setBpm).toHaveBeenLastCalledWith(85);
+    await userEvent.click(screen.getByRole("button", { name: "−5" }));
+    expect(metro.setBpm).toHaveBeenLastCalledWith(75);
+    expect(screen.getByLabelText("Metronom-BPM")).toHaveValue(80);
+  });
+
+  it("count-in starts scrolling after one bar", () => {
+    vi.useFakeTimers();
+    metro.bpm = 120;
+    renderSong();
+    const interval = vi.spyOn(globalThis, "setInterval");
+    fireEvent.click(screen.getByRole("button", { name: "Einzählen und scrollen" }));
+    expect(metro.start).toHaveBeenCalled();
+    act(() => { vi.advanceTimersByTime(1999); });
+    expect(interval).not.toHaveBeenCalled();
+    act(() => { vi.advanceTimersByTime(1); });
+    expect(interval).toHaveBeenCalled();
+    expect(screen.getByRole("button", { name: /Auto-Scroll stoppen/ })).toBeInTheDocument();
+    interval.mockRestore();
+  });
+
+  it("stop button cancels a running count-in", () => {
+    vi.useFakeTimers();
+    metro.bpm = 120;
+    renderSong();
+    fireEvent.click(screen.getByRole("button", { name: "Einzählen und scrollen" }));
+    fireEvent.click(screen.getByRole("button", { name: /Auto-Scroll stoppen/ }));
+    act(() => { vi.advanceTimersByTime(5000); });
+    expect(screen.getByRole("button", { name: /Auto-Scroll starten/ })).toBeInTheDocument();
+  });
+
+  it("scroll speed survives remount", () => {
+    const first = renderSong();
+    fireEvent.change(screen.getByLabelText("Scroll-Tempo"), { target: { value: "70" } });
+    first.unmount();
+    renderSong();
+    expect(screen.getByLabelText("Scroll-Tempo")).toHaveValue("70");
   });
 });
