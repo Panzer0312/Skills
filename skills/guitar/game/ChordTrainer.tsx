@@ -8,6 +8,7 @@ import {
 } from "../../../packages/web/src/audio/signalTone.js";
 import { ChordDiagramSingle } from "../../../packages/web/src/music/ChordDiagramSingle.js";
 import { useChordOverrides } from "../../../packages/web/src/music/useChordOverrides.js";
+import { UndoButton } from "./UndoButton.js";
 import { gameApi, gameContent, useGameState, type LogResult } from "./api.js";
 
 const COUNT_IN_BEATS = 4;
@@ -319,6 +320,7 @@ export function ChordTrainer({
           {result.isRecord ? <p className="font-bold">Neuer Rekord!</p> : null}
           <p>+{result.xpGained} XP</p>
           {result.goldGained > 0 ? <p>+{result.goldGained} Gold</p> : null}
+          <UndoButton logId={result.logId} />
         </div>
       ) : null}
     </div>

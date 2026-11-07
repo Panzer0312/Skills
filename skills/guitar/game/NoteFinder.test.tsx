@@ -51,7 +51,7 @@ function json(body: unknown) {
 function serve() {
   const fetchMock = vi.fn(async (url: string, _init?: RequestInit) => {
     if (String(url).includes("/state")) return json(base);
-    if (String(url).includes("/log")) return json({ xpGained: 5, suggestion: null, isRecord: false });
+    if (String(url).includes("/log")) return json({ logId: 7, xpGained: 5, suggestion: null, isRecord: false });
     return json({ ok: true });
   });
   vi.stubGlobal("fetch", fetchMock);
@@ -247,7 +247,7 @@ describe("NoteFinder", () => {
   it("logs nothing for a round without hits and shows no record", async () => {
     const fetchMock = vi.fn(async (url: string, _init?: RequestInit) => {
       if (String(url).includes("/state")) return json(base);
-      if (String(url).includes("/log")) return json({ xpGained: 5, suggestion: null, isRecord: true });
+      if (String(url).includes("/log")) return json({ logId: 7, xpGained: 5, suggestion: null, isRecord: true });
       return json({ ok: true });
     });
     vi.stubGlobal("fetch", fetchMock);

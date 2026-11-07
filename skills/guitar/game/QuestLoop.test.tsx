@@ -78,7 +78,7 @@ function serve(initial: Partial<GameState>, options: Options = {}) {
       return json({ ok: true });
     }
     if (url.endsWith("/log")) {
-      return options.log?.() ?? json({ xpGained: 40, suggestion: null, isRecord: false });
+      return options.log?.() ?? json({ logId: 7, xpGained: 40, suggestion: null, isRecord: false });
     }
     if (url.includes("/level/")) return options.level?.() ?? json({ ok: true });
     if (url.startsWith("/api/progress")) return json({ lessons: [] });
@@ -817,6 +817,16 @@ describe("result dialog", () => {
     await screen.findByText("+40 XP");
   }
 
+  it("hides the XP lines after undo and keeps the dialog", async () => {
+    const fetchMock = serve({});
+    renderGame("/quest/akkordwechsel-takt");
+    await saveResult();
+    await userEvent.click(screen.getByRole("button", { name: "Rückgängig" }));
+    expect(await screen.findByText("Eintrag entfernt.")).toBeInTheDocument();
+    expect(screen.queryByText("+40 XP")).not.toBeInTheDocument();
+    expect(fetchMock.mock.calls.some(([u, i]) => String(u).endsWith("/log/7") && i?.method === "DELETE")).toBe(true);
+  });
+
   it("sends the lesson's target from a quest without its own", async () => {
     const fetchMock = serve({});
     renderGame("/quest/akkordwechsel-takt");
@@ -952,7 +962,7 @@ describe("result dialog", () => {
     fireEvent.submit(form);
     expect(writes(fetchMock, "/log")).toHaveLength(1);
     expect(save).toBeDisabled();
-    response.release(json({ xpGained: 40, suggestion: null, isRecord: false }));
+    response.release(json({ logId: 7, xpGained: 40, suggestion: null, isRecord: false }));
     expect(await screen.findByText("+40 XP")).toBeInTheDocument();
     expect(writes(fetchMock, "/log")).toHaveLength(1);
   });
@@ -965,7 +975,7 @@ describe("result dialog", () => {
         log: () =>
           failing
             ? json({ error: { code: "x", message: "Server kaputt" } }, 500)
-            : json({ xpGained: 25, suggestion: null, isRecord: false }),
+            : json({ logId: 7, xpGained: 25, suggestion: null, isRecord: false }),
       },
     );
     renderGame("/quest/anschlag-takt");
@@ -987,7 +997,7 @@ describe("result dialog", () => {
     const response = held();
     const fetchMock = serve(
       { levels: { anschlag: 4 }, today: { minutes: 30, questIds: ["anschlag-takt"] } },
-      { log: () => json({ xpGained: 40, suggestion: 5, isRecord: false }), level: () => response.promise },
+      { log: () => json({ logId: 7, xpGained: 40, suggestion: 5, isRecord: false }), level: () => response.promise },
     );
     renderGame("/quest/anschlag-takt");
     await finish();
@@ -1014,7 +1024,7 @@ describe("result dialog", () => {
     serve(
       {},
       {
-        log: () => json({ xpGained: 40, suggestion: 2, isRecord: false }),
+        log: () => json({ logId: 7, xpGained: 40, suggestion: 2, isRecord: false }),
         level: () => json({ error: { code: "x", message: "Stufe kaputt" } }, 500),
       },
     );
@@ -1030,7 +1040,7 @@ describe("result dialog", () => {
   it("saves nothing when the owner declines the suggestion", async () => {
     const fetchMock = serve(
       { today: { minutes: 30, questIds: ["anschlag-takt"] } },
-      { log: () => json({ xpGained: 40, suggestion: 5, isRecord: false }) },
+      { log: () => json({ logId: 7, xpGained: 40, suggestion: 5, isRecord: false }) },
     );
     renderGame("/quest/anschlag-takt");
     await finish();

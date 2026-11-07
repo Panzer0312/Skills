@@ -49,7 +49,7 @@ function serve(records: Record<string, number> = {}, isRecord = false) {
   const fetchMock = vi.fn(async (url: string, _init?: RequestInit) => {
     if (String(url).includes("/state")) return json({ ...base, records });
     if (String(url).includes("/log"))
-      return json({ xpGained: 5, suggestion: null, isRecord });
+      return json({ logId: 7, xpGained: 5, suggestion: null, isRecord });
     if (String(url).startsWith("/api/chords"))
       return json({ global: [], song: [], entries: [] });
     return json({ ok: true });

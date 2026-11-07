@@ -15,6 +15,7 @@ import { playSignal } from "../../../packages/web/src/audio/signalTone.js";
 import { usePersistentState } from "../../../packages/web/src/app/usePersistentState.js";
 import { useInputDevices } from "../../../packages/web/src/audio/useInputDevices.js";
 import { useMicrophone } from "../../../packages/web/src/audio/useMicrophone.js";
+import { UndoButton } from "./UndoButton.js";
 import { gameApi, type LogResult } from "./api.js";
 import { FretboardGrid } from "./FretboardGrid.js";
 import { InputControls } from "./InputControls.js";
@@ -300,6 +301,7 @@ export function NoteFinder({
           {result.isRecord && hits > 0 ? <p className="font-bold">Neuer Rekord!</p> : null}
           <p>+{result.xpGained} XP</p>
           {result.goldGained > 0 ? <p>+{result.goldGained} Gold</p> : null}
+          <UndoButton logId={result.logId} />
         </div>
       ) : null}
     </div>

@@ -7,6 +7,7 @@ import {
 } from "@skills/core";
 import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { UndoButton } from "./UndoButton.js";
 import { GAME_BASE, gameApi, gameContent, type LogResult } from "./api.js";
 
 const RATINGS: { value: PracticeRating; label: string }[] = [
@@ -103,6 +104,7 @@ export function ResultDialog({
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<LogResult | null>(null);
+  const [undone, setUndone] = useState(false);
   const savingRef = useRef(false);
 
   async function save() {
@@ -157,10 +159,15 @@ export function ResultDialog({
     const atCheckpoint = bestNext(gameContent.road, lessons)?.lessonId === quest.lessonId;
     return (
       <section role="dialog" aria-label="Ergebnis" className="quest-result">
-        {result.isRecord ? <p className="font-bold">Neuer Rekord!</p> : null}
-        <p className="quest-xp">+{result.xpGained} XP</p>
-        {result.goldGained > 0 ? <p className="quest-xp">+{result.goldGained} Gold</p> : null}
-        {result.suggestion !== null ? (
+        {result.isRecord && !undone ? <p className="font-bold">Neuer Rekord!</p> : null}
+        {undone ? null : (
+          <>
+            <p className="quest-xp">+{result.xpGained} XP</p>
+            {result.goldGained > 0 ? <p className="quest-xp">+{result.goldGained} Gold</p> : null}
+          </>
+        )}
+        <UndoButton logId={result.logId} onUndone={() => setUndone(true)} />
+        {result.suggestion !== null && !undone ? (
           <>
             <p>Nächstes Mal Stufe {result.suggestion}?</p>
             <LevelPicker techniqueId={quest.techniqueId} initial={result.suggestion} onSaved={onClose} />
