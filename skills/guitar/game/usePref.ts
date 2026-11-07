@@ -23,20 +23,26 @@ export function usePref<K extends PrefKey>(
   const client = useQueryClient();
   const { prefs, loading } = usePrefs();
   const mutation = useMutation({
+    mutationKey: PREFS_KEY,
     mutationFn: (value: PrefValue<K>) => prefsApi.setPref(key, value),
     onMutate: async (value) => {
       await client.cancelQueries({ queryKey: PREFS_KEY });
-      const previous = client.getQueryData<PrefsData>(PREFS_KEY);
-      client.setQueryData<PrefsData>(PREFS_KEY, {
-        prefs: { ...(previous?.prefs ?? defaults()), [key]: value },
-      });
+      const previous = client.getQueryData<PrefsData>(PREFS_KEY)?.prefs[key] ?? defaults()[key];
+      client.setQueryData<PrefsData>(PREFS_KEY, (old) => ({
+        prefs: { ...(old?.prefs ?? defaults()), [key]: value },
+      }));
       return { previous };
     },
-    onError: (_error, _value, context) => {
-      if (context?.previous) client.setQueryData(PREFS_KEY, context.previous);
-      else client.removeQueries({ queryKey: PREFS_KEY });
+    // Only this key goes back, and only while it still shows this write's value.
+    onError: (_error, value, context) => {
+      client.setQueryData<PrefsData>(PREFS_KEY, (old) =>
+        old && old.prefs[key] === value && context ? { prefs: { ...old.prefs, [key]: context.previous } } : old,
+      );
     },
-    // A failed write is rolled back silently; the next load shows the stored value.
+    // The last write to settle reloads, so the cache ends up as the server has it.
+    onSettled: () => {
+      if (client.isMutating({ mutationKey: PREFS_KEY }) <= 1) void client.invalidateQueries({ queryKey: PREFS_KEY });
+    },
   });
   return [prefs[key], (v) => mutation.mutate(v), { loading }];
 }

@@ -6,7 +6,7 @@ import { invalid } from "./shared.js";
 
 export const router = new Hono<AppEnv>();
 
-const bodySchema = z.object({ key: z.string().min(1), value: z.unknown() });
+const bodySchema = z.object({ key: z.string().min(1) }).passthrough();
 
 router.get("/api/game/:skillId/prefs", (c) => {
   const rows = c
@@ -27,7 +27,11 @@ router.get("/api/game/:skillId/prefs", (c) => {
 router.put("/api/game/:skillId/prefs", async (c) => {
   const parsed = bodySchema.safeParse(await c.req.json().catch(() => null));
   if (!parsed.success) return invalid(c, parsed.error);
-  const { key, value } = parsed.data;
+  const { key } = parsed.data;
+  if (!("value" in parsed.data)) {
+    return c.json({ error: { code: "invalid_pref", message: "Der Wert fehlt." } }, 400);
+  }
+  const value = parsed.data.value;
   if (!isPrefKey(key)) {
     return c.json({ error: { code: "unknown_pref", message: `Unbekannte Einstellung: ${key}` } }, 400);
   }

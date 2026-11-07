@@ -30,6 +30,12 @@ describe("prefs routes", () => {
     expect((await prefs())["intro.gesehen"]).toBe(false);
   });
 
+  it("prefs route rejects a missing value", async () => {
+    const res = await send("PUT", "/api/game/guitar/prefs", { key: "intro.gesehen" });
+    expect(res.status).toBe(400);
+    expect(((await res.json()) as { error: { code: string } }).error.code).toBe("invalid_pref");
+  });
+
   it("prefs round trip and reset", async () => {
     expect((await prefs())["intro.gesehen"]).toBe(false);
     expect(await (await send("PUT", "/api/game/guitar/prefs", { key: "intro.gesehen", value: true })).json()).toEqual({ ok: true });

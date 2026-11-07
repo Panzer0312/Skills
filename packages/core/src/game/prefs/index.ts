@@ -6,6 +6,7 @@ import { prefs as klang } from "./klang.js";
 import { prefs as mentor } from "./mentor.js";
 import { prefs as ueben } from "./ueben.js";
 import { prefs as werkzeuge } from "./werkzeuge.js";
+import type { z } from "zod";
 import type { PrefDef } from "./types.js";
 
 export { definePrefs } from "./define.js";
@@ -23,7 +24,7 @@ export const PREFS = {
 };
 
 export type PrefKey = keyof typeof PREFS;
-export type PrefValue<K extends PrefKey> = (typeof PREFS)[K]["default"];
+export type PrefValue<K extends PrefKey> = z.infer<(typeof PREFS)[K]["schema"]>;
 export type ResolvedPrefs = { [K in PrefKey]: PrefValue<K> };
 
 /** Validates each stored value; invalid or missing ones fall back to the default, unknown keys are dropped. */
