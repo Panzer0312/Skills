@@ -42,6 +42,8 @@ Meister Orlo, ein alter Hafenbarde, begleitet den Weg als Mentor: Eine Karte im 
 Song ändern — wahlweise nur für diesen Song oder für alle.
 Im Markt gibt es Ausrüstung: Üben bringt Gold, damit kauft man Helm, Waffen, Schilde, Ringe und Talismane; Meilensteine des Hauptwegs schenken einzigartige Stücke. Die Ausrüstung ist nur Schmuck und erscheint in der Statusleiste. Über „Klang an/aus“ in der Statusleiste lassen sich leise Hafengeräusche und kurze Effekte einschalten (Standard: aus); in Quests, Taverne, Schrein, Griffbrett, Schmiede, Riffs und Jam Room bleibt es still.
 
+Kleine Verbesserungen im Alltag: „Frei üben“ im Statusbalken (Timer oder Minuten eintragen, auch ohne Quest), „Rückgängig“ nach dem Speichern, Pause in Quests, Tastenkürzel, ein Bildschirm, der beim Üben an bleibt, und gemerkte Einstellungen. Der Song hat ein Metronom mit Einzählen, ebenso der Akkordwechsel-Trainer; dort lässt sich auch ein eigenes Akkordpaar wählen. Der Notenfinder funktioniert auch in anderen Stimmungen. Die Chronik zeigt Übungstage und letzte Einträge und exportiert die Daten.
+
 ## Neuen Lernbereich hinzufügen
 
 Siehe `docs/skills-authoring.md`. Kurzfassung: Ordner unter `skills/` anlegen, `skill.json`
