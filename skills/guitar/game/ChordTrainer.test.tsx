@@ -420,6 +420,8 @@ describe("ChordTrainer in a quest", () => {
   const progress = { record: vi.fn(), get: () => null, complete: vi.fn() };
 
   async function renderQuest() {
+    // The intro is done, so the deep link to the quest is not sent to the village.
+    resetTestPrefs({ "intro.gesehen": true });
     render(
       <QueryClientProvider client={queryClient}>
         <MemoryRouter

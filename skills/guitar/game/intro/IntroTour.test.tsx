@@ -37,15 +37,17 @@ vi.mock("../api.js", async (orig) => ({
   useGameState: () => ({ isPending: false, data: { placed: placed.value } }),
 }));
 
-function renderTour() {
+function renderTour(entry = "/vollbild/guitar/spiel") {
   return render(
     <QueryClientProvider client={queryClient}>
-      <MemoryRouter initialEntries={["/vollbild/guitar/spiel"]}>
+      <MemoryRouter initialEntries={[entry]}>
         <IntroTour />
         <Routes>
           <Route element={<PlacementGate />}>
             <Route path="/vollbild/guitar/spiel" element={<p>Dorf</p>} />
+            <Route path="/vollbild/guitar/spiel/quests" element={<p>Quests</p>} />
           </Route>
+          <Route path="/vollbild/guitar/spiel/jam" element={<p>Jam</p>} />
           <Route
             path="/vollbild/guitar/spiel/einstufung"
             element={<h1>Einstufung</h1>}
@@ -73,6 +75,25 @@ describe("IntroTour", () => {
     await userEvent.click(screen.getByRole("button", { name: "Überspringen" }));
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
     expect(testPref("intro.gesehen")).toBe(true);
+  });
+
+  it("a deep link to a gated route leads to the village, where the tour shows", () => {
+    renderTour("/vollbild/guitar/spiel/quests");
+    expect(screen.getByText("Dorf")).toBeInTheDocument();
+    expect(screen.queryByText("Quests")).not.toBeInTheDocument();
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
+  });
+
+  it("the tour waits for the village on a tool route", () => {
+    renderTour("/vollbild/guitar/spiel/jam");
+    expect(screen.getByText("Jam")).toBeInTheDocument();
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+  });
+
+  it("a gated route is not redirected once the tour is done", () => {
+    resetTestPrefs({ "intro.gesehen": true });
+    renderTour("/vollbild/guitar/spiel/quests");
+    expect(screen.getByText("Quests")).toBeInTheDocument();
   });
 
   it("does not show while prefs load or once seen", () => {

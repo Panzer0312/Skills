@@ -1,5 +1,5 @@
 import type { GameState } from "@skills/core";
-import { localDayKey } from "@skills/core";
+import { localDayKey, PREFS } from "@skills/core";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -37,7 +37,13 @@ const json = (body: unknown) =>
 beforeEach(() => {
   vi.stubGlobal(
     "fetch",
-    vi.fn(async (url: string) => (String(url).includes("/state") ? json(base) : json({ ok: true }))),
+    vi.fn(async (url: string) =>
+      String(url).includes("/state")
+        ? json(base)
+        : String(url).includes("/prefs")
+          ? json({ prefs: { ...Object.fromEntries(Object.entries(PREFS).map(([k, d]) => [k, d.default])), "intro.gesehen": true } })
+          : json({ ok: true }),
+    ),
   );
   vi.stubGlobal(
     "AudioContext",

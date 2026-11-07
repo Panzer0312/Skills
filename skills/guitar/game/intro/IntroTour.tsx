@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { story } from "../api.js";
+import { useLocation } from "react-router-dom";
+import { GAME_BASE, story } from "../api.js";
 import { usePref } from "../usePref.js";
 import { dismissIntro, useIntroDismissed } from "./dismissed.js";
 import { onIntroStep } from "./helpBus.js";
@@ -42,7 +43,10 @@ export function IntroTour() {
   const nextRef = useRef<HTMLButtonElement>(null);
 
   const dismissed = useIntroDismissed();
-  const touring = !loading && !seen && !dismissed;
+  const { pathname } = useLocation();
+  // The first-launch tour starts in the village only; tools do not get interrupted.
+  const inVillage = pathname === GAME_BASE || pathname === `${GAME_BASE}/`;
+  const touring = !loading && !seen && !dismissed && inVillage;
 
   const active = help !== null ? help : touring ? index : null;
   const step = active !== null ? STEPS[active] : undefined;
