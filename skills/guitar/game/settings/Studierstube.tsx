@@ -95,7 +95,7 @@ export function Studierstube() {
     refs.current[target]?.focus();
   };
   return (
-    <ToolFrame title="Studierstube">
+    <ToolFrame title="Studierstube" helpStepId="studierstube">
       <div className="studier">
         <div role="tablist" aria-label="Einstellungen" className="studier-tabs" onKeyDown={onKeyDown}>
           {tabs.map((t) => (

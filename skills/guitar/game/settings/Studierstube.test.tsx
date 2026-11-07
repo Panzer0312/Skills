@@ -41,6 +41,11 @@ beforeEach(() => {
 });
 
 describe("Studierstube", () => {
+  it("offers the help button for its intro step", () => {
+    screenUnderTest();
+    expect(screen.getByRole("button", { name: "Hilfe von Meister Orlo" })).toBeInTheDocument();
+  });
+
   it("tabs appear only for groups with visible prefs", () => {
     screenUnderTest();
     const visible = new Set(
