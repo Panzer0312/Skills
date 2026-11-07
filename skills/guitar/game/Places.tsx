@@ -16,7 +16,7 @@ export function ToolFrame({ title, children }: { title: string; children: ReactN
   return (
     <section className="tool-frame">
       <h1>{title}</h1>
-      <div className="tool-frame-inner bg-white p-4 font-sans text-base text-slate-900 dark:bg-slate-950 dark:text-slate-100">
+      <div className="tool-frame-inner">
         {children}
       </div>
     </section>
@@ -39,7 +39,7 @@ function SongRecommendations() {
               {node.songs.map((song) => (
                 <li key={`${song.title}-${song.artist}`}>
                   {song.title} · {song.artist}{" "}
-                  <small className="text-slate-600 dark:text-slate-400">{song.trains}</small>
+                  <small className="text-slate-600">{song.trains}</small>
                 </li>
               ))}
             </ul>
@@ -143,14 +143,6 @@ export function Forge(props: WidgetProps) {
     <ToolFrame title="Schmiede">
       <ChordTrainer />
       <ChordDiagram {...props} />
-    </ToolFrame>
-  );
-}
-
-export function Market() {
-  return (
-    <ToolFrame title="Markt">
-      <p>Der Markt öffnet bald</p>
     </ToolFrame>
   );
 }

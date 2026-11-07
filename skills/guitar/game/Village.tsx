@@ -95,7 +95,7 @@ function VillageView({ state, fetching }: { state: GameState; fetching: boolean 
         <Sign path="taverne" x={57} y={20} label="Tavern" hint="deine Songs" />
         <Sign path="bibliothek" x={87} y={14} label="Library" hint="Lektionen" />
         <Sign path="hafen" x={68} y={72} label="Harbor" hint="die Reise" />
-        <Sign path="markt" x={34} y={68} label="Market" hint="öffnet bald" />
+        <Sign path="markt" x={34} y={68} label="Market" hint="Ausrüstung" />
       </nav>
       <nav className="village-menu" aria-label="Werkzeuge">
         {MENU.map((item) => (

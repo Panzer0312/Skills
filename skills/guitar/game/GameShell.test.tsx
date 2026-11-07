@@ -29,6 +29,10 @@ const base: GameState = {
   recentQuestIds: [],
   storySeen: [],
   today: null,
+  gold: 0,
+  owned: [],
+  equipped: {},
+  sound: false,
 };
 
 const progress = { record: vi.fn(), get: () => null, complete: vi.fn() };
@@ -267,10 +271,10 @@ describe("game places", () => {
     expect(screen.queryByText("Bester nächster Schritt")).not.toBeInTheDocument();
   });
 
-  it("promises the market", async () => {
+  it("opens the market", async () => {
     serve({});
     renderGame("/markt");
-    expect(await screen.findByText("Der Markt öffnet bald")).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: "Händler" })).toBeInTheDocument();
   });
 
   it("shows totals, records and the placement link in the chronicle", async () => {

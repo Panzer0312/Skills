@@ -159,6 +159,7 @@ export function ResultDialog({
       <section role="dialog" aria-label="Ergebnis" className="quest-result">
         {result.isRecord ? <p className="font-bold">Neuer Rekord!</p> : null}
         <p className="quest-xp">+{result.xpGained} XP</p>
+        {result.goldGained > 0 ? <p className="quest-xp">+{result.goldGained} Gold</p> : null}
         {result.suggestion !== null ? (
           <>
             <p>Nächstes Mal Stufe {result.suggestion}?</p>

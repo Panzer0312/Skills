@@ -7,10 +7,10 @@ import {
   Forge,
   FretboardPlace,
   Library,
-  Market,
   Shrine,
   Tavern,
 } from "../game/Places.js";
+import { Market } from "../game/market/Market.js";
 import { Chronicle } from "../game/chronicle/Chronicle.js";
 import { JamRoom } from "../game/jam/JamRoom.js";
 import { MapScreen } from "../game/map/MapScreen.js";

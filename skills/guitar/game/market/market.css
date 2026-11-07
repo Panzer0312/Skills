@@ -1,0 +1,101 @@
+.market h2 {
+  margin: 1.5rem 0 0.5rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.market h3 {
+  margin: 1rem 0 0.25rem;
+  font-weight: 600;
+}
+
+.market-gold {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.25rem;
+}
+
+.market-gold img,
+.market-tile img,
+.gear-strip img {
+  width: 32px;
+  height: 32px;
+  image-rendering: pixelated;
+}
+
+.market-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.market-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+  padding: 0.75rem;
+  border: 4px solid #3a2414;
+  background: #f4e7c8;
+  color: #1c1009;
+}
+
+.market-tile small {
+  color: #4a3724;
+}
+
+.market-tile button:not(.game-button) {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  text-align: left;
+}
+
+.market-price {
+  font-weight: 700;
+  color: #7a5200;
+}
+
+.market-owned {
+  font-weight: 700;
+}
+
+.market-empty {
+  color: #4a3724;
+  font-style: italic;
+}
+
+.market-hint {
+  font-style: italic;
+}
+
+.market-locked {
+  opacity: 0.6;
+  filter: grayscale(0.8);
+}
+
+.market-tile .game-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.gear-strip {
+  display: inline-flex;
+  gap: 2px;
+  margin-left: 0.25rem;
+  vertical-align: middle;
+}
+
+@media (max-width: 640px) {
+  .market-grid {
+    grid-template-columns: 1fr;
+  }
+}

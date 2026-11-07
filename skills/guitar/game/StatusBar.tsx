@@ -2,6 +2,8 @@ import type { GameState } from "@skills/core";
 import { Link } from "react-router-dom";
 import { GAME_BASE } from "./api.js";
 import { spriteUrl } from "./assets.js";
+import { GearStrip } from "./GearStrip.js";
+import { SoundToggle } from "./sound/SoundToggle.js";
 
 export function formatTime(seconds: number): string {
   const minutes = Math.floor(seconds / 60);
@@ -15,6 +17,7 @@ export function StatusBar({ state }: { state: GameState | undefined }) {
         <>
           <span className="game-stat">
             <img src={spriteUrl("helm")} alt="" /> <b>Level {state.level}</b> {state.title}
+            <GearStrip equipped={state.equipped} />
           </span>
           <span className="game-stat">
             XP{" "}
@@ -31,16 +34,20 @@ export function StatusBar({ state }: { state: GameState | undefined }) {
             {state.xpIntoLevel}/{state.xpForNext}
           </span>
           <span className="game-stat">
+            <img src={spriteUrl("gold")} alt="" /> <b>{state.gold}</b> Gold
+          </span>
+          <span className="game-stat">
             <img src={spriteUrl("torch")} alt="" /> <b>{state.streak}</b> {state.streak === 1 ? "Tag" : "Tage"} Serie
           </span>
           <span className="game-stat">
-            <img src={spriteUrl("goldbag")} alt="" /> <b>{formatTime(state.totalSeconds)}</b> gesamt
+            <img src={spriteUrl("parchment")} alt="" /> <b>{formatTime(state.totalSeconds)}</b> gesamt
           </span>
           <span className="game-stat">
             <b>{formatTime(state.weekSeconds)}</b> diese Woche
           </span>
         </>
       ) : null}
+      <SoundToggle />
       <Link to={GAME_BASE} className="game-home">
         Zum Dorf
       </Link>

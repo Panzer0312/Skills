@@ -14,7 +14,9 @@ import {
   scaleQuest,
   type LessonStatus,
   type MapNode,
+  GEAR,
 } from "@skills/core";
+import { SPRITE_NAMES } from "./assets.js";
 import { resolveChordShape } from "../../../packages/web/src/music/userChords.js";
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -634,5 +636,16 @@ describe("note game quest", () => {
     expect(quest.noteGame).toEqual({ strings: [0] });
     expect(quest.metricLabel).toBe("Treffer pro Minute");
     expect(content.quests.find((q) => q.id === "griffbrett-namen")!.noteGame).toBeUndefined();
+  });
+});
+
+describe("gear catalogue", () => {
+  it("uses only known sprites", () => {
+    for (const item of GEAR) expect(SPRITE_NAMES as readonly string[]).toContain(item.sprite);
+  });
+
+  it("grants every milestone item for a lesson on the road", () => {
+    const roadIds = content.road.map((step) => step.lessonId);
+    for (const item of GEAR.filter((i) => i.milestone !== null)) expect(roadIds).toContain(item.milestone);
   });
 });
