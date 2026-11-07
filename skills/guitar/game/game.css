@@ -161,9 +161,179 @@
   font-weight: 700;
 }
 
-.tool-frame-inner {
+/* Parchment panel: the game keeps this look whatever the app's light or dark setting.
+   Tailwind uses darkMode "class" (.dark on an ancestor), so the rules below use
+   .game-root .tool-frame-inner prefixes and .dark variants to outrank its dark: utilities. */
+.game-root .tool-frame-inner {
   min-width: 0;
   overflow-x: auto;
+  padding: 12px 14px;
+  background: #f3e6c4;
+  color: #3b2a1a;
+  border: 3px solid #2b1d12;
+  box-shadow: inset 2px 2px 0 #fbf1d8;
+  color-scheme: light;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.game-root .tool-frame-inner h2,
+.game-root .tool-frame-inner h3 {
+  font-family: "Pixelify Sans", monospace;
+}
+
+/* :where() keeps these base rules at zero specificity, so Tailwind state
+   utilities on a button or link (bg-slate-900, text-white, selected tabs) still win. */
+:where(.game-root .tool-frame-inner a) {
+  color: #7a4a10;
+}
+
+.game-root .tool-frame-inner :is(input, select, textarea) {
+  font: inherit;
+  padding: 2px 6px;
+  border: 2px solid #8a6a3d;
+  background: #fffaf0;
+  color: #2b1d12;
+}
+
+:where(.game-root .tool-frame-inner button:not(.game-button)) {
+  font: inherit;
+  padding: 2px 10px;
+  border: 2px solid #8a6a3d;
+  background: #ecd9b0;
+  color: #2b1d12;
+}
+
+.game-root .tool-frame-inner :is(button, input, select, textarea, a, .game-button):focus-visible {
+  outline: 3px solid #a8720f;
+  outline-offset: 2px;
+}
+
+/* Muted text that Tailwind would colour light in dark mode. */
+.game-root .tool-frame-inner .text-slate-500,
+.game-root .tool-frame-inner .text-slate-600,
+.game-root .tool-frame-inner .dark\:text-slate-400,
+.game-root .tool-frame-inner .dark\:text-slate-700 {
+  color: #5c4630;
+}
+
+/* Dark-mode utilities from shared components, remapped to parchment-safe colours. */
+.dark .game-root .tool-frame-inner .dark\:text-slate-400,
+.dark .game-root .tool-frame-inner .dark\:text-slate-700 {
+  color: #5c4630;
+}
+
+.dark .game-root .tool-frame-inner .dark\:text-amber-400 {
+  color: #8a5a00;
+}
+
+.dark .game-root .tool-frame-inner .dark\:text-red-400,
+.dark .game-root .tool-frame-inner .dark\:text-red-300 {
+  color: #9b1c1c;
+}
+
+.dark .game-root .tool-frame-inner .dark\:text-slate-100 {
+  color: #2b1d12;
+}
+
+.dark .game-root .tool-frame-inner .dark\:fill-slate-900 {
+  fill: #2b1d12;
+}
+
+.dark .game-root .tool-frame-inner .dark\:border-slate-100,
+.dark .game-root .tool-frame-inner .dark\:border-slate-700,
+.dark .game-root .tool-frame-inner .dark\:border-slate-800,
+.dark .game-root .tool-frame-inner .dark\:hover\:border-slate-600 {
+  border-color: #8a6a3d;
+}
+
+.dark .game-root .tool-frame-inner .dark\:border-slate-100 {
+  border-color: #2b1d12;
+}
+
+.dark .game-root .tool-frame-inner .dark\:bg-slate-900,
+.dark .game-root .tool-frame-inner .dark\:bg-slate-800 {
+  background-color: #e4d3a6;
+}
+
+.dark .game-root .tool-frame-inner .dark\:hover\:bg-slate-900:hover {
+  background-color: #e4d3a6;
+}
+
+/* Dark-mode tones of the MDX callouts (Box) and warning boxes: back to their light-mode look. */
+.dark .game-root .tool-frame-inner .dark\:bg-sky-950 {
+  background-color: #f0f9ff;
+}
+
+.dark .game-root .tool-frame-inner .dark\:bg-violet-950 {
+  background-color: #f5f3ff;
+}
+
+.dark .game-root .tool-frame-inner .dark\:bg-red-950 {
+  background-color: #fef2f2;
+}
+
+.dark .game-root .tool-frame-inner .dark\:bg-emerald-950 {
+  background-color: #ecfdf5;
+}
+
+.dark .game-root .tool-frame-inner .dark\:bg-amber-950 {
+  background-color: #fffbeb;
+}
+
+.dark .game-root .tool-frame-inner .dark\:border-amber-900 {
+  border-color: #fcd34d;
+}
+
+.dark .game-root .tool-frame-inner .dark\:border-red-900 {
+  border-color: #fca5a5;
+}
+
+.dark .game-root .tool-frame-inner .dark\:border-emerald-900 {
+  border-color: #6ee7b7;
+}
+
+.dark .game-root .tool-frame-inner .dark\:text-amber-200 {
+  color: #7c4a03;
+}
+
+.dark .game-root .tool-frame-inner .dark\:text-emerald-200 {
+  color: #065f46;
+}
+
+/* Light-mode lines and tracks that vanish on parchment: chord grids, card borders, slider tracks. */
+.game-root .tool-frame-inner :is(.border-slate-200, .border-slate-300) {
+  border-color: #8a6a3d;
+}
+
+.game-root .tool-frame-inner .bg-slate-200 {
+  background-color: #c9b382;
+}
+
+.game-root .tool-frame-inner input[type="range"] {
+  accent-color: #7a4a10;
+}
+
+/* Lesson prose (CourseRenderer: prose / prose-slate / dark:prose-invert). */
+.game-root .tool-frame-inner .prose,
+.dark .game-root .tool-frame-inner .prose {
+  --tw-prose-body: #3b2a1a;
+  --tw-prose-headings: #2b1d12;
+  --tw-prose-lead: #3b2a1a;
+  --tw-prose-links: #7a4a10;
+  --tw-prose-bold: #2b1d12;
+  --tw-prose-counters: #5c4630;
+  --tw-prose-bullets: #8a6a3d;
+  --tw-prose-hr: #8a6a3d;
+  --tw-prose-quotes: #2b1d12;
+  --tw-prose-quote-borders: #a8720f;
+  --tw-prose-captions: #5c4630;
+  --tw-prose-code: #2b1d12;
+  --tw-prose-pre-code: #f3e6c4;
+  --tw-prose-pre-bg: #2b1d12;
+  --tw-prose-th-borders: #8a6a3d;
+  --tw-prose-td-borders: #c9b382;
 }
 
 /* Below 640 px the painting is hidden and the same links read as a list. */
