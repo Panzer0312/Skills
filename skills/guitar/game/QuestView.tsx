@@ -1,21 +1,18 @@
 import { scaleQuest, type GameState, type MapNode, type QuestDefinition, type ScaledQuest } from "@skills/core";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { usePracticeKeys } from "../../../packages/web/src/app/usePracticeKeys.js";
 import { useWakeLock } from "../../../packages/web/src/app/useWakeLock.js";
 import { api } from "../../../packages/web/src/api/client.js";
-import { FretOverlay } from "./FretOverlay.js";
 import { MetronomePanel } from "./MetronomePanel.js";
 import { useMetronome } from "../../../packages/web/src/audio/useMetronome.js";
 import type { WidgetProps } from "../../../packages/web/src/skills/widgets.js";
 import { GAME_BASE, gameContent, normalizeTitle, questLevel, useGameState } from "./api.js";
-import { ChordTrainer, changeMetricKey } from "./ChordTrainer.js";
-import { NoteFinder } from "./NoteFinder.js";
+import { changeMetricKey } from "./ChordTrainer.js";
 import { ToolFrame } from "./Places.js";
-import { RiffCard } from "./RiffViewer.js";
+import { QUEST_TOOLS, type QuestToolProps } from "./questTools.js";
 import { ResultDialog } from "./ResultDialog.js";
-import { Griffbild } from "./visuals/index.js";
 
 const ACTIVE_KEY = "game.activeQuest";
 
@@ -191,12 +188,23 @@ function QuestRun({ quest, state, data }: { quest: QuestDefinition; state: GameS
   const level = questLevel(state, quest);
   const scaled = scaleQuest(quest, level);
   const pair = quest.kind === "wechsel" ? scaled.chordPair : null;
-  const riff = gameContent.riffs.find((entry) => entry.id === quest.riffId);
   const lessonSong = gameContent.nodes.find((node) => node.id === quest.lessonId)?.targetSong ?? null;
 
   useEffect(() => {
     if (scaled.bpm !== null) setBpm(scaled.bpm);
   }, [scaled.bpm, setBpm]);
+
+  const toolProps: QuestToolProps = {
+    quest,
+    scaled,
+    level,
+    state,
+    setBpm,
+    countInBpm: scaled.bpm ?? undefined,
+    onResult: (n) => setTrainerValue((v) => Math.max(v ?? 0, n)),
+    onRunningChange: setToolRunning,
+    cancelSignal,
+  };
 
   const paused = clock.pausedAt !== null;
   useWakeLock(finished === null && !paused);
@@ -299,35 +307,9 @@ function QuestRun({ quest, state, data }: { quest: QuestDefinition; state: GameS
             <SongPanel targetSongId={state.targetSongId} scaled={scaled} data={data} />
           )
         ) : null}
-        {quest.chords ? <Griffbild akkorde={quest.chords} /> : null}
-        {riff ? <RiffCard
-            riff={riff}
-            onTempo={setBpm}
-            bpm={scaled.bpm ?? undefined}
-            inQuest
-            questId={quest.id}
-            tuningLinked={Boolean(quest.tuning)}
-          /> : null}
-        {quest.fretboard ? (
-          <FretOverlay
-            root={quest.fretboard.root}
-            scale={quest.fretboard.scale}
-            box={quest.fretboard.box as 1 | 2 | 3 | 4 | 5 | undefined}
-            caged={quest.fretboard.caged}
-          />
-        ) : null}
-        {pair ? (
-          <ChordTrainer pair={pair} countInBpm={scaled.bpm ?? undefined} onRunningChange={setToolRunning} cancelSignal={cancelSignal} onResult={(n) => setTrainerValue((v) => Math.max(v ?? 0, n))} />
-        ) : null}
-        {quest.noteGame ? (
-          <NoteFinder
-            strings={quest.noteGame.strings}
-            tuning={quest.tuning ?? "Standard"}
-            onRunningChange={setToolRunning}
-            cancelSignal={cancelSignal}
-            onResult={(n) => setTrainerValue((v) => Math.max(v ?? 0, n))}
-          />
-        ) : null}
+        {QUEST_TOOLS.filter((tool) => tool.applies(quest)).map((tool) => (
+          <Fragment key={tool.id}>{tool.render(toolProps)}</Fragment>
+        ))}
         {trainerValue !== null ? (
           <p>Beste Runde: {trainerValue}. Starte noch eine Runde oder tippe auf Fertig.</p>
         ) : null}

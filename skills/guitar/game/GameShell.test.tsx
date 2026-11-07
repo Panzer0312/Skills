@@ -7,6 +7,7 @@ import { MemoryRouter, Route, Routes, useLocation } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { queryClient } from "../../../packages/web/src/app/queryClient.js";
 import GameApp from "../widgets/GameApp.js";
+import { PLACES } from "./placeRegistry.js";
 import { gameApi, gameContent } from "./api.js";
 
 const base: GameState = {
@@ -152,6 +153,16 @@ describe("GameShell", () => {
     for (const [name, href] of places) {
       expect(await screen.findByRole("link", { name })).toHaveAttribute("href", `/vollbild/guitar/spiel${href}`);
     }
+  });
+
+  it("village menu renders from the registry", async () => {
+    serve({});
+    renderGame();
+    const menu = await screen.findByRole("navigation", { name: "Werkzeuge" });
+    const links = within(menu).getAllByRole("link");
+    expect(links.map((l) => l.getAttribute("href"))).toEqual(
+      PLACES.filter((p) => p.inMenu).map((p) => `/vollbild/guitar/spiel/${p.path}`),
+    );
   });
 
   it("heads the note finder on the Tower", async () => {

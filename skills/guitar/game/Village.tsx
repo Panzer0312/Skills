@@ -3,6 +3,7 @@ import type { CSSProperties } from "react";
 import { Link } from "react-router-dom";
 import { GAME_BASE, useGameState } from "./api.js";
 import { spriteUrl, type SpriteName } from "./assets.js";
+import { PLACES } from "./placeRegistry.js";
 import { MentorCard } from "./MentorCard.js";
 import { useTodaySet } from "./useTodaySet.js";
 
@@ -13,15 +14,6 @@ export const QUEST_SPRITE: Record<QuestDefinition["kind"], SpriteName> = {
   theorie: "scroll",
   aufwaermen: "potion",
 };
-
-const MENU: { path: string; label: string; hint: string; sprite: SpriteName }[] = [
-  { path: "schrein", label: "Shrine", hint: "Stimmgerät", sprite: "ring" },
-  { path: "schmiede", label: "Forge", hint: "Akkordgriffe", sprite: "sword" },
-  { path: "griffbrett", label: "Tower of CAGED", hint: "Griffbrett", sprite: "bow" },
-  { path: "riffs", label: "Riffs", hint: "Tabs zum Üben", sprite: "shield" },
-  { path: "jam", label: "Jam Room", hint: "Begleitung", sprite: "potion" },
-  { path: "chronik", label: "Chronicle", hint: "dein Fortschritt", sprite: "parchment" },
-];
 
 function TodayPanel({
   state,
@@ -34,7 +26,10 @@ function TodayPanel({
 }) {
   return (
     <section className="village-today game-panel" aria-label="Heutige Quests">
-      <h2>Heute{state.today && quests.length > 0 ? ` · ${state.today.minutes} min` : ""}</h2>
+      <h2>
+        Heute
+        {state.today && quests.length > 0 ? ` · ${state.today.minutes} min` : ""}
+      </h2>
       {failure !== null ? (
         <>
           <p role="alert" className="game-error">
@@ -98,7 +93,7 @@ function VillageView({ state, fetching }: { state: GameState; fetching: boolean 
         <Sign path="markt" x={34} y={68} label="Market" hint="Ausrüstung" />
       </nav>
       <nav className="village-menu" aria-label="Werkzeuge">
-        {MENU.map((item) => (
+        {PLACES.filter((place) => place.inMenu).map((item) => (
           <Link key={item.path} to={`${GAME_BASE}/${item.path}`} className="game-quest">
             <img src={spriteUrl(item.sprite)} alt="" />
             <span>
