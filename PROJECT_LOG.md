@@ -18,6 +18,7 @@ Dieses Dokument ist die zentrale Stelle für Stand, Probleme und Ideen.
 | C9 Japanese-Skill | fertig | Kana-Transliteration (Hepburn), Kana-Daten, `KanaGrid`, `KanaDrill`, acht Themen-Vokabel-Decks (256 Karten), zwölfteiliger Grammatik-Kurs, 40 Kanji mit Lesungsregeln und 60 annotierte Sätze, `ReadingTrainer`. Rauchtest in `e2e/japanese.spec.ts`. |
 | C11 Gitarren-RPG, Stufe 1 | fertig | Fundament: Einstufung beim ersten Start, Dorf mit Statusleiste (Level, XP, Serie, Zeit), Quest Board mit Tagesquests und anpassbarer Sitzungslänge, Quest-Ansicht mit Metronom und Stoppuhr, Ergebnisdialog (Bewertung, Minuten, Messwert), Akkordwechsel-Trainer mit 60-Sekunden-Runde. Alle Werkzeuge (Stimmgerät, Griffbrett, Akkorde, Songs, Lektionen) bleiben jederzeit erreichbar; nur Dorf und Quests warten auf die Einstufung. Routen unter `/vollbild/guitar/spiel`, Ende-zu-Ende-Test in `e2e/guitar-game.spec.ts`. Stufen 2 und 3 brachten Karte und Werkzeuge. |
 | C12 Gitarren-RPG, Stufe 4 | fertig | Lektionen und Geschichte: Die Bibliothek umfasst 82 Lektionen, jeder Knoten der Karte außer den drei bekannten Songs ist verfügbar und jeder Schritt des Hauptwegs hat eine Quest. Meister Orlo, ein alter Hafenbarde, ist der Mentor: Kurze Szenen (`skills/guitar/game/story.json`, vier Kapitel) erscheinen als Mentor-Karte im Dorf und auf dem Quest Board, „Weiter“ bestätigt sie, und die Bibliothek führt das aktuelle Kapitel samt Theorie und bisheriger Geschichte. Der Hinweis „In Vorbereitung“ und `moreComing` sind entfallen; wer den Hauptweg beendet, sieht den Abschluss-Text. Auf `metal-ganzer-song` wählt man den Zielsong selbst. Tests in `content.test.ts` prüfen Lektionstitel, Griffbilder, Messwerte und Geschichte. Ende-zu-Ende: `e2e/guitar-story.spec.ts`. |
+| C13 Gitarren-RPG, Stufe 5 | fertig | Belohnungen und Politur: Der Markt verkauft 15 Gegenstände für Gold, 8 weitere schenken Meilensteine des Hauptwegs. Gold ergibt sich wie XP aus dem Übungslog (XP geteilt durch 5) minus gespeicherter Kaufpreise; Kauf, Anlegen und Klang liegen in SQLite (`game_inventory`, `game_equipped`, `game_settings`). Angelegtes erscheint in der Statusleiste. Hafen-Ambiente und Effekte per Web Audio, Standard aus. Zehn neue Ausrüstungs-Sprites aus dem Item-Bogen, vier Wahrzeichen auf der Karte. Werkzeugrahmen haben ein einheitliches Pergament-Aussehen. Ende-zu-Ende: `e2e/guitar-market.spec.ts`. |
 | C10 Projekt-Log | fertig | dieses Dokument |
 
 ## Offene Punkte
@@ -341,7 +342,7 @@ Dieses Dokument ist die zentrale Stelle für Stand, Probleme und Ideen.
   Puppets nennt keine bpm mehr, weil die Quellseite keine Zahl belegt.
 - 2026-11-06 — `e2e/guitar-map.spec.ts` pausiert vor jedem Test alle gewählten Lektionen über die API,
   damit die Tests unabhängig von Reihenfolge und früheren Läufen bleiben.
-- Offen: Stufe 4 (restliche Lektionen und Story), 5 (Belohnungen, Politur).
+- Offen: keine Stufe mehr; Stufe 4 und 5 sind fertig.
 
 ## Abweichungen vom Plan (Gitarren-RPG, Stufe 3: Werkzeuge)
 
@@ -366,3 +367,18 @@ Dieses Dokument ist die zentrale Stelle für Stand, Probleme und Ideen.
 - Offen für den Besitzer: Der Hörtest des Jam Room (Klang von Schlagzeug und Bass, Lautstärke, Taktgefühl)
   ist noch nicht gemacht; die Tests prüfen nur Start, Stopp und Tonleiter.
 
+## Abweichungen vom Plan (Gitarren-RPG, Stufe 5: Belohnungen)
+
+- 2026-11-07 — Der Ausrüstungskatalog liegt als Code in `packages/core/src/game/gear.ts`, nicht als JSON im Skill,
+  damit der Server Preise und Plätze selbst prüft.
+- 2026-11-07 — Meilenstein-Gegenstände werden nicht gespeichert: Ist die Lektion gelernt oder gemeistert, gehört der
+  Gegenstand dazu. Wird die Lektion zurückgesetzt, verschwindet er aus der Statusleiste und kommt mit ihr zurück.
+- 2026-11-07 — Für Hügel, Gipfel, Turm und Bibliothek fand sich keine passende CC0-Grafik; die vier Wahrzeichen sind
+  eigene Pixelgrafiken aus `scripts/draw-landmarks.py`.
+- 2026-11-07 — Klang ist synthetisiert (Web Audio), daher braucht es keine Audiodateien und keine Lizenzen. Er läuft nur
+  im Dorf, Markt, Taverne, Bibliothek, Hafen und Chronik und nur bei sichtbarem Tab.
+- 2026-11-07 — Werkzeugrahmen: Fließtext in Systemschrift 16px, Pixelschrift nur in Überschriften; dunkle Tailwind-Klassen
+  werden im Rahmen auf Pergament-Farben umgelegt, damit das Spiel im Dunkelmodus gleich aussieht.
+- 2026-11-07 — `e2e/guitar-game.spec.ts` prüft die Wochenminuten jetzt mit „mindestens +5“, weil parallele Specs
+  dieselbe Datenbank nutzen.
+- Offen für den Besitzer: Hafen-Ambiente und Effekte sind nie mit dem Ohr geprüft, nur ihr Start und Stopp.

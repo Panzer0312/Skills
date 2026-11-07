@@ -24,7 +24,8 @@ test("a first session runs from placement to XP in the status bar", async ({ pag
 
   await expect(page.getByRole("heading", { name: "Quest Board" })).toBeVisible();
   await expect.poll(async () => (await readStatus(page)).score).toBeGreaterThan(before.score);
-  await expect.poll(async () => (await readStatus(page)).weekMinutes).toBe(before.weekMinutes + 5);
+  // Specs run in parallel on one database, so another spec may log time in the same window.
+  await expect.poll(async () => (await readStatus(page)).weekMinutes).toBeGreaterThanOrEqual(before.weekMinutes + 5);
 });
 
 test("a chord change quest runs its 60 second round and logs the metric", async ({ page }) => {
