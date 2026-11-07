@@ -14,12 +14,21 @@ afterEach(() => {
 
 function mockWakeLock() {
   const release = vi.fn(() => Promise.resolve());
-  const request = vi.fn(() => Promise.resolve({ release }));
+  const request = vi.fn(() => Promise.resolve({ release, released: false }));
   Object.defineProperty(navigator, "wakeLock", { value: { request }, configurable: true });
   return { request, release };
 }
 
+function setVisibility(state: "visible" | "hidden") {
+  Object.defineProperty(document, "visibilityState", { value: state, configurable: true });
+  document.dispatchEvent(new Event("visibilitychange"));
+}
+
 describe("useWakeLock", () => {
+  afterEach(() => {
+    delete (document as unknown as { visibilityState?: unknown }).visibilityState;
+  });
+
   it("wake lock requests when active and releases when inactive", async () => {
     const { request, release } = mockWakeLock();
     const { rerender } = renderHook(({ a }) => useWakeLock(a), { initialProps: { a: true } });
@@ -32,6 +41,50 @@ describe("useWakeLock", () => {
 
   it("wake lock without API does nothing and does not throw", () => {
     expect(() => renderHook(() => useWakeLock(true))).not.toThrow();
+  });
+
+  it("visibilitychange re-requests only when no lock is held", async () => {
+    const release = vi.fn(() => Promise.resolve());
+    const held = { release, released: false };
+    const request = vi
+      .fn()
+      .mockResolvedValueOnce(held)
+      .mockResolvedValue({ release, released: false });
+    Object.defineProperty(navigator, "wakeLock", { value: { request }, configurable: true });
+    renderHook(() => useWakeLock(true));
+    await act(async () => {});
+    expect(request).toHaveBeenCalledTimes(1);
+
+    // a lock is still held: returning to the tab must not ask twice
+    act(() => setVisibility("visible"));
+    await act(async () => {});
+    expect(request).toHaveBeenCalledTimes(1);
+
+    // the browser dropped the lock while hidden: request again
+    held.released = true;
+    act(() => setVisibility("hidden"));
+    act(() => setVisibility("visible"));
+    await act(async () => {});
+    expect(request).toHaveBeenCalledTimes(2);
+  });
+
+  it("visibilitychange does not request while a request is still pending", async () => {
+    const request = vi.fn(() => new Promise<never>(() => {}));
+    Object.defineProperty(navigator, "wakeLock", { value: { request }, configurable: true });
+    renderHook(() => useWakeLock(true));
+    expect(request).toHaveBeenCalledTimes(1);
+    act(() => setVisibility("visible"));
+    expect(request).toHaveBeenCalledTimes(1);
+  });
+
+  it("wake lock releases on unmount", async () => {
+    const { request, release } = mockWakeLock();
+    const { unmount } = renderHook(() => useWakeLock(true));
+    await act(async () => {});
+    expect(request).toHaveBeenCalledTimes(1);
+    unmount();
+    await act(async () => {});
+    expect(release).toHaveBeenCalledTimes(1);
   });
 });
 
@@ -66,6 +119,37 @@ describe("usePersistentState", () => {
 });
 
 describe("usePracticeKeys", () => {
+  afterEach(() => {
+    document.body.replaceChildren();
+  });
+
+  it("practice keys ignore repeat events", () => {
+    const fn = vi.fn();
+    renderHook(() => usePracticeKeys({ p: fn }));
+    document.body.dispatchEvent(new KeyboardEvent("keydown", { key: "p", repeat: true, bubbles: true }));
+    expect(fn).not.toHaveBeenCalled();
+    document.body.dispatchEvent(new KeyboardEvent("keydown", { key: "p", bubbles: true }));
+    expect(fn).toHaveBeenCalledTimes(1);
+  });
+
+  it("practice keys call preventDefault when a binding fires", () => {
+    const fn = vi.fn();
+    renderHook(() => usePracticeKeys({ " ": fn }));
+    const event = new KeyboardEvent("keydown", { key: " ", cancelable: true, bubbles: true });
+    document.body.dispatchEvent(event);
+    expect(fn).toHaveBeenCalledTimes(1);
+    expect(event.defaultPrevented).toBe(true);
+  });
+
+  it("practice keys ignore inherited properties as keys", () => {
+    const fn = vi.fn();
+    renderHook(() => usePracticeKeys({ p: fn }));
+    const event = new KeyboardEvent("keydown", { key: "constructor", cancelable: true, bubbles: true });
+    document.body.dispatchEvent(event);
+    expect(event.defaultPrevented).toBe(false);
+    expect(fn).not.toHaveBeenCalled();
+  });
+
   it("practice keys fire space and ignore inputs", () => {
     const fn = vi.fn();
     renderHook(() => usePracticeKeys({ " ": fn }));
@@ -101,8 +185,6 @@ describe("usePracticeKeys", () => {
     link.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
     div.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
     expect(fn).not.toHaveBeenCalled();
-    link.remove();
-    div.remove();
   });
 
   it("practice keys fire letters on buttons but leave space and Enter to them", () => {

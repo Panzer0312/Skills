@@ -19,8 +19,8 @@ export function usePracticeKeys(bindings: Record<string, () => void>, enabled = 
         if (ACTIVATION_KEYS.has(e.key) && target.closest(ACTIVATORS)) return;
       }
       const current = ref.current;
-      const handler =
-        current[e.key] ?? (e.key.length === 1 ? current[e.key.toLowerCase()] : undefined);
+      const own = (key: string) => (Object.hasOwn(current, key) ? current[key] : undefined);
+      const handler = own(e.key) ?? (e.key.length === 1 ? own(e.key.toLowerCase()) : undefined);
       if (!handler) return;
       e.preventDefault();
       handler();

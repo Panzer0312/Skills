@@ -61,6 +61,24 @@ describe("JamRoom", () => {
     expect(screen.queryByLabelText("Box")).not.toBeInTheDocument();
   });
 
+  it("box choice survives remount", async () => {
+    const user = userEvent.setup();
+    const first = render(<JamRoom />);
+    await user.selectOptions(screen.getByLabelText("Box"), "2");
+    first.unmount();
+    render(<JamRoom />);
+    expect(screen.getByLabelText("Box")).toHaveValue("2");
+  });
+
+  it("space in a select does not toggle", async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+    render(<JamRoom />);
+    act(() => screen.getByLabelText("Stil").focus());
+    await user.keyboard(" ");
+    expect(screen.getByRole("button", { name: "Starten" })).toBeInTheDocument();
+  });
+
   it("shows the current and next chord while playing", async () => {
     vi.useFakeTimers({ shouldAdvanceTime: true });
     const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });

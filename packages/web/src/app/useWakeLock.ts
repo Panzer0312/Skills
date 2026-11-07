@@ -2,6 +2,7 @@ import { useEffect } from "react";
 
 interface Sentinel {
   release: () => Promise<void>;
+  released: boolean;
 }
 interface WakeLockApi {
   request: (type: "screen") => Promise<Sentinel>;
@@ -14,32 +15,38 @@ export function useWakeLock(active: boolean): void {
     if (!api || typeof api.request !== "function") return;
 
     let cancelled = false;
+    let pending = false;
     let sentinel: Sentinel | null = null;
 
     const acquire = () => {
-      if (cancelled || sentinel) return;
+      if (cancelled || pending || sentinel) return;
+      pending = true;
       try {
         api
           .request("screen")
           .then((s) => {
+            pending = false;
             if (cancelled) {
               void s.release().catch(() => {});
               return;
             }
             sentinel = s;
           })
-          .catch(() => {});
+          .catch(() => {
+            pending = false;
+          });
       } catch {
-        /* silent */
+        pending = false;
       }
     };
 
     const onVisibility = () => {
-      if (document.visibilityState === "visible") {
-        // the browser drops the lock when the tab is hidden
-        sentinel = null;
-        acquire();
-      }
+      if (document.visibilityState !== "visible") return;
+      if (pending) return;
+      if (sentinel && sentinel.released === false) return;
+      // the browser dropped the lock while the tab was hidden
+      sentinel = null;
+      acquire();
     };
 
     acquire();
