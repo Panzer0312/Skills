@@ -649,3 +649,22 @@ describe("gear catalogue", () => {
     for (const item of GEAR.filter((i) => i.milestone !== null)) expect(roadIds).toContain(item.milestone);
   });
 });
+
+describe("intro tour content", () => {
+  const intro = read("intro/intro.json") as {
+    steps: { id: string; target: string | null; title: string; text: string; place?: string }[];
+  };
+  const targets = new Set(["quests", "heute", "hafen", "werkzeuge", "frei", "chronik", "studierstube"]);
+
+  it("intro steps have known targets and short text", () => {
+    expect(intro.steps.length).toBeGreaterThanOrEqual(6);
+    expect(intro.steps.length).toBeLessThanOrEqual(9);
+    expect(new Set(intro.steps.map((s) => s.id)).size).toBe(intro.steps.length);
+    for (const step of intro.steps) {
+      if (step.target !== null) expect(targets.has(step.target)).toBe(true);
+      expect(step.title.length).toBeGreaterThan(0);
+      expect(step.text.split(/(?<=[.!?])\s+/).length).toBeLessThanOrEqual(2);
+      expect(step.text.length).toBeLessThanOrEqual(140);
+    }
+  });
+});

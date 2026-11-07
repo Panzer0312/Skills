@@ -25,7 +25,7 @@ function TodayPanel({
   failure: string | null;
 }) {
   return (
-    <section className="village-today game-panel" aria-label="Heutige Quests">
+    <section className="village-today game-panel" aria-label="Heutige Quests" data-intro="heute">
       <h2>
         Heute
         {state.today && quests.length > 0 ? ` · ${state.today.minutes} min` : ""}
@@ -60,10 +60,10 @@ function TodayPanel({
   );
 }
 
-function Sign({ path, x, y, label, hint }: { path: string; x: number; y: number; label: string; hint: string }) {
+function Sign({ path, x, y, label, hint, intro }: { path: string; x: number; y: number; label: string; hint: string; intro?: string }) {
   const position = { "--x": `${x}%`, "--y": `${y}%` } as CSSProperties;
   return (
-    <Link to={`${GAME_BASE}/${path}`} className="village-sign" style={position}>
+    <Link to={`${GAME_BASE}/${path}`} className="village-sign" style={position} data-intro={intro}>
       {label}
       <small>{hint}</small>
     </Link>
@@ -82,6 +82,7 @@ function VillageView({ state, fetching }: { state: GameState; fetching: boolean 
         <img src={spriteUrl("village")} alt="" />
         <Sign
           path="quests"
+          intro="quests"
           x={22}
           y={24}
           label="Quest Board"
@@ -89,10 +90,10 @@ function VillageView({ state, fetching }: { state: GameState; fetching: boolean 
         />
         <Sign path="taverne" x={57} y={20} label="Tavern" hint="deine Songs" />
         <Sign path="bibliothek" x={87} y={14} label="Library" hint="Lektionen" />
-        <Sign path="hafen" x={68} y={72} label="Harbor" hint="die Reise" />
+        <Sign intro="hafen" path="hafen" x={68} y={72} label="Harbor" hint="die Reise" />
         <Sign path="markt" x={34} y={68} label="Market" hint="Ausrüstung" />
       </nav>
-      <nav className="village-menu" aria-label="Werkzeuge">
+      <nav className="village-menu" aria-label="Werkzeuge" data-intro="werkzeuge">
         {PLACES.filter((place) => place.inMenu).map((item) => (
           <Link key={item.path} to={`${GAME_BASE}/${item.path}`} className="game-quest">
             <img src={spriteUrl(item.sprite)} alt="" />

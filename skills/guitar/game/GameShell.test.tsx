@@ -9,6 +9,9 @@ import { queryClient } from "../../../packages/web/src/app/queryClient.js";
 import GameApp from "../widgets/GameApp.js";
 import { PLACES } from "./placeRegistry.js";
 import { gameApi, gameContent } from "./api.js";
+import { resetTestPrefs } from "./testPrefs.js";
+
+vi.mock("./usePref.js", async () => ({ usePref: (await import("./testPrefs.js")).usePref }));
 
 const base: GameState = {
   day: localDayKey(Date.now()),
@@ -79,6 +82,7 @@ function renderGame(path = "") {
 }
 
 beforeEach(() => {
+  resetTestPrefs({ "intro.gesehen": true });
   queryClient.clear();
   queryClient.setDefaultOptions({ queries: { retry: false } });
 });

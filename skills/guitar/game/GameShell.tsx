@@ -4,8 +4,10 @@ import { Navigate, Outlet } from "react-router-dom";
 import { GAME_BASE, useGameState } from "./api.js";
 import { PREFS_KEY } from "./api/prefs.js";
 import { migrateLocalPrefs } from "./migrateLocalPrefs.js";
+import { IntroTour } from "./intro/IntroTour.js";
 import { StatusBar } from "./StatusBar.js";
 import { useAmbience } from "./sound/useAmbience.js";
+import { usePref } from "./usePref.js";
 
 export function GameShell() {
   const state = useGameState();
@@ -30,6 +32,7 @@ export function GameShell() {
       <main>
         <Outlet />
       </main>
+      <IntroTour />
     </>
   );
 }
@@ -37,8 +40,10 @@ export function GameShell() {
 /** First launch gates only the village and quest screens. Tool places stay outside this route. */
 export function PlacementGate() {
   const state = useGameState();
-  if (state.isPending) return <p className="game-note">Wird geladen…</p>;
+  const [introSeen, , { loading }] = usePref("intro.gesehen");
+  if (state.isPending || loading) return <p className="game-note">Wird geladen…</p>;
   if (!state.data) return null;
-  if (!state.data.placed) return <Navigate to={`${GAME_BASE}/einstufung`} replace />;
+  // Meister Orlo speaks first; the placement follows once the tour is done or skipped.
+  if (!state.data.placed && introSeen) return <Navigate to={`${GAME_BASE}/einstufung`} replace />;
   return <Outlet />;
 }

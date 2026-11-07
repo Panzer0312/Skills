@@ -1,0 +1,73 @@
+.intro-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+}
+
+.intro-dim {
+  position: absolute;
+  inset: 0;
+  background: rgba(28, 16, 9, 0.7);
+}
+
+/* The cut-out is the element itself; its huge shadow dims everything else. */
+.intro-spot {
+  position: fixed;
+  border: 3px solid var(--gold);
+  box-shadow: 0 0 0 9999px rgba(28, 16, 9, 0.7);
+  pointer-events: none;
+  transition:
+    top 0.2s,
+    left 0.2s,
+    width 0.2s,
+    height 0.2s;
+}
+
+.intro-card {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(420px, calc(100vw - 32px));
+  color: var(--ink);
+}
+
+.intro-card-low {
+  top: auto;
+  bottom: 16px;
+  transform: translateX(-50%);
+}
+
+.intro-who {
+  font-weight: 700;
+}
+
+.intro-who small {
+  font-weight: 400;
+}
+
+.intro-card h2 {
+  margin: 4px 0;
+}
+
+.intro-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.intro-skip {
+  margin-left: auto;
+  background: transparent;
+}
+
+.intro-card button:disabled {
+  opacity: 0.5;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .intro-spot {
+    transition: none;
+  }
+}

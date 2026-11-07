@@ -690,3 +690,15 @@
     width: 340px;
   }
 }
+
+.tool-frame {
+  position: relative;
+}
+
+.tool-help {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  padding: 0 8px;
+  font-size: 16px;
+}

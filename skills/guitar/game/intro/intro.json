@@ -1,0 +1,62 @@
+{
+  "steps": [
+    {
+      "id": "willkommen",
+      "target": null,
+      "title": "Willkommen im Dorf",
+      "text": "Ich bin Meister Orlo. Ich zeige dir kurz, wo alles liegt, und danach gehört das Dorf dir."
+    },
+    {
+      "id": "dorf",
+      "target": "quests",
+      "title": "Das Dorf und das Quest Board",
+      "text": "Am Quest Board wählst du deine Übungen. Such dir aus, was dir heute Freude macht.",
+      "place": "quests"
+    },
+    {
+      "id": "heute",
+      "target": "heute",
+      "title": "Heute",
+      "text": "Hier liegen die Quests für heute bereit. Du kannst sie in deinem Tempo angehen."
+    },
+    {
+      "id": "karte",
+      "target": "hafen",
+      "title": "Die Karte im Hafen",
+      "text": "Im Hafen siehst du den ganzen Weg, der vor dir liegt. Du kannst jederzeit überall hin.",
+      "place": "hafen"
+    },
+    {
+      "id": "werkzeuge",
+      "target": "werkzeuge",
+      "title": "Schmiede, Schrein und Jam Room",
+      "text": "In der Schmiede übst du Griffe, im Schrein stimmst du, im Jam Room spielst du mit Begleitung. Alles steht dir offen."
+    },
+    {
+      "id": "frei",
+      "target": "frei",
+      "title": "Frei üben",
+      "text": "Mit \"Frei üben\" zählt auch Zeit, die du einfach so spielst. Starte, wann du magst."
+    },
+    {
+      "id": "chronik",
+      "target": "chronik",
+      "title": "Die Chronik",
+      "text": "Die Chronik hält fest, was du schon geschafft hast. Schau gern mal hinein und freu dich darüber.",
+      "place": "chronik"
+    },
+    {
+      "id": "studierstube",
+      "target": "studierstube",
+      "title": "Die Studierstube",
+      "text": "In der Studierstube stellst du alles nach deinem Geschmack ein. Auch dieses Intro findest du dort wieder.",
+      "place": "studierstube"
+    },
+    {
+      "id": "abschied",
+      "target": null,
+      "title": "Viel Freude!",
+      "text": "Das war's schon. Nimm dir Zeit, ich bin immer in der Nähe."
+    }
+  ]
+}

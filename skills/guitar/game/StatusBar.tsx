@@ -46,11 +46,13 @@ export function StatusBar({ state }: { state: GameState | undefined }) {
           <span className="game-stat">
             <b>{formatTime(state.weekSeconds)}</b> diese Woche
           </span>
-          <FreePractice />
+          <span data-intro="frei">
+            <FreePractice />
+          </span>
         </>
       ) : null}
       <SoundToggle />
-      <Link to={`${GAME_BASE}/studierstube`} className="game-home" aria-label="Einstellungen" title="Einstellungen">
+      <Link to={`${GAME_BASE}/studierstube`} className="game-home" data-intro="studierstube" aria-label="Einstellungen" title="Einstellungen">
         <span aria-hidden="true">⚙</span>
       </Link>
       <Link to={GAME_BASE} className="game-home">

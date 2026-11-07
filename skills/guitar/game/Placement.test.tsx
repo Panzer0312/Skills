@@ -8,6 +8,9 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { queryClient } from "../../../packages/web/src/app/queryClient.js";
 import GameApp from "../widgets/GameApp.js";
 import { gameContent } from "./api.js";
+import { resetTestPrefs } from "./testPrefs.js";
+
+vi.mock("./usePref.js", async () => ({ usePref: (await import("./testPrefs.js")).usePref }));
 
 const base: GameState = {
   day: localDayKey(Date.now()),
@@ -82,6 +85,7 @@ async function toSongStep() {
 }
 
 beforeEach(() => {
+  resetTestPrefs({ "intro.gesehen": true });
   queryClient.clear();
   queryClient.setDefaultOptions({ queries: { retry: false } });
 });

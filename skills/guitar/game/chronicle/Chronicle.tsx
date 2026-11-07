@@ -176,7 +176,7 @@ export function Chronicle() {
   const { data: state } = useGameState();
   const history = useGameHistory();
   return (
-    <ToolFrame title="Chronik">
+    <ToolFrame title="Chronik" helpStepId="chronik">
       {history.isError ? (
         <div role="alert">
           <p>Der Verlauf konnte nicht geladen werden.</p>

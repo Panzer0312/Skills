@@ -10,6 +10,9 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { queryClient } from "../../../../packages/web/src/app/queryClient.js";
 import GameApp from "../../widgets/GameApp.js";
 import { gameApi, gameContent, normalizeTitle } from "../api.js";
+import { resetTestPrefs } from "../testPrefs.js";
+
+vi.mock("../usePref.js", async () => ({ usePref: (await import("../testPrefs.js")).usePref }));
 
 const base: GameState = {
   day: localDayKey(Date.now()),
@@ -117,6 +120,7 @@ function patchNode(id: string, extra: Partial<MapNode>) {
 const BARDS = { title: "The Bard's Song", artist: "Blind Guardian" };
 
 beforeEach(() => {
+  resetTestPrefs({ "intro.gesehen": true });
   queryClient.clear();
   queryClient.setDefaultOptions({ queries: { retry: false } });
 });

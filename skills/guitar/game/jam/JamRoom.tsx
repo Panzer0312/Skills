@@ -32,7 +32,7 @@ export function JamRoom() {
   const pentatonic = scale === "moll-pentatonik";
 
   return (
-    <ToolFrame title="Jam Room">
+    <ToolFrame title="Jam Room" helpStepId="werkzeuge">
       <section aria-label="Begleitung" className="jam-room">
         {error && (
           <p role="alert" className="game-error">
