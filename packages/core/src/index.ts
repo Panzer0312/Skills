@@ -81,3 +81,15 @@ export {
   type GearItem,
   type BuyRefusal,
 } from "./game/index.js";
+export {
+  PREFS,
+  definePrefs,
+  resolvePrefs,
+  isPrefKey,
+  type PrefKey,
+  type PrefValue,
+  type PrefDef,
+  type PrefGroup,
+  type PrefUi,
+  type ResolvedPrefs,
+} from "./game/prefs/index.js";

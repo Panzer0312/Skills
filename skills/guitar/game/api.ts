@@ -14,6 +14,7 @@ import road from "./road.json";
 import storyData from "./story.json";
 import { lessonsApi } from "./api/lessons.js";
 import { logApi } from "./api/log.js";
+import { prefsApi } from "./api/prefs.js";
 import { songsApi } from "./api/songs.js";
 import { stateApi } from "./api/state.js";
 
@@ -21,6 +22,7 @@ export { SONG_META_KEY } from "./api/client.js";
 export { useGameHistory, useGameState, useRecentLog } from "./api/state.js";
 export type { LogResult } from "./api/log.js";
 export type { PlacementBody } from "./api/lessons.js";
+export { PREFS_KEY } from "./api/prefs.js";
 export { useBuyItem, useEquip } from "./api/market.js";
 export { useSoundSetting } from "./api/settings.js";
 
@@ -29,6 +31,7 @@ export const gameApi = {
   ...logApi,
   ...lessonsApi,
   ...songsApi,
+  ...prefsApi,
 };
 
 export const GAME_BASE = "/vollbild/guitar/spiel";
