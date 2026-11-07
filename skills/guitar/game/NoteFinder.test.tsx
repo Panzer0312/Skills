@@ -90,6 +90,11 @@ beforeEach(() => {
   mic.error = null;
   mic.start.mockClear();
   mic.stop.mockClear();
+  try {
+    localStorage.clear();
+  } catch {
+    // no storage
+  }
 });
 afterEach(() => {
   vi.useRealTimers();
@@ -180,15 +185,38 @@ describe("NoteFinder", () => {
     expect(fetchMock.mock.calls.filter(([url]) => String(url).includes("/log"))).toHaveLength(0);
   });
 
-  it("releases the microphone when the round ends", async () => {
+  it("mic stays running after a round ends", async () => {
     serve();
     renderFinder();
     fireEvent.click(screen.getByRole("button", { name: "Start" }));
     mic.stop.mockClear();
-    await tick(59_000);
+    await tick(60_000);
     expect(mic.stop).not.toHaveBeenCalled();
-    await tick(1_000);
-    expect(mic.stop).toHaveBeenCalledTimes(1);
+    fireEvent.click(screen.getByRole("button", { name: "Start" }));
+    fireEvent.click(screen.getByRole("button", { name: "Abbrechen" }));
+    expect(mic.stop).not.toHaveBeenCalled();
+  });
+
+  it("drop d tuning labels the low string D and scores D on fret 0", () => {
+    serve();
+    renderFinder({});
+    fireEvent.change(screen.getByLabelText("Stimmung"), { target: { value: "Drop D" } });
+    expect(screen.getByRole("option", { name: "D-Saite" })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Start" }));
+    expect(screen.getByTestId("prompt")).toHaveTextContent("Finde D auf der D-Saite");
+    fireEvent.click(screen.getByTestId("finder-0-0"));
+    expect(screen.getByText("Treffer: 1")).toBeInTheDocument();
+  });
+
+  it("tuning metric key includes tuning name", async () => {
+    const fetchMock = serve();
+    renderFinder({ tuning: "Drop D", strings: [0] });
+    expect(screen.queryByLabelText("Stimmung")).toBeNull();
+    fireEvent.click(screen.getByRole("button", { name: "Start" }));
+    fireEvent.click(screen.getByTestId("finder-0-0"));
+    await tick(60_000);
+    const calls = fetchMock.mock.calls.filter(([url]) => String(url).includes("/log"));
+    expect(JSON.parse(String(calls[0]![1]?.body)).metricKey).toBe("notenfinder:Drop D:0");
   });
 
   it("scores a pitch held on the microphone", async () => {

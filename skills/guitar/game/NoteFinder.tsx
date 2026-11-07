@@ -8,9 +8,11 @@ import {
   notePitchClass,
   TUNINGS,
   type NoteTarget,
+  type Tuning,
 } from "@skills/core";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { playSignal } from "../../../packages/web/src/audio/signalTone.js";
+import { usePersistentState } from "../../../packages/web/src/app/usePersistentState.js";
 import { useInputDevices } from "../../../packages/web/src/audio/useInputDevices.js";
 import { useMicrophone } from "../../../packages/web/src/audio/useMicrophone.js";
 import { gameApi, type LogResult } from "./api.js";
@@ -19,15 +21,29 @@ import { InputControls } from "./InputControls.js";
 
 const ROUND_MS = 60_000;
 const TICK_MS = 100;
-const TUNING = TUNINGS[0]!;
-const STRING_NAMES = ["E", "A", "D", "G", "H", "e"];
 
-const CHOICES: { label: string; strings: number[] }[] = [
-  { label: "E-Saite", strings: [0] },
-  { label: "A-Saite", strings: [1] },
-  { label: "E und A", strings: [0, 1] },
-  { label: "Alle", strings: [0, 1, 2, 3, 4, 5] },
-];
+function isTuningName(raw: unknown): raw is string {
+  return typeof raw === "string" && TUNINGS.some((t) => t.name === raw);
+}
+
+function findTuning(name: string): Tuning {
+  return TUNINGS.find((t) => t.name === name) ?? TUNINGS[0]!;
+}
+
+/** Label of a string: the open note without its octave, the high string in lower case. */
+function stringLabel(tuning: Tuning, index: number): string {
+  const name = displayNote(tuning.strings[index]!.replace(/-?\d+$/, ""));
+  return index === 5 ? name.toLowerCase() : name;
+}
+
+function choicesFor(tuning: Tuning): { label: string; strings: number[] }[] {
+  return [
+    { label: `${stringLabel(tuning, 0)}-Saite`, strings: [0] },
+    { label: `${stringLabel(tuning, 1)}-Saite`, strings: [1] },
+    { label: `${stringLabel(tuning, 0)} und ${stringLabel(tuning, 1)}`, strings: [0, 1] },
+    { label: "Alle", strings: [0, 1, 2, 3, 4, 5] },
+  ];
+}
 
 type Phase = "pick" | "run" | "done";
 
@@ -40,21 +56,29 @@ function beep(kind: "start" | "ende") {
 }
 
 /** The pitch class counts on every fret of the string, so fret 12 is as good as the open string. */
-function isRight(target: NoteTarget, stringIndex: number, fret: number): boolean {
+function isRight(tuning: Tuning, target: NoteTarget, stringIndex: number, fret: number): boolean {
   if (stringIndex !== target.stringIndex) return false;
-  const open = TUNING.strings[stringIndex]!;
+  const open = tuning.strings[stringIndex]!;
   return (notePitchClass(open) + fret) % 12 === notePitchClass(target.note);
 }
 
 export function NoteFinder({
   strings: fixedStrings,
+  tuning: fixedTuning,
   onResult,
 }: {
   strings?: number[];
+  tuning?: string;
   onResult?: (hits: number) => void;
 }) {
   const [choice, setChoice] = useState(0);
-  const strings = fixedStrings ?? CHOICES[choice]!.strings;
+  const [storedTuning, setStoredTuning] = usePersistentState("guitar.notefinder.tuning", "Standard", isTuningName);
+  const tuningName = fixedTuning !== undefined && isTuningName(fixedTuning) ? fixedTuning : fixedTuning ? "Standard" : storedTuning;
+  const tuning = findTuning(tuningName);
+  const tuningRef = useRef(tuning);
+  tuningRef.current = tuning;
+  const choices = choicesFor(tuning);
+  const strings = fixedStrings ?? choices[choice]!.strings;
   const stringsKey = strings.join(",");
 
   const [phase, setPhase] = useState<Phase>("pick");
@@ -89,7 +113,7 @@ export function NoteFinder({
   const score = useCallback(() => {
     hitsRef.current += 1;
     setHits(hitsRef.current);
-    showTarget(nextTarget(stringsRef.current, targetRef.current, TUNING));
+    showTarget(nextTarget(stringsRef.current, targetRef.current, tuningRef.current));
   }, []);
 
   const onBuffer = useCallback(
@@ -114,7 +138,6 @@ export function NoteFinder({
     phaseRef.current = "done";
     setPhase("done");
     setLevel(0);
-    mic.stop();
     beep("ende");
     const total = hitsRef.current;
     if (onResult) {
@@ -130,7 +153,7 @@ export function NoteFinder({
           seconds: ROUND_MS / 1000,
           level: 1,
           techniqueId: "theorie",
-          metricKey: `notenfinder:${strings.join("-")}`,
+          metricKey: `notenfinder:${tuning.name === "Standard" ? "" : `${tuning.name}:`}${strings.join("-")}`,
           metricValue: total,
         }),
       );
@@ -165,7 +188,7 @@ export function NoteFinder({
     setRemainingMs(ROUND_MS);
     phaseRef.current = "run";
     setPhase("run");
-    showTarget(nextTarget(strings, null, TUNING));
+    showTarget(nextTarget(strings, null, tuning));
     beep("start");
   }
 
@@ -173,24 +196,39 @@ export function NoteFinder({
     phaseRef.current = "pick";
     setPhase("pick");
     setLevel(0);
-    mic.stop();
     showTarget(null);
   }
 
   function click(stringIndex: number, fret: number) {
     if (phase !== "run" || !target) return;
-    if (isRight(target, stringIndex, fret)) score();
+    if (isRight(tuning, target, stringIndex, fret)) score();
     else setRevealed(true);
   }
 
   const running = phase === "run";
   const micOn = mic.state === "running";
   const prompt = target
-    ? `Finde ${displayNote(target.note.replace(/-?\d+$/, ""))} auf der ${STRING_NAMES[target.stringIndex]}-Saite`
+    ? `Finde ${displayNote(target.note.replace(/-?\d+$/, ""))} auf der ${stringLabel(tuning, target.stringIndex)}-Saite`
     : "";
 
   return (
     <div className="space-y-4">
+      {fixedTuning === undefined && !running ? (
+        <label className="block">
+          Stimmung{" "}
+          <select
+            value={tuning.name}
+            onChange={(event) => setStoredTuning(event.target.value)}
+            className="rounded border border-slate-300 bg-white px-2 py-1 dark:border-slate-700 dark:bg-slate-900"
+          >
+            {TUNINGS.map((t) => (
+              <option key={t.name} value={t.name}>
+                {t.name}
+              </option>
+            ))}
+          </select>
+        </label>
+      ) : null}
       {!fixedStrings && !running ? (
         <label className="block">
           Saiten{" "}
@@ -199,7 +237,7 @@ export function NoteFinder({
             onChange={(event) => setChoice(Number(event.target.value))}
             className="rounded border border-slate-300 bg-white px-2 py-1 dark:border-slate-700 dark:bg-slate-900"
           >
-            {CHOICES.map((c, i) => (
+            {choices.map((c, i) => (
               <option key={c.label} value={i}>
                 {c.label}
               </option>
@@ -220,7 +258,7 @@ export function NoteFinder({
 
       <FretboardGrid
         key={stringsKey}
-        tuning={TUNING}
+        tuning={tuning}
         testIdPrefix="finder"
         onFret={click}
         mark={(stringIndex, fret) => {
