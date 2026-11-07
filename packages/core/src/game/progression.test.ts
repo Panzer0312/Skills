@@ -11,6 +11,10 @@ describe("xpForEntry", () => {
   });
 });
 describe("levelFromXp", () => {
+  it("treats non-finite XP as none instead of looping", () => {
+    expect(levelFromXp(Infinity)).toEqual({ level: 1, xpIntoLevel: 0, xpForNext: 100 });
+    expect(levelFromXp(NaN)).toEqual({ level: 1, xpIntoLevel: 0, xpForNext: 100 });
+  });
   it("starts at level 1", () => expect(levelFromXp(0)).toEqual({ level: 1, xpIntoLevel: 0, xpForNext: 100 }));
   it("crosses a level exactly", () => expect(levelFromXp(300)).toEqual({ level: 3, xpIntoLevel: 0, xpForNext: 300 }));
 });
@@ -63,5 +67,14 @@ describe("goldForEntry", () => {
   });
   it("is zero for no practice", () => {
     expect(goldForEntry({ kind: "quest", seconds: 0, level: 3, rating: "passt" })).toBe(0);
+  });
+});
+
+describe("xpForEntry guards", () => {
+  it("clamps negative seconds and levels below 1", () => {
+    expect(xpForEntry({ kind: "quest", seconds: -600, level: 1, rating: null })).toBe(0);
+    expect(xpForEntry({ kind: "quest", seconds: 60, level: -5, rating: null })).toBe(
+      xpForEntry({ kind: "quest", seconds: 60, level: 1, rating: null }),
+    );
   });
 });

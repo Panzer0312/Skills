@@ -355,7 +355,9 @@ export function SkillMap({ nodes, paths, road, statuses, chosen, selectedId, bes
     setView(panBy(current.view, -dx / scale, -dy / scale));
   }
 
-  function endDrag() {
+  function endDrag(event: PointerEvent<SVGSVGElement>) {
+    // Lifting a second finger must not end the drag of the first.
+    if (drag.current && event.pointerId !== drag.current.pointerId) return;
     drag.current = null;
   }
 

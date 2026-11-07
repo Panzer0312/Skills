@@ -10,9 +10,10 @@ export interface PracticeEntry {
 }
 
 export function xpForEntry(entry: PracticeEntry): number {
-  const level = entry.kind === "frei" ? 1 : entry.level;
-  const base = Math.round((entry.seconds / 60) * 4 * (1 + (level - 1) * 0.1));
-  const bonus = entry.kind === "quest" && entry.rating !== null && entry.seconds >= 30 ? 10 : 0;
+  const level = entry.kind === "frei" || !Number.isFinite(entry.level) ? 1 : Math.max(1, entry.level);
+  const seconds = Number.isFinite(entry.seconds) ? Math.max(0, entry.seconds) : 0;
+  const base = Math.round((seconds / 60) * 4 * (1 + (level - 1) * 0.1));
+  const bonus = entry.kind === "quest" && entry.rating !== null && seconds >= 30 ? 10 : 0;
   return base + bonus;
 }
 
@@ -23,7 +24,8 @@ export function goldForEntry(entry: PracticeEntry): number {
 
 export function levelFromXp(xp: number): { level: number; xpIntoLevel: number; xpForNext: number } {
   let level = 1;
-  let rest = Math.max(0, xp);
+  // Non-finite XP (NaN, Infinity) would never leave the loop or poison the result.
+  let rest = Number.isFinite(xp) ? Math.max(0, xp) : 0;
   while (rest >= 100 * level) {
     rest -= 100 * level;
     level += 1;

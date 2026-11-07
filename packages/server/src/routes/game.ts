@@ -267,7 +267,8 @@ gameRoutes.post("/api/game/:skillId/log", async (c) => {
             .get(skillId, body.metricKey) as { m: number | null }).m
         : null;
     const isRecord =
-      body.metricValue !== undefined && body.metricKey !== undefined && (previousMax === null || body.metricValue > previousMax);
+      body.metricValue !== undefined && body.metricKey !== undefined && // A first value of 0 (nothing hit) is no record worth celebrating.
+      (previousMax === null ? body.metricValue > 0 : body.metricValue > previousMax);
 
     raw
       .prepare(

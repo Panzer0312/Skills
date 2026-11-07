@@ -67,6 +67,12 @@ describe("game api", () => {
     expect((await state()).records.wpm).toBe(22);
   });
 
+  it("does not call a first value of 0 a record", async () => {
+    const m = (v: number) => ({ kind: "quest", seconds: 10, level: 1, metricKey: "hits", metricValue: v });
+    expect((await log(m(0))).isRecord).toBe(false);
+    expect((await log(m(1))).isRecord).toBe(true);
+  });
+
   it("moves a lesson to aktiv, then gemeistert at the target", async () => {
     const base = { kind: "quest", lessonId: "L1", seconds: 60, level: 1, masteryTarget: 80 };
     await log({ ...base, metricKey: "m", metricValue: 50 });

@@ -1,5 +1,5 @@
 import { Suspense, useMemo } from "react";
-import { Navigate, useParams } from "react-router-dom";
+import { Link, Navigate, useParams } from "react-router-dom";
 import { CourseRenderer } from "../renderers/CourseRenderer.js";
 import { DeckRenderer } from "../renderers/DeckRenderer.js";
 import { LibraryRenderer } from "../renderers/LibraryRenderer.js";
@@ -55,7 +55,15 @@ function renderModule(
   followRedirect: boolean,
 ) {
   if (!skill || !module) {
-    return <p className="text-slate-600 dark:text-slate-400">Dieses Modul existiert nicht.</p>;
+    // The fullscreen route has no app chrome, so the page itself must offer a way back.
+    return (
+      <div className="text-slate-600 dark:text-slate-400">
+        <p>Dieses Modul existiert nicht.</p>
+        <Link to="/" className="underline">
+          Zur Startseite
+        </Link>
+      </div>
+    );
   }
 
   if (followRedirect && module.redirect) return <Navigate to={module.redirect} replace />;

@@ -60,19 +60,21 @@ export function SongView({ song, songKey }: { song: Song; songKey?: string }) {
   const { overrides, entries, save, reset } = useChordOverrides(songKey);
 
   const shown = steps === 0 ? song : transposeSong(song, steps);
+  // A new song prop may have fewer sections than the loop pointed at.
+  const activeLoop = loopIndex !== null && loopIndex < song.sections.length ? loopIndex : null;
 
   useEffect(() => {
     if (!scrolling) return;
     const timer = setInterval(() => {
       const container = containerRef.current;
       if (!container) return;
-      const range = scrollRange(container, sectionRefs.current, loopIndex);
+      const range = scrollRange(container, sectionRefs.current, activeLoop);
       const { top, done } = nextScrollTop(container.scrollTop, 1, range);
       container.scrollTop = top;
       if (done) setScrolling(false);
     }, Math.max(10, 2000 / scrollSpeed));
     return () => clearInterval(timer);
-  }, [scrolling, scrollSpeed, loopIndex]);
+  }, [scrolling, scrollSpeed, activeLoop]);
 
   function chooseLoop(value: string) {
     if (value === "") {
@@ -133,7 +135,7 @@ export function SongView({ song, songKey }: { song: Song; songKey?: string }) {
           <label className="flex items-center gap-2">
             <span>Abschnitt wiederholen</span>
             <select
-              value={loopIndex === null ? "" : String(loopIndex)}
+              value={activeLoop === null ? "" : String(activeLoop)}
               onChange={(e) => chooseLoop(e.target.value)}
               className="rounded border border-slate-300 px-2 py-1 dark:border-slate-700 dark:bg-slate-900"
             >

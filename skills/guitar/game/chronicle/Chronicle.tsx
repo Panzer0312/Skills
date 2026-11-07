@@ -36,9 +36,18 @@ function lastDay(metrics: History["metrics"], key: string): string {
   return metricSeries(metrics, key).at(-1)?.day ?? "";
 }
 
+/** Newest last practice first; ties keep the given key order, so the cap is stable. */
+function byNewest(metrics: History["metrics"]) {
+  return (a: string, b: string) => {
+    const da = lastDay(metrics, a);
+    const db = lastDay(metrics, b);
+    return da === db ? 0 : da < db ? 1 : -1;
+  };
+}
+
 function ChangeSection({ metrics, keys }: { metrics: History["metrics"]; keys: string[] }) {
   const latest = useMemo(
-    () => [...keys].sort((a, b) => (lastDay(metrics, a) < lastDay(metrics, b) ? 1 : -1))[0]!,
+    () => [...keys].sort(byNewest(metrics))[0]!,
     [keys, metrics],
   );
   const [picked, setPicked] = useState<string[]>([]);
@@ -95,7 +104,7 @@ function GroupSection({
   metrics: History["metrics"];
   keys: string[];
 }) {
-  const shown = [...keys].sort((a, b) => (lastDay(metrics, a) < lastDay(metrics, b) ? 1 : -1)).slice(0, MAX_LINES);
+  const shown = [...keys].sort(byNewest(metrics)).slice(0, MAX_LINES);
   const series = shown.map((key) => ({
     label: key.startsWith("notenfinder:") ? noteRoundLabel(key) : recordLabel(key),
     points: metricSeries(metrics, key),

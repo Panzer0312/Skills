@@ -88,5 +88,6 @@ describe("ModuleRoute", () => {
   it("rejects a non-fullscreen module on the fullscreen route", () => {
     renderRoute("/vollbild/demo/cards");
     expect(screen.getByText("Dieses Modul existiert nicht.")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Zur Startseite" })).toHaveAttribute("href", "/");
   });
 });
