@@ -1,7 +1,10 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { resetTestPrefs, testPref } from "../game/testPrefs.js";
 import Tuner from "./Tuner.js";
+
+vi.mock("../game/usePref.js", async () => ({ usePref: (await import("../game/testPrefs.js")).usePref }));
 
 const progress = { record: vi.fn(), get: () => null, complete: vi.fn(async () => {}) };
 
@@ -19,7 +22,7 @@ vi.mock("../../../packages/web/src/audio/useInputDevices.js", () => ({
 vi.mock("../../../packages/web/src/audio/referenceTone.js", () => ({ playReferenceTone }));
 
 describe("Tuner", () => {
-  beforeEach(() => localStorage.clear());
+  beforeEach(() => resetTestPrefs());
 
   it("offers to start the microphone", async () => {
     mocks.state = "idle";
@@ -90,7 +93,7 @@ describe("Tuner", () => {
   });
 
   it("tuner url tuning beats stored tuning", () => {
-    localStorage.setItem("guitar.tuner.tuning", JSON.stringify("Drop D"));
+    resetTestPrefs({ "werkzeuge.stimmgeraet.stimmung": "Drop D" });
     mocks.state = "idle";
     mocks.error = null;
     render(<Tuner data={[]} progress={progress} settings={{}} initialTuning="Standard" />);
@@ -100,7 +103,7 @@ describe("Tuner", () => {
   it("tuner restores stored tuning", async () => {
     mocks.state = "idle";
     mocks.error = null;
-    localStorage.setItem("guitar.tuner.tuning", JSON.stringify("Drop D"));
+    resetTestPrefs({ "werkzeuge.stimmgeraet.stimmung": "Drop D" });
     render(<Tuner data={[]} progress={progress} settings={{}} />);
     expect(screen.getByLabelText(/Stimmung/)).toHaveValue("Drop D");
   });
@@ -110,6 +113,6 @@ describe("Tuner", () => {
     mocks.error = null;
     render(<Tuner data={[]} progress={progress} settings={{}} />);
     await userEvent.selectOptions(screen.getByLabelText(/Stimmung/), "Drop D");
-    expect(JSON.parse(localStorage.getItem("guitar.tuner.tuning")!)).toBe("Drop D");
+    expect(testPref("werkzeuge.stimmgeraet.stimmung")).toBe("Drop D");
   });
 });

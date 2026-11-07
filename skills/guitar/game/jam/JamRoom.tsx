@@ -1,9 +1,9 @@
-import { displayNote, JAM_STYLES, NOTES, SCALES, type JamStyle } from "@skills/core";
-import { usePersistentState } from "../../../../packages/web/src/app/usePersistentState.js";
+import { displayNote, JAM_STYLES, NOTES, SCALES, type JamStyle, type PrefValue } from "@skills/core";
 import { usePracticeKeys } from "../../../../packages/web/src/app/usePracticeKeys.js";
 import { useWakeLock } from "../../../../packages/web/src/app/useWakeLock.js";
 import { FretOverlay } from "../FretOverlay.js";
 import { ToolFrame } from "../Places.js";
+import { usePref } from "../usePref.js";
 import { useJamEngine } from "./useJamEngine.js";
 
 const MIN_BPM = 50;
@@ -12,36 +12,10 @@ const BOXES = [1, 2, 3, 4, 5] as const;
 
 type Box = (typeof BOXES)[number];
 
-interface StoredJam {
-  root: string;
-  style: JamStyle;
-  bpm: number;
-  box?: Box;
-  volume: number;
-}
-
-const DEFAULTS: StoredJam = { root: "E", style: "rock", bpm: 90, volume: 0.7 };
-
-function isStoredJam(raw: unknown): raw is StoredJam {
-  if (typeof raw !== "object" || raw === null) return false;
-  const r = raw as Record<string, unknown>;
-  return (
-    typeof r.root === "string" &&
-    (NOTES as readonly string[]).includes(r.root) &&
-    typeof r.style === "string" &&
-    r.style in JAM_STYLES &&
-    typeof r.bpm === "number" &&
-    r.bpm >= MIN_BPM &&
-    r.bpm <= MAX_BPM &&
-    (r.box === undefined || (BOXES as readonly unknown[]).includes(r.box)) &&
-    typeof r.volume === "number" &&
-    r.volume >= 0 &&
-    r.volume <= 1
-  );
-}
+type StoredJam = PrefValue<"werkzeuge.jam">;
 
 export function JamRoom() {
-  const [settings, setSettings] = usePersistentState("guitar.jam", DEFAULTS, isStoredJam);
+  const [settings, setSettings] = usePref("werkzeuge.jam");
   const { root, style, bpm, volume, box } = settings;
   const update = (patch: Partial<StoredJam>) => setSettings({ ...settings, ...patch });
   const setRoot = (value: string) => update({ root: value });

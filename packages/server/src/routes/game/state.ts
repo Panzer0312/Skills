@@ -91,6 +91,10 @@ router.get("/api/game/:skillId/state", (c) => {
   const soundRow = raw.prepare("SELECT sound FROM game_settings WHERE skill_id = ?").get(skillId) as
     | { sound: number }
     | undefined;
+  const soundPref = raw
+    .prepare("SELECT value_json FROM game_prefs WHERE skill_id = ? AND key = 'klang.an'")
+    .get(skillId) as { value_json: string } | undefined;
+  const sound = soundPref ? soundPref.value_json === "true" : soundRow?.sound === 1;
   const state: GameState = {
     day: today,
     placed: profile?.placed_at != null,
@@ -115,7 +119,7 @@ router.get("/api/game/:skillId/state", (c) => {
     gold,
     owned,
     equipped,
-    sound: soundRow?.sound === 1,
+    sound,
   };
   return c.json(state);
 });

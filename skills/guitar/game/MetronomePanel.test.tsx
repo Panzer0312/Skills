@@ -2,6 +2,8 @@ import { act, fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { useMetronome } from "../../../packages/web/src/audio/useMetronome.js";
+vi.mock("./usePref.js", async () => ({ usePref: (await import("./testPrefs.js")).usePref }));
+import { finishTestLoading, prefWrites, resetTestPrefs, testPref } from "./testPrefs.js";
 import { MetronomePanel } from "./MetronomePanel.js";
 
 let latest: ReturnType<typeof useMetronome>;
@@ -13,7 +15,7 @@ function Harness() {
 }
 
 beforeEach(() => {
-  localStorage.clear();
+  resetTestPrefs();
   vi.stubGlobal(
     "AudioContext",
     class {
@@ -166,10 +168,7 @@ describe("MetronomePanel", () => {
   });
 
   it("metronome restores beats and accents", () => {
-    localStorage.setItem(
-      "guitar.metronome",
-      JSON.stringify({ beatsPerBar: 3, subdivision: "achtel", accents: [true, false, true], stepBpm: 6, everyBars: 3 }),
-    );
+    resetTestPrefs({ "werkzeuge.metronom": { beatsPerBar: 3, subdivision: "achtel", accents: [true, false, true], stepBpm: 6, everyBars: 3 } });
     render(<Harness />);
     expect(latest.beatsPerBar).toBe(3);
     expect(latest.subdivision).toBe("achtel");
@@ -178,10 +177,7 @@ describe("MetronomePanel", () => {
   });
 
   it("stale accents are ignored", () => {
-    localStorage.setItem(
-      "guitar.metronome",
-      JSON.stringify({ beatsPerBar: 3, subdivision: "viertel", accents: [true, true, true, true], stepBpm: 4, everyBars: 2 }),
-    );
+    resetTestPrefs({ "werkzeuge.metronom": { beatsPerBar: 3, subdivision: "viertel", accents: [true, true, true, true], stepBpm: 4, everyBars: 2 } });
     render(<Harness />);
     expect(latest.beatsPerBar).toBe(3);
     expect(latest.accents).toEqual([true, false, false]);
@@ -192,7 +188,7 @@ describe("MetronomePanel", () => {
     render(<Harness />);
     await user.selectOptions(screen.getByLabelText("Takt"), "3");
     await user.click(screen.getByRole("button", { name: "Betonung Schlag 2" }));
-    expect(JSON.parse(localStorage.getItem("guitar.metronome")!)).toMatchObject({
+    expect(testPref("werkzeuge.metronom")).toMatchObject({
       beatsPerBar: 3,
       accents: [true, true, false],
     });
@@ -205,12 +201,26 @@ describe("MetronomePanel", () => {
     await user.selectOptions(screen.getByLabelText("Takt"), "3");
     fireEvent.change(screen.getByLabelText("Plus"), { target: { value: "99" } });
     fireEvent.change(screen.getByLabelText("Alle (Takte)"), { target: { value: "0" } });
-    expect(JSON.parse(localStorage.getItem("guitar.metronome")!)).toMatchObject({
+    expect(testPref("werkzeuge.metronom")).toMatchObject({
       beatsPerBar: 3,
       stepBpm: 50,
       everyBars: 1,
     });
     fireEvent.change(screen.getByLabelText("Alle (Takte)"), { target: { value: "8" } });
-    expect(JSON.parse(localStorage.getItem("guitar.metronome")!)).toMatchObject({ beatsPerBar: 3, stepBpm: 50, everyBars: 8 });
+    expect(testPref("werkzeuge.metronom")).toMatchObject({ beatsPerBar: 3, stepBpm: 50, everyBars: 8 });
+  });
+
+  it("waits for the stored setup to load before applying it", () => {
+    resetTestPrefs(
+      { "werkzeuge.metronom": { beatsPerBar: 3, subdivision: "achtel", accents: [true, false, true], stepBpm: 6, everyBars: 3 } },
+      { loading: true },
+    );
+    render(<Harness />);
+    expect(latest.beatsPerBar).toBe(4);
+    expect(prefWrites).toHaveLength(0);
+    act(() => finishTestLoading());
+    expect(latest.beatsPerBar).toBe(3);
+    expect(latest.subdivision).toBe("achtel");
+    expect(prefWrites).toHaveLength(0);
   });
 });

@@ -1,16 +1,9 @@
-import { useGameState, useSoundSetting } from "../api.js";
+import { usePref } from "../usePref.js";
 
 export function SoundToggle() {
-  const on = useGameState().data?.sound === true;
-  const setting = useSoundSetting();
+  const [on, setOn] = usePref("klang.an");
   return (
-    <button
-      type="button"
-      className="game-button"
-      aria-pressed={on}
-      disabled={setting.isPending}
-      onClick={() => setting.mutate(!on)}
-    >
+    <button type="button" className="game-button" aria-pressed={on} onClick={() => setOn(!on)}>
       {on ? "Klang an" : "Klang aus"}
     </button>
   );

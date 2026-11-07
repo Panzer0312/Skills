@@ -1,11 +1,21 @@
+import { useQueryClient } from "@tanstack/react-query";
+import { useEffect } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import { GAME_BASE, useGameState } from "./api.js";
+import { PREFS_KEY } from "./api/prefs.js";
+import { migrateLocalPrefs } from "./migrateLocalPrefs.js";
 import { StatusBar } from "./StatusBar.js";
 import { useAmbience } from "./sound/useAmbience.js";
 
 export function GameShell() {
   const state = useGameState();
   useAmbience();
+  const client = useQueryClient();
+  useEffect(() => {
+    void migrateLocalPrefs().then((wrote) => {
+      if (wrote) void client.invalidateQueries({ queryKey: PREFS_KEY });
+    });
+  }, [client]);
   return (
     <>
       <StatusBar state={state.data} />

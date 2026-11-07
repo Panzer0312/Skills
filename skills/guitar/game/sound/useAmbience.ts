@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { useLocation } from "react-router-dom";
-import { useGameState } from "../api.js";
+import { usePref } from "../usePref.js";
 import { getFreeTimerRunning, subscribeFreeTimer } from "../freeTimerStore.js";
 import { ambienceAllowed, startAmbience } from "./ambience.js";
 import { setSoundEnabled } from "./effects.js";
 
 export function useAmbience(): void {
-  const sound = useGameState().data?.sound === true;
+  const [sound] = usePref("klang.an");
   const { pathname } = useLocation();
   // Free practice is practice too, wherever the timer is started from.
   const freeTimerRunning = useSyncExternalStore(subscribeFreeTimer, getFreeTimerRunning);

@@ -16,6 +16,8 @@ const EXPORT_TABLES = [
   "game_inventory",
   "game_equipped",
   "game_settings",
+  "game_prefs",
+  "game_gold_adjust",
   "lesson_progress",
 ] as const;
 
@@ -27,7 +29,7 @@ router.get("/api/game/:skillId/export", (c) => {
     tables[table] = raw.prepare(`SELECT * FROM ${table} WHERE skill_id = ?`).all(skillId);
   }
   const now = Date.now();
-  c.header("content-disposition", `attachment; filename="guitar-export-${localDayKey(now)}.json"`);
+  c.header("content-disposition", `attachment; filename="${skillId.replace(/[^\w-]/g, "_")}-export-${localDayKey(now)}.json"`);
   return c.json({ exportedAt: now, skillId, tables });
 });
 
@@ -40,5 +42,12 @@ router.put("/api/game/:skillId/settings", async (c) => {
        ON CONFLICT(skill_id) DO UPDATE SET sound = excluded.sound`,
     )
     .run(c.req.param("skillId"), parsed.data.sound ? 1 : 0);
+  // The pref is the source of truth now; the old column stays for back-compat.
+  c.get("database")
+    .raw.prepare(
+      `INSERT INTO game_prefs (skill_id, key, value_json) VALUES (?, 'klang.an', ?)
+       ON CONFLICT(skill_id, key) DO UPDATE SET value_json = excluded.value_json`,
+    )
+    .run(c.req.param("skillId"), JSON.stringify(parsed.data.sound));
   return c.json({ ok: true });
 });

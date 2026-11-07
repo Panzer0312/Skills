@@ -1,44 +1,11 @@
-import { defaultAccents, SUBDIVISIONS, type Subdivision } from "@skills/core";
+import { defaultAccents, SUBDIVISIONS, type Subdivision, type PrefValue } from "@skills/core";
 import { useEffect, useRef, useState } from "react";
-import { usePersistentState } from "../../../packages/web/src/app/usePersistentState.js";
 import type { useMetronome } from "../../../packages/web/src/audio/useMetronome.js";
+import { usePref } from "./usePref.js";
 
 const BEAT_OPTIONS = [2, 3, 4, 5, 6, 7];
 
-interface StoredMetronome {
-  beatsPerBar: number;
-  subdivision: Subdivision;
-  accents: boolean[];
-  stepBpm: number;
-  everyBars: number;
-}
-
-const DEFAULTS: StoredMetronome = {
-  beatsPerBar: 4,
-  subdivision: "viertel",
-  accents: defaultAccents(4),
-  stepBpm: 4,
-  everyBars: 2,
-};
-
-function isStoredMetronome(raw: unknown): raw is StoredMetronome {
-  if (typeof raw !== "object" || raw === null) return false;
-  const r = raw as Record<string, unknown>;
-  return (
-    typeof r.beatsPerBar === "number" &&
-    BEAT_OPTIONS.includes(r.beatsPerBar) &&
-    typeof r.subdivision === "string" &&
-    r.subdivision in SUBDIVISIONS &&
-    Array.isArray(r.accents) &&
-    r.accents.every((a) => typeof a === "boolean") &&
-    typeof r.stepBpm === "number" &&
-    r.stepBpm >= 1 &&
-    r.stepBpm <= 50 &&
-    typeof r.everyBars === "number" &&
-    r.everyBars >= 1 &&
-    r.everyBars <= 32
-  );
-}
+type StoredMetronome = PrefValue<"werkzeuge.metronom">;
 
 function clamp(value: number, min: number, max: number, fallback: number): number {
   if (!Number.isFinite(value)) return fallback;
@@ -51,7 +18,7 @@ export function MetronomePanel({
   metronome: ReturnType<typeof useMetronome>;
 }) {
   const [targetBpm, setTargetBpm] = useState(() => metronome.bpm + 20);
-  const [stored, setStored] = usePersistentState("guitar.metronome", DEFAULTS, isStoredMetronome);
+  const [stored, setStored, { loading }] = usePref("werkzeuge.metronom");
   const [stepBpm, setStepBpmRaw] = useState(stored.stepBpm);
   const [everyBars, setEveryBarsRaw] = useState(stored.everyBars);
   const { bpm, running, speedTrainer, error } = metronome;
@@ -60,11 +27,14 @@ export function MetronomePanel({
   const targetTooLow = !speedTrainer && targetBpm <= bpm;
   const valid = !targetTooLow && stepBpm >= 1 && everyBars >= 1;
 
-  // Apply the remembered setup once; setBeatsPerBar resets the accents, so toggle afterwards.
+  // Apply the remembered setup once it has loaded, so defaults never stand in for it.
+  // setBeatsPerBar resets the accents, so toggle afterwards.
   const applied = useRef(false);
   useEffect(() => {
-    if (applied.current) return;
+    if (applied.current || loading) return;
     applied.current = true;
+    setStepBpmRaw(stored.stepBpm);
+    setEveryBarsRaw(stored.everyBars);
     metronome.setBeatsPerBar(stored.beatsPerBar);
     metronome.setSubdivision(stored.subdivision);
     if (stored.accents.length === stored.beatsPerBar) {
@@ -74,7 +44,7 @@ export function MetronomePanel({
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [loading]);
 
   // A half-typed trainer field must not make the whole stored setup invalid.
   const remember = (patch: Partial<StoredMetronome>) => {

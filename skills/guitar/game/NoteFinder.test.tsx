@@ -5,6 +5,8 @@ import { act, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { frequencyOf } from "@skills/core";
 import { queryClient } from "../../../packages/web/src/app/queryClient.js";
+vi.mock("./usePref.js", async () => ({ usePref: (await import("./testPrefs.js")).usePref }));
+import { resetTestPrefs, testPref } from "./testPrefs.js";
 import { NoteFinder } from "./NoteFinder.js";
 
 const mic = vi.hoisted(() => ({
@@ -90,11 +92,7 @@ beforeEach(() => {
   mic.error = null;
   mic.start.mockClear();
   mic.stop.mockClear();
-  try {
-    localStorage.clear();
-  } catch {
-    // no storage
-  }
+  resetTestPrefs();
 });
 afterEach(() => {
   vi.useRealTimers();
@@ -298,5 +296,14 @@ describe("NoteFinder", () => {
     );
     expect(screen.getByRole("button", { name: "Start" })).toBeInTheDocument();
     expect(onRunningChange).toHaveBeenLastCalledWith(false);
+  });
+
+  it("tools read and write prefs: note finder tuning", () => {
+    serve();
+    resetTestPrefs({ "werkzeuge.notenfinder.stimmung": "Drop D" });
+    renderFinder({});
+    expect(screen.getByLabelText("Stimmung")).toHaveValue("Drop D");
+    fireEvent.change(screen.getByLabelText("Stimmung"), { target: { value: "Standard" } });
+    expect(testPref("werkzeuge.notenfinder.stimmung")).toBe("Standard");
   });
 });

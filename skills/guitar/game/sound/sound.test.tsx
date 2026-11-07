@@ -3,12 +3,9 @@ import { MemoryRouter, useNavigate } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const BASE = "/vollbild/guitar/spiel";
-let gameState: { sound: boolean } | undefined = { sound: true };
-vi.mock("../api.js", () => ({
-  GAME_BASE: "/vollbild/guitar/spiel",
-  useGameState: () => ({ data: gameState }),
-}));
+vi.mock("../usePref.js", async () => ({ usePref: (await import("../testPrefs.js")).usePref }));
 
+import { resetTestPrefs } from "../testPrefs.js";
 import { ambienceAllowed } from "./ambience.js";
 import { playEffect, setSoundEnabled } from "./effects.js";
 import { setFreeTimerRunning } from "../freeTimerStore.js";
@@ -63,7 +60,7 @@ beforeEach(() => {
   vi.useFakeTimers();
   contexts = [];
   initialState = "running";
-  gameState = { sound: true };
+  resetTestPrefs({ "klang.an": true });
   vi.stubGlobal("AudioContext", FakeCtx);
 });
 afterEach(() => {
@@ -88,7 +85,7 @@ describe("ambienceAllowed", () => {
 
 describe("useAmbience", () => {
   it("never builds a context while sound is off", () => {
-    gameState = { sound: false };
+    resetTestPrefs({ "klang.an": false });
     mount();
     expect(contexts).toHaveLength(0);
   });
@@ -133,7 +130,7 @@ describe("useAmbience", () => {
     const { rerender } = mount();
     expect(started()).toBe(1);
     go(`${BASE}/quest/x`);
-    gameState = { sound: false };
+    act(() => resetTestPrefs({ "klang.an": false }));
     rerender(
       <MemoryRouter initialEntries={[BASE]}>
         <Probe />

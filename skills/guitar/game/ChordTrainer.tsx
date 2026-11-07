@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { chordShape } from "@skills/core";
-import { usePersistentState } from "../../../packages/web/src/app/usePersistentState.js";
 import { usePracticeKeys } from "../../../packages/web/src/app/usePracticeKeys.js";
 import {
   playClick,
@@ -9,6 +8,7 @@ import {
 import { ChordDiagramSingle } from "../../../packages/web/src/music/ChordDiagramSingle.js";
 import { useChordOverrides } from "../../../packages/web/src/music/useChordOverrides.js";
 import { UndoButton } from "./UndoButton.js";
+import { usePref } from "./usePref.js";
 import { gameApi, gameContent, useGameState, type LogResult } from "./api.js";
 
 const COUNT_IN_BEATS = 4;
@@ -31,15 +31,6 @@ function click(accent: boolean) {
   } catch {
     // A failed click must not stop the count-in.
   }
-}
-
-function isPairOfStrings(raw: unknown): raw is [string, string] {
-  return (
-    Array.isArray(raw) &&
-    raw.length === 2 &&
-    typeof raw[0] === "string" &&
-    typeof raw[1] === "string"
-  );
 }
 
 type Pair = [string, string];
@@ -78,11 +69,7 @@ export function ChordTrainer({
   const pairs = pairsFromContent();
   const [index, setIndex] = useState(0);
   const [custom, setCustom] = useState(false);
-  const [customPair, setCustomPair] = usePersistentState<Pair>(
-    "guitar.trainer.customPair",
-    ["C", "G"],
-    isPairOfStrings,
-  );
+  const [customPair, setCustomPair] = usePref("werkzeuge.akkordtrainer.eigenesPaar");
   const useCustom = !pair && custom;
   const rawChosen: Pair =
     pair ?? (custom ? customPair : (pairs[index] ?? ["Am", "Em"]));

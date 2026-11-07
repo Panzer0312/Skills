@@ -1,6 +1,9 @@
 import { act, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+vi.mock("../usePref.js", async () => ({ usePref: (await import("../testPrefs.js")).usePref }));
+
+import { resetTestPrefs, testPref } from "../testPrefs.js";
 import { JamRoom } from "./JamRoom.js";
 
 vi.mock("../api.js", async (importOriginal) => ({
@@ -15,7 +18,7 @@ const param = () => ({
 });
 
 beforeEach(() => {
-  localStorage.clear();
+  resetTestPrefs();
   vi.stubGlobal(
     "AudioContext",
     class {
@@ -126,10 +129,7 @@ describe("JamRoom", () => {
   });
 
   it("jam restores style and bpm", () => {
-    localStorage.setItem(
-      "guitar.jam",
-      JSON.stringify({ root: "A", style: "blues", bpm: 120, volume: 0.4 }),
-    );
+    resetTestPrefs({ "werkzeuge.jam": { root: "A", style: "blues", bpm: 120, volume: 0.4 } });
     render(<JamRoom />);
     expect(screen.getByLabelText("Tonart")).toHaveValue("A");
     expect(screen.getByLabelText("Stil")).toHaveValue("blues");
@@ -137,10 +137,7 @@ describe("JamRoom", () => {
   });
 
   it("jam ignores unknown stored style", () => {
-    localStorage.setItem(
-      "guitar.jam",
-      JSON.stringify({ root: "A", style: "polka", bpm: 120, volume: 0.4 }),
-    );
+    resetTestPrefs({ "werkzeuge.jam": { root: "A", style: "polka", bpm: 120, volume: 0.4 } });
     render(<JamRoom />);
     expect(screen.getByLabelText("Stil")).toHaveValue("rock");
     expect(screen.getByText("90 BPM")).toBeInTheDocument();
@@ -154,5 +151,13 @@ describe("JamRoom", () => {
     expect(screen.getByRole("button", { name: "Stoppen" })).toBeInTheDocument();
     await user.keyboard(" ");
     expect(screen.getByRole("button", { name: "Starten" })).toBeInTheDocument();
+  });
+
+  it("tools read and write prefs: jam", async () => {
+    const user = userEvent.setup();
+    resetTestPrefs({ "werkzeuge.jam": { root: "A", style: "blues", bpm: 120, volume: 0.4 } });
+    render(<JamRoom />);
+    await user.selectOptions(screen.getByLabelText("Tonart"), "D");
+    expect(testPref("werkzeuge.jam")).toMatchObject({ root: "D", style: "blues", bpm: 120 });
   });
 });

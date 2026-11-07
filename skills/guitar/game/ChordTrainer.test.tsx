@@ -10,6 +10,8 @@ import {
   playSignal,
 } from "../../../packages/web/src/audio/signalTone.js";
 import GameApp from "../widgets/GameApp.js";
+vi.mock("./usePref.js", async () => ({ usePref: (await import("./testPrefs.js")).usePref }));
+import { resetTestPrefs, testPref } from "./testPrefs.js";
 import { changeMetricKey, ChordTrainer } from "./ChordTrainer.js";
 
 vi.mock("../../../packages/web/src/audio/signalTone.js", () => ({
@@ -88,11 +90,7 @@ beforeEach(() => {
   queryClient.setDefaultOptions({ queries: { retry: false } });
   vi.mocked(playSignal).mockClear();
   vi.mocked(playClick).mockClear();
-  try {
-    localStorage.clear();
-  } catch {
-    // ignore
-  }
+  resetTestPrefs();
 });
 afterEach(() => {
   vi.useRealTimers();
@@ -319,6 +317,16 @@ describe("ChordTrainer count-in and custom pair", () => {
       target: { value: b },
     });
   }
+
+  it("tools read and write prefs: custom pair", async () => {
+    serve();
+    resetTestPrefs({ "werkzeuge.akkordtrainer.eigenesPaar": ["D", "A"] });
+    renderTrainer();
+    fireEvent.change(screen.getByLabelText("Akkordpaar"), { target: { value: "custom" } });
+    expect(screen.getByLabelText("Erster Akkord")).toHaveValue("D");
+    fireEvent.change(screen.getByLabelText("Zweiter Akkord"), { target: { value: "E" } });
+    expect(testPref("werkzeuge.akkordtrainer.eigenesPaar")).toEqual(["D", "E"]);
+  });
 
   it("custom pair logs its metric key", async () => {
     const fetchMock = serve();

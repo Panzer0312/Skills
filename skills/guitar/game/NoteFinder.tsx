@@ -12,7 +12,6 @@ import {
 } from "@skills/core";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { playSignal } from "../../../packages/web/src/audio/signalTone.js";
-import { usePersistentState } from "../../../packages/web/src/app/usePersistentState.js";
 import { useInputDevices } from "../../../packages/web/src/audio/useInputDevices.js";
 import { useMicrophone } from "../../../packages/web/src/audio/useMicrophone.js";
 import { findTuning, stringLabel, stringsLabel } from "./tuningLabels.js";
@@ -20,6 +19,7 @@ import { UndoButton } from "./UndoButton.js";
 import { gameApi, type LogResult } from "./api.js";
 import { FretboardGrid } from "./FretboardGrid.js";
 import { InputControls } from "./InputControls.js";
+import { usePref } from "./usePref.js";
 
 const ROUND_MS = 60_000;
 const TICK_MS = 100;
@@ -69,7 +69,7 @@ export function NoteFinder({
   cancelSignal?: number;
 }) {
   const [choice, setChoice] = useState(0);
-  const [storedTuning, setStoredTuning] = usePersistentState("guitar.notefinder.tuning", "Standard", isTuningName);
+  const [storedTuning, setStoredTuning] = usePref("werkzeuge.notenfinder.stimmung");
   const tuningName =
     fixedTuning !== undefined ? (isTuningName(fixedTuning) ? fixedTuning : "Standard") : storedTuning;
   const tuning = tuningFor(tuningName);
