@@ -107,4 +107,62 @@ describe("FreePractice", () => {
     });
     expect(screen.getByRole("button", { name: /1:05/ })).toBeInTheDocument();
   });
+
+  it("a timer over 4 hours logs nothing and asks for manual minutes", () => {
+    const log = vi.spyOn(gameApi, "log").mockResolvedValue(result as never);
+    localStorage.setItem("guitar.freeTimer", JSON.stringify({ startedAt: Date.now() - 5 * 3600_000, techniqueId: "song" }));
+    render(<FreePractice />);
+    open();
+    fireEvent.click(screen.getByRole("button", { name: "Timer stoppen und speichern" }));
+    expect(screen.getByText("Der Timer lief über 4 Stunden. Trag deine Minuten bitte selbst ein.")).toBeInTheDocument();
+    expect(screen.getByLabelText("Minuten")).toHaveFocus();
+    expect(log).not.toHaveBeenCalled();
+    expect(JSON.parse(localStorage.getItem("guitar.freeTimer") ?? "null")).toBeNull();
+  });
+
+  it("stopping after the record was removed elsewhere logs nothing", () => {
+    const log = vi.spyOn(gameApi, "log").mockResolvedValue(result as never);
+    localStorage.setItem("guitar.freeTimer", JSON.stringify({ startedAt: Date.now() - 600_000, techniqueId: "song" }));
+    render(<FreePractice />);
+    open();
+    localStorage.removeItem("guitar.freeTimer");
+    fireEvent.click(screen.getByRole("button", { name: "Timer stoppen und speichern" }));
+    expect(log).not.toHaveBeenCalled();
+    expect(screen.getByRole("button", { name: "Timer starten" })).toBeInTheDocument();
+  });
+
+  it("follows the storage event from another tab", () => {
+    render(<FreePractice />);
+    open();
+    expect(screen.getByRole("button", { name: "Timer starten" })).toBeInTheDocument();
+    act(() => {
+      localStorage.setItem("guitar.freeTimer", JSON.stringify({ startedAt: Date.now(), techniqueId: "song" }));
+      window.dispatchEvent(new StorageEvent("storage", { key: "guitar.freeTimer" }));
+    });
+    expect(screen.getByRole("button", { name: "Timer stoppen und speichern" })).toBeInTheDocument();
+  });
+
+  it("Verwerfen clears the timer without logging", () => {
+    const log = vi.spyOn(gameApi, "log").mockResolvedValue(result as never);
+    render(<FreePractice />);
+    open();
+    fireEvent.click(screen.getByRole("button", { name: "Timer starten" }));
+    fireEvent.click(screen.getByRole("button", { name: "Verwerfen" }));
+    expect(screen.getByRole("button", { name: "Timer starten" })).toBeInTheDocument();
+    expect(log).not.toHaveBeenCalled();
+  });
+
+  it("keeps the saved result when reopened and closes on Escape", async () => {
+    vi.spyOn(gameApi, "log").mockResolvedValue(result as never);
+    render(<FreePractice />);
+    open();
+    fireEvent.change(screen.getByLabelText("Minuten"), { target: { value: "10" } });
+    fireEvent.click(screen.getByRole("button", { name: "Eintragen" }));
+    await screen.findByText("+12 XP · +3 Gold");
+    fireEvent.keyDown(document, { key: "Escape" });
+    expect(screen.queryByRole("dialog", { name: "Frei üben" })).toBeNull();
+    open();
+    expect(screen.getByText("+12 XP · +3 Gold")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Rückgängig" })).toBeInTheDocument();
+  });
 });

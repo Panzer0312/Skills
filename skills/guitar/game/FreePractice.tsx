@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { usePersistentState } from "../../../packages/web/src/app/usePersistentState.js";
 import { useWakeLock } from "../../../packages/web/src/app/useWakeLock.js";
 import { gameApi } from "./api.js";
 import { UndoButton } from "./UndoButton.js";
@@ -30,13 +29,40 @@ function isTimer(raw: unknown): raw is TimerRecord | null {
   );
 }
 
+const STORAGE_KEY = "guitar.freeTimer";
+
+function readTimer(): TimerRecord | null {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw === null) return null;
+    const parsed: unknown = JSON.parse(raw);
+    return isTimer(parsed) ? parsed : null;
+  } catch {
+    return null;
+  }
+}
+
+function writeTimer(next: TimerRecord | null): void {
+  try {
+    if (next === null) localStorage.removeItem(STORAGE_KEY);
+    else localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+  } catch {
+    /* storage unavailable: keep in-memory value */
+  }
+}
+
 function clock(ms: number): string {
   const total = Math.max(0, Math.floor(ms / 1000));
   return `${Math.floor(total / 60)}:${String(total % 60).padStart(2, "0")}`;
 }
 
 export function FreePractice() {
-  const [timer, setTimer] = usePersistentState<TimerRecord | null>("guitar.freeTimer", null, isTimer);
+  const [timer, setTimerState] = useState<TimerRecord | null>(readTimer);
+  const setTimer = (next: TimerRecord | null) => {
+    setTimerState(next);
+    writeTimer(next);
+  };
+  const minutesRef = useRef<HTMLInputElement>(null);
   const [open, setOpen] = useState(false);
   const [kind, setKind] = useState<string>("song");
   const [minutes, setMinutes] = useState("");
@@ -57,6 +83,23 @@ export function FreePractice() {
     return () => clearInterval(id);
   }, [running]);
 
+  useEffect(() => {
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === null || e.key === STORAGE_KEY) setTimerState(readTimer());
+    };
+    window.addEventListener("storage", onStorage);
+    return () => window.removeEventListener("storage", onStorage);
+  }, []);
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [open]);
+
   async function save(seconds: number, techniqueId: string): Promise<boolean> {
     if (busyRef.current) return false;
     busyRef.current = true;
@@ -76,6 +119,11 @@ export function FreePractice() {
     }
   }
 
+  function discard() {
+    setTimer(null);
+    setNote(null);
+  }
+
   function start() {
     setSaved(null);
     setNote(null);
@@ -85,7 +133,21 @@ export function FreePractice() {
 
   async function stop() {
     if (!timer) return;
-    const seconds = Math.min(MAX_SECONDS, Math.floor((Date.now() - timer.startedAt) / 1000));
+    const stored = readTimer();
+    if (!stored || stored.startedAt !== timer.startedAt) {
+      setTimerState(stored);
+      setSaved(null);
+      setNote("Der Timer wurde schon woanders beendet.");
+      return;
+    }
+    const seconds = Math.floor((Date.now() - timer.startedAt) / 1000);
+    if (seconds > MAX_SECONDS) {
+      setTimer(null);
+      setSaved(null);
+      setNote("Der Timer lief über 4 Stunden. Trag deine Minuten bitte selbst ein.");
+      minutesRef.current?.focus();
+      return;
+    }
     if (seconds < 60) {
       setTimer(null);
       setSaved(null);
@@ -129,9 +191,14 @@ export function FreePractice() {
             </select>
           </label>
           {running ? (
-            <button type="button" className="game-button" disabled={busy} onClick={() => void stop()}>
-              Timer stoppen und speichern
-            </button>
+            <>
+              <button type="button" className="game-button" disabled={busy} onClick={() => void stop()}>
+                Timer stoppen und speichern
+              </button>
+              <button type="button" className="game-button" disabled={busy} onClick={discard}>
+                Verwerfen
+              </button>
+            </>
           ) : (
             <button type="button" className="game-button" onClick={start}>
               Timer starten
@@ -141,6 +208,7 @@ export function FreePractice() {
             <label>
               Minuten
               <input
+                ref={minutesRef}
                 type="number"
                 inputMode="numeric"
                 min={1}
