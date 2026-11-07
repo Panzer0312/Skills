@@ -83,4 +83,45 @@ describe("usePref", () => {
     act(() => gates["zweite.pref"].release());
     await waitFor(() => expect(stored["zweite.pref"]).toBe(true));
   });
+
+  it("usePref coalesces quick sets into one PUT with the last value", async () => {
+    const { mock, puts } = server();
+    const { result } = renderHook(() => usePref("intro.gesehen"), { wrapper });
+    await waitFor(() => expect(result.current[2].loading).toBe(false));
+    act(() => {
+      for (let i = 0; i < 20; i++) result.current[1](i % 2 === 1);
+    });
+    act(() => result.current[1](true));
+    await waitFor(() => expect(result.current[0]).toBe(true));
+    expect(puts).toHaveLength(0);
+    await waitFor(() => expect(puts).toHaveLength(1), { timeout: 1500 });
+    await new Promise((r) => setTimeout(r, 400));
+    expect(puts).toHaveLength(1);
+    const put = mock.mock.calls.find(([, i]) => i?.method === "PUT")!;
+    expect(JSON.parse(put[1]!.body as string)).toEqual({ key: "intro.gesehen", value: true });
+  });
+
+  it("usePref flushes a pending write on unmount", async () => {
+    const { puts } = server();
+    const { result, unmount } = renderHook(() => usePref("intro.gesehen"), { wrapper });
+    await waitFor(() => expect(result.current[2].loading).toBe(false));
+    act(() => result.current[1](true));
+    expect(puts).toHaveLength(0);
+    unmount();
+    await waitFor(() => expect(puts).toEqual(["intro.gesehen"]));
+  });
+
+  it("usePref rolls back to the value before the burst when the flushed write fails", async () => {
+    const gates = { "intro.gesehen": { release: () => {}, fail: true } };
+    const { puts } = server(gates);
+    const { result } = renderHook(() => usePref("intro.gesehen"), { wrapper });
+    await waitFor(() => expect(result.current[2].loading).toBe(false));
+    act(() => result.current[1](true));
+    act(() => result.current[1](false));
+    act(() => result.current[1](true));
+    await waitFor(() => expect(puts).toHaveLength(1), { timeout: 1500 });
+    expect(result.current[0]).toBe(true);
+    act(() => gates["intro.gesehen"].release());
+    await waitFor(() => expect(result.current[0]).toBe(false));
+  });
 });

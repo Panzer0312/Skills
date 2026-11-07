@@ -1,5 +1,6 @@
 import { PREFS, type PrefKey, type PrefValue, type ResolvedPrefs } from "@skills/core";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useEffect, useRef } from "react";
 import { PREFS_KEY, prefsApi } from "./api/prefs.js";
 
 type PrefsData = { prefs: ResolvedPrefs };
@@ -16,7 +17,21 @@ export function usePrefs(): { prefs: ResolvedPrefs; loading: boolean } {
   return { prefs: query.data?.prefs ?? defaults(), loading: query.isPending };
 }
 
-/** One pref: default while loading, optimistic writes, rollback if the server refuses. */
+const DEBOUNCE_MS = 300;
+
+type Pending = { timer: ReturnType<typeof setTimeout>; value: unknown; previous: unknown; send: () => void };
+// One pending (debounced) write per key; latest value wins.
+const pending = new Map<string, Pending>();
+
+function flush(key: string) {
+  const p = pending.get(key);
+  if (!p) return;
+  clearTimeout(p.timer);
+  pending.delete(key);
+  p.send();
+}
+
+/** One pref: default while loading, optimistic writes (sent debounced, latest wins), rollback if the server refuses. */
 export function usePref<K extends PrefKey>(
   key: K,
 ): [PrefValue<K>, (v: PrefValue<K>) => void, { loading: boolean }] {
@@ -24,25 +39,45 @@ export function usePref<K extends PrefKey>(
   const { prefs, loading } = usePrefs();
   const mutation = useMutation({
     mutationKey: PREFS_KEY,
-    mutationFn: (value: PrefValue<K>) => prefsApi.setPref(key, value),
-    onMutate: async (value) => {
-      await client.cancelQueries({ queryKey: PREFS_KEY });
-      const previous = client.getQueryData<PrefsData>(PREFS_KEY)?.prefs[key] ?? defaults()[key];
-      client.setQueryData<PrefsData>(PREFS_KEY, (old) => ({
-        prefs: { ...(old?.prefs ?? defaults()), [key]: value },
-      }));
-      return { previous };
-    },
+    // Writes per key run in order.
+    scope: { id: `pref:${key}` },
+    mutationFn: ({ value }: { value: PrefValue<K>; previous: unknown }) => prefsApi.setPref(key, value),
     // Only this key goes back, and only while it still shows this write's value.
-    onError: (_error, value, context) => {
+    onError: (_error, { value, previous }) => {
       client.setQueryData<PrefsData>(PREFS_KEY, (old) =>
-        old && old.prefs[key] === value && context ? { prefs: { ...old.prefs, [key]: context.previous } } : old,
+        old && old.prefs[key] === value ? { prefs: { ...old.prefs, [key]: previous } } : old,
       );
     },
     // The last write to settle reloads, so the cache ends up as the server has it.
     onSettled: () => {
-      if (client.isMutating({ mutationKey: PREFS_KEY }) <= 1) void client.invalidateQueries({ queryKey: PREFS_KEY });
+      if (client.isMutating({ mutationKey: PREFS_KEY }) <= 1 && pending.size === 0) {
+        void client.invalidateQueries({ queryKey: PREFS_KEY });
+      }
     },
   });
-  return [prefs[key], (v) => mutation.mutate(v), { loading }];
+  const mutate = useRef(mutation.mutate);
+  mutate.current = mutation.mutate;
+  // Leaving the screen must not lose the last change.
+  useEffect(() => () => flush(key), [key]);
+
+  const set = (value: PrefValue<K>) => {
+    const existing = pending.get(key);
+    if (existing) clearTimeout(existing.timer);
+    // The rollback target is the value from before the burst began.
+    const previous = existing
+      ? existing.previous
+      : (client.getQueryData<PrefsData>(PREFS_KEY)?.prefs[key] ?? defaults()[key]);
+    client.setQueryData<PrefsData>(PREFS_KEY, (old) => ({
+      prefs: { ...(old?.prefs ?? defaults()), [key]: value },
+    }));
+    // A refetch still in flight would bring back the old value.
+    void client.cancelQueries({ queryKey: PREFS_KEY }, { revert: false });
+    pending.set(key, {
+      value,
+      previous,
+      send: () => mutate.current({ value, previous }),
+      timer: setTimeout(() => flush(key), DEBOUNCE_MS),
+    });
+  };
+  return [prefs[key], set, { loading }];
 }
