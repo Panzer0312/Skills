@@ -1,22 +1,204 @@
 {
-  "mentor": { "name": "Meister Kai", "role": "dein Gitarrenlehrer" },
+  "mentor": { "name": "Meister Orlo", "role": "alter Hafenbarde" },
   "chapters": [
     {
-      "id": "kapitel-1",
-      "title": "Der Anfang",
-      "months": [1, 12],
-      "intro": "Du stehst am Anfang deiner Reise. Zuerst kommen Haltung und Grundlagen.",
+      "id": "kapitel-1", "title": "Der leere Hafen", "months": [1, 3],
+      "intro": "Im Hafen ist es still geworden. Die Lieder sind fort, und Orlo zeigt dir, wo du anfängst.",
       "theoryLessons": ["03-saiten-buende"]
+    },
+    {
+      "id": "kapitel-2", "title": "Wege ins Land", "months": [4, 6],
+      "intro": "Die Hände sind warm, jetzt gehst du weiter hinaus. Jede Straße gibt ein Stück zurück.",
+      "theoryLessons": ["theorie-dur-tonleiter", "theorie-intervalle", "theorie-akkordbau", "13-theorie", "theorie-moll"]
+    },
+    {
+      "id": "kapitel-3", "title": "Der Turm wird sichtbar", "months": [7, 9],
+      "intro": "Das Griffbrett wirkt nicht mehr wie ein Labyrinth. Die Formen fangen an, einander zu kennen.",
+      "theoryLessons": ["theorie-tonarten", "theorie-akkordfolgen", "theorie-analyse", "theorie-riff-hoeren"]
+    },
+    {
+      "id": "kapitel-4", "title": "Alles zurück nach Hause", "months": [10, 12],
+      "intro": "Fast jedes Lied ist wieder da. Was du jetzt übst, bringst du selbst zusammen.",
+      "theoryLessons": ["theorie-modi", "theorie-harmonisch-moll"]
     }
   ],
   "beats": [
     {
-      "id": "willkommen",
-      "chapterId": "kapitel-1",
-      "when": "next",
-      "lessonId": "01-haltung",
-      "title": "Willkommen im Dorf",
-      "lines": ["Schön, dass du da bist. Wir beginnen mit deiner Haltung."]
+      "id": "prolog", "chapterId": "kapitel-1", "when": "next", "lessonId": "01-haltung",
+      "title": "Ein stiller Hafen",
+      "lines": [
+        "Setz dich erst mal hin. Hier ist Orlo, früher Barde, heute Hafenwächter.",
+        "Die Lieder des Hafens wurden auf sechs Straßen davongetragen.",
+        "Jede Region gibt eins zurück, wenn du dort etwas gelernt hast.",
+        "Ich spiele dir nichts vor. Ich schicke dich nur in die richtige Richtung."
+      ]
+    },
+    {
+      "id": "erste-toene-geschafft", "chapterId": "kapitel-1", "when": "done", "lessonId": "05-erste-toene",
+      "title": "Der erste Ton gehört dir",
+      "lines": [
+        "Saubere Einzeltöne, das ist mehr als es klingt.",
+        "Meine linke Hand schließt sich nicht mehr. Deine tut es, also nutz das."
+      ]
+    },
+    {
+      "id": "region-rhythmus", "chapterId": "kapitel-1", "when": "next", "lessonId": "06-offene-akkorde",
+      "title": "Forest of Changes",
+      "lines": [
+        "Hier im Wald hängt der Takt zwischen den Bäumen.",
+        "Wer hier Akkorde greift, findet den Weg zu den ersten Liedern."
+      ]
+    },
+    {
+      "id": "wechsel-geschafft", "chapterId": "kapitel-1", "when": "done", "lessonId": "07-akkordwechsel",
+      "title": "Die Hand findet allein",
+      "lines": [
+        "Du wechselst, und es klingt nach Musik. Das habe ich gehört.",
+        "Ich bin selbst bei drei Liedern hängen geblieben. Genau da lernt man am meisten."
+      ]
+    },
+    {
+      "id": "region-metal", "chapterId": "kapitel-1", "when": "next", "lessonId": "09-powerchords",
+      "title": "Iron Hills",
+      "lines": [
+        "Hier wird es laut. Die Hügel antworten auf jeden Anschlag.",
+        "Ein bisschen Lärm schadet nicht. Halt nur die Saiten im Griff."
+      ]
+    },
+    {
+      "id": "powerchords-geschafft", "chapterId": "kapitel-1", "when": "done", "lessonId": "09-powerchords",
+      "title": "Zwei Töne, viel Wumms",
+      "lines": [
+        "Mit den Power Chords hast du die Tür zum harten Zeug offen.",
+        "Der Rest der Hügel wartet, aber er läuft dir nicht weg."
+      ]
+    },
+    {
+      "id": "region-fingerpicking", "chapterId": "kapitel-1", "when": "next", "lessonId": "finger-daumen",
+      "title": "Bard's Grove",
+      "lines": [
+        "Im Hain wird gezupft, nicht geschlagen. Das ist eine andere Ruhe.",
+        "Ein altes Lied liegt hier unter den Wurzeln. Hol es dir."
+      ]
+    },
+    {
+      "id": "bards-ganz-geschafft", "chapterId": "kapitel-1", "when": "done", "lessonId": "song-bards-ganz",
+      "title": "Das erste Lied kehrt heim",
+      "lines": [
+        "Du hast ein ganzes Lied durchgespielt. Der Hafen hört es.",
+        "Ich habe leise mitgesummt. Sag es niemandem."
+      ]
+    },
+    {
+      "id": "region-barre", "chapterId": "kapitel-2", "when": "next", "lessonId": "10-barre",
+      "title": "Eine schwere Straße",
+      "lines": [
+        "Der Barré ist ein Stein im Weg. Jeder muss einmal drüber.",
+        "Es darf erst mal scheppern. Dein Zeigefinger lernt das Tempo selbst."
+      ]
+    },
+    {
+      "id": "barre-geschafft", "chapterId": "kapitel-2", "when": "done", "lessonId": "10-barre",
+      "title": "Der Stein ist weg",
+      "lines": [
+        "Du hast den Barré geschafft. Das ist ein echter Einschnitt.",
+        "Fast alle Akkorde gehören jetzt dir, an jeder Stelle des Halses."
+      ]
+    },
+    {
+      "id": "region-griffbrett", "chapterId": "kapitel-2", "when": "next", "lessonId": "griffbrett-noten",
+      "title": "Der Turm der Formen",
+      "lines": [
+        "Am Rand der Straße steht ein Turm. Er heißt CAGED, nach fünf Formen.",
+        "Erst lernst du die Noten kennen. Hinauf geht es später."
+      ]
+    },
+    {
+      "id": "region-lead", "chapterId": "kapitel-2", "when": "next", "lessonId": "11-pentatonik",
+      "title": "Der Drachengipfel",
+      "lines": [
+        "Weiter oben fliegen die Melodien. Sie lassen sich nur mit der Pentatonik locken.",
+        "Fünf Töne reichen für ein ganzes Gebirge."
+      ]
+    },
+    {
+      "id": "pentatonik-geschafft", "chapterId": "kapitel-2", "when": "done", "lessonId": "11-pentatonik",
+      "title": "Die erste Melodie am Berg",
+      "lines": [
+        "Du spielst Melodien, nicht nur Begleitung. Ein ganz neues Gefühl, oder?",
+        "Bleib nicht in der Box stehen. Die Box ist nur der Anfang."
+      ]
+    },
+    {
+      "id": "technik-geschafft", "chapterId": "kapitel-2", "when": "done", "lessonId": "12-techniken",
+      "title": "Kleine Kniffe",
+      "lines": [
+        "Hammer-on, Pull-off, Slide. Jetzt klingt es nach jemandem, der spielt."
+      ]
+    },
+    {
+      "id": "region-theorie", "chapterId": "kapitel-2", "when": "next", "lessonId": "theorie-dur-tonleiter",
+      "title": "Die Sternenbibliothek",
+      "lines": [
+        "Hier wird nichts gespielt, hier wird verstanden. Du bist trotzdem willkommen.",
+        "Die Regale nehmen dir nichts ab. Aber sie erklären, warum es klingt, wie es klingt."
+      ]
+    },
+    {
+      "id": "theorie-geschafft", "chapterId": "kapitel-2", "when": "done", "lessonId": "13-theorie",
+      "title": "Die Sterne haben Namen",
+      "lines": [
+        "Du erkennst, was du spielst. Das ist eine halbe Landkarte.",
+        "Alles Weitere in der Bibliothek ist ein Spaziergang."
+      ]
+    },
+    {
+      "id": "caged-e-geschafft", "chapterId": "kapitel-3", "when": "done", "lessonId": "caged-e",
+      "title": "Die erste Form steht",
+      "lines": [
+        "Eine Form kennst du jetzt ganz. Die anderen sehen ihr ähnlicher, als du denkst."
+      ]
+    },
+    {
+      "id": "caged-g-geschafft", "chapterId": "kapitel-3", "when": "done", "lessonId": "caged-g",
+      "title": "Der Turm ist gebaut",
+      "lines": [
+        "Fünf Formen, ein Hals. Du hast sie alle angefasst.",
+        "Noch kennst du sie einzeln. Als Nächstes fügst du sie zusammen."
+      ]
+    },
+    {
+      "id": "solo-geschafft", "chapterId": "kapitel-4", "when": "done", "lessonId": "lead-erstes-solo",
+      "title": "Dein erstes Solo",
+      "lines": [
+        "Ein eigenes Solo. Ich hätte es nicht besser machen können, und ich übertreibe selten.",
+        "Von da oben siehst du den ganzen Hafen."
+      ]
+    },
+    {
+      "id": "metal-tight-weiter", "chapterId": "kapitel-4", "when": "next", "lessonId": "metal-tight",
+      "title": "Zurück in die Hügel",
+      "lines": [
+        "In den Iron Hills wartet noch viel Arbeit. Diesmal präzise und schnell.",
+        "Du bringst jetzt mehr Hände mit als beim ersten Besuch."
+      ]
+    },
+    {
+      "id": "metal-song-geschafft", "chapterId": "kapitel-4", "when": "done", "lessonId": "metal-ganzer-song",
+      "title": "Ein ganzer Metal-Song",
+      "lines": [
+        "Du hast einen ganzen Song im Griff, von vorn bis hinten.",
+        "Die Hügel sind ruhig geworden. Das ist bei Metal ein gutes Zeichen."
+      ]
+    },
+    {
+      "id": "ende", "chapterId": "kapitel-4", "when": "done", "lessonId": "jam-frei",
+      "title": "Der Hafen singt wieder",
+      "lines": [
+        "Jede Straße hat ein Lied zurückgegeben. Der Hafen ist nicht mehr still.",
+        "Du spielst frei und gehst eigene Wege. Ich habe dir nur den Anfang gezeigt.",
+        "Meine Hand schließt sich nicht mehr. Deine macht jetzt, was sie will. Danke dafür."
+      ]
     }
   ]
 }

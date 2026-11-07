@@ -79,7 +79,7 @@ describe("SkillMap nodes", () => {
     setup({ statuses: { Mitte: "aktiv" } });
     expect(button("Mitte")).toHaveAccessibleName("Mitte, begonnen, Schwierigkeit 5 von 10");
     expect(button("Start")).toHaveAccessibleName("Start, offen, Schwierigkeit 2 von 10");
-    expect(button("Später")).toHaveAccessibleName("Später, in Vorbereitung, Schwierigkeit 2 von 10");
+    expect(button("Später")).toHaveAccessibleName("Später, offen, Schwierigkeit 2 von 10");
   });
 
   it("calls a started lesson aktiv only when chosen or best next", () => {

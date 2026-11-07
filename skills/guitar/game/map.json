@@ -74,7 +74,7 @@
   "nodes": [
     {
       "id": "01-haltung",
-      "title": "Haltung",
+      "title": "Instrument und Haltung",
       "description": "Du sitzt und stehst so an der Gitarre, dass nichts verkrampft. Das schützt Schultern und Handgelenke für alles, was danach kommt.",
       "path": "hafen",
       "rank": 1,
@@ -91,7 +91,7 @@
     },
     {
       "id": "02-anschlag",
-      "title": "Anschlag",
+      "title": "Die Anschlagshand",
       "description": "Du schlägst einzelne Saiten mit Pick oder Daumen gleichmäßig an, abwärts und aufwärts.",
       "path": "hafen",
       "rank": 1,
@@ -108,7 +108,7 @@
     },
     {
       "id": "03-saiten-buende",
-      "title": "Saiten und Bünde",
+      "title": "Saiten, Bünde, Halbtonschritte",
       "description": "Du nennst die leeren Saiten und weißt, dass jeder Bund einen Halbtonschritt bedeutet.",
       "path": "hafen",
       "rank": 1,
@@ -142,7 +142,7 @@
     },
     {
       "id": "05-erste-toene",
-      "title": "Erste Töne",
+      "title": "Erste saubere Töne",
       "description": "Du greifst einzelne Töne so, dass sie klar und ohne Schnarren klingen.",
       "path": "hafen",
       "rank": 2,
@@ -299,10 +299,15 @@
       "y": 445,
       "parent": "rhythmus-achtel",
       "quick": false,
-      "available": false,
+      "available": true,
       "knownSong": false,
       "techniqueId": "rhythmus",
-      "links": [],
+      "links": [
+        {
+          "to": "metal-synkopen",
+          "reason": "Dasselbe Prinzip, Anschlag zwischen den Schlägen, im Riff."
+        }
+      ],
       "songs": [],
       "targetSong": null
     },
@@ -316,11 +321,18 @@
       "y": 545,
       "parent": "rhythmus-achtel",
       "quick": false,
-      "available": false,
+      "available": true,
       "knownSong": false,
       "techniqueId": "rhythmus",
       "links": [],
-      "songs": [],
+      "songs": [
+        {
+          "title": "Pride and Joy",
+          "artist": "Stevie Ray Vaughan",
+          "trains": "Texas-Shuffle, ternäre Achtel",
+          "source": "https://en.wikipedia.org/wiki/Pride_and_Joy_(Stevie_Ray_Vaughan_song)"
+        }
+      ],
       "targetSong": null
     },
     {
@@ -333,7 +345,7 @@
       "y": 495,
       "parent": "rhythmus-synkopen",
       "quick": false,
-      "available": false,
+      "available": true,
       "knownSong": false,
       "techniqueId": "rhythmus",
       "links": [],
@@ -350,7 +362,7 @@
       "y": 440,
       "parent": "rhythmus-sechzehntel",
       "quick": false,
-      "available": false,
+      "available": true,
       "knownSong": false,
       "techniqueId": "rhythmus",
       "links": [],
@@ -367,7 +379,7 @@
       "y": 730,
       "parent": "rhythmus-ankerfinger",
       "quick": false,
-      "available": false,
+      "available": true,
       "knownSong": false,
       "techniqueId": "akkordwechsel",
       "links": [],
@@ -430,10 +442,15 @@
       "y": 640,
       "parent": "10-barre",
       "quick": false,
-      "available": false,
+      "available": true,
       "knownSong": false,
       "techniqueId": "barre",
-      "links": [],
+      "links": [
+        {
+          "to": "griffbrett-noten",
+          "reason": "Der Grundton liegt auf der A-Saite: Wer die Noten dort kennt, findet jeden Barré-Akkord."
+        }
+      ],
       "songs": [],
       "targetSong": null
     },
@@ -447,7 +464,7 @@
       "y": 700,
       "parent": "rhythmus-moll-barre",
       "quick": false,
-      "available": false,
+      "available": true,
       "knownSong": false,
       "techniqueId": "barre",
       "links": [],
@@ -554,7 +571,10 @@
       "techniqueId": "song",
       "links": [],
       "songs": [],
-      "targetSong": { "title": "The Bard's Song", "artist": "Blind Guardian" }
+      "targetSong": {
+        "title": "The Bard's Song",
+        "artist": "Blind Guardian"
+      }
     },
     {
       "id": "song-bards-ganz",
@@ -571,7 +591,10 @@
       "techniqueId": "song",
       "links": [],
       "songs": [],
-      "targetSong": { "title": "The Bard's Song", "artist": "Blind Guardian" }
+      "targetSong": {
+        "title": "The Bard's Song",
+        "artist": "Blind Guardian"
+      }
     },
     {
       "id": "finger-wechselbass",
@@ -583,7 +606,7 @@
       "y": 385,
       "parent": "song-bards-ganz",
       "quick": false,
-      "available": false,
+      "available": true,
       "knownSong": false,
       "techniqueId": "fingerpicking",
       "links": [],
@@ -600,7 +623,7 @@
       "y": 335,
       "parent": "finger-wechselbass",
       "quick": false,
-      "available": false,
+      "available": true,
       "knownSong": false,
       "techniqueId": "fingerpicking",
       "links": [],
@@ -624,10 +647,15 @@
       "y": 455,
       "parent": "finger-daumen",
       "quick": false,
-      "available": false,
+      "available": true,
       "knownSong": false,
       "techniqueId": "fingerpicking",
-      "links": [],
+      "links": [
+        {
+          "to": "griffbrett-oktaven",
+          "reason": "Das Flageolett am 12. Bund klingt eine Oktave über der leeren Saite."
+        }
+      ],
       "songs": [],
       "targetSong": null
     },
@@ -641,7 +669,7 @@
       "y": 260,
       "parent": "finger-travis",
       "quick": false,
-      "available": false,
+      "available": true,
       "knownSong": false,
       "techniqueId": "fingerpicking",
       "links": [
@@ -663,11 +691,23 @@
       "y": 225,
       "parent": "finger-hybrid",
       "quick": false,
-      "available": false,
+      "available": true,
       "knownSong": false,
       "techniqueId": "fingerpicking",
-      "links": [],
-      "songs": [],
+      "links": [
+        {
+          "to": "metal-sound",
+          "reason": "Der Einsatz nach dem Intro ist der verzerrte Sound."
+        }
+      ],
+      "songs": [
+        {
+          "title": "Nothing Else Matters",
+          "artist": "Metallica",
+          "trains": "Gezupftes Clean-Intro mit Arpeggios",
+          "source": "https://www.licklibrary.com/learn/lessons/metallica/nothing-else-matters"
+        }
+      ],
       "targetSong": null
     },
     {
@@ -680,7 +720,7 @@
       "y": 255,
       "parent": "finger-clean-intro",
       "quick": false,
-      "available": false,
+      "available": true,
       "knownSong": false,
       "techniqueId": "fingerpicking",
       "links": [],
@@ -690,18 +730,42 @@
     {
       "id": "finger-stimmungen",
       "title": "Offene Stimmungen",
-      "description": "Du stimmst die Gitarre nach DADGAD oder Open G um und findest dort klingende Griffe.",
+      "description": "Du stimmst die Gitarre nach Open G oder Drop D um und findest dort klingende Griffe.",
       "path": "fingerpicking",
       "rank": 8,
       "x": 395,
       "y": 215,
       "parent": "finger-akkordmelodie",
       "quick": false,
-      "available": false,
+      "available": true,
       "knownSong": false,
       "techniqueId": "fingerpicking",
-      "links": [],
-      "songs": [],
+      "links": [
+        {
+          "to": "metal-drop-d",
+          "reason": "Drop D ist dieselbe Umstimmung, im Metal mit Power Chords."
+        }
+      ],
+      "songs": [
+        {
+          "title": "Brown Sugar",
+          "artist": "The Rolling Stones",
+          "trains": "Open G (D G D G B D)",
+          "source": "https://www.andyguitar.co.uk/videos/top-5-rolling-stones-songs-in-open-g-beginner-to-intermediate"
+        },
+        {
+          "title": "Little Red Rooster",
+          "artist": "The Rolling Stones",
+          "trains": "Open G mit Ein-Finger-Griffen",
+          "source": "https://www.andyguitar.co.uk/videos/top-5-rolling-stones-songs-in-open-g-beginner-to-intermediate"
+        },
+        {
+          "title": "Kashmir",
+          "artist": "Led Zeppelin",
+          "trains": "DADGAD-Stimmung",
+          "source": "https://en.wikipedia.org/wiki/List_of_guitar_tunings"
+        }
+      ],
       "targetSong": null
     },
     {
@@ -714,7 +778,7 @@
       "y": 145,
       "parent": "finger-stimmungen",
       "quick": false,
-      "available": false,
+      "available": true,
       "knownSong": false,
       "techniqueId": "fingerpicking",
       "links": [],
@@ -731,7 +795,7 @@
       "y": 415,
       "parent": "05-erste-toene",
       "quick": false,
-      "available": false,
+      "available": true,
       "knownSong": false,
       "techniqueId": "theorie",
       "links": [],
@@ -748,13 +812,17 @@
       "y": 325,
       "parent": "theorie-dur-tonleiter",
       "quick": false,
-      "available": false,
+      "available": true,
       "knownSong": false,
       "techniqueId": "theorie",
       "links": [
         {
           "to": "metal-zweistimmig",
           "reason": "Die zweite Stimme läuft meist eine Terz neben der ersten."
+        },
+        {
+          "to": "09-powerchords",
+          "reason": "Ein Power Chord besteht aus Grundton und Quinte."
         }
       ],
       "songs": [],
@@ -770,7 +838,7 @@
       "y": 195,
       "parent": "theorie-intervalle",
       "quick": false,
-      "available": false,
+      "available": true,
       "knownSong": false,
       "techniqueId": "theorie",
       "links": [],
@@ -787,7 +855,7 @@
       "y": 85,
       "parent": "theorie-akkordfolgen",
       "quick": false,
-      "available": false,
+      "available": true,
       "knownSong": false,
       "techniqueId": "theorie",
       "links": [
@@ -809,7 +877,7 @@
       "y": 335,
       "parent": "theorie-dur-tonleiter",
       "quick": false,
-      "available": false,
+      "available": true,
       "knownSong": false,
       "techniqueId": "theorie",
       "links": [
@@ -848,7 +916,7 @@
       "y": 165,
       "parent": "13-theorie",
       "quick": false,
-      "available": false,
+      "available": true,
       "knownSong": false,
       "techniqueId": "theorie",
       "links": [
@@ -870,7 +938,7 @@
       "y": 70,
       "parent": "theorie-tonarten",
       "quick": false,
-      "available": false,
+      "available": true,
       "knownSong": false,
       "techniqueId": "theorie",
       "links": [],
@@ -887,7 +955,7 @@
       "y": 150,
       "parent": "theorie-tonarten",
       "quick": false,
-      "available": false,
+      "available": true,
       "knownSong": false,
       "techniqueId": "theorie",
       "links": [
@@ -913,7 +981,7 @@
       "y": 65,
       "parent": "theorie-moll",
       "quick": false,
-      "available": false,
+      "available": true,
       "knownSong": false,
       "techniqueId": "theorie",
       "links": [
@@ -935,7 +1003,7 @@
       "y": 60,
       "parent": "theorie-modi",
       "quick": false,
-      "available": false,
+      "available": true,
       "knownSong": false,
       "techniqueId": "theorie",
       "links": [
@@ -949,7 +1017,7 @@
     },
     {
       "id": "09-powerchords",
-      "title": "Power Chords",
+      "title": "Power Chords und Palm Mute",
       "description": "Du greifst Power Chords auf der tiefen E- und A-Saite und dämpfst sie mit dem Handballen.",
       "path": "metal",
       "rank": 2,
@@ -1102,7 +1170,7 @@
       "y": 345,
       "parent": "metal-downpicking",
       "quick": false,
-      "available": false,
+      "available": true,
       "knownSong": false,
       "techniqueId": "metal",
       "links": [
@@ -1131,7 +1199,7 @@
       "y": 240,
       "parent": "metal-downpicking",
       "quick": false,
-      "available": false,
+      "available": true,
       "knownSong": false,
       "techniqueId": "metal",
       "links": [
@@ -1140,7 +1208,26 @@
           "reason": "Beide Male änderst du die Stimmung und lernst neue Griffe."
         }
       ],
-      "songs": [],
+      "songs": [
+        {
+          "title": "Killing in the Name",
+          "artist": "Rage Against the Machine",
+          "trains": "Drop-D-Riff mit Powerchords",
+          "source": "https://en.wikipedia.org/wiki/Killing_in_the_Name"
+        },
+        {
+          "title": "Everlong",
+          "artist": "Foo Fighters",
+          "trains": "Drop D, palm-gemutete Powerchords",
+          "source": "https://en.wikipedia.org/wiki/List_of_guitar_tunings"
+        },
+        {
+          "title": "Slither",
+          "artist": "Velvet Revolver",
+          "trains": "Drop-D-Powerchords mit einem Finger",
+          "source": "https://www.andyguitar.co.uk/videos/15-legendary-drop-d-riffs-every-guitarist-should-learn"
+        }
+      ],
       "targetSong": null
     },
     {
@@ -1153,7 +1240,7 @@
       "y": 265,
       "parent": "metal-galopp",
       "quick": false,
-      "available": false,
+      "available": true,
       "knownSong": false,
       "techniqueId": "metal",
       "links": [],
@@ -1170,11 +1257,23 @@
       "y": 165,
       "parent": "metal-tight",
       "quick": false,
-      "available": false,
+      "available": true,
       "knownSong": false,
       "techniqueId": "metal",
-      "links": [],
-      "songs": [],
+      "links": [
+        {
+          "to": "metal-downpicking",
+          "reason": "Beide verlangen eine kleine, lockere Bewegung aus dem Handgelenk."
+        }
+      ],
+      "songs": [
+        {
+          "title": "New Born",
+          "artist": "Muse",
+          "trains": "Tremolo Picking im Drop-D-Riff",
+          "source": "https://www.andyguitar.co.uk/videos/15-legendary-drop-d-riffs-every-guitarist-should-learn"
+        }
+      ],
       "targetSong": null
     },
     {
@@ -1187,10 +1286,15 @@
       "y": 185,
       "parent": "metal-tremolo",
       "quick": false,
-      "available": false,
+      "available": true,
       "knownSong": false,
       "techniqueId": "metal",
-      "links": [],
+      "links": [
+        {
+          "to": "metal-palm-mute",
+          "reason": "Die gedämpften Töne zwischen den Akzenten sind Palm Mute."
+        }
+      ],
       "songs": [],
       "targetSong": null
     },
@@ -1204,7 +1308,7 @@
       "y": 90,
       "parent": "metal-synkopen",
       "quick": false,
-      "available": false,
+      "available": true,
       "knownSong": false,
       "techniqueId": "metal",
       "links": [],
@@ -1221,22 +1325,39 @@
       "y": 105,
       "parent": "metal-zweistimmig",
       "quick": false,
-      "available": false,
+      "available": true,
       "knownSong": false,
       "techniqueId": "metal",
-      "links": [],
+      "links": [
+        {
+          "to": "song-bards-ganz",
+          "reason": "Auch dort lernst du ein ganzes Stück Abschnitt für Abschnitt."
+        }
+      ],
       "songs": [
         {
-          "title": "Paranoid",
-          "artist": "Black Sabbath",
-          "trains": "Kurzer Metal-Song mit durchgehendem Riff und Powerchords",
-          "source": "https://en.wikipedia.org/wiki/Paranoid_(Black_Sabbath_song)"
+          "title": "Run to the Hills",
+          "artist": "Iron Maiden",
+          "trains": "Galopp-Riffs, Powerchords und Palm Mute durch den ganzen Song",
+          "source": "https://www.licklibrary.com/learn/lessons/iron-maiden/run-to-the-hills-1"
         },
         {
-          "title": "Enter Sandman",
+          "title": "Seek & Destroy",
           "artist": "Metallica",
-          "trains": "Palm Mute, Riff-Wechsel und Songaufbau im Original-Tempo",
-          "source": "https://en.wikipedia.org/wiki/Enter_Sandman"
+          "trains": "Downpicking mit Palm Mute im Hauptriff",
+          "source": "https://www.licklibrary.com/learn/lessons/metallica/seek-and-destroy"
+        },
+        {
+          "title": "Creeping Death",
+          "artist": "Metallica",
+          "trains": "Galopp in der Strophe, Palm Mute und synkopierte Rhythmen",
+          "source": "https://www.licklibrary.com/learn/courses/classic-albums-ride-the-lightning"
+        },
+        {
+          "title": "Ace of Spades",
+          "artist": "Motörhead",
+          "trains": "Palm-gemutete Powerchords im Hauptriff",
+          "source": "https://www.licklibrary.com/learn/lessons/motorhead/motorhead-ace-of-spades-main-riff"
         }
       ],
       "targetSong": null,
@@ -1252,11 +1373,23 @@
       "y": 190,
       "parent": "metal-ganzer-song",
       "quick": false,
-      "available": false,
+      "available": true,
       "knownSong": false,
       "techniqueId": "metal",
-      "links": [],
-      "songs": [],
+      "links": [
+        {
+          "to": "metal-galopp",
+          "reason": "Teil A des Riffs ist ein Galopp."
+        }
+      ],
+      "songs": [
+        {
+          "title": "Battery",
+          "artist": "Metallica",
+          "trains": "Downpicking, Palm Mute und Galopp zusammen im Riff",
+          "source": "https://www.licklibrary.com/learn/lessons/metallica/battery-1"
+        }
+      ],
       "targetSong": null
     },
     {
@@ -1305,7 +1438,7 @@
     },
     {
       "id": "12-techniken",
-      "title": "Hammer-on bis Vibrato",
+      "title": "Hammer-on, Pull-off, Slide, Bending, Vibrato",
       "description": "Du spielst Hammer-on, Pull-off, Slide, einen Ganztonbend und Vibrato einzeln sauber.",
       "path": "lead",
       "rank": 4,
@@ -1330,10 +1463,15 @@
       "y": 575,
       "parent": "12-techniken",
       "quick": false,
-      "available": false,
+      "available": true,
       "knownSong": false,
       "techniqueId": "lead",
-      "links": [],
+      "links": [
+        {
+          "to": "theorie-intervalle",
+          "reason": "Halbton und Ganzton sind die kleinsten Intervalle, hier hörst du sie."
+        }
+      ],
       "songs": [],
       "targetSong": null
     },
@@ -1347,7 +1485,7 @@
       "y": 610,
       "parent": "lead-bending",
       "quick": false,
-      "available": false,
+      "available": true,
       "knownSong": false,
       "techniqueId": "lead",
       "links": [],
@@ -1364,10 +1502,15 @@
       "y": 720,
       "parent": "lead-vibrato",
       "quick": false,
-      "available": false,
+      "available": true,
       "knownSong": false,
       "techniqueId": "lead",
-      "links": [],
+      "links": [
+        {
+          "to": "jam-frage-antwort",
+          "reason": "Frage und Antwort spielst du dort über wechselnde Akkorde."
+        }
+      ],
       "songs": [],
       "targetSong": null
     },
@@ -1381,7 +1524,7 @@
       "y": 870,
       "parent": "lead-phrasen",
       "quick": false,
-      "available": false,
+      "available": true,
       "knownSong": false,
       "techniqueId": "lead",
       "links": [
@@ -1403,10 +1546,15 @@
       "y": 1020,
       "parent": "lead-erstes-solo",
       "quick": false,
-      "available": false,
+      "available": true,
       "knownSong": false,
       "techniqueId": "lead",
-      "links": [],
+      "links": [
+        {
+          "to": "metal-downpicking",
+          "reason": "Hier kommt der Aufschlag zum Abschlag aus dem Metal dazu: gleiche Pendelhand, doppelte Geschwindigkeit."
+        }
+      ],
       "songs": [],
       "targetSong": null
     },
@@ -1420,7 +1568,7 @@
       "y": 945,
       "parent": "lead-wechselschlag",
       "quick": false,
-      "available": false,
+      "available": true,
       "knownSong": false,
       "techniqueId": "lead",
       "links": [],
@@ -1437,10 +1585,15 @@
       "y": 800,
       "parent": "lead-legato",
       "quick": false,
-      "available": false,
+      "available": true,
       "knownSong": false,
       "techniqueId": "lead",
-      "links": [],
+      "links": [
+        {
+          "to": "theorie-dur-tonleiter",
+          "reason": "A-Moll hat dieselben Töne wie C-Dur, nur beginnt die Tonleiter auf A."
+        }
+      ],
       "songs": [],
       "targetSong": null
     },
@@ -1454,7 +1607,7 @@
       "y": 730,
       "parent": "lead-moll",
       "quick": false,
-      "available": false,
+      "available": true,
       "knownSong": false,
       "techniqueId": "lead",
       "links": [],
@@ -1471,7 +1624,7 @@
       "y": 985,
       "parent": "lead-boxen",
       "quick": false,
-      "available": false,
+      "available": true,
       "knownSong": false,
       "techniqueId": "lead",
       "links": [],
@@ -1488,10 +1641,15 @@
       "y": 830,
       "parent": "lead-tapping",
       "quick": false,
-      "available": false,
+      "available": true,
       "knownSong": false,
       "techniqueId": "lead",
-      "links": [],
+      "links": [
+        {
+          "to": "finger-arpeggio",
+          "reason": "Ein Sweep spielt dasselbe Arpeggio wie das Fingerpicking, nur mit dem Plektrum in einer Bewegung."
+        }
+      ],
       "songs": [],
       "targetSong": null
     },
@@ -1505,7 +1663,7 @@
       "y": 750,
       "parent": "03-saiten-buende",
       "quick": false,
-      "available": false,
+      "available": true,
       "knownSong": false,
       "techniqueId": "theorie",
       "links": [
@@ -1548,10 +1706,15 @@
       "y": 850,
       "parent": "griffbrett-noten",
       "quick": false,
-      "available": false,
+      "available": true,
       "knownSong": false,
       "techniqueId": "griffbrett",
-      "links": [],
+      "links": [
+        {
+          "to": "theorie-intervalle",
+          "reason": "Die Oktave ist das erste Intervall, das du hier greifst."
+        }
+      ],
       "songs": [],
       "targetSong": null
     },
@@ -1565,7 +1728,7 @@
       "y": 780,
       "parent": "griffbrett-oktaven",
       "quick": false,
-      "available": false,
+      "available": true,
       "knownSong": false,
       "techniqueId": "griffbrett",
       "links": [],
@@ -1582,7 +1745,7 @@
       "y": 992,
       "parent": "caged-d",
       "quick": false,
-      "available": false,
+      "available": true,
       "knownSong": false,
       "techniqueId": "griffbrett",
       "links": [],
@@ -1599,7 +1762,7 @@
       "y": 1030,
       "parent": "caged-c",
       "quick": false,
-      "available": false,
+      "available": true,
       "knownSong": false,
       "techniqueId": "griffbrett",
       "links": [],
@@ -1616,13 +1779,13 @@
       "y": 930,
       "parent": "caged-a",
       "quick": false,
-      "available": false,
+      "available": true,
       "knownSong": false,
       "techniqueId": "griffbrett",
       "links": [
         {
           "to": "caged-e",
-          "reason": "Nach der G-Form schließt sich der Ring: Eine Oktave höher folgt wieder die E-Form."
+          "reason": "Nach der G-Form schließt sich der Ring: Nach der G-Form schließt sich der Ring: Gleich darüber folgt wieder die E-Form."
         }
       ],
       "songs": [],
@@ -1638,10 +1801,15 @@
       "y": 830,
       "parent": "griffbrett-alle-noten",
       "quick": false,
-      "available": false,
+      "available": true,
       "knownSong": false,
       "techniqueId": "griffbrett",
-      "links": [],
+      "links": [
+        {
+          "to": "10-barre",
+          "reason": "Dein F-Barré ist die E-Form, einen Bund über dem Sattel."
+        }
+      ],
       "songs": [],
       "targetSong": null
     },
@@ -1655,7 +1823,7 @@
       "y": 868,
       "parent": "caged-e",
       "quick": false,
-      "available": false,
+      "available": true,
       "knownSong": false,
       "techniqueId": "griffbrett",
       "links": [],
@@ -1672,10 +1840,15 @@
       "y": 880,
       "parent": "caged-g",
       "quick": false,
-      "available": false,
+      "available": true,
       "knownSong": false,
       "techniqueId": "jam",
-      "links": [],
+      "links": [
+        {
+          "to": "jam-ein-akkord",
+          "reason": "Aus dem Jam über einen Akkord wird hier ein Gespräch über vier Akkorde."
+        }
+      ],
       "songs": [],
       "targetSong": null
     },
@@ -1689,10 +1862,15 @@
       "y": 900,
       "parent": "jam-frage-antwort",
       "quick": false,
-      "available": false,
+      "available": true,
       "knownSong": false,
       "techniqueId": "griffbrett",
-      "links": [],
+      "links": [
+        {
+          "to": "jam-akkordtoene",
+          "reason": "Wer die Formen verbindet, findet Akkordtöne überall am Hals."
+        }
+      ],
       "songs": [],
       "targetSong": null
     },
@@ -1706,10 +1884,15 @@
       "y": 1000,
       "parent": "caged-verbinden",
       "quick": false,
-      "available": false,
+      "available": true,
       "knownSong": false,
       "techniqueId": "jam",
-      "links": [],
+      "links": [
+        {
+          "to": "theorie-akkordbau",
+          "reason": "Grundton, Terz und Quinte sind die Ziele beim Wechsel."
+        }
+      ],
       "songs": [],
       "targetSong": null
     },
@@ -1723,10 +1906,15 @@
       "y": 1040,
       "parent": "jam-akkordtoene",
       "quick": false,
-      "available": false,
+      "available": true,
       "knownSong": false,
       "techniqueId": "jam",
-      "links": [],
+      "links": [
+        {
+          "to": "lead-erstes-solo",
+          "reason": "Vom freien Spiel zum aufgebauten Solo über eine ganze Songform."
+        }
+      ],
       "songs": [],
       "targetSong": null
     }

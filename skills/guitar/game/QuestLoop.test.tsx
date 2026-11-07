@@ -291,31 +291,14 @@ describe("Quest Board", () => {
     expect(screen.getByText("Bester nächster Schritt")).toBeInTheDocument();
   });
 
-  it("names the change drill and promises more while planned steps remain", async () => {
-    const written = gameContent.road.filter((step) => step.questId !== null);
-    const lessons = Object.fromEntries(written.map((step) => [step.lessonId, "gelernt" as const]));
+  it("shows the finished message once the whole road is done", async () => {
+    const lessons = Object.fromEntries(gameContent.road.map((step) => [step.lessonId, "gelernt" as const]));
     serve({ today: set, lessons });
     renderGame("/quests");
     const block = (await screen.findByText("Bester nächster Schritt")).closest("div")!;
     expect(block).toHaveTextContent("Wechsel pro Minute");
-    expect(block).toHaveTextContent("Alle fertigen Lektionen auf dem Hauptweg sind geschafft. Weitere folgen.");
-    expect(block).not.toHaveTextContent("Der Hauptweg ist geschafft");
-  });
-
-  it("keeps the finished message for a truly finished road", async () => {
-    const road = gameContent.road;
-    gameContent.road = road.filter((step) => step.questId !== null);
-    try {
-      const lessons = Object.fromEntries(gameContent.road.map((step) => [step.lessonId, "gelernt" as const]));
-      serve({ today: set, lessons });
-      renderGame("/quests");
-      const block = (await screen.findByText("Bester nächster Schritt")).closest("div")!;
-      expect(block).toHaveTextContent("Wechsel pro Minute");
-      expect(block).toHaveTextContent("Der Hauptweg ist geschafft.");
-      expect(block).not.toHaveTextContent("Weitere folgen");
-    } finally {
-      gameContent.road = road;
-    }
+    expect(block).toHaveTextContent("Der Hauptweg ist geschafft.");
+    expect(block).not.toHaveTextContent("Weitere folgen");
   });
 
   it("starts the best next quest without a write when it is in today's set", async () => {
@@ -794,6 +777,35 @@ describe("quest view", () => {
     serve({ targetSongId: "db:7" }, { songs: [{ id: 7, title: "Eigenes Lied" }] });
     renderGame("/quest/song-ziel");
     expect(await screen.findByText("Eigenes Lied")).toBeInTheDocument();
+  });
+
+  describe("the whole-song quest metal-song-ganz", () => {
+    const choose = () =>
+      expect(screen.getByRole("link", { name: /Zielsong wählen/ })).toHaveAttribute("href", "/vollbild/guitar/spiel/einstufung");
+
+    it("asks for a target song when none is set", async () => {
+      serve({ targetSongId: null });
+      renderGame("/quest/metal-song-ganz");
+      expect(await screen.findByRole("link", { name: /Zielsong wählen/ })).toBeInTheDocument();
+      choose();
+      expect(screen.queryByRole("link", { name: /Taverne/ })).not.toBeInTheDocument();
+    });
+
+    it("practises the chosen target song", async () => {
+      serve({ targetSongId: "db:7" }, { songs: [{ id: 7, title: "Eigenes Lied" }] });
+      renderGame("/quest/metal-song-ganz");
+      expect(await screen.findByText("Eigenes Lied")).toBeInTheDocument();
+      expect(screen.getByRole("link", { name: /Taverne/ })).toBeInTheDocument();
+      expect(screen.queryByRole("link", { name: /Zielsong wählen/ })).not.toBeInTheDocument();
+    });
+
+    it("asks again when the target song no longer exists", async () => {
+      serve({ targetSongId: "db:99" }, { songs: [{ id: 7, title: "Eigenes Lied" }] });
+      renderGame("/quest/metal-song-ganz");
+      expect(await screen.findByRole("link", { name: /Zielsong wählen/ })).toBeInTheDocument();
+      choose();
+      expect(screen.queryByText("Eigenes Lied")).not.toBeInTheDocument();
+    });
   });
 });
 

@@ -251,8 +251,6 @@ export function LessonPanel({
 
       {node.knownSong ? (
         <p className="lesson-tag">Bekannter Song</p>
-      ) : !node.available ? (
-        <p className="lesson-tag">In Vorbereitung</p>
       ) : (
         <div className="lesson-actions">
           <Link to={`${GAME_BASE}/bibliothek/${node.id}`} className="game-button">

@@ -1,0 +1,60 @@
+export const meta = { id: "metal-galopp", title: "Galopp-Rhythmus", order: 261, requires: null };
+
+import { RhythmusRaster, Tab } from "../game/visuals/index";
+
+<Ziel>Du zählst den Galopp als eine Achtel und zwei Sechzehntel und spielst ihn auf der leeren E-Saite und mit Power Chords gedämpft und gleichmäßig.</Ziel>
+
+Der Galopp ist ein Rhythmus aus drei Anschlägen pro Schlag, nach dem Muster lang, kurz, kurz. Er klingt wie Hufschlag und treibt ein Riff voran. Dazu brauchst du eine neue Notenlänge.
+
+**Sechzehntel.** Eine Achtel ist die Hälfte eines Schlags, eine Sechzehntel die Hälfte einer Achtel. In einen Schlag passen also vier Sechzehntel. Du zählst sie so: 1 e + a, 2 e + a, 3 e + a, 4 e + a.
+
+**Der Galopp.** Ein Galopp-Schlag besteht aus einer Achtel und zwei Sechzehnteln. Die Achtel liegt auf der Zahl und dauert bis zum „+". Die Sechzehntel liegen auf dem „+" und auf dem „a". Das „e" bleibt leer. Gesprochen: 1 (e) + a, 2 (e) + a.
+
+**Anschlag.** Du hast zwei Möglichkeiten, beide mit Palm Mute:
+
+- Nur Abschläge: Ab, ab, ab. Das ist härter und gleichmäßiger, kostet aber Kraft wie beim Downpicking.
+- Ab, ab, auf: Auf der Zahl und dem „+" abwärts, auf dem „a" aufwärts. Die Hand bewegt sich dabei durchgehend in Sechzehnteln ab-auf-ab-auf und trifft das „e" nur nicht. Das schont die Hand bei höherem Tempo.
+
+Im Raster siehst du einen Takt mit Wechselschlag. D ist ein Abschlag, U ein Aufschlag, ein Punkt heißt kein Anschlag.
+
+<RhythmusRaster muster="D-DUD-DUD-DUD-DU" zaehlzeiten={["1", "e", "+", "a"]} />
+
+Die Tabulatur zeigt zwei Takte, jedes Zeichen ist eine Sechzehntel. Takt 1 hat drei Galopp-Schläge auf der leeren E-Saite und einen auf G5. In Takt 2 folgen zwei Schläge auf E, einer auf A5 und zum Schluss ein langer Ton auf der leeren E-Saite. Bei jedem Akkord schlägst du beide Saiten an.
+
+<Tab
+  titel="Galopp-Riff in zwei Takten, jedes Zeichen eine Sechzehntel"
+  zeilen={[
+    "----------------|----------------",
+    "----------------|----------------",
+    "----------------|----------------",
+    "----------------|----------------",
+    "------------5-55|--------7-77----",
+    "0-000-000-003-33|0-000-005-550---",
+  ]}
+/>
+
+<Handhaltung>
+Die Anschlagshand bleibt locker und bewegt sich klein aus dem Handgelenk. Der Handballen liegt wie beim Palm Mute am Steg. Bei den Akkorden hebt die Greifhand nicht zwischen den drei Anschlägen ab, der Griff bleibt stehen. Die Schulter bleibt unten.
+</Handhaltung>
+
+<Fehlerbild>
+Du spielst drei gleich lange Töne pro Schlag, also eine Triole. Dann klingt es wie „da-da-da" statt „daaa-da-da". Prüfe: Liegt der zweite Anschlag genau auf dem „+" und nicht zwischen „e" und „+"? Der zweite Fehler: Der erste Ton ist zu kurz oder die beiden kurzen Töne werden lauter als der erste. Die Achtel auf der Zahl trägt den Schlag und darf am stärksten klingen.
+</Fehlerbild>
+
+<Merksatz>Zähle 1 e + a, spiele 1, + und a. Das „e" bleibt leer, die Hand läuft trotzdem mit.</Merksatz>
+
+<Uebung bpm={70}>
+Metronom auf 70, ein Klick pro Zahl.
+
+**Zählen.** Sprich 1 e + a, 2 e + a viermal laut mit und klatsche nur auf 1, + und a.
+
+**Leere E-Saite.** Spiele den Galopp mit Palm Mute auf der leeren tiefen E-Saite, erst vier Takte nur mit Abschlägen, dann vier Takte mit ab, ab, auf.
+
+**Das Riff.** Spiele die Tabulatur acht Mal hintereinander.
+
+Steigere in kleinen Schritten. Gemeistert ist die Lektion bei 120 BPM. Übe über 100 BPM in kurzen Runden mit Pausen.
+</Uebung>
+
+<Hinweis>Bei Schmerz hörst du sofort auf. Ein Galopp hat drei Anschläge pro Schlag, das ermüdet die Hand schneller als Achtel.</Hinweis>
+
+<Checkpoint>Du spielst die Tabulatur acht Mal bei 70 BPM ohne anzuhalten. Die Achtel trägt jeden Schlag, die zwei Sechzehntel sitzen auf dem „+" und dem „a", und der Palm Mute klingt gleichmäßig.</Checkpoint>

@@ -1,0 +1,74 @@
+export const meta = { id: "rhythmus-barre-songs", title: "Barré-Songset", order: 207, requires: null };
+
+import { Griffbild, GriffbrettBild } from "../game/visuals/index";
+
+<Ziel>Du spielst drei kurze Stücke hintereinander, die nur aus Barré-Griffen bestehen, wechselst zwischen E-Form und A-Form und lässt die Hand dabei nicht ermüden. Gemeistert ist die Lektion bei 90 BPM.</Ziel>
+
+Alle drei Stücke sind Akkordfolgen mit vier Barré-Griffen, jeder für einen Takt. Du schlägst je einen Abschlag pro Schlag an,
+vier pro Takt, und spielst jede Folge zweimal. Der Rhythmus bleibt einfach, damit die Greifhand die Arbeit hat.
+
+**E-Form** heißt: Grundton auf der tiefen E-Saite, alle sechs Saiten klingen. **A-Form** heißt: Grundton auf der A-Saite,
+du schlägst erst ab der A-Saite an. Welche Form du nimmst, bestimmt die Lage des Akkords. Die Bundzahl steht in Klammern.
+
+**Stück 1: „Die Rutsche".** Alle Akkorde liegen nah beieinander.
+
+```
+Hm (A-Form, 2) | G (E-Form, 3) | D (A-Form, 5) | A (E-Form, 5)
+```
+
+**Stück 2: „Auf der Leiter".** Die Folge beginnt hoch im Griffbrett und springt zum Anfang des Halses.
+
+```
+Am (E-Form, 5) | F (E-Form, 1) | C (A-Form, 3) | G (E-Form, 3)
+```
+
+**Stück 3: „Zwei Hälften".** Zwei E-Formen, dann zwei A-Formen.
+
+```
+A (E-Form, 5) | Fis-Moll (E-Form, 2) | D (A-Form, 5) | E (A-Form, 7)
+```
+
+Hm und F-Dur kennst du schon. Neu ist Fis-Moll (F#m): Es ist die Moll-E-Form, nur im 2. Bund: Zeigefinger über alle sechs Saiten im
+2. Bund, Ring- und kleiner Finger im 4. Bund auf A- und D-Saite.
+
+<GriffbrettBild
+  bis={5}
+  punkte={[
+    { saite: 6, bund: 2, text: "1" },
+    { saite: 5, bund: 4, text: "3" },
+    { saite: 4, bund: 4, text: "4" },
+    { saite: 3, bund: 2, text: "1" },
+    { saite: 2, bund: 2, text: "1" },
+    { saite: 1, bund: 2, text: "1" },
+  ]}
+/>
+
+Das Griffbild schreibt die Akkorde englisch: Bm ist Hm, F#m ist Fis-Moll.
+
+<Griffbild akkorde={["Bm", "F#m", "F"]} />
+
+<Handhaltung>
+Gib dem Barré nie mehr Druck als nötig. Bei jedem Wechsel lockerst du den Druck, noch bevor die Hand wandert, und baust
+ihn am Ziel erst im letzten Moment wieder auf. Der Daumen bleibt hinter dem Hals, der Ellbogen frei. Zwischen den Stücken
+schüttelst du die Hand aus.
+</Handhaltung>
+
+<Fehlerbild>
+Der Barré-Druck bleibt auch zwischen den Akkorden auf voller Kraft. Nach dem zweiten Stück zittert die Hand, und die
+Saiten klingen immer dumpfer. Oder du verrechnest dich beim Wechsel zwischen E-Form und A-Form: Der Grundton wandert von der tiefen E-Saite auf die A-Saite, und die Hand landet einen Bund daneben. Prüfe vor jedem Stück die Zielbünde und zupfe den ersten Akkord einzeln an.
+</Fehlerbild>
+
+<Merksatz>Barré hält man nur dann, wenn es klingen muss. Dazwischen locker, sonst geht die Kraft aus.</Merksatz>
+
+<Uebung bpm={60}>
+Metronom auf 60, vier Abschläge pro Takt, jedes Stück zweimal.
+
+Spiele Stück 1, dann 30 Sekunden Pause mit ausgeschüttelter Hand, dann Stück 2, Pause, Stück 3. Danach die Reihenfolge
+rückwärts. Notiere, bei welchem Wechsel der Klang zuerst kippt.
+
+Steigere das Tempo in kleinen Schritten, nur wenn alle drei Stücke sauber laufen. Gemeistert ist die Lektion bei 90 BPM.
+</Uebung>
+
+<Hinweis>Bei Schmerz oder Zittern hörst du sofort auf. Lieber drei kurze Runden mit Pause als eine lange.</Hinweis>
+
+<Checkpoint>Du spielst alle drei Stücke bei 60 BPM hintereinander, jedes zweimal, und die Saiten klingen noch im dritten Stück klar.</Checkpoint>

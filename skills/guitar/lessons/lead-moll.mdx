@@ -1,0 +1,101 @@
+export const meta = { id: "lead-moll", title: "Moll-Tonleiter im Solo", order: 293, requires: null };
+
+import { GriffbrettBild, Tab } from "../game/visuals/index";
+
+<Ziel>Du spielst die natürliche A-Moll-Tonleiter in der Lage von Box 1 und setzt ihre zwei zusätzlichen Töne gezielt in Licks ein, bei 100 BPM in Achteln.</Ziel>
+
+Die Moll-Pentatonik hat fünf Töne: A, C, D, E, G. Die natürliche Moll-Tonleiter hat sieben. Es fehlen
+H und F. Sie klingen weicher und gefühlvoller als die Pentatonik, und viele Melodien brauchen sie.
+
+**Die zwei neuen Töne.** Von A aus gezählt ist H die 2 (große Sekunde, zwei Halbtöne über A). F ist die
+b6 (kleine Sexte, acht Halbtöne über A). Alle sieben Töne in Stufen: 1 = A, 2 = H, b3 = C, 4 = D, 5 = E,
+b6 = F, b7 = G.
+
+Zur Kontrolle: Die Schritte von A aus sind Ganzton, Halbton, Ganzton, Ganzton, Halbton, Ganzton, Ganzton.
+Die beiden Halbtöne liegen zwischen H und C sowie zwischen E und F.
+
+In der Lage von Box 1 (Bünde 5 bis 8) liegen die neuen Töne an diesen Stellen: H auf der tiefen E-Saite
+Bund 7 und auf der hohen e-Saite Bund 7, F auf der A-Saite Bund 8 und auf der H-Saite Bund 6. Die Buchstaben
+sind die Tonnamen.
+
+<GriffbrettBild
+  bis={8}
+  punkte={[
+    { saite: 6, bund: 5, text: "A" },
+    { saite: 6, bund: 7, text: "H" },
+    { saite: 6, bund: 8, text: "C" },
+    { saite: 5, bund: 5, text: "D" },
+    { saite: 5, bund: 7, text: "E" },
+    { saite: 5, bund: 8, text: "F" },
+    { saite: 4, bund: 5, text: "G" },
+    { saite: 4, bund: 7, text: "A" },
+    { saite: 3, bund: 5, text: "C" },
+    { saite: 3, bund: 7, text: "D" },
+    { saite: 2, bund: 5, text: "E" },
+    { saite: 2, bund: 6, text: "F" },
+    { saite: 2, bund: 8, text: "G" },
+    { saite: 1, bund: 5, text: "A" },
+    { saite: 1, bund: 7, text: "H" },
+    { saite: 1, bund: 8, text: "C" },
+  ]}
+/>
+
+Die erste Tabulatur ist die Tonleiter von A bis A über drei Saiten, aufwärts und abwärts. Du spielst A, H,
+C, D, E, F, G, A.
+
+<Tab
+  titel="A-Moll aufwärts, dann abwärts"
+  zeilen={[
+    "------------------------------",
+    "------------------------------",
+    "------------------------------",
+    "------------5-7-5-------------",
+    "------5-7-8-------8-7-5-------",
+    "5-7-8-------------------8-7-5-",
+  ]}
+/>
+
+Die zweite Tabulatur ist ein Lick, der die neuen Töne so benutzt, wie man sie im Solo hört. Er läuft
+von C (hohe e-Saite, Bund 8) über H, A, G, F bis zum E und springt dann eine Quinte nach unten auf A (D-Saite, Bund 7). F löst sich dabei in E
+auf und H in A: Die zusätzlichen Töne sind Durchgänge, die Pentatonik-Töne sind die Ziele.
+
+<Tab
+  titel="Lick mit H und F als Durchgang"
+  zeilen={[
+    "8-7-5---------",
+    "------8-6-5---",
+    "--------------",
+    "------------7-",
+    "--------------",
+    "--------------",
+  ]}
+/>
+
+<Handhaltung>
+Die Hand bleibt in der Lage von Box 1, Zeigefinger auf Bund 5. Die neuen Töne liegen bis auf eine Ausnahme
+auf Bünden, die du ohnehin greifst: H auf Bund 7 mit dem Ringfinger, F auf Bund 8 mit dem kleinen Finger.
+Nur das F auf der H-Saite liegt auf Bund 6 und gehört dem Mittelfinger.
+</Handhaltung>
+
+<Fehlerbild>
+Die neuen Töne werden wie Pentatonik-Töne behandelt: lang gehalten und als Ziel eines Licks benutzt. Dann
+klingt es sofort nach Tonleiter-Übung und nicht mehr nach Solo. Besonders F klingt gegen einen A-Moll-Akkord
+spannungsvoll und will nach E. Halte H und F kurz und löse sie nach unten in A oder E auf.
+</Fehlerbild>
+
+<Merksatz>Moll-Pentatonik plus H und F. Die zwei Zusatztöne sind Durchgang, die fünf Pentatoniktöne sind Ziel.</Merksatz>
+
+<Uebung bpm={60}>
+Metronom auf 60, ein Ton pro Klick.
+
+**Tonleiter.** Spiele die erste Tabulatur auf und ab, zehn Mal. Sage dabei laut die Tonnamen. Beim zweiten
+Mal sagst du die Stufen 1 bis b7.
+
+**Lick.** Spiele den Lick fünf Mal, dann erfinde zwei eigene, die in der Box 1 beginnen und auf A oder E
+enden. Mindestens ein Zusatzton pro Lick, aber nie am Ende.
+
+Steigere auf Achtel und in Fünferschritten das Tempo. Gemeistert ist die Lektion bei 100 BPM.
+</Uebung>
+
+<Checkpoint>Du spielst die A-Moll-Tonleiter aufwärts und abwärts bei 100 BPM in Achteln, nennst H und F als 2 und b6 und
+spielst einen eigenen Lick, der auf einen Pentatonikton endet.</Checkpoint>

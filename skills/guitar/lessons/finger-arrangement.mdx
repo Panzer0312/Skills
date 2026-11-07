@@ -1,0 +1,92 @@
+export const meta = { id: "finger-arrangement", title: "Solo-Arrangement", order: 228, requires: null };
+
+import { Tab } from "../game/visuals/index";
+
+<Ziel>Du baust die Melodie „Ode an die Freude" Schritt für Schritt zu einem Stück für eine Gitarre aus, mit Bass, Akkorden und Melodie.</Ziel>
+
+Ein Arrangement heißt: eine Gitarre spielt alles, was sonst mehrere spielen, nämlich Melodie und Begleitung. Du baust dein Stück in vier Schritten auf und prüfst nach jedem Schritt, ob es klingt.
+
+Das Thema stammt von Ludwig van Beethoven (1824) und ist gemeinfrei. Es steht in C-Dur und liegt auf den hohen Saiten in den ersten Bünden. Jeder Ton hat seine Stelle: E ist die leere e-Saite, F Bund 1, G Bund 3. Das D liegt auf der H-Saite, Bund 3, das C auf der H-Saite, Bund 1.
+
+**Schritt 1: die Melodie allein.** Die erste Hälfte, Takt für Takt:
+
+- Takt 1: E, E, F, G
+- Takt 2: G, F, E, D
+- Takt 3: C, C, D, E
+- Takt 4: E (lang), D, D (lang)
+
+Takt 5 bis 7 sind wie Takt 1 bis 3. Takt 8 endet anders: D (lang), C, C (lang). Spiele die Melodie auf den hohen Saiten einstimmig, bis du sie auswendig kannst.
+
+**Schritt 2: die Akkorde.** Takt 1 und 3 tragen C-Dur, Takt 2 trägt G-Dur. Takt 4 beginnt auf C und wechselt auf Schlag 3 zu G. Takt 8 beginnt auf G und endet auf C.
+
+**Schritt 3: der Bass.** Auf Schlag 1 spielt der Daumen den Basston des Akkords, auf Schlag 3 den nächsten:
+
+- Takt 1: A-Saite Bund 3 (C), Schlag 3 tiefe E-Saite Bund 3 (G)
+- Takt 2: tiefe E-Saite Bund 3 (G), Schlag 3 A-Saite Bund 2 (H)
+- Takt 3: A-Saite Bund 3 (C), Schlag 3 tiefe E-Saite Bund 3 (G)
+- Takt 4: A-Saite Bund 3 (C), Schlag 3 tiefe E-Saite Bund 3 (G)
+- Takt 8: tiefe E-Saite Bund 3 (G), Schlag 3 A-Saite Bund 3 (C)
+
+**Schritt 4: zusammensetzen.** Melodie mit dem Ring- oder Mittelfinger, Bass mit dem Daumen, beide am selben Schlag zusammen. Wo die Melodie lang ist, in Takt 4, steht sie einen Moment allein.
+
+<Tab
+  titel="Ode an die Freude, Takte 1 und 2"
+  zeilen={[
+    "0---0---1---3---|3---1---0-------",
+    "----------------|------------3---",
+    "----------------|----------------",
+    "----------------|----------------",
+    "3---------------|--------2-------",
+    "--------3-------|3---------------",
+  ]}
+/>
+
+<Tab
+  titel="Ode an die Freude, Takte 3 und 4"
+  zeilen={[
+    "------------0---|0---------------",
+    "1---1---3-------|------3-3-------",
+    "----------------|----------------",
+    "----------------|----------------",
+    "3---------------|3---------------",
+    "--------3-------|--------3-------",
+  ]}
+/>
+
+Die Takte 5 und 6 spielst du wie 1 und 2. Takt 7 ist wie Takt 3. Der letzte Takt ist anders:
+
+<Tab
+  titel="Ode an die Freude, Takte 7 und 8"
+  zeilen={[
+    "------------0---|----------------",
+    "1---1---3-------|3-----1-1-------",
+    "----------------|----------------",
+    "----------------|----------------",
+    "3---------------|--------3-------",
+    "--------3-------|3---------------",
+  ]}
+/>
+
+**Dein nächstes Stück.** Such dir selbst ein altes Volkslied aus und gehe dieselben vier Schritte. Notiere dir, auf welchen Saiten die Melodie liegt und welche Akkorde passen.
+
+<Handhaltung>
+Die Greifhand springt zwischen Bass und Melodie. Plane die Finger vor: Welcher Finger greift den Bass, welcher die Melodie? Im Zweifel lässt du den Bass offen. Die Anschlagshand bleibt wie gewohnt ruhig. Der Daumen bleibt leiser, die Melodie führt.
+</Handhaltung>
+
+<Fehlerbild>
+Du willst alles auf einmal spielen und bleibst hängen. Oder die Melodie geht im Bass unter, weil der Daumen kräftiger anschlägt. Prüfe: Gehe die Schritte der Reihe nach durch und gehe erst weiter, wenn der vorige sauber läuft. Nimm den ganzen Durchlauf auf und höre, ob die Melodie klar vorn steht.
+</Fehlerbild>
+
+<Merksatz>Erst die Melodie, dann der Bass, dann beides. Schritt für Schritt.</Merksatz>
+
+<Uebung bpm={60}>
+Metronom auf 60, ein Klick pro Schlag.
+
+- Zwei Minuten: Schritt 1, die Melodie allein, acht Takte.
+- Zwei Minuten: Schritt 3, nur der Bass, acht Takte.
+- Drei Minuten: Schritt 4, das ganze Stück, ohne Pause wiederholt.
+
+Steigere das Tempo erst, wenn du das Stück ohne Stolpern spielst.
+</Uebung>
+
+<Checkpoint>Du spielst die acht Takte von „Ode an die Freude" mit Bass und Melodie bei 70 BPM ohne anzuhalten, und die Melodie steht klar vorn.</Checkpoint>

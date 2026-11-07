@@ -1,0 +1,67 @@
+export const meta = { id: "finger-travis", title: "Travis Picking", order: 223, requires: null };
+
+import { Griffbild, Tab } from "../game/visuals/index";
+
+<Ziel>Du spielst über dem durchlaufenden Daumen zwei Figuren mit den Fingern, die versetzt zu den Daumenschlägen kommen.</Ziel>
+
+Travis Picking ist der Wechselbass mit mehr Leben darüber. Der Daumen läuft wie vorher auf 1, 2, 3 und 4. Die Finger spielen nur zwischen den Schlägen, auf dem „+". Dadurch gibt es zwei Ebenen: den Bass auf den Zahlen und die Melodie dazwischen, und die Töne reiben sich nicht aneinander.
+
+Die Bass-Saiten sind dieselben wie im Wechselbass:
+
+- C: A-Saite Bund 3, D-Saite Bund 2
+- G: tiefe E-Saite Bund 3, D-Saite leer
+- Am: A-Saite leer, D-Saite Bund 2
+
+<Griffbild akkorde={["C", "G", "Am"]} />
+
+**Muster 1: Treppe.** Auf jedem „+" spielt ein Finger einen Ton, immer ein anderer: Zeigefinger auf der G-Saite, Mittelfinger auf der H-Saite, Zeigefinger auf der G-Saite, Ringfinger auf der hohen e-Saite. Die G-Saite ist bei C und G leer und bei Am Bund 2, die H-Saite bei C und Am Bund 1.
+
+<Tab
+  titel="Travis, Muster 1 über C und G"
+  zeilen={[
+    "--------------0-|--------------3-",
+    "------1---------|------0---------",
+    "--0-------0-----|--0-------0-----",
+    "----2-------2---|----0-------0---",
+    "3-------3-------|----------------",
+    "----------------|3-------3-------",
+  ]}
+/>
+
+**Muster 2: Lücke.** Die Finger spielen nur auf dem „+" hinter 1, 2 und 4. Hinter der 3 bleibt eine Lücke. Das Muster hat so einen Schwung, der nicht gleichmäßig durchläuft. Der Daumen merkt davon nichts.
+
+<Tab
+  titel="Travis, Muster 2 über Am und G"
+  zeilen={[
+    "--------------0-|--------------3-",
+    "------1---------|------0---------",
+    "--2-------------|--0-------------",
+    "----2-------2---|----0-------0---",
+    "0-------0-------|----------------",
+    "----------------|3-------3-------",
+  ]}
+/>
+
+Beide Muster sind eigene Übungen und gehören zu keinem Song.
+
+<Handhaltung>
+Wie im Wechselbass: Hand ruhig, Daumen läuft. Neu ist, dass jeder Finger nur einen Ton spielt und sofort wieder in Position geht. Zeige-, Mittel- und Ringfinger bleiben nahe an den Saiten, ohne sie zu berühren. Die Greifhand hält den Akkord wie sonst. Sie wechselt erst im letzten Moment des Takts.
+</Handhaltung>
+
+<Fehlerbild>
+Daumen und Finger fallen zusammen. Dann hörst du auf der „+" einen Doppelschlag, oder der Daumen zieht den Finger mit. Das passiert, wenn der Daumen zu schnell wird oder wenn du auf die Finger schaust. Ein zweiter Fehler: Die Finger spielen zu laut und übertönen den Bass. Prüfe: Klatsche die Zählzeit 1 + 2 + 3 + 4 + mit und sprich die „+" leise. Spiele dann nur den Daumen, dann nur die Finger auf der „+", dann beide.
+</Fehlerbild>
+
+<Merksatz>Daumen auf die Zahlen, Finger auf das Und. Beide stören sich nie.</Merksatz>
+
+<Uebung bpm={60}>
+Metronom auf 60, ein Klick pro Schlag.
+
+- Zwei Minuten: Muster 1 auf C, dann auf G, dann auf Am.
+- Zwei Minuten: Muster 2 auf C, dann auf G, dann auf Am.
+- Zwei Minuten: Muster 1 und Muster 2 im Wechsel über C, G, Am, G, ein Takt pro Akkord.
+
+Steigere das Tempo erst, wenn Daumen und Finger sauber getrennt klingen.
+</Uebung>
+
+<Checkpoint>Du spielst Muster 1 über C, G, Am, G zwei Minuten lang bei 70 BPM, der Daumen läuft durch, und die Finger treffen jedes „+" sauber.</Checkpoint>

@@ -1,216 +1,2078 @@
 {
   "techniques": [
-    { "id": "akkordwechsel", "title": "Akkordwechsel" },
-    { "id": "anschlag", "title": "Anschlag" },
-    { "id": "rhythmus", "title": "Rhythmus" },
-    { "id": "powerchords", "title": "Power Chords" },
-    { "id": "barre", "title": "Barré" },
-    { "id": "lead", "title": "Lead und Pentatonik" },
-    { "id": "theorie", "title": "Theorie" },
-    { "id": "song", "title": "Songs" },
-    { "id": "fingerpicking", "title": "Fingerpicking" },
-    { "id": "metal", "title": "Metal" },
-    { "id": "jam", "title": "Jam" },
-    { "id": "griffbrett", "title": "Griffbrett" }
+    {
+      "id": "akkordwechsel",
+      "title": "Akkordwechsel"
+    },
+    {
+      "id": "anschlag",
+      "title": "Anschlag"
+    },
+    {
+      "id": "rhythmus",
+      "title": "Rhythmus"
+    },
+    {
+      "id": "powerchords",
+      "title": "Power Chords"
+    },
+    {
+      "id": "barre",
+      "title": "Barré"
+    },
+    {
+      "id": "lead",
+      "title": "Lead und Pentatonik"
+    },
+    {
+      "id": "theorie",
+      "title": "Theorie"
+    },
+    {
+      "id": "song",
+      "title": "Songs"
+    },
+    {
+      "id": "fingerpicking",
+      "title": "Fingerpicking"
+    },
+    {
+      "id": "metal",
+      "title": "Metal"
+    },
+    {
+      "id": "jam",
+      "title": "Jam"
+    },
+    {
+      "id": "griffbrett",
+      "title": "Griffbrett"
+    }
   ],
   "quests": [
     {
-      "id": "haltung-check", "title": "Haltungs-Check",
+      "id": "haltung-check",
+      "title": "Haltungs-Check",
       "description": "Setze die Gitarre dreimal neu an und prüfe Schultern, Daumen und Handgelenk. Fünf Minuten genügen.",
-      "kind": "technik", "techniqueId": "anschlag", "lessonId": "01-haltung", "minutes": 5, "icon": "guitar", "scale": {}
+      "kind": "technik",
+      "techniqueId": "anschlag",
+      "lessonId": "01-haltung",
+      "minutes": 5,
+      "icon": "guitar",
+      "scale": {}
     },
     {
-      "id": "anschlag-takt", "title": "Gleichmäßiger Anschlag",
+      "id": "anschlag-takt",
+      "title": "Gleichmäßiger Anschlag",
       "description": "Schlage die leeren Saiten im Takt des Metronoms an. Halte Gewicht und Lautstärke gleich.",
-      "kind": "technik", "techniqueId": "anschlag", "lessonId": "02-anschlag", "minutes": 5, "icon": "pick",
-      "scale": { "bpm": [40, 80] }
-    },
-    {
-      "id": "griffbrett-namen", "title": "Saiten und Bünde",
-      "description": "Nenne die Saitennamen vorwärts und rückwärts und zeige den 3., 5., 7. und 12. Bund ohne zu zählen.",
-      "kind": "theorie", "techniqueId": "theorie", "lessonId": "03-saiten-buende", "minutes": 5, "icon": "fretboard", "scale": {}
-    },
-    {
-      "id": "noten-e-saite", "title": "Noten auf der E-Saite",
-      "description": "Nenne die Töne auf der tiefen E-Saite und zeige sie: F im 1., G im 3., A im 5., H im 7., C im 8., D im 10. und E im 12. Bund. Danach rückwärts. Im Spiel findest du eine Minute lang so viele gefragte Töne wie möglich, per Klick oder auf der Gitarre.",
-      "kind": "theorie", "techniqueId": "theorie", "lessonId": "03-saiten-buende", "minutes": 5, "icon": "fretboard", "scale": {},
-      "metricLabel": "Treffer pro Minute", "noteGame": { "strings": [0] }
-    },
-    {
-      "id": "aufwaermen-finger", "title": "Fingerübung zum Aufwärmen",
-      "description": "Spiele 1-2-3-4 aufsteigend und 4-3-2-1 absteigend, ein Ton pro Schlag, und wechsle Saite für Saite.",
-      "kind": "aufwaermen", "techniqueId": "anschlag", "lessonId": "04-aufwaermen", "minutes": 5, "icon": "flame",
-      "scale": { "bpm": [40, 80] }
-    },
-    {
-      "id": "erste-toene", "title": "Saubere Einzeltöne",
-      "description": "Spiele einzelne Töne im Takt und achte darauf, dass jeder Ton klar und ohne Schnarren klingt.",
-      "kind": "technik", "techniqueId": "anschlag", "lessonId": "05-erste-toene", "minutes": 5, "icon": "note",
-      "scale": { "bpm": [50, 90] }
-    },
-    {
-      "id": "offene-akkorde", "title": "Offene Akkorde greifen",
-      "description": "Greife Em, Am, C und G nacheinander und prüfe jede Saite einzeln auf sauberen Klang.",
-      "chords": ["Em", "Am", "C", "G"],
-      "kind": "technik", "techniqueId": "akkordwechsel", "lessonId": "06-offene-akkorde", "minutes": 10, "icon": "chord",
-      "scale": { "bpm": [40, 80] }
-    },
-    {
-      "id": "akkordtoene", "title": "Akkordtöne nennen",
-      "description": "Greife C und zupfe Saite für Saite: C, E, G, C, E. Greife Em: E, H, E, G, H, E. Nenne jeden Ton laut. Beide Akkorde bestehen nur aus drei verschiedenen Tönen.",
-      "chords": ["C", "Em"],
-      "kind": "theorie", "techniqueId": "theorie", "lessonId": "06-offene-akkorde", "minutes": 5, "icon": "book", "scale": {}
-    },
-    {
-      "id": "akkordwechsel-takt", "title": "Akkordwechsel im Takt",
-      "description": "Wechsle im Takt zwischen zwei Akkorden, auf jeden vierten Schlag ein Wechsel. Alle Finger setzen gleichzeitig auf.",
-      "kind": "technik", "techniqueId": "akkordwechsel", "lessonId": "07-akkordwechsel", "minutes": 10, "icon": "chord",
-      "scale": { "bpm": [50, 90] }
-    },
-    {
-      "id": "wechsel-minute", "title": "Wechsel pro Minute",
-      "description": "Eine Minute lang zwischen zwei Akkorden hin und her wechseln. Zähle die sauberen Wechsel und notiere die Zahl.",
-      "kind": "wechsel", "techniqueId": "akkordwechsel", "lessonId": "07-akkordwechsel", "minutes": 5, "icon": "stopwatch",
-      "metricLabel": "Wechsel pro Minute", "masteryTarget": 40,
+      "kind": "technik",
+      "techniqueId": "anschlag",
+      "lessonId": "02-anschlag",
+      "minutes": 5,
+      "icon": "pick",
       "scale": {
-        "chordPairs": [["Em", "Am"], ["Am", "C"], ["C", "G"], ["G", "D"], ["D", "Am"]]
+        "bpm": [
+          40,
+          80
+        ]
       }
     },
     {
-      "id": "ankerfinger-wechsel", "title": "Ankerfinger",
+      "id": "griffbrett-namen",
+      "title": "Saiten und Bünde",
+      "description": "Nenne die Saitennamen vorwärts und rückwärts und zeige den 3., 5., 7. und 12. Bund ohne zu zählen.",
+      "kind": "theorie",
+      "techniqueId": "theorie",
+      "lessonId": "03-saiten-buende",
+      "minutes": 5,
+      "icon": "fretboard",
+      "scale": {}
+    },
+    {
+      "id": "noten-e-saite",
+      "title": "Noten auf der E-Saite",
+      "description": "Nenne die Töne auf der tiefen E-Saite und zeige sie: F im 1., G im 3., A im 5., H im 7., C im 8., D im 10. und E im 12. Bund. Danach rückwärts. Im Spiel findest du eine Minute lang so viele gefragte Töne wie möglich, per Klick oder auf der Gitarre.",
+      "kind": "theorie",
+      "techniqueId": "theorie",
+      "lessonId": "03-saiten-buende",
+      "minutes": 5,
+      "icon": "fretboard",
+      "scale": {},
+      "metricLabel": "Treffer pro Minute",
+      "noteGame": {
+        "strings": [
+          0
+        ]
+      }
+    },
+    {
+      "id": "aufwaermen-finger",
+      "title": "Fingerübung zum Aufwärmen",
+      "description": "Spiele 1-2-3-4 aufsteigend und 4-3-2-1 absteigend, ein Ton pro Schlag, und wechsle Saite für Saite.",
+      "kind": "aufwaermen",
+      "techniqueId": "anschlag",
+      "lessonId": "04-aufwaermen",
+      "minutes": 5,
+      "icon": "flame",
+      "scale": {
+        "bpm": [
+          40,
+          80
+        ]
+      }
+    },
+    {
+      "id": "erste-toene",
+      "title": "Saubere Einzeltöne",
+      "description": "Spiele einzelne Töne im Takt und achte darauf, dass jeder Ton klar und ohne Schnarren klingt.",
+      "kind": "technik",
+      "techniqueId": "anschlag",
+      "lessonId": "05-erste-toene",
+      "minutes": 5,
+      "icon": "note",
+      "scale": {
+        "bpm": [
+          50,
+          90
+        ]
+      }
+    },
+    {
+      "id": "offene-akkorde",
+      "title": "Offene Akkorde greifen",
+      "description": "Greife Em, Am, C und G nacheinander und prüfe jede Saite einzeln auf sauberen Klang.",
+      "chords": [
+        "Em",
+        "Am",
+        "C",
+        "G"
+      ],
+      "kind": "technik",
+      "techniqueId": "akkordwechsel",
+      "lessonId": "06-offene-akkorde",
+      "minutes": 10,
+      "icon": "chord",
+      "scale": {
+        "bpm": [
+          40,
+          80
+        ]
+      }
+    },
+    {
+      "id": "akkordtoene",
+      "title": "Akkordtöne nennen",
+      "description": "Greife C und zupfe Saite für Saite: C, E, G, C, E. Greife Em: E, H, E, G, H, E. Nenne jeden Ton laut. Beide Akkorde bestehen nur aus drei verschiedenen Tönen.",
+      "chords": [
+        "C",
+        "Em"
+      ],
+      "kind": "theorie",
+      "techniqueId": "theorie",
+      "lessonId": "06-offene-akkorde",
+      "minutes": 5,
+      "icon": "book",
+      "scale": {}
+    },
+    {
+      "id": "akkordwechsel-takt",
+      "title": "Akkordwechsel im Takt",
+      "description": "Wechsle im Takt zwischen zwei Akkorden, auf jeden vierten Schlag ein Wechsel. Alle Finger setzen gleichzeitig auf.",
+      "kind": "technik",
+      "techniqueId": "akkordwechsel",
+      "lessonId": "07-akkordwechsel",
+      "minutes": 10,
+      "icon": "chord",
+      "scale": {
+        "bpm": [
+          50,
+          90
+        ]
+      }
+    },
+    {
+      "id": "wechsel-minute",
+      "title": "Wechsel pro Minute",
+      "description": "Eine Minute lang zwischen zwei Akkorden hin und her wechseln. Zähle die sauberen Wechsel und notiere die Zahl.",
+      "kind": "wechsel",
+      "techniqueId": "akkordwechsel",
+      "lessonId": "07-akkordwechsel",
+      "minutes": 5,
+      "icon": "stopwatch",
+      "metricLabel": "Wechsel pro Minute",
+      "masteryTarget": 40,
+      "scale": {
+        "chordPairs": [
+          [
+            "Em",
+            "Am"
+          ],
+          [
+            "Am",
+            "C"
+          ],
+          [
+            "C",
+            "G"
+          ],
+          [
+            "G",
+            "D"
+          ],
+          [
+            "D",
+            "Am"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "ankerfinger-wechsel",
+      "title": "Ankerfinger",
       "description": "Wechsle Am–C, C–G und Em–G im Takt. Bei Am–C bleiben Zeige- und Mittelfinger liegen, bei den anderen beiden setzt du die ganze Form gleichzeitig auf.",
-      "chords": ["Am", "C", "G", "Em"],
-      "kind": "technik", "techniqueId": "akkordwechsel", "lessonId": "rhythmus-ankerfinger", "minutes": 10, "icon": "chord",
-      "scale": { "bpm": [50, 90] }
+      "chords": [
+        "Am",
+        "C",
+        "G",
+        "Em"
+      ],
+      "kind": "technik",
+      "techniqueId": "akkordwechsel",
+      "lessonId": "rhythmus-ankerfinger",
+      "minutes": 10,
+      "icon": "chord",
+      "scale": {
+        "bpm": [
+          50,
+          90
+        ]
+      }
     },
     {
-      "id": "drei-akkord-song", "title": "Drei-Akkord-Song",
+      "id": "drei-akkord-song",
+      "title": "Drei-Akkord-Song",
       "description": "Spiele „Zwei Akkorde, eine Wiege“ und „Wanderung zu zweit“ hintereinander: acht Takte mit Em, Am und C, ein Abschlag pro Schlag.",
-      "chords": ["Em", "Am", "C"],
-      "kind": "technik", "techniqueId": "akkordwechsel", "lessonId": "rhythmus-drei-akkorde", "minutes": 15, "icon": "song",
-      "scale": { "bpm": [50, 75] }
+      "chords": [
+        "Em",
+        "Am",
+        "C"
+      ],
+      "kind": "technik",
+      "techniqueId": "akkordwechsel",
+      "lessonId": "rhythmus-drei-akkorde",
+      "minutes": 15,
+      "icon": "song",
+      "scale": {
+        "bpm": [
+          50,
+          75
+        ]
+      }
     },
     {
-      "id": "schlagmuster", "title": "Schlagmuster üben",
+      "id": "schlagmuster",
+      "title": "Schlagmuster üben",
       "description": "Spiele ein Schlagmuster auf einem Akkord, bis die Anschlagshand von allein läuft. Das Metronom gibt den Takt vor.",
-      "kind": "technik", "techniqueId": "rhythmus", "lessonId": "08-schlagmuster", "minutes": 10, "icon": "strum",
-      "scale": { "bpm": [60, 100] }
+      "kind": "technik",
+      "techniqueId": "rhythmus",
+      "lessonId": "08-schlagmuster",
+      "minutes": 10,
+      "icon": "strum",
+      "scale": {
+        "bpm": [
+          60,
+          100
+        ]
+      }
     },
     {
-      "id": "achtel-fluss", "title": "Achtel im Fluss",
+      "id": "achtel-fluss",
+      "title": "Achtel im Fluss",
       "description": "Zähle laut 1 + 2 + 3 + 4 + und spiele die drei Muster. Die Hand läuft durch, auch bei Leerschlägen.",
-      "kind": "technik", "techniqueId": "rhythmus", "lessonId": "rhythmus-achtel", "minutes": 10, "icon": "strum",
-      "scale": { "bpm": [60, 100] }
+      "kind": "technik",
+      "techniqueId": "rhythmus",
+      "lessonId": "rhythmus-achtel",
+      "minutes": 10,
+      "icon": "strum",
+      "scale": {
+        "bpm": [
+          60,
+          100
+        ]
+      }
     },
     {
-      "id": "powerchords-palmmute", "title": "Power Chords mit Palm Mute",
+      "id": "powerchords-palmmute",
+      "title": "Power Chords mit Palm Mute",
       "description": "Wechsle zwischen Power Chords und dämpfe mit dem Handballen. Achte auf kurze, trockene Anschläge.",
-      "kind": "technik", "techniqueId": "powerchords", "lessonId": "09-powerchords", "minutes": 10, "icon": "bolt",
-      "scale": { "bpm": [70, 110] }
+      "kind": "technik",
+      "techniqueId": "powerchords",
+      "lessonId": "09-powerchords",
+      "minutes": 10,
+      "icon": "bolt",
+      "scale": {
+        "bpm": [
+          70,
+          110
+        ]
+      }
     },
     {
-      "id": "sound-einstellen", "title": "Dein Metal-Sound",
+      "id": "sound-einstellen",
+      "title": "Dein Metal-Sound",
       "description": "Stelle den Startpunkt ein und spiele die Testphrase. Ändere immer nur einen Regler und notiere deine beste Einstellung.",
-      "kind": "technik", "techniqueId": "metal", "lessonId": "metal-sound", "minutes": 10, "icon": "flame", "scale": {}
+      "kind": "technik",
+      "techniqueId": "metal",
+      "lessonId": "metal-sound",
+      "minutes": 10,
+      "icon": "flame",
+      "scale": {}
     },
     {
-      "id": "saiten-stumm", "title": "Saiten stumm halten",
+      "id": "saiten-stumm",
+      "title": "Saiten stumm halten",
       "description": "Spiele mit Verzerrung die Stopp-Übung und den Wisch-Test. Nur die gewollten Töne dürfen klingen.",
-      "kind": "technik", "techniqueId": "metal", "lessonId": "metal-stumm", "minutes": 10, "icon": "guitar",
-      "scale": { "bpm": [60, 100] }
+      "kind": "technik",
+      "techniqueId": "metal",
+      "lessonId": "metal-stumm",
+      "minutes": 10,
+      "icon": "guitar",
+      "scale": {
+        "bpm": [
+          60,
+          100
+        ]
+      }
     },
     {
-      "id": "palm-mute-akzente", "riffId": "palm-mute-akzente", "title": "Palm Mute mit Akzenten",
+      "id": "palm-mute-akzente",
+      "riffId": "palm-mute-akzente",
+      "title": "Palm Mute mit Akzenten",
       "description": "Wechsle zwischen offenen und gedämpften Tönen und setze Akzente. Trage am Ende dein höchstes sauberes Tempo ein.",
-      "kind": "technik", "techniqueId": "metal", "lessonId": "metal-palm-mute", "minutes": 10, "icon": "bolt",
-      "metricLabel": "Sauberes Tempo (BPM)", "masteryTarget": 120,
-      "scale": { "bpm": [70, 120] }
+      "kind": "technik",
+      "techniqueId": "metal",
+      "lessonId": "metal-palm-mute",
+      "minutes": 10,
+      "icon": "bolt",
+      "metricLabel": "Sauberes Tempo (BPM)",
+      "masteryTarget": 120,
+      "scale": {
+        "bpm": [
+          70,
+          120
+        ]
+      }
     },
     {
-      "id": "daumen-finger", "title": "Daumen und Finger",
+      "id": "daumen-finger",
+      "title": "Daumen und Finger",
       "description": "Zupfe zum Metronom erst mit dem Daumen die tiefen Saiten, dann mit den Fingern die hohen, dann beides im Wechsel. Die Hand bleibt ruhig an ihrem Platz.",
-      "kind": "technik", "techniqueId": "fingerpicking", "lessonId": "finger-daumen", "minutes": 10, "icon": "note",
-      "scale": { "bpm": [50, 90] }
+      "kind": "technik",
+      "techniqueId": "fingerpicking",
+      "lessonId": "finger-daumen",
+      "minutes": 10,
+      "icon": "note",
+      "scale": {
+        "bpm": [
+          50,
+          90
+        ]
+      }
     },
     {
-      "id": "arpeggio-muster", "title": "Arpeggio-Muster",
+      "id": "arpeggio-muster",
+      "title": "Arpeggio-Muster",
       "description": "Spiele die drei Zupfmuster über Em, Am, C und G, einen Takt pro Akkord. Der Daumen trifft die richtige Bass-Saite, und zwischen den Takten entsteht keine Lücke.",
-      "chords": ["Em", "Am", "C", "G"],
-      "kind": "technik", "techniqueId": "fingerpicking", "lessonId": "finger-arpeggio", "minutes": 10, "icon": "note",
-      "scale": { "bpm": [50, 90] }
+      "chords": [
+        "Em",
+        "Am",
+        "C",
+        "G"
+      ],
+      "kind": "technik",
+      "techniqueId": "fingerpicking",
+      "lessonId": "finger-arpeggio",
+      "minutes": 10,
+      "icon": "note",
+      "scale": {
+        "bpm": [
+          50,
+          90
+        ]
+      }
     },
     {
-      "id": "bards-wechsel", "title": "The Bard's Song: Wechsel",
+      "id": "bards-wechsel",
+      "title": "The Bard's Song: Wechsel",
       "description": "Übe die neuen Wechsel einzeln im Takt: Em7–Dm, Dm–C, Am–Dm, Dm–F und F–G. Spiele danach die Kette Em7, Dm, C, Am, Dm, F, G, vier Klicks pro Akkord.",
-      "chords": ["Em7", "Dm", "C", "Am", "F", "G"],
-      "kind": "technik", "techniqueId": "song", "lessonId": "song-bards-vorbereitung", "minutes": 15, "icon": "chord",
-      "scale": { "bpm": [50, 90] }
+      "chords": [
+        "Em7",
+        "Dm",
+        "C",
+        "Am",
+        "F",
+        "G"
+      ],
+      "kind": "technik",
+      "techniqueId": "song",
+      "lessonId": "song-bards-vorbereitung",
+      "minutes": 15,
+      "icon": "chord",
+      "scale": {
+        "bpm": [
+          50,
+          90
+        ]
+      }
     },
     {
-      "id": "erstes-riff", "riffId": "erstes-riff", "title": "Erstes Riff",
+      "id": "erstes-riff",
+      "riffId": "erstes-riff",
+      "title": "Erstes Riff",
       "description": "Lerne das Riff aus leerer E-Saite, G5 und A5 und spiele es zum Metronom. Die E-Saite bleibt gedämpft.",
-      "kind": "technik", "techniqueId": "metal", "lessonId": "metal-erster-riff", "minutes": 15, "icon": "bolt",
-      "scale": { "bpm": [70, 110] }
+      "kind": "technik",
+      "techniqueId": "metal",
+      "lessonId": "metal-erster-riff",
+      "minutes": 15,
+      "icon": "bolt",
+      "scale": {
+        "bpm": [
+          70,
+          110
+        ]
+      }
     },
     {
-      "id": "downpicking-ausdauer", "riffId": "downpicking-achtel", "title": "Downpicking-Ausdauer",
+      "id": "downpicking-ausdauer",
+      "riffId": "downpicking-achtel",
+      "title": "Downpicking-Ausdauer",
       "description": "Spiele Achtel nur mit Abschlägen in kurzen Runden mit Pausen. Bei Schmerz hörst du sofort auf. Trage dein höchstes sauberes Tempo ein.",
-      "kind": "technik", "techniqueId": "metal", "lessonId": "metal-downpicking", "minutes": 10, "icon": "pick",
-      "metricLabel": "Sauberes Tempo (BPM)", "masteryTarget": 160,
-      "scale": { "bpm": [80, 160] }
+      "kind": "technik",
+      "techniqueId": "metal",
+      "lessonId": "metal-downpicking",
+      "minutes": 10,
+      "icon": "pick",
+      "metricLabel": "Sauberes Tempo (BPM)",
+      "masteryTarget": 160,
+      "scale": {
+        "bpm": [
+          80,
+          160
+        ]
+      }
     },
     {
-      "id": "barre-greifen", "title": "Barré-Akkord halten",
+      "id": "barre-greifen",
+      "title": "Barré-Akkord halten",
       "description": "Greife F oder Bm als Barré und prüfe jede Saite. Entspanne zwischendurch die Hand.",
-      "chords": ["F"],
-      "kind": "technik", "techniqueId": "barre", "lessonId": "10-barre", "minutes": 10, "icon": "barre",
-      "scale": { "bpm": [50, 90] }
+      "chords": [
+        "F"
+      ],
+      "kind": "technik",
+      "techniqueId": "barre",
+      "lessonId": "10-barre",
+      "minutes": 10,
+      "icon": "barre",
+      "scale": {
+        "bpm": [
+          50,
+          90
+        ]
+      }
     },
     {
-      "id": "pentatonik-box1", "title": "Pentatonik Box 1",
+      "id": "pentatonik-box1",
+      "title": "Pentatonik Box 1",
       "description": "Spiele die Moll-Pentatonik in Box 1 auf- und abwärts, langsam und mit gleichmäßigem Anschlag.",
-      "kind": "technik", "techniqueId": "lead", "lessonId": "11-pentatonik", "minutes": 10, "icon": "scale",
-      "scale": { "bpm": [60, 100] },
-      "fretboard": { "root": "A", "scale": "moll-pentatonik", "box": 1 }
+      "kind": "technik",
+      "techniqueId": "lead",
+      "lessonId": "11-pentatonik",
+      "minutes": 10,
+      "icon": "scale",
+      "scale": {
+        "bpm": [
+          60,
+          100
+        ]
+      },
+      "fretboard": {
+        "root": "A",
+        "scale": "moll-pentatonik",
+        "box": 1
+      }
     },
     {
-      "id": "solo-drei-toene", "title": "Solo aus drei Tönen",
+      "id": "solo-drei-toene",
+      "title": "Solo aus drei Tönen",
       "description": "Spiele die Phrase aus E, G und A im Takt und erfinde eine eigene. Der letzte Ton ist A und klingt voll aus.",
-      "kind": "technik", "techniqueId": "lead", "lessonId": "lead-drei-toene", "minutes": 10, "icon": "scale",
-      "scale": { "bpm": [60, 100] },
-      "fretboard": { "root": "A", "scale": "moll-pentatonik", "box": 1 }
+      "kind": "technik",
+      "techniqueId": "lead",
+      "lessonId": "lead-drei-toene",
+      "minutes": 10,
+      "icon": "scale",
+      "scale": {
+        "bpm": [
+          60,
+          100
+        ]
+      },
+      "fretboard": {
+        "root": "A",
+        "scale": "moll-pentatonik",
+        "box": 1
+      }
     },
     {
-      "id": "jam-em", "title": "Jam über Em",
+      "id": "jam-em",
+      "title": "Jam über Em",
       "description": "Wechsle dich mit dir selbst ab: zwei Takte Em, zwei Takte Phrase aus D, E, G und A. Jede Phrase endet auf E.",
-      "kind": "technik", "techniqueId": "jam", "lessonId": "jam-ein-akkord", "minutes": 10, "icon": "scale",
-      "scale": { "bpm": [60, 90] },
-      "fretboard": { "root": "E", "scale": "moll-pentatonik", "box": 3 }
+      "kind": "technik",
+      "techniqueId": "jam",
+      "lessonId": "jam-ein-akkord",
+      "minutes": 10,
+      "icon": "scale",
+      "scale": {
+        "bpm": [
+          60,
+          90
+        ]
+      },
+      "fretboard": {
+        "root": "E",
+        "scale": "moll-pentatonik",
+        "box": 3
+      }
     },
     {
-      "id": "spieltechniken", "title": "Hammer-on, Pull-off und Bending",
+      "id": "spieltechniken",
+      "title": "Hammer-on, Pull-off und Bending",
       "description": "Übe Hammer-on, Pull-off, Slide, Bending und Vibrato einzeln, bis jeder Ton klar und gleich laut klingt.",
-      "kind": "technik", "techniqueId": "lead", "lessonId": "12-techniken", "minutes": 10, "icon": "bend",
-      "scale": { "bpm": [60, 100] }
+      "kind": "technik",
+      "techniqueId": "lead",
+      "lessonId": "12-techniken",
+      "minutes": 10,
+      "icon": "bend",
+      "scale": {
+        "bpm": [
+          60,
+          100
+        ]
+      }
     },
     {
-      "id": "stufenakkorde", "title": "Stufenakkorde spielen",
+      "id": "stufenakkorde",
+      "title": "Stufenakkorde spielen",
       "description": "Spiele I, vi, IV und V in C-Dur und danach in G-Dur. Sage bei jedem Wechsel die Stufe laut an.",
-      "chords": ["C", "Am", "F", "G", "Em", "D"],
-      "kind": "theorie", "techniqueId": "theorie", "lessonId": "13-theorie", "minutes": 5, "icon": "book", "scale": {}
+      "chords": [
+        "C",
+        "Am",
+        "F",
+        "G",
+        "Em",
+        "D"
+      ],
+      "kind": "theorie",
+      "techniqueId": "theorie",
+      "lessonId": "13-theorie",
+      "minutes": 5,
+      "icon": "book",
+      "scale": {}
     },
     {
-      "id": "song-ziel", "title": "Dein Zielsong",
+      "id": "song-ziel",
+      "title": "Dein Zielsong",
       "description": "Übe deinen Zielsong abschnittsweise. Beginne langsam und steigere das Tempo, sobald es sauber läuft.",
-      "kind": "song", "techniqueId": "song", "lessonId": null, "minutes": 10, "icon": "song",
-      "scale": { "tempoPercent": [50, 100], "sections": ["Intro", "Strophe", "Refrain", "Bridge", "Ganzer Song"], "runs": [2, 5] }
+      "kind": "song",
+      "techniqueId": "song",
+      "lessonId": null,
+      "minutes": 10,
+      "icon": "song",
+      "scale": {
+        "tempoPercent": [
+          50,
+          100
+        ],
+        "sections": [
+          "Intro",
+          "Strophe",
+          "Refrain",
+          "Bridge",
+          "Ganzer Song"
+        ],
+        "runs": [
+          2,
+          5
+        ]
+      }
     },
     {
-      "id": "bards-ganz", "title": "The Bard's Song: ganz",
+      "id": "bards-ganz",
+      "title": "The Bard's Song: ganz",
       "description": "Spiele den genannten Abschnitt im genannten Tempo, ohne bei einem Fehler anzuhalten. 100 % ist dein Zieltempo aus der Lektion. Bis du es kennst, gilt 100 % = 100 BPM. Trage am Ende ein, wie viele ganze Durchläufe von vorn bis hinten dir gelungen sind.",
-      "kind": "song", "techniqueId": "song", "lessonId": "song-bards-ganz", "minutes": 15, "icon": "song",
-      "metricLabel": "Ganze Durchläufe", "masteryTarget": 3,
-      "scale": { "bpm": [50, 80], "tempoPercent": [50, 80], "sections": ["Teil A", "Teil B", "Ganzer Song", "Ganzer Song"], "runs": [1, 4] }
+      "kind": "song",
+      "techniqueId": "song",
+      "lessonId": "song-bards-ganz",
+      "minutes": 15,
+      "icon": "song",
+      "metricLabel": "Ganze Durchläufe",
+      "masteryTarget": 3,
+      "scale": {
+        "bpm": [
+          50,
+          80
+        ],
+        "tempoPercent": [
+          50,
+          80
+        ],
+        "sections": [
+          "Teil A",
+          "Teil B",
+          "Ganzer Song",
+          "Ganzer Song"
+        ],
+        "runs": [
+          1,
+          4
+        ]
+      }
+    },
+    {
+      "id": "flageolett-glocken",
+      "title": "Flageoletts am 12., 7. und 5. Bund",
+      "description": "Spiele auf jeder Saite die Flageoletts an Bund 12, 7 und 5, einen Ton pro Klick, erst von der tiefen E- bis zur hohen e-Saite, dann zurück. Berühre die Saite genau über dem Bundstäbchen und löse den Finger sofort nach dem Anschlag. Zähle, wie viele Töne glockenklar klingen.",
+      "kind": "technik",
+      "techniqueId": "fingerpicking",
+      "lessonId": "finger-flageolett",
+      "minutes": 10,
+      "icon": "note",
+      "metricLabel": "Sauberes Tempo (BPM)",
+      "masteryTarget": 60,
+      "scale": {
+        "bpm": [
+          40,
+          70
+        ]
+      }
+    },
+    {
+      "id": "wechselbass-runde",
+      "riffId": "wechselbass-c-g",
+      "chords": [
+        "C",
+        "G",
+        "Am"
+      ],
+      "title": "Wechselbass über C, G, Am",
+      "description": "Spiele das Riff Wechselbass über C und G. Danach die Runde C, G, Am, G, ein Takt pro Akkord. Der Daumen pendelt ohne Pause, die Finger kommen auf dem Und hinter 2 und 4.",
+      "kind": "technik",
+      "techniqueId": "fingerpicking",
+      "lessonId": "finger-wechselbass",
+      "minutes": 10,
+      "icon": "note",
+      "metricLabel": "Sauberes Tempo (BPM)",
+      "masteryTarget": 70,
+      "scale": {
+        "bpm": [
+          50,
+          80
+        ]
+      }
+    },
+    {
+      "id": "travis-runde",
+      "riffId": "travis-treppe",
+      "chords": [
+        "C",
+        "G",
+        "Am"
+      ],
+      "title": "Travis über C, G, Am",
+      "description": "Spiele das Riff Travis, Muster 1, über C und G. Danach die Runde C, G, Am, G, ein Takt pro Akkord, erst mit Muster 1, dann mit Muster 2. Der Daumen läuft ohne Pause, die Finger spielen nur auf dem Und.",
+      "kind": "technik",
+      "techniqueId": "fingerpicking",
+      "lessonId": "finger-travis",
+      "minutes": 10,
+      "icon": "note",
+      "metricLabel": "Sauberes Tempo (BPM)",
+      "masteryTarget": 70,
+      "scale": {
+        "bpm": [
+          50,
+          80
+        ]
+      }
+    },
+    {
+      "id": "hybrid-runde",
+      "riffId": "hybrid-zange",
+      "chords": [
+        "Em",
+        "Am",
+        "C",
+        "G"
+      ],
+      "title": "Hybrid Picking: Zange und Sprung",
+      "description": "Spiele das Riff Hybrid, Muster 1, als Runde Em, Am, C, G. Danach Muster 2 über Em und Am. Der Pick bleibt die ganze Zeit zwischen Daumen und Zeigefinger.",
+      "kind": "technik",
+      "techniqueId": "fingerpicking",
+      "lessonId": "finger-hybrid",
+      "minutes": 10,
+      "icon": "pick",
+      "metricLabel": "Sauberes Tempo (BPM)",
+      "masteryTarget": 70,
+      "scale": {
+        "bpm": [
+          50,
+          90
+        ]
+      }
+    },
+    {
+      "id": "clean-intro-runde",
+      "riffId": "clean-intro-em",
+      "chords": [
+        "Em",
+        "C",
+        "G",
+        "D"
+      ],
+      "title": "Cleanes Intro in Em",
+      "description": "Spiele das Intro: Takte Em, C, G, D in der Welle, zweimal hintereinander, dazu den Einsatz mit E5. Wähle Tonabnehmer und Lautstärke so, dass der Einsatz nicht springt.",
+      "kind": "technik",
+      "techniqueId": "fingerpicking",
+      "lessonId": "finger-clean-intro",
+      "minutes": 10,
+      "icon": "bolt",
+      "metricLabel": "Sauberes Tempo (BPM)",
+      "masteryTarget": 80,
+      "scale": {
+        "bpm": [
+          50,
+          90
+        ]
+      }
+    },
+    {
+      "id": "akkordmelodie-runde",
+      "riffId": "akkordmelodie-motiv",
+      "chords": [
+        "C",
+        "Am",
+        "G"
+      ],
+      "title": "Akkordmelodie in C",
+      "description": "Spiele die Melodie über C, Am, G, C. Zuerst nur die Melodie, dann Melodie und Bass auf Schlag 1 und 3. Die Melodie bleibt dabei klar lauter als der Bass.",
+      "kind": "technik",
+      "techniqueId": "fingerpicking",
+      "lessonId": "finger-akkordmelodie",
+      "minutes": 10,
+      "icon": "song",
+      "metricLabel": "Sauberes Tempo (BPM)",
+      "masteryTarget": 70,
+      "scale": {
+        "bpm": [
+          40,
+          80
+        ]
+      }
+    },
+    {
+      "id": "stimmungen-open-g",
+      "riffId": "open-g-treppe",
+      "tuning": "Open G",
+      "title": "Open G: G, C, D",
+      "description": "Stimme nach Open G um. Spiele das Muster über G, C und D mit dem Barré auf Bund 0, 5 und 7, ein Takt pro Akkord. Stimme am Ende zurück in die Standardstimmung.",
+      "kind": "technik",
+      "techniqueId": "fingerpicking",
+      "lessonId": "finger-stimmungen",
+      "minutes": 15,
+      "icon": "guitar",
+      "metricLabel": "Sauberes Tempo (BPM)",
+      "masteryTarget": 70,
+      "scale": {
+        "bpm": [
+          50,
+          80
+        ]
+      }
+    },
+    {
+      "id": "arrangement-ode",
+      "riffId": "ode-takte-1-2",
+      "chords": [
+        "C",
+        "G"
+      ],
+      "title": "Ode an die Freude arrangieren",
+      "description": "Spiele die acht Takte Schritt für Schritt: erst die Melodie allein, dann den Bass allein, dann beides zusammen. Wiederhole den ganzen Durchlauf ohne anzuhalten.",
+      "kind": "technik",
+      "techniqueId": "fingerpicking",
+      "lessonId": "finger-arrangement",
+      "minutes": 15,
+      "icon": "song",
+      "metricLabel": "Sauberes Tempo (BPM)",
+      "masteryTarget": 70,
+      "scale": {
+        "bpm": [
+          40,
+          80
+        ]
+      }
+    },
+    {
+      "id": "noten-e-a-saite",
+      "title": "Noten auf E- und A-Saite",
+      "description": "Im Notenspiel suchst du gefragte Töne auf der tiefen E- und der A-Saite, per Klick oder auf der Gitarre. Erst die Stammtöne, dann die Töne mit Vorzeichen. Trage am Ende deine besten Treffer pro Minute ein.",
+      "kind": "theorie",
+      "techniqueId": "theorie",
+      "lessonId": "griffbrett-noten",
+      "minutes": 5,
+      "icon": "fretboard",
+      "scale": {
+        "runs": [
+          3,
+          8
+        ]
+      },
+      "metricLabel": "Treffer pro Minute",
+      "masteryTarget": 25,
+      "noteGame": {
+        "strings": [
+          0,
+          1
+        ]
+      }
+    },
+    {
+      "id": "oktaven-wanderung",
+      "title": "Oktavmuster wandern",
+      "description": "Spiele Grundton und Oktave als Paar auf E- und D-Saite, einen Ton pro Schlag, und wandere von Bund 1 bis 12. Sage jeden Ton laut. Trage am Ende dein höchstes sauberes Tempo ein.",
+      "kind": "technik",
+      "techniqueId": "griffbrett",
+      "lessonId": "griffbrett-oktaven",
+      "minutes": 10,
+      "icon": "fretboard",
+      "scale": {
+        "bpm": [
+          40,
+          80
+        ]
+      },
+      "metricLabel": "Sauberes Tempo (BPM)",
+      "masteryTarget": 80
+    },
+    {
+      "id": "alle-noten-spiel",
+      "title": "Alle Saiten im Notenspiel",
+      "description": "Im Notenspiel suchst du gefragte Töne auf allen sechs Saiten, per Klick oder auf der Gitarre. Nutze die Oktavmuster, um zu springen. Trage am Ende deine besten Treffer pro Minute ein.",
+      "kind": "technik",
+      "techniqueId": "griffbrett",
+      "lessonId": "griffbrett-alle-noten",
+      "minutes": 10,
+      "icon": "fretboard",
+      "scale": {
+        "runs": [
+          3,
+          8
+        ]
+      },
+      "metricLabel": "Treffer pro Minute",
+      "masteryTarget": 20,
+      "noteGame": {
+        "strings": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      }
+    },
+    {
+      "id": "caged-e-form",
+      "title": "E-Form verschieben",
+      "description": "Wechsle vier Schläge pro Akkord zwischen offenem E, G (Bund 3) und A (Bund 5) in E-Form. Die Karte zeigt die Form. Trage am Ende dein höchstes sauberes Tempo ein.",
+      "kind": "technik",
+      "techniqueId": "griffbrett",
+      "lessonId": "caged-e",
+      "minutes": 10,
+      "icon": "fretboard",
+      "scale": {
+        "bpm": [
+          50,
+          90
+        ]
+      },
+      "metricLabel": "Sauberes Tempo (BPM)",
+      "masteryTarget": 70,
+      "fretboard": {
+        "root": "G",
+        "scale": "dur",
+        "caged": "E"
+      }
+    },
+    {
+      "id": "caged-d-form",
+      "title": "D-Form verschieben",
+      "description": "Gleite die D-Form vier Schläge pro Akkord zwischen G (Bund 5), A (Bund 7) und H (Bund 9) auf den vier hohen Saiten. Trage am Ende dein höchstes sauberes Tempo ein.",
+      "kind": "technik",
+      "techniqueId": "griffbrett",
+      "lessonId": "caged-d",
+      "minutes": 10,
+      "icon": "fretboard",
+      "scale": {
+        "bpm": [
+          50,
+          90
+        ]
+      },
+      "metricLabel": "Sauberes Tempo (BPM)",
+      "masteryTarget": 70,
+      "fretboard": {
+        "root": "G",
+        "scale": "dur",
+        "caged": "D"
+      }
+    },
+    {
+      "id": "caged-c-form",
+      "title": "C-Form verschieben",
+      "description": "Wechsle vier Schläge pro Akkord zwischen offenem C, D (Bund 5) und E (Bund 7) in C-Form. Die tiefe E-Saite bleibt stumm. Trage am Ende dein höchstes sauberes Tempo ein.",
+      "kind": "technik",
+      "techniqueId": "griffbrett",
+      "lessonId": "caged-c",
+      "minutes": 10,
+      "icon": "fretboard",
+      "scale": {
+        "bpm": [
+          40,
+          80
+        ]
+      },
+      "metricLabel": "Sauberes Tempo (BPM)",
+      "masteryTarget": 60,
+      "fretboard": {
+        "root": "D",
+        "scale": "dur",
+        "caged": "C"
+      }
+    },
+    {
+      "id": "caged-a-form",
+      "title": "A-Form verschieben",
+      "description": "Wechsle vier Schläge pro Akkord zwischen C (Bund 3), D (Bund 5) und E (Bund 7) in A-Form. Die tiefe E-Saite bleibt stumm. Trage am Ende dein höchstes sauberes Tempo ein.",
+      "kind": "technik",
+      "techniqueId": "griffbrett",
+      "lessonId": "caged-a",
+      "minutes": 10,
+      "icon": "fretboard",
+      "scale": {
+        "bpm": [
+          50,
+          90
+        ]
+      },
+      "metricLabel": "Sauberes Tempo (BPM)",
+      "masteryTarget": 70,
+      "fretboard": {
+        "root": "C",
+        "scale": "dur",
+        "caged": "A"
+      }
+    },
+    {
+      "id": "caged-g-form",
+      "title": "G-Form verschieben",
+      "description": "Wechsle vier Schläge pro Akkord zwischen offenem G, A (Bund 5) und C (Bund 8) in G-Form. Halte die Form nach jedem Wechsel zwei Sekunden. Trage am Ende dein höchstes sauberes Tempo ein.",
+      "kind": "technik",
+      "techniqueId": "griffbrett",
+      "lessonId": "caged-g",
+      "minutes": 10,
+      "icon": "fretboard",
+      "scale": {
+        "bpm": [
+          40,
+          80
+        ]
+      },
+      "metricLabel": "Sauberes Tempo (BPM)",
+      "masteryTarget": 60,
+      "fretboard": {
+        "root": "C",
+        "scale": "dur",
+        "caged": "G"
+      }
+    },
+    {
+      "id": "jam-frage-antwort",
+      "title": "Frage und Antwort",
+      "description": "Öffne den Jam Room im Dorf: Tonart A, Stil Rock, Box 1. Spiele zwei Takte Frage, die auf G oder E offen enden, und zwei Takte Antwort, die auf der 1 des nächsten Durchgangs auf A landet.",
+      "kind": "technik",
+      "techniqueId": "jam",
+      "lessonId": "jam-frage-antwort",
+      "minutes": 10,
+      "icon": "scale",
+      "metricLabel": "Sauberes Tempo (BPM)",
+      "masteryTarget": 80,
+      "scale": {
+        "bpm": [
+          60,
+          100
+        ]
+      },
+      "fretboard": {
+        "root": "A",
+        "scale": "moll-pentatonik",
+        "box": 1
+      }
+    },
+    {
+      "id": "caged-c-ring",
+      "title": "C-Dur in fünf Formen",
+      "description": "Spiele C-Dur in allen fünf Formen, von der offenen C-Form bis zur D-Form im 10. Bund, ein Takt pro Form. Die Karte zeigt die E-Form, die anderen Orte findest du über den Grundton C.",
+      "kind": "technik",
+      "techniqueId": "griffbrett",
+      "lessonId": "caged-verbinden",
+      "minutes": 10,
+      "icon": "fretboard",
+      "metricLabel": "Sauberes Tempo (BPM)",
+      "masteryTarget": 70,
+      "scale": {
+        "bpm": [
+          50,
+          80
+        ]
+      },
+      "fretboard": {
+        "root": "C",
+        "scale": "dur",
+        "caged": "E"
+      },
+      "chords": [
+        "C"
+      ]
+    },
+    {
+      "id": "caged-formen-boxen",
+      "title": "Formen und Boxen",
+      "description": "Spiele zu jeder C-Form die passende A-Moll-Box: G-Form mit Box 1, E-Form mit Box 2, D-Form mit Box 3, C-Form mit Box 4, A-Form mit Box 5. Die Karte zeigt Box 2.",
+      "kind": "technik",
+      "techniqueId": "griffbrett",
+      "lessonId": "caged-verbinden",
+      "minutes": 10,
+      "icon": "scale",
+      "scale": {
+        "runs": [
+          2,
+          5
+        ]
+      },
+      "fretboard": {
+        "root": "A",
+        "scale": "moll-pentatonik",
+        "box": 2
+      }
+    },
+    {
+      "id": "jam-akkordtoene-wechsel",
+      "title": "Akkordtöne auf der 1",
+      "description": "Öffne den Jam Room im Dorf: Tonart E, Stil Rock, Box 3. Lande bei jedem Akkordwechsel auf der 1 auf einem Ton des neuen Akkords und spiele danach frei weiter.",
+      "kind": "technik",
+      "techniqueId": "jam",
+      "lessonId": "jam-akkordtoene",
+      "minutes": 10,
+      "icon": "scale",
+      "metricLabel": "Sauberes Tempo (BPM)",
+      "masteryTarget": 80,
+      "scale": {
+        "bpm": [
+          60,
+          100
+        ]
+      },
+      "fretboard": {
+        "root": "E",
+        "scale": "moll-pentatonik",
+        "box": 3
+      },
+      "chords": [
+        "Em",
+        "C",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "id": "jam-frei-runde",
+      "title": "Freier Jam",
+      "description": "Öffne den Jam Room im Dorf, wähle Tonart und Stil selbst und spiele fünf bis zehn Minuten frei. Beginne mit einer Minute Box und zwei Minuten Frage und Antwort.",
+      "kind": "technik",
+      "techniqueId": "jam",
+      "lessonId": "jam-frei",
+      "minutes": 10,
+      "icon": "scale",
+      "scale": {
+        "runs": [
+          1,
+          3
+        ]
+      },
+      "fretboard": {
+        "root": "E",
+        "scale": "moll-pentatonik"
+      }
+    },
+    {
+      "id": "bending-ziel",
+      "riffId": "bending-ziel",
+      "title": "Bendings treffen",
+      "description": "Greife erst den Zielton auf Bund 9, dann ziehe Bund 7 darauf. Danach dasselbe mit dem Halbton auf Bund 8. Höre, ob Bend und Zielton gleich hoch klingen. Trage am Ende dein höchstes Tempo ein, in dem alle Bends treffen.",
+      "kind": "technik",
+      "techniqueId": "lead",
+      "lessonId": "lead-bending",
+      "minutes": 10,
+      "icon": "bend",
+      "metricLabel": "Sauberes Tempo (BPM)",
+      "masteryTarget": 80,
+      "scale": {
+        "bpm": [
+          50,
+          80
+        ]
+      },
+      "fretboard": {
+        "root": "A",
+        "scale": "moll-pentatonik",
+        "box": 1
+      }
+    },
+    {
+      "id": "vibrato-gleichmaessig",
+      "riffId": "vibrato-gleichmaessig",
+      "title": "Gleichmäßiges Vibrato",
+      "description": "Halte A mit Vibrato vier Schläge lang, dann den gezogenen Ton von Bund 7 auf Bund 9. Zwei Schwingungen pro Schlag, gleich breit. Trage am Ende dein höchstes Tempo ein, in dem das Vibrato gleichmäßig bleibt.",
+      "kind": "technik",
+      "techniqueId": "lead",
+      "lessonId": "lead-vibrato",
+      "minutes": 10,
+      "icon": "bend",
+      "metricLabel": "Sauberes Tempo (BPM)",
+      "masteryTarget": 90,
+      "scale": {
+        "bpm": [
+          50,
+          90
+        ]
+      },
+      "fretboard": {
+        "root": "A",
+        "scale": "moll-pentatonik",
+        "box": 1
+      }
+    },
+    {
+      "id": "phrase-frage-antwort",
+      "title": "Frage und Antwort",
+      "description": "Spiele die Frage mit Bend, G und E und einem Schlag Pause. Dann die Antwort eine Saite höher mit Ende auf A. Erfinde danach zwei eigene Paare, die Frage endet nicht auf A, die Antwort schon.",
+      "kind": "technik",
+      "techniqueId": "lead",
+      "lessonId": "lead-phrasen",
+      "minutes": 10,
+      "icon": "scale",
+      "scale": {
+        "bpm": [
+          60,
+          100
+        ]
+      },
+      "fretboard": {
+        "root": "A",
+        "scale": "moll-pentatonik",
+        "box": 1
+      }
+    },
+    {
+      "id": "boxen-verbinden",
+      "title": "Fünf Boxen verbinden",
+      "description": "Spiele die Boxen 5, 1, 2, 3 und 4 nacheinander auf und ab, jede mit gleichmäßigen Achteln. Wechsle zwischen den Boxen über die gemeinsamen Töne. Trage am Ende dein höchstes sauberes Tempo ein.",
+      "kind": "technik",
+      "techniqueId": "lead",
+      "lessonId": "lead-boxen",
+      "minutes": 15,
+      "icon": "scale",
+      "metricLabel": "Sauberes Tempo (BPM)",
+      "masteryTarget": 90,
+      "scale": {
+        "bpm": [
+          60,
+          90
+        ]
+      },
+      "fretboard": {
+        "root": "A",
+        "scale": "moll-pentatonik"
+      }
+    },
+    {
+      "id": "pentatonik-box2",
+      "title": "Pentatonik Box 2",
+      "description": "Spiele Box 2 der A-Moll-Pentatonik auf und ab. Zeigefinger auf den tieferen Bund jeder Saite, Ringfinger bei zwei Bünden Abstand, kleiner Finger bei drei. Dann wechsle auf einer Saite in die nächste Box.",
+      "kind": "technik",
+      "techniqueId": "lead",
+      "lessonId": "lead-boxen",
+      "minutes": 10,
+      "icon": "scale",
+      "scale": {
+        "bpm": [
+          60,
+          100
+        ]
+      },
+      "fretboard": {
+        "root": "A",
+        "scale": "moll-pentatonik",
+        "box": 2
+      }
+    },
+    {
+      "id": "pentatonik-box3",
+      "title": "Pentatonik Box 3",
+      "description": "Spiele Box 3 der A-Moll-Pentatonik auf und ab. Zeigefinger auf den tieferen Bund jeder Saite, Ringfinger bei zwei Bünden Abstand, kleiner Finger bei drei. Dann wechsle auf einer Saite in die nächste Box.",
+      "kind": "technik",
+      "techniqueId": "lead",
+      "lessonId": "lead-boxen",
+      "minutes": 10,
+      "icon": "scale",
+      "scale": {
+        "bpm": [
+          60,
+          100
+        ]
+      },
+      "fretboard": {
+        "root": "A",
+        "scale": "moll-pentatonik",
+        "box": 3
+      }
+    },
+    {
+      "id": "pentatonik-box4",
+      "title": "Pentatonik Box 4",
+      "description": "Spiele Box 4 der A-Moll-Pentatonik auf und ab. Zeigefinger auf den tieferen Bund jeder Saite, Ringfinger bei zwei Bünden Abstand, kleiner Finger bei drei. Dann wechsle auf einer Saite in die nächste Box.",
+      "kind": "technik",
+      "techniqueId": "lead",
+      "lessonId": "lead-boxen",
+      "minutes": 10,
+      "icon": "scale",
+      "scale": {
+        "bpm": [
+          60,
+          100
+        ]
+      },
+      "fretboard": {
+        "root": "A",
+        "scale": "moll-pentatonik",
+        "box": 4
+      }
+    },
+    {
+      "id": "pentatonik-box5",
+      "title": "Pentatonik Box 5",
+      "description": "Spiele Box 5 der A-Moll-Pentatonik auf und ab. Zeigefinger auf den tieferen Bund jeder Saite, Ringfinger bei zwei Bünden Abstand, kleiner Finger bei drei. Dann wechsle auf einer Saite in die nächste Box.",
+      "kind": "technik",
+      "techniqueId": "lead",
+      "lessonId": "lead-boxen",
+      "minutes": 10,
+      "icon": "scale",
+      "scale": {
+        "bpm": [
+          60,
+          100
+        ]
+      },
+      "fretboard": {
+        "root": "A",
+        "scale": "moll-pentatonik",
+        "box": 5
+      }
+    },
+    {
+      "id": "solo-zwoelf-takte",
+      "title": "Zwölf-Takte-Solo",
+      "description": "Spiele dein Solo zwölf Takte lang zum Metronom: Takt 1 bis 4 in Box 1, Takt 5 bis 8 in Box 2, Takt 9 bis 12 in Box 3 mit Bend und Vibrato am Höhepunkt. Ende auf A. Zähle die Takte laut mit. Trage ein, wie viele ganze Runden ohne Stopp gelungen sind.",
+      "kind": "technik",
+      "techniqueId": "lead",
+      "lessonId": "lead-erstes-solo",
+      "minutes": 15,
+      "icon": "flame",
+      "metricLabel": "Ganze Durchläufe",
+      "masteryTarget": 3,
+      "scale": {
+        "bpm": [
+          60,
+          80
+        ],
+        "runs": [
+          1,
+          4
+        ]
+      },
+      "fretboard": {
+        "root": "A",
+        "scale": "moll-pentatonik",
+        "box": 1
+      }
+    },
+    {
+      "id": "wechselschlag-tempo",
+      "title": "Wechselschlag-Tempo",
+      "description": "Spiele Box 1 mit strengem Wechselschlag, vier Töne pro Klick. Trage am Ende dein höchstes sauberes Tempo ein.",
+      "kind": "technik",
+      "techniqueId": "lead",
+      "lessonId": "lead-wechselschlag",
+      "minutes": 10,
+      "icon": "bolt",
+      "riffId": "wechselschlag-box1",
+      "metricLabel": "Sauberes Tempo (BPM)",
+      "masteryTarget": 90,
+      "scale": {
+        "bpm": [
+          60,
+          110
+        ]
+      }
+    },
+    {
+      "id": "wechselschlag-spinne",
+      "title": "Ein Finger pro Bund",
+      "description": "Spiele die Bünde 5 bis 8 auf vier Saiten, strikt ab und auf, und schiebe den Griff nach jeder Runde einen Bund hoch.",
+      "kind": "technik",
+      "techniqueId": "lead",
+      "lessonId": "lead-wechselschlag",
+      "minutes": 10,
+      "icon": "bolt",
+      "riffId": "wechselschlag-spinne",
+      "scale": {
+        "bpm": [
+          60,
+          100
+        ]
+      }
+    },
+    {
+      "id": "legato-laeufe",
+      "title": "Legato-Läufe",
+      "description": "Spiele den Lauf durch Box 1 und schlage nur am Anfang jeder Saite an. Trage am Ende dein höchstes sauberes Tempo ein.",
+      "kind": "technik",
+      "techniqueId": "lead",
+      "lessonId": "lead-legato",
+      "minutes": 10,
+      "icon": "scale",
+      "riffId": "legato-lauf",
+      "metricLabel": "Sauberes Tempo (BPM)",
+      "masteryTarget": 80,
+      "scale": {
+        "bpm": [
+          50,
+          90
+        ]
+      }
+    },
+    {
+      "id": "moll-tonleiter",
+      "title": "Moll-Tonleiter im Solo",
+      "description": "Spiele die A-Moll-Tonleiter auf und ab, dann Licks, in denen H und F nur Durchgang sind. Trage am Ende dein höchstes sauberes Tempo ein.",
+      "kind": "technik",
+      "techniqueId": "lead",
+      "lessonId": "lead-moll",
+      "minutes": 10,
+      "icon": "scale",
+      "fretboard": {
+        "root": "A",
+        "scale": "moll"
+      },
+      "metricLabel": "Sauberes Tempo (BPM)",
+      "masteryTarget": 100,
+      "scale": {
+        "bpm": [
+          60,
+          110
+        ]
+      }
+    },
+    {
+      "id": "tapping-dreiklang",
+      "title": "Tapping-Dreiklang",
+      "description": "Tappe den A-Moll-Dreiklang auf der e-Saite und den E-Moll-Dreiklang auf der H-Saite. Dämpfe alle Saiten, die nicht klingen sollen. Trage am Ende dein höchstes sauberes Tempo ein.",
+      "kind": "technik",
+      "techniqueId": "lead",
+      "lessonId": "lead-tapping",
+      "minutes": 10,
+      "icon": "bolt",
+      "riffId": "tapping-dreiklang",
+      "metricLabel": "Sauberes Tempo (BPM)",
+      "masteryTarget": 70,
+      "scale": {
+        "bpm": [
+          50,
+          80
+        ]
+      }
+    },
+    {
+      "id": "sweep-drei-saiten",
+      "title": "Sweep über drei Saiten",
+      "description": "Spiele den A-Moll-Sweep über G-, H- und e-Saite, mit Roll und Dämpfen. Es klingt immer nur ein Ton. Trage am Ende dein höchstes sauberes Tempo ein.",
+      "kind": "technik",
+      "techniqueId": "lead",
+      "lessonId": "lead-sweep",
+      "minutes": 10,
+      "icon": "bolt",
+      "riffId": "sweep-drei-saiten",
+      "metricLabel": "Sauberes Tempo (BPM)",
+      "masteryTarget": 80,
+      "scale": {
+        "bpm": [
+          50,
+          90
+        ]
+      }
+    },
+    {
+      "id": "sweep-fuenf-saiten",
+      "title": "Sweep über fünf Saiten",
+      "description": "Spiele den A-Moll-Sweep über fünf Saiten, abwärts und aufwärts, langsam und gedämpft.",
+      "kind": "technik",
+      "techniqueId": "lead",
+      "lessonId": "lead-sweep",
+      "minutes": 10,
+      "icon": "bolt",
+      "riffId": "sweep-fuenf-saiten",
+      "scale": {
+        "bpm": [
+          50,
+          80
+        ]
+      }
+    },
+    {
+      "id": "galopp-riff",
+      "riffId": "galopp-riff",
+      "title": "Galopp-Riff",
+      "description": "Zähle 1 e + a und spiele das Galopp-Riff gedämpft, erst nur mit Abschlägen, dann mit ab, ab, auf. Trage am Ende dein höchstes sauberes Tempo ein.",
+      "kind": "technik",
+      "techniqueId": "metal",
+      "lessonId": "metal-galopp",
+      "minutes": 10,
+      "icon": "bolt",
+      "metricLabel": "Sauberes Tempo (BPM)",
+      "masteryTarget": 120,
+      "scale": {
+        "bpm": [
+          70,
+          140
+        ]
+      }
+    },
+    {
+      "id": "drop-d-riff",
+      "riffId": "drop-d-riff",
+      "title": "Drop-D-Riff",
+      "description": "Stimme im Schrein auf Drop D, mache die Gegenprobe am 7. Bund und spiele dann das Riff mit leerem D und Power Chords aus einem Finger.",
+      "kind": "technik",
+      "techniqueId": "metal",
+      "lessonId": "metal-drop-d",
+      "minutes": 10,
+      "icon": "guitar",
+      "tuning": "Drop D",
+      "scale": {
+        "bpm": [
+          60,
+          110
+        ]
+      }
+    },
+    {
+      "id": "tight-aufnahme",
+      "riffId": "tight-stopps",
+      "title": "Tight zum Klick",
+      "description": "Spiele das Riff vier Mal zum Metronom und nimm es auf. Prüfe Anschläge, Enden und Pausen und spiele dann besser. Trage am Ende dein höchstes sauberes Tempo ein.",
+      "kind": "technik",
+      "techniqueId": "metal",
+      "lessonId": "metal-tight",
+      "minutes": 10,
+      "icon": "pick",
+      "metricLabel": "Sauberes Tempo (BPM)",
+      "masteryTarget": 120,
+      "scale": {
+        "bpm": [
+          70,
+          120
+        ]
+      }
+    },
+    {
+      "id": "tremolo-melodie",
+      "riffId": "tremolo-melodie",
+      "title": "Tremolo-Melodie",
+      "description": "Spiele vier Anschläge pro Klick im Wechselschlag, erst auf einer Saite, dann die Melodie. Arbeite in kurzen Runden und trage am Ende dein höchstes sauberes Tempo ein.",
+      "kind": "technik",
+      "techniqueId": "metal",
+      "lessonId": "metal-tremolo",
+      "minutes": 10,
+      "icon": "bolt",
+      "metricLabel": "Sauberes Tempo (BPM)",
+      "masteryTarget": 120,
+      "scale": {
+        "bpm": [
+          80,
+          180
+        ]
+      }
+    },
+    {
+      "id": "synkopen-riff",
+      "riffId": "synkopen-riff",
+      "title": "Synkopen-Riff",
+      "description": "Tippe den Puls mit dem Fuß und spiele das Riff: Takt 1 gedämpft mit offenen Akzenten, Takt 2 mit stillen Pausen.",
+      "kind": "technik",
+      "techniqueId": "metal",
+      "lessonId": "metal-synkopen",
+      "minutes": 10,
+      "icon": "bolt",
+      "scale": {
+        "bpm": [
+          70,
+          130
+        ]
+      }
+    },
+    {
+      "id": "terzen-riff",
+      "riffId": "terzen-riff",
+      "title": "Zweistimmig in Terzen",
+      "description": "Spiele erst die untere Stimme auf der G-Saite, dann die obere auf der H-Saite, nacheinander oder als Loop, zuletzt beide Saiten zusammen.",
+      "kind": "technik",
+      "techniqueId": "metal",
+      "lessonId": "metal-zweistimmig",
+      "minutes": 10,
+      "icon": "note",
+      "scale": {
+        "bpm": [
+          60,
+          100
+        ]
+      },
+      "fretboard": {
+        "root": "A",
+        "scale": "moll"
+      }
+    },
+    {
+      "id": "metal-song-ganz",
+      "title": "Metal-Song: ganz",
+      "description": "Spiele den genannten Abschnitt deines Zielsongs im genannten Tempo, ohne bei einem Fehler anzuhalten. 100 % ist das Originaltempo der Aufnahme. Trage am Ende ein, wie viele ganze Durchläufe von vorn bis hinten dir gelungen sind.",
+      "kind": "song",
+      "techniqueId": "metal",
+      "lessonId": "metal-ganzer-song",
+      "minutes": 15,
+      "icon": "song",
+      "metricLabel": "Ganze Durchläufe",
+      "masteryTarget": 3,
+      "scale": {
+        "tempoPercent": [
+          50,
+          100
+        ],
+        "sections": [
+          "Intro und Riff",
+          "Strophe und Refrain",
+          "Solo-Teil oder Bridge",
+          "Ganzer Song"
+        ],
+        "runs": [
+          1,
+          4
+        ]
+      }
+    },
+    {
+      "id": "thrash-boss-riff",
+      "riffId": "thrash-riff",
+      "title": "Thrash-Riff-Boss",
+      "description": "Spiele das Riff in A, A, B, B zum Metronom. Übe zuerst den Wechsel von Teil A zu Teil B. Bei Schmerz hörst du sofort auf. Trage am Ende dein höchstes sauberes Tempo ein.",
+      "kind": "technik",
+      "techniqueId": "metal",
+      "lessonId": "metal-thrash-boss",
+      "minutes": 15,
+      "icon": "flame",
+      "metricLabel": "Sauberes Tempo (BPM)",
+      "masteryTarget": 140,
+      "scale": {
+        "bpm": [
+          100,
+          200
+        ]
+      }
+    },
+    {
+      "id": "moll-barre-wechsel",
+      "title": "Hm und Cm als Barré",
+      "description": "Greife Hm in der A-Form im 2. Bund und gleite einen Bund hoch auf Cm. Vier Schläge pro Akkord, nur ab der A-Saite angeschlagen. Zwischendurch den Druck lösen.",
+      "kind": "technik",
+      "techniqueId": "barre",
+      "lessonId": "rhythmus-moll-barre",
+      "minutes": 10,
+      "icon": "barre",
+      "chords": [
+        "Bm",
+        "Cm",
+        "B"
+      ],
+      "metricLabel": "Sauberes Tempo (BPM)",
+      "masteryTarget": 90,
+      "scale": {
+        "bpm": [
+          50,
+          90
+        ]
+      }
+    },
+    {
+      "id": "sus-sept-farben",
+      "title": "Sus- und Septfarben",
+      "description": "Spiele jeden Sus- und Septakkord direkt nach seinem Grundakkord, vier Schläge pro Akkord, und höre auf die Farbe. Danach die Schleife aus der Lektion.",
+      "kind": "technik",
+      "techniqueId": "akkordwechsel",
+      "lessonId": "rhythmus-sus-sept",
+      "minutes": 10,
+      "icon": "chord",
+      "chords": [
+        "Dsus2",
+        "Dsus4",
+        "Asus2",
+        "Asus4",
+        "Am7",
+        "E7",
+        "A7",
+        "D7",
+        "G7"
+      ],
+      "scale": {
+        "bpm": [
+          50,
+          80
+        ]
+      }
+    },
+    {
+      "id": "synkopen-plus",
+      "title": "Anschlag auf dem Plus",
+      "description": "Spiele die drei Synkopen-Muster über Em und Am. Zähle laut, die Hand pendelt ohne Pause, und der Akkord vom Plus klingt über die Zahl weiter.",
+      "kind": "technik",
+      "techniqueId": "rhythmus",
+      "lessonId": "rhythmus-synkopen",
+      "minutes": 10,
+      "icon": "strum",
+      "chords": [
+        "Em",
+        "Am"
+      ],
+      "metricLabel": "Sauberes Tempo (BPM)",
+      "masteryTarget": 100,
+      "scale": {
+        "bpm": [
+          60,
+          100
+        ]
+      }
+    },
+    {
+      "id": "shuffle-zwoelftakter",
+      "title": "Zwölftakter im Shuffle",
+      "description": "Spiele den Zwölftakter in A im Shuffle: vier Takte A, zwei Takte D, zwei Takte A, dann E, D, A, E. Zähle in Triolen, die Hand pendelt ungleich.",
+      "kind": "technik",
+      "techniqueId": "rhythmus",
+      "lessonId": "rhythmus-shuffle",
+      "minutes": 10,
+      "icon": "strum",
+      "chords": [
+        "A",
+        "D",
+        "E"
+      ],
+      "metricLabel": "Sauberes Tempo (BPM)",
+      "masteryTarget": 100,
+      "scale": {
+        "bpm": [
+          60,
+          100
+        ]
+      }
+    },
+    {
+      "id": "sechzehntel-groove",
+      "title": "Sechzehntel-Grooves",
+      "description": "Zähle laut 1 e + a und spiele die drei Muster über Em und Am. Die Hand läuft in Sechzehnteln durch, der Ausschlag bleibt klein.",
+      "kind": "technik",
+      "techniqueId": "rhythmus",
+      "lessonId": "rhythmus-sechzehntel",
+      "minutes": 10,
+      "icon": "strum",
+      "chords": [
+        "Em",
+        "Am"
+      ],
+      "metricLabel": "Sauberes Tempo (BPM)",
+      "masteryTarget": 90,
+      "scale": {
+        "bpm": [
+          60,
+          90
+        ]
+      }
+    },
+    {
+      "id": "funk-stoss",
+      "title": "Scratch und Stoß",
+      "description": "Spiele über Am und D die vier Funk-Muster: gedämpfter Scratch, dazwischen kurze Stöße auf den oberen vier Saiten. Die Hand pendelt in Sechzehnteln weiter.",
+      "kind": "technik",
+      "techniqueId": "rhythmus",
+      "lessonId": "rhythmus-funk",
+      "minutes": 10,
+      "icon": "bolt",
+      "chords": [
+        "Am",
+        "D"
+      ],
+      "metricLabel": "Sauberes Tempo (BPM)",
+      "masteryTarget": 90,
+      "scale": {
+        "bpm": [
+          60,
+          90
+        ]
+      }
+    },
+    {
+      "id": "barre-songset",
+      "title": "Barré-Songset",
+      "description": "Spiele die drei Barré-Stücke hintereinander, vier Abschläge pro Takt, jedes zweimal. Zwischen den Stücken 30 Sekunden Pause, Hand ausschütteln.",
+      "kind": "technik",
+      "techniqueId": "barre",
+      "lessonId": "rhythmus-barre-songs",
+      "minutes": 15,
+      "icon": "song",
+      "chords": [
+        "Bm",
+        "F#m",
+        "F"
+      ],
+      "metricLabel": "Sauberes Tempo (BPM)",
+      "masteryTarget": 90,
+      "scale": {
+        "bpm": [
+          50,
+          90
+        ]
+      }
+    },
+    {
+      "id": "dur-tonleiter-saite",
+      "title": "C-Dur auf einer Saite",
+      "description": "Spiele C-Dur auf der A-Saite von Bund 3 bis Bund 15 und zurück, ein Ton pro Schlag. Sage zu jedem Schritt laut ganz oder halb.",
+      "kind": "theorie",
+      "techniqueId": "theorie",
+      "lessonId": "theorie-dur-tonleiter",
+      "minutes": 10,
+      "icon": "scale",
+      "metricLabel": "Sauberes Tempo (BPM)",
+      "masteryTarget": 80,
+      "scale": {
+        "bpm": [
+          50,
+          90
+        ]
+      },
+      "fretboard": {
+        "root": "C",
+        "scale": "dur"
+      }
+    },
+    {
+      "id": "dur-tonleiter-lage",
+      "title": "C-Dur in einer Lage",
+      "description": "Spiele C-Dur in der Lage über A-, D-, G- und H-Saite auf und ab. Finde danach im Spiel eine Minute lang Töne auf diesen vier Saiten.",
+      "kind": "theorie",
+      "techniqueId": "theorie",
+      "lessonId": "theorie-dur-tonleiter",
+      "minutes": 5,
+      "icon": "fretboard",
+      "metricLabel": "Treffer pro Minute",
+      "masteryTarget": 20,
+      "scale": {
+        "runs": [
+          2,
+          5
+        ]
+      },
+      "noteGame": {
+        "strings": [
+          1,
+          2,
+          3,
+          4
+        ]
+      }
+    },
+    {
+      "id": "intervalle-hoeren",
+      "title": "Intervalle suchen und singen",
+      "description": "Spiele von einem Startton auf der A-Saite die große Terz, Quarte, Quinte und Oktave und singe jeden Sprung leise mit. Nenne den Namen, bevor du die Bünde zählst.",
+      "kind": "theorie",
+      "techniqueId": "theorie",
+      "lessonId": "theorie-intervalle",
+      "minutes": 10,
+      "icon": "note",
+      "scale": {
+        "runs": [
+          2,
+          5
+        ]
+      },
+      "fretboard": {
+        "root": "C",
+        "scale": "dur"
+      }
+    },
+    {
+      "id": "akkordbau-terz",
+      "title": "Terz tauschen: Dur und Moll",
+      "description": "Wechsle im Takt zwischen E und Em, danach zwischen A und Am, ein Akkord pro Takt. Sage bei jedem Wechsel, welche Terz du spielst.",
+      "chords": [
+        "E",
+        "Em",
+        "A",
+        "Am"
+      ],
+      "kind": "theorie",
+      "techniqueId": "theorie",
+      "lessonId": "theorie-akkordbau",
+      "minutes": 10,
+      "icon": "chord",
+      "metricLabel": "Sauberes Tempo (BPM)",
+      "masteryTarget": 80,
+      "scale": {
+        "bpm": [
+          50,
+          90
+        ]
+      }
+    },
+    {
+      "id": "tonarten-folgen",
+      "title": "I, IV, V in vier Tonarten",
+      "description": "Spiele G - C - D - G, D - G - A - D, A - D - E - A und C - F - G - C, ein Akkord pro Takt. Nenne vorher die Vorzeichen jeder Tonart.",
+      "chords": [
+        "G",
+        "C",
+        "D",
+        "A",
+        "E",
+        "F"
+      ],
+      "kind": "theorie",
+      "techniqueId": "theorie",
+      "lessonId": "theorie-tonarten",
+      "minutes": 10,
+      "icon": "book",
+      "metricLabel": "Sauberes Tempo (BPM)",
+      "masteryTarget": 80,
+      "scale": {
+        "bpm": [
+          50,
+          90
+        ]
+      },
+      "fretboard": {
+        "root": "G",
+        "scale": "dur"
+      }
+    },
+    {
+      "id": "moll-parallelen",
+      "title": "A-Moll und seine Parallele",
+      "description": "Spiele A-Moll auf der A-Saite auf und ab, dann E-Moll auf der tiefen E-Saite mit demselben Bundmuster. Nenne zu jeder Dur-Tonart die Parallele.",
+      "kind": "theorie",
+      "techniqueId": "theorie",
+      "lessonId": "theorie-moll",
+      "minutes": 10,
+      "icon": "scale",
+      "metricLabel": "Sauberes Tempo (BPM)",
+      "masteryTarget": 80,
+      "scale": {
+        "bpm": [
+          50,
+          90
+        ]
+      },
+      "fretboard": {
+        "root": "A",
+        "scale": "moll"
+      }
+    },
+    {
+      "id": "moll-akkorde",
+      "title": "Am - G - F - G",
+      "description": "Begleite die Folge Am - G - F - G, ein Akkord pro Takt. Danach Em - D - C - D auf demselben Weg.",
+      "chords": [
+        "Am",
+        "G",
+        "F",
+        "Em",
+        "D",
+        "C"
+      ],
+      "kind": "theorie",
+      "techniqueId": "theorie",
+      "lessonId": "theorie-moll",
+      "minutes": 5,
+      "icon": "chord",
+      "scale": {
+        "bpm": [
+          60,
+          90
+        ]
+      }
+    },
+    {
+      "id": "folgen-hoeren",
+      "title": "Folgen nach Gehör",
+      "description": "Spiele C vier Schläge lang als Zuhause. Spiele danach F, G und Am je nach C und höre, wohin jeder Wechsel zieht. Spiele dann I-IV-V-I und I-V-vi-IV je dreimal und benenne bei jedem Wechsel die Rolle, ohne auf die Stufen zu schauen.",
+      "kind": "theorie",
+      "techniqueId": "theorie",
+      "lessonId": "theorie-akkordfolgen",
+      "minutes": 8,
+      "icon": "chord",
+      "scale": {
+        "runs": [
+          2,
+          4
+        ]
+      },
+      "chords": [
+        "C",
+        "F",
+        "G",
+        "Am"
+      ]
+    },
+    {
+      "id": "riff-aufnehmen-b",
+      "title": "Testriff B heraushören",
+      "description": "Spiele das Testriff B aus dem Riffblatt bei 70 BPM zweimal als Aufnahme ein und schaue danach nicht mehr aufs Blatt. Höre die Aufnahme und schreibe das Riff nach Puls, Grundton und kleinen Stücken als Tabulatur auf. Vergleiche am Ende mit dem Blatt.",
+      "kind": "theorie",
+      "techniqueId": "theorie",
+      "lessonId": "theorie-riff-hoeren",
+      "minutes": 10,
+      "icon": "note",
+      "scale": {
+        "runs": [
+          1,
+          3
+        ]
+      },
+      "riffId": "hoeren-riff-b"
+    },
+    {
+      "id": "riff-aufnehmen-c",
+      "title": "Testriff C heraushören",
+      "description": "Spiele das Testriff C aus dem Riffblatt bei 70 BPM als Aufnahme ein und höre es später ohne Blatt heraus. Trenne Töne und Rhythmus, suche erst den Grundton und danach die übrigen Töne in kleinen Stücken.",
+      "kind": "theorie",
+      "techniqueId": "theorie",
+      "lessonId": "theorie-riff-hoeren",
+      "minutes": 10,
+      "icon": "note",
+      "scale": {
+        "runs": [
+          1,
+          3
+        ]
+      },
+      "riffId": "hoeren-riff-c"
+    },
+    {
+      "id": "songs-analysieren",
+      "title": "Stufen eines Songs",
+      "description": "Bestimme für einen Song deiner Wahl die Tonart und schreibe die Akkorde als Stufen auf. Markiere die Wiederholungen und übertrage die wichtigste Folge in eine zweite Tonart. Spiele sie dort einmal durch.",
+      "kind": "theorie",
+      "techniqueId": "theorie",
+      "lessonId": "theorie-analyse",
+      "minutes": 10,
+      "icon": "book",
+      "scale": {
+        "runs": [
+          1,
+          3
+        ]
+      },
+      "chords": [
+        "C",
+        "Dm",
+        "Em",
+        "F",
+        "G",
+        "Am"
+      ]
+    },
+    {
+      "id": "modi-phrygisch-aeolisch",
+      "title": "Phrygisch gegen Äolisch",
+      "description": "Spiele das phrygische Riff mit F und danach dasselbe Riff mit F# auf der tiefen E-Saite. Wechsle viermal und betone den Merkton. Steigere das Tempo in kleinen Schritten, wenn beide Fassungen sauber klingen.",
+      "kind": "theorie",
+      "techniqueId": "theorie",
+      "lessonId": "theorie-modi",
+      "minutes": 10,
+      "icon": "scale",
+      "scale": {
+        "bpm": [
+          60,
+          100
+        ]
+      },
+      "metricLabel": "Sauberes Tempo (BPM)",
+      "masteryTarget": 100,
+      "riffId": "modi-phrygisch",
+      "fretboard": {
+        "root": "E",
+        "scale": "moll"
+      }
+    },
+    {
+      "id": "harmonisch-moll-lick",
+      "title": "Lick in harmonisch Moll",
+      "description": "Spiele die harmonische A-Moll-Tonleiter auf der A-Saite und danach das Lick mit dem Sprung von F zu G#. Halte das Lick sauber, höre auf den Leitton und steigere das Tempo in kleinen Schritten.",
+      "kind": "theorie",
+      "techniqueId": "theorie",
+      "lessonId": "theorie-harmonisch-moll",
+      "minutes": 10,
+      "icon": "scale",
+      "scale": {
+        "bpm": [
+          60,
+          100
+        ]
+      },
+      "metricLabel": "Sauberes Tempo (BPM)",
+      "masteryTarget": 100,
+      "riffId": "harmonisch-moll-lick",
+      "fretboard": {
+        "root": "A",
+        "scale": "moll"
+      }
     }
   ]
 }

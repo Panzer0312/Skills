@@ -1,0 +1,82 @@
+export const meta = { id: "theorie-moll", title: "Moll und Parallelen", order: 245, requires: null };
+
+import { Griffbild, GriffbrettBild, Tab } from "../game/visuals/index";
+
+<Ziel>Du spielst die natürliche Moll-Tonleiter, findest zu jeder Dur-Tonart die parallele Moll-Tonart und begleitest in Am mit Akkorden aus C-Dur.</Ziel>
+
+Die **natürliche Moll-Tonleiter** hat das Muster **ganz – halb – ganz – ganz – halb – ganz – ganz**, also
+2, 1, 2, 2, 1, 2, 2 Bünde. Der dritte Ton liegt nur drei Halbtöne über dem Grundton: die kleine Terz.
+Daher kommt der dunklere Klang.
+
+A-Moll auf der A-Saite, leer beginnend: A – H – C – D – E – F – G – A, das sind die Bünde 0, 2, 3, 5, 7, 8, 10, 12.
+Prüfe die Schritte: 0→2 ganz, 2→3 halb, 3→5 ganz, 5→7 ganz, 7→8 halb, 8→10 ganz, 10→12 ganz.
+
+<GriffbrettBild
+  bis={12}
+  punkte={[
+    { saite: 5, bund: 0, text: "A" },
+    { saite: 5, bund: 2, text: "H" },
+    { saite: 5, bund: 3, text: "C" },
+    { saite: 5, bund: 5, text: "D" },
+    { saite: 5, bund: 7, text: "E" },
+    { saite: 5, bund: 8, text: "F" },
+    { saite: 5, bund: 10, text: "G" },
+    { saite: 5, bund: 12, text: "A" },
+  ]}
+/>
+
+<Tab
+  titel="A-Moll auf der A-Saite"
+  zeilen={[
+    "------------------------",
+    "------------------------",
+    "------------------------",
+    "------------------------",
+    "0--2--3--5--7--8--10-12-",
+    "------------------------",
+  ]}
+/>
+
+Es sind genau die Töne von C-Dur, nur beginnst du auf A. A ist die sechste Stufe von C-Dur. Deshalb hat A-Moll keine
+Vorzeichen, und C-Dur und A-Moll sind **Parallelen**: zwei Tonarten mit denselben Tönen und denselben Vorzeichen.
+
+**Parallele finden.** Von der Dur-Tonart gehst du drei Bünde (eine kleine Terz) abwärts auf den Grundton der Moll-Tonart,
+und von Moll drei Bünde aufwärts zurück:
+
+- C-Dur und A-Moll (C im 3. Bund der A-Saite, A leer)
+- G-Dur und E-Moll (ein Kreuz, Fis)
+- D-Dur und H-Moll (zwei Kreuze, Fis und Cis)
+- F-Dur und D-Moll (ein b)
+
+Dasselbe Bundmuster funktioniert auf jeder Saite: E-Moll auf der tiefen E-Saite hat ebenfalls die Bünde
+0, 2, 3, 5, 7, 8, 10, 12 (E – Fis – G – A – H – C – D – E).
+
+**Akkorde von A-Moll.** Du brauchst keine neuen Griffe. A-Moll nutzt die Stufenakkorde von C-Dur: Am, Dm, Em,
+F, G und C. Der Grundton Am wirkt als Zuhause. Beliebte Folge: Am – G – F – G.
+
+<Griffbild akkorde={["Am", "G", "F", "Dm", "Em", "C"]} />
+
+<Handhaltung>
+Für die Tonleiter auf der A-Saite wanderst du mit der Hand. Bund 2 und 3 liegen noch in der ersten Lage, ab
+Bund 5 wechselst du die Lage. Nutze für die Akkorde die Fingersätze, die du kennst, und achte beim Wechsel Am – G – F –
+G darauf, dass der Rhythmus nicht bricht, wenn der Barré-Griff F kommt.
+</Handhaltung>
+
+<Fehlerbild>
+Du lernst A-Moll als neue Tonleiter mit neuen Fingerbildern und merkst nicht, dass sie dieselben Töne
+wie C-Dur hat. Prüfe: kannst du zu jeder Moll-Tonleiter sofort sagen, welche Dur-Tonleiter hinter ihr steckt?
+</Fehlerbild>
+
+<Merksatz>Von Dur drei Bünde abwärts ist die Parallele in Moll. Dieselben Töne, ein anderes Zuhause.</Merksatz>
+
+<Hinweis>Die Moll-Pentatonik aus Lektion 11 ist diese Tonleiter ohne zwei ihrer Töne, nämlich ohne Stufe 2 und 6 (bei A-Moll also H und F).</Hinweis>
+
+<Uebung bpm={70}>
+Metronom auf 70. Spiele A-Moll auf der A-Saite aufwärts und abwärts, ein Ton pro Schlag. Wiederhole mit E-Moll
+auf der tiefen E-Saite, mit demselben Bundmuster. Danach Akkorde: Am – G – F – G, ein Akkord pro Takt, und danach Em – D – C – D.
+Beide Folgen kommen aus den Stufenakkorden einer Dur-Tonart, aus C-Dur und aus G-Dur, die jeweilige Parallele ist dabei das Zuhause.
+
+Steigere in Fünferschritten, sobald alles sauber klingt.
+</Uebung>
+
+<Checkpoint>Du sagst zu C-, G-, D- und F-Dur die parallele Moll-Tonart, spielst A-Moll und E-Moll mit dem Bundmuster sauber bis 80 BPM und begleitest die Folge Am – G – F – G im Takt.</Checkpoint>

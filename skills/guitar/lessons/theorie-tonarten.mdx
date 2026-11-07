@@ -1,0 +1,76 @@
+export const meta = { id: "theorie-tonarten", title: "Tonarten und Quintenzirkel", order: 244, requires: null };
+
+import { Griffbild } from "../game/visuals/index";
+
+<Ziel>Du bestimmst die Tonart eines Songs aus seinen Akkorden, nennst ihre Vorzeichen und findest mit dem Quintenzirkel die Akkorde, die dazu gehören.</Ziel>
+
+Eine **Tonart** ist die Dur-Tonleiter, um die ein Stück kreist, und ihr erster Ton, der Grundton, ist
+das Zuhause. Du hast die Stufenakkorde schon kennengelernt. In G-Dur sind es G, Am, Hm, C, D, Em und Fis vermindert (das Fis kommt gleich).
+
+**Vorzeichen.** Sobald du die Dur-Tonleiter ab einem anderen Ton als C beginnst, passt das Ganz-Halb-Muster
+nicht mehr zu den weißen Tönen. Dann brauchst du **Kreuze** (ein Halbton höher) oder **b** (ein Halbton tiefer).
+Jede Tonart hat ihre feste Menge davon.
+
+**Der Quintenzirkel** ordnet alle Dur-Tonarten im Abstand einer Quinte. Gehst du eine Quinte aufwärts,
+kommt ein Kreuz dazu:
+
+- C-Dur: keine Vorzeichen
+- G-Dur: 1 Kreuz (Fis)
+- D-Dur: 2 Kreuze (Fis, Cis)
+- A-Dur: 3 Kreuze (Fis, Cis, Gis)
+- E-Dur: 4 Kreuze (Fis, Cis, Gis, Dis)
+
+In die andere Richtung, eine Quinte abwärts (also eine Quarte aufwärts), kommt je ein b dazu:
+
+- F-Dur: 1 b (B)
+- B-Dur: 2 b (B, Es)
+- Es-Dur: 3 b (B, Es, As)
+
+Das deutsche B ist der Ton einen Halbton unter H (englisch Bb). Die Reihenfolge der Kreuze ist Fis, Cis, Gis, Dis. Das letzte Kreuz
+liegt immer einen Halbton unter dem Grundton der Tonart: bei D-Dur ist das letzte Cis und der Grundton D.
+Bei den b ist das vorletzte b der Grundton: in Es-Dur sind es B, Es, As, und Es steht an vorletzter Stelle. Nur F-Dur mit einem einzigen b ist die Ausnahme.
+
+**Akkorde über den Zirkel.** Wo eine Tonart im Kreis steht, findest du ihre wichtigsten Akkorde bei ihren zwei Nachbarn.
+Für C-Dur sind das F links und G rechts: C, F und G sind die Akkorde I, IV und V. Die Moll-Akkorde dieser Tonart sind Dm, Am und Em.
+Für G-Dur sind die Nachbarn C und D: G, C und D sind I, IV und V.
+
+<Griffbild akkorde={["G", "C", "D", "Em"]} />
+
+**Die Tonart eines Songs finden.**
+
+1. Schreibe die Akkorde des Songs auf.
+2. Suche die Dur-Tonart, deren Stufenakkorde alle diese Akkorde enthalten. Beginne bei der Tonart des ersten oder letzten Akkords.
+3. Prüfe: Beginnt oder endet der Song auf dem Akkord I? Meist ja.
+
+Beispiel: Akkorde A, D, E. A-Dur hat die Stufenakkorde A, Hm, Cis-Moll, D, E, Fis-Moll und Gis vermindert. A, D und E kommen alle vor, der Song beginnt und
+endet auf A, also A-Dur. Die Nachbarn von A im Zirkel sind D und E.
+
+<Griffbild akkorde={["A", "D", "E"]} />
+
+<Handhaltung>
+Hier gibt es keine neue Grifftechnik. Spiele die Akkordfolgen mit den Griffen, die du kennst, und achte darauf, die gleiche Anschlagsform
+beizubehalten, damit du den Klang der Tonart hörst und nicht die Unterschiede im Anschlag.
+</Handhaltung>
+
+<Fehlerbild>
+Du suchst die Tonart allein am letzten Akkord und stellst nicht sicher, dass alle anderen Akkorde zur Tonart gehören. Dann
+verwechselst du Songs, die auf V enden, mit Songs in einer anderen Tonart. Prüfe jeden Akkord gegen die Stufenliste.
+</Fehlerbild>
+
+<Merksatz>Eine Quinte hoch heißt ein Kreuz mehr, eine Quinte tief ein B mehr. Die Nachbarn im Zirkel sind IV und V.</Merksatz>
+
+<Uebung bpm={70}>
+**I – IV – V – I in vier Tonarten.** Metronom auf 70, ein Akkord pro Takt, vier Anschläge. Spiele G – C – D – G, dann
+D – G – A – D, dann A – D – E – A, dann C – F – G – C. Sage vor jeder Folge das Vorzeichen der Tonart an und nenne am Ende, welche zwei
+Tonarten neben ihr im Zirkel stehen.
+
+Dann bestimme die Tonart dieser drei Songs aus den Akkorden:
+
+1. G – C – D – G
+2. D – G – A – D
+3. C – F – G – Am – F – C – G
+
+Lösung: G-Dur, D-Dur, C-Dur.
+</Uebung>
+
+<Checkpoint>Du nennst die Vorzeichen von C-, G-, D-, A-, E-, F- und B-Dur ohne Nachschlagen, findest zu einer Tonart ihre zwei Nachbarn im Zirkel und spielst I – IV – V – I in vier Tonarten bei 80 BPM.</Checkpoint>

@@ -1,0 +1,95 @@
+export const meta = { id: "theorie-dur-tonleiter", title: "Dur-Tonleiter", order: 241, requires: null };
+
+import { GriffbrettBild, Tab } from "../game/visuals/index";
+
+<Ziel>Du leitest die Dur-Tonleiter aus Ganz- und Halbtonschritten her und spielst C-Dur auf einer Saite und in einer Lage, im Takt bei 80 BPM.</Ziel>
+
+Ein Bund auf der Gitarre ist ein **Halbtonschritt**, zwei Bünde sind ein **Ganztonschritt**. Mehr
+Maß brauchst du nicht. Eine Dur-Tonleiter hat sieben Töne, und der Abstand zwischen ihnen folgt
+immer demselben Muster:
+
+**ganz – ganz – halb – ganz – ganz – ganz – halb**
+
+Das sind 2, 2, 1, 2, 2, 2, 1 Bünde. Der achte Ton ist wieder der erste, eine Oktave höher.
+
+Warum klappt C-Dur ohne Vorzeichen? Zwischen E und F sowie zwischen H und C liegt genau ein Bund.
+Alle anderen Nachbarn der Töne A bis G haben einen Bund dazwischen. Die Tonleiter C – D – E – F – G – A – H – C
+fällt deshalb von selbst in das Muster.
+
+**C-Dur auf einer Saite.** Auf der A-Saite liegt C im 3. Bund. Von dort gehst du das Muster ab:
+Bund 3, 5, 7, 8, 10, 12, 14, 15. Prüfe die Schritte: 3→5 ganz, 5→7 ganz, 7→8 halb, 8→10 ganz,
+10→12 ganz, 12→14 ganz, 14→15 halb.
+
+<GriffbrettBild
+  bis={15}
+  punkte={[
+    { saite: 5, bund: 3, text: "C" },
+    { saite: 5, bund: 5, text: "D" },
+    { saite: 5, bund: 7, text: "E" },
+    { saite: 5, bund: 8, text: "F" },
+    { saite: 5, bund: 10, text: "G" },
+    { saite: 5, bund: 12, text: "A" },
+    { saite: 5, bund: 14, text: "H" },
+    { saite: 5, bund: 15, text: "C" },
+  ]}
+/>
+
+Das Muster hängt nicht an C. Es gilt von jedem Startbund aus. Beginnst du auf der tiefen E-Saite im
+3. Bund (G), landest du bei Bund 3, 5, 7, 8, 10, 12, 14, 15 und spielst G-Dur. Der siebte Ton ist
+dort Fis, der Ton einen Bund über F. Dafür steht ein Kreuz, und darum ist G-Dur anders als C-Dur nicht
+nur auf weißen Tasten.
+
+**C-Dur in einer Lage.** Auf einer Saite rutscht deine Hand weit. Dieselben acht Töne liegen
+auch nah beieinander, wenn du sie auf drei Saiten verteilst:
+
+<GriffbrettBild
+  bis={4}
+  punkte={[
+    { saite: 5, bund: 3, text: "C" },
+    { saite: 4, bund: 0, text: "D" },
+    { saite: 4, bund: 2, text: "E" },
+    { saite: 4, bund: 3, text: "F" },
+    { saite: 3, bund: 0, text: "G" },
+    { saite: 3, bund: 2, text: "A" },
+    { saite: 2, bund: 0, text: "H" },
+    { saite: 2, bund: 1, text: "C" },
+  ]}
+/>
+
+<Tab
+  titel="C-Dur, eine Oktave"
+  zeilen={[
+    "----------------",
+    "------------0-1-",
+    "--------0-2-----",
+    "--0-2-3---------",
+    "3---------------",
+    "----------------",
+  ]}
+/>
+
+<Handhaltung>
+In dieser Lage gilt: Bund 1 spielt der Zeigefinger, Bund 2 der Mittelfinger, Bund 3 der Ringfinger.
+Jeder Finger bleibt über seinem Bund, auch wenn er gerade nichts greift. Greife nah am Bundstäbchen
+und lass die Töne vollständig ausklingen, bevor du den nächsten anschlägst.
+</Handhaltung>
+
+<Fehlerbild>
+Du spielst die Töne rauf und runter, ohne die Schritte zu hören. Dann bleibt es eine Fingerübung.
+Sprich beim Spielen laut mit: „ganz, ganz, halb“ und so weiter. Wenn die Stufe zwischen E und F oder
+zwischen H und C nicht kleiner klingt als die anderen, spielst du zu schnell darüber.
+</Fehlerbild>
+
+<Merksatz>Ganz, ganz, halb, ganz, ganz, ganz, halb. Dieses Muster macht aus jedem Startton eine Dur-Tonleiter.</Merksatz>
+
+<Uebung bpm={60}>
+**Erst auf einer Saite, dann in der Lage.** Metronom auf 60, ein Ton pro Schlag. Spiele C-Dur auf
+der A-Saite von Bund 3 bis Bund 15 und zurück. Sage dabei zu jedem Schritt „ganz“ oder „halb“.
+Danach dieselbe Tonleiter in der Lage aus dem Tab, ebenfalls auf und ab. Zum Schluss G-Dur auf der
+tiefen E-Saite mit dem gleichen Bundmuster, den siebten Ton (Fis) hörst du als hellen Schritt hinauf zur
+Oktave.
+
+Steigere das Tempo in Fünferschritten, sobald alle Töne sauber klingen.
+</Uebung>
+
+<Checkpoint>Du sagst das Ganz-Halb-Muster auswendig auf, spielst C-Dur auf der A-Saite und in der Lage ohne Fehler und schaffst es sauber bei 80 BPM.</Checkpoint>

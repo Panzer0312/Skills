@@ -46,7 +46,6 @@ export function matches(node: MapNode, filter: MapFilter, term: string): boolean
 /** A started lesson only counts as active while it is chosen or best next. */
 export function statusLabel(node: MapNode, status: LessonStatus = "offen", current: boolean): string {
   if (node.knownSong) return "Bekannter Song";
-  if (!node.available) return "in Vorbereitung";
   return status === "aktiv" && !current ? "begonnen" : status;
 }
 

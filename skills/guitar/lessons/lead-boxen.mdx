@@ -1,0 +1,162 @@
+export const meta = { id: "lead-boxen", title: "Fünf Pentatonik-Boxen", order: 284, requires: null };
+
+import { GriffbrettBild, Tab } from "../game/visuals/index";
+
+<Ziel>Du spielst alle fünf Boxen der A-Moll-Pentatonik auf und ab und wechselst über gemeinsame Töne von einer Box zur nächsten.</Ziel>
+
+Die Pentatonik hat auf dem Hals nicht nur eine Lage. Dieselben fünf Töne A, C, D, E und G liegen in fünf
+Boxen nebeneinander, vom tiefen bis zum hohen Hals. Box 1 kennst du schon. Die anderen vier legen sich wie
+Treppenstufen daneben.
+
+**Fingerregel für jede Box.** Der Zeigefinger greift auf jeder Saite den tieferen Bund. Liegt der zweite
+Ton zwei Bünde höher, nimmst du den Ringfinger, bei drei Bünden den kleinen Finger. In den Bildern stehen
+die Fingernummern: 1 Zeigefinger, 3 Ringfinger, 4 kleiner Finger.
+
+**Box 5** liegt unter Box 1, Bund 2 bis 5. Nach Box 4 folgt Box 5 noch einmal zwölf Bünde höher.
+
+<GriffbrettBild
+  bis={5}
+  punkte={[
+    { saite: 6, bund: 3, text: "1" },
+    { saite: 6, bund: 5, text: "3" },
+    { saite: 5, bund: 3, text: "1" },
+    { saite: 5, bund: 5, text: "3" },
+    { saite: 4, bund: 2, text: "1" },
+    { saite: 4, bund: 5, text: "4" },
+    { saite: 3, bund: 2, text: "1" },
+    { saite: 3, bund: 5, text: "4" },
+    { saite: 2, bund: 3, text: "1" },
+    { saite: 2, bund: 5, text: "3" },
+    { saite: 1, bund: 3, text: "1" },
+    { saite: 1, bund: 5, text: "3" },
+  ]}
+/>
+
+**Box 2**, Bund 7 bis 10:
+
+<GriffbrettBild
+  bis={10}
+  punkte={[
+    { saite: 6, bund: 8, text: "1" },
+    { saite: 6, bund: 10, text: "3" },
+    { saite: 5, bund: 7, text: "1" },
+    { saite: 5, bund: 10, text: "4" },
+    { saite: 4, bund: 7, text: "1" },
+    { saite: 4, bund: 10, text: "4" },
+    { saite: 3, bund: 7, text: "1" },
+    { saite: 3, bund: 9, text: "3" },
+    { saite: 2, bund: 8, text: "1" },
+    { saite: 2, bund: 10, text: "3" },
+    { saite: 1, bund: 8, text: "1" },
+    { saite: 1, bund: 10, text: "3" },
+  ]}
+/>
+
+**Box 3**, Bund 9 bis 13:
+
+<GriffbrettBild
+  bis={13}
+  punkte={[
+    { saite: 6, bund: 10, text: "1" },
+    { saite: 6, bund: 12, text: "3" },
+    { saite: 5, bund: 10, text: "1" },
+    { saite: 5, bund: 12, text: "3" },
+    { saite: 4, bund: 10, text: "1" },
+    { saite: 4, bund: 12, text: "3" },
+    { saite: 3, bund: 9, text: "1" },
+    { saite: 3, bund: 12, text: "4" },
+    { saite: 2, bund: 10, text: "1" },
+    { saite: 2, bund: 13, text: "4" },
+    { saite: 1, bund: 10, text: "1" },
+    { saite: 1, bund: 12, text: "3" },
+  ]}
+/>
+
+**Box 4**, Bund 12 bis 15:
+
+<GriffbrettBild
+  bis={15}
+  punkte={[
+    { saite: 6, bund: 12, text: "1" },
+    { saite: 6, bund: 15, text: "4" },
+    { saite: 5, bund: 12, text: "1" },
+    { saite: 5, bund: 15, text: "4" },
+    { saite: 4, bund: 12, text: "1" },
+    { saite: 4, bund: 14, text: "3" },
+    { saite: 3, bund: 12, text: "1" },
+    { saite: 3, bund: 14, text: "3" },
+    { saite: 2, bund: 13, text: "1" },
+    { saite: 2, bund: 15, text: "3" },
+    { saite: 1, bund: 12, text: "1" },
+    { saite: 1, bund: 15, text: "4" },
+  ]}
+/>
+
+Von tief nach hoch spielst du die Boxen in der Reihenfolge 5, 1, 2, 3, 4. Hier siehst du, wo in jeder Box
+der Grundton A liegt:
+
+- Box 5: tiefe E-Saite Bund 5, G-Saite Bund 2, hohe E-Saite Bund 5
+- Box 1: tiefe E-Saite Bund 5, D-Saite Bund 7, hohe E-Saite Bund 5
+- Box 2: D-Saite Bund 7, H-Saite Bund 10
+- Box 3: A-Saite Bund 12, H-Saite Bund 10
+- Box 4: A-Saite Bund 12, G-Saite Bund 14
+
+**Verbinden.** Benachbarte Boxen teilen Töne. Auf jeder Saite ist der obere Ton einer Box der untere Ton
+der nächsten. Box 1 und Box 2 teilen zum Beispiel Bund 7 auf der G-Saite und Bund 8 auf den zwei hohen
+Saiten. Dort wechselst du die Box, ohne zu springen.
+
+<Tab
+  titel="Von Box 1 nach Box 2 über den gemeinsamen Ton"
+  zeilen={[
+    "-----------8-10-",
+    "------8-10------",
+    "5-7/9-----------",
+    "----------------",
+    "----------------",
+    "----------------",
+  ]}
+/>
+
+Auf der H-Saite siehst du alle Boxen hintereinander: D, E, G, A, C, D.
+
+<Tab
+  titel="Die H-Saite durch alle fünf Boxen"
+  zeilen={[
+    "---------------",
+    "3-5-8-10-13-15-",
+    "---------------",
+    "---------------",
+    "---------------",
+    "---------------",
+  ]}
+/>
+
+<Handhaltung>
+Eine Box, eine Handposition. Beim Wechsel wandert die Hand als Ganzes und bleibt auf dem gemeinsamen Ton
+kurz stehen, dann folgt der nächste Finger. Box 3 und 4 verlangen auf einzelnen Saiten eine Spreizung vom
+Zeigefinger zum kleinen Finger. Die Hand lockert sich dazwischen.
+</Handhaltung>
+
+<Fehlerbild>
+Jede Box klingt einzeln gut, aber im Wechsel stolperst du, weil du den gemeinsamen Ton nicht kennst und
+im falschen Bund landest. Oder du schaust bei jedem Wechsel auf den Hals. Prüfe: Weißt du für Box 1 nach
+Box 2 und für Box 2 nach Box 3, auf welchem Ton du wechselst?
+</Fehlerbild>
+
+<Merksatz>Die Boxen sind eine Treppe, und die gemeinsamen Töne sind die Stufen.</Merksatz>
+
+<Uebung bpm={70}>
+Metronom auf 70, ein Ton pro Achtel.
+
+**Einzeln.** Spiele jede Box zweimal auf und ab, in der Reihenfolge 5, 1, 2, 3, 4. Sage vor dem Start,
+welcher Finger auf welchem Bund beginnt.
+
+**Verbinden.** Spiele die Tabulatur von Box 1 nach Box 2. Dann suche selbst den Wechsel von Box 2 nach Box 3
+und von Box 3 nach Box 4.
+
+**H-Saite.** Spiele die H-Saite von Bund 3 bis Bund 15 und zurück.
+
+Steigere das Tempo in 5er-Schritten. Gemeistert ist die Lektion bei 90 BPM.
+</Uebung>
+
+<Checkpoint>Du spielst bei 70 BPM jede Box auf und ab und wechselst auf der H-Saite durch alle fünf Boxen, ohne auf die Hand zu schauen.</Checkpoint>

@@ -2,8 +2,6 @@ import type { MapNode, Tips } from "@skills/core";
 import type { ReactNode } from "react";
 import { spriteUrl, type SpriteName } from "../assets.js";
 
-export const MORE_COMING = "Alle fertigen Lektionen auf dem Hauptweg sind geschafft. Weitere folgen.";
-
 function Tip({ sprite, title, children }: { sprite: SpriteName; title: string; children: ReactNode }) {
   return (
     <div className="tips-entry">
@@ -38,7 +36,6 @@ export function TipsBoard({
           <p>{best.reason}</p>
         </Tip>
       ) : null}
-      {tips.moreComing ? <p>{MORE_COMING}</p> : null}
       {quick ? (
         <Tip sprite="ruby" title={quick.refine ? "Verfeinern" : "Schneller Erfolg"}>
           <button type="button" className="map-text-button" onClick={() => onSelect(quick.node.id)}>

@@ -40,7 +40,6 @@ const CHOSEN = ["09-powerchords", "11-pentatonik"];
 
 const nodeOf = (id: string) => gameContent.nodes.find((node) => node.id === id)!;
 const titleOf = (id: string) => nodeOf(id).title;
-const planned = gameContent.nodes.find((node) => !node.available && !node.knownSong && node.techniqueId)!;
 const quick = gameContent.nodes.find((node) => node.quick)!;
 
 function json(body: unknown, status = 200) {
@@ -286,15 +285,6 @@ describe("LessonPanel", () => {
     expect(screen.queryByText(/Dir fehlen noch Grundlagen/)).not.toBeInTheDocument();
   });
 
-  it("names no missing basics for a parent that is not written yet", async () => {
-    const id = "13-theorie";
-    expect(nodeOf(nodeOf(id).parent!).available).toBe(false);
-    serve({});
-    renderMap(`/hafen/${id}`);
-    await within(await panel()).findByRole("link", { name: "Lektion öffnen" });
-    expect(screen.queryByText(/Dir fehlen noch Grundlagen/)).not.toBeInTheDocument();
-  });
-
   it("exempts quick wins and known songs from the warning", async () => {
     const known = gameContent.nodes.find((node) => node.knownSong && node.parent !== null)!;
     expect(quick.parent).not.toBeNull();
@@ -423,20 +413,6 @@ describe("LessonPanel", () => {
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   });
 
-  it("shows in Vorbereitung without actions for an unwritten lesson", async () => {
-    patchNode(planned.id, { targetSong: BARDS });
-    serve({});
-    renderMap(`/hafen/${planned.id}`);
-    const box = await panel();
-    expect(await within(box).findByText("In Vorbereitung")).toBeInTheDocument();
-    expect(box).toHaveTextContent(planned.description);
-    expect(within(box).queryByRole("link")).not.toBeInTheDocument();
-    expect(within(box).queryByRole("slider")).not.toBeInTheDocument();
-    for (const name of ["Als Quest annehmen", "Pausieren", "Als Zielsong setzen"]) {
-      expect(within(box).queryByRole("button", { name })).not.toBeInTheDocument();
-    }
-  });
-
   it("shows a known song without actions", async () => {
     const song = gameContent.nodes.find((node) => node.knownSong)!;
     serve({});
@@ -444,7 +420,6 @@ describe("LessonPanel", () => {
     const box = await panel();
     expect(await within(box).findByText("Bekannter Song")).toBeInTheDocument();
     expect(box).toHaveTextContent(song.description);
-    expect(within(box).queryByText("In Vorbereitung")).not.toBeInTheDocument();
     expect(within(box).queryByRole("link")).not.toBeInTheDocument();
     expect(within(box).queryByRole("slider")).not.toBeInTheDocument();
     expect(within(box).queryByRole("button", { name: "Als Quest annehmen" })).not.toBeInTheDocument();
@@ -748,7 +723,7 @@ describe("NavPane", () => {
     serve({});
     renderMap();
     const pane = await nav();
-    for (const entry of ["Leicht, 1 bis 3", "Mittel, 4 bis 6", "Schwer, 7 bis 10", "Schneller Erfolg", "In Vorbereitung", "Als Quest angenommen"]) {
+    for (const entry of ["Leicht, 1 bis 3", "Mittel, 4 bis 6", "Schwer, 7 bis 10", "Schneller Erfolg", "Als Quest angenommen"]) {
       expect(within(pane).getByText(new RegExp(entry))).toBeInTheDocument();
     }
   });
@@ -764,7 +739,7 @@ describe("Das erste Jahr", () => {
     return details;
   };
 
-  it("lists every road step in road order with title and months, planned ones included", async () => {
+  it("lists every road step in road order with title and months", async () => {
     serve({});
     renderMap();
     const list = await year();
@@ -775,9 +750,7 @@ describe("Das erste Jahr", () => {
       expect(rows[i]).toHaveTextContent(titleOf(step.lessonId));
       expect(rows[i]).toHaveTextContent(from === to ? `Monat ${from}` : `Monate ${from}–${to}`);
     });
-    expect(gameContent.road.some((step) => step.questId === null)).toBe(true);
-    const plannedStep = gameContent.road.find((step) => step.questId === null)!;
-    expect(rows[gameContent.road.indexOf(plannedStep)]).toHaveTextContent("in Vorbereitung");
+    expect(list).not.toHaveTextContent("in Vorbereitung");
   });
 
   it("groups the steps by quarter", async () => {
@@ -808,11 +781,11 @@ describe("Das erste Jahr", () => {
     });
   });
 
-  it("selects a step on the map, a planned one too", async () => {
+  it("selects a step on the map", async () => {
     serve({});
     renderMap();
     const list = await year();
-    const step = gameContent.road.find((entry) => entry.questId === null)!;
+    const step = gameContent.road[gameContent.road.length - 1]!;
     await userEvent.click(within(list).getByRole("button", { name: new RegExp(titleOf(step.lessonId)) }));
     expect(await within(await panel()).findByRole("heading", { name: titleOf(step.lessonId) })).toBeInTheDocument();
     expect(mapNode(titleOf(step.lessonId))).toHaveAttribute("aria-pressed", "true");
@@ -856,19 +829,14 @@ describe("TipsBoard", () => {
     expect(board).toHaveTextContent("Zwei Nebenwege reichen. Bring erst einen davon zu Ende.");
   });
 
-  it("shows the coming-soon note when written lessons are finished", async () => {
-    const lessons = Object.fromEntries(
-      gameContent.road
-        .filter((step) => step.questId !== null)
-        .map((step) => [step.lessonId, "gelernt" as LessonStatus]),
-    );
+  it("shows no best next and no coming-soon note once the road is finished", async () => {
+    const lessons = Object.fromEntries(gameContent.road.map((step) => [step.lessonId, "gelernt" as LessonStatus]));
     serve({ lessons });
     renderMap();
     const board = await tips();
-    expect(
-      await within(board).findByText("Alle fertigen Lektionen auf dem Hauptweg sind geschafft. Weitere folgen."),
-    ).toBeInTheDocument();
+    await within(board).findByText("Bleib auf Kurs");
     expect(within(board).queryByText("Bester nächster Schritt")).not.toBeInTheDocument();
+    expect(board).not.toHaveTextContent("Weitere folgen");
   });
 });
 

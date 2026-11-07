@@ -1,0 +1,94 @@
+export const meta = { id: "rhythmus-funk", title: "Funk-Muting", order: 206, requires: null };
+
+import { Griffbild, GriffbrettBild, RhythmusRaster } from "../game/visuals/index";
+
+<Ziel>Du erzeugst mit der Greifhand gedämpfte Scratch-Schläge, setzt kurze Akkord-Stöße auf den oberen Saiten und hältst dabei die Sechzehntel-Hand im Fluss. Gemeistert ist die Lektion bei 90 BPM.</Ziel>
+
+Funk lebt vom Gegensatz: Ein Akkord klingt nur einen Augenblick, dazwischen rauscht ein trockenes „tschk". Beides
+kommt aus der Greifhand, die Anschlagshand läuft wie in „Sechzehntel-Grooves" ununterbrochen weiter.
+
+**Scratch.** Du greifst den Akkord, löst aber den Druck, bis die Finger die Saiten nur noch berühren,
+ohne sie ganz aufs Griffbrett zu drücken. Dann schlägst du an: Statt Ton hörst du ein kurzes, trockenes
+Geräusch. Im Raster steht dafür ein x.
+
+**Stoß.** Für einen Akkord-Stoß drückst du die Saiten fest, schlägst an und lässt den Druck sofort wieder
+los. Die Finger bleiben dabei auf den Saiten liegen, der Akkord klingt nur kurz. Der Stoß trifft nur die
+oberen drei oder vier Saiten, das klingt schlank und scharf.
+
+Der Am-Stoß: D-Saite Bund 2, G-Saite Bund 2, H-Saite Bund 1, die hohe E-Saite klingt leer. Die tiefen Saiten lässt du weg.
+
+<GriffbrettBild
+  bis={3}
+  punkte={[
+    { saite: 4, bund: 2, text: "2" },
+    { saite: 3, bund: 2, text: "3" },
+    { saite: 2, bund: 1, text: "1" },
+    { saite: 1, bund: 0, text: "0" },
+  ]}
+/>
+
+Auch D hat nur die oberen vier Saiten: D-Saite leer, G-Saite Bund 2, H-Saite Bund 3, hohe E-Saite Bund 2. Mit Am und D hast du
+zwei Stöße, die dieselben vier Saiten treffen. Das macht den Wechsel einfach.
+
+<Griffbild akkorde={["Am", "D"]} />
+
+**Muster 1: nur Scratch.** Die Hand pendelt in Sechzehnteln und trifft jede Zelle gedämpft. Das ist die Basis.
+
+<RhythmusRaster
+  muster="xxxxxxxxxxxxxxxx"
+  zaehlzeiten={["1", "e", "+", "a", "2", "e", "+", "a", "3", "e", "+", "a", "4", "e", "+", "a"]}
+/>
+
+**Muster 2: Stoß auf jeder Zahl.** Der Stoß sitzt auf 1, 2, 3 und 4, dazwischen kratzt es.
+
+<RhythmusRaster
+  muster="DxxxDxxxDxxxDxxx"
+  zaehlzeiten={["1", "e", "+", "a", "2", "e", "+", "a", "3", "e", "+", "a", "4", "e", "+", "a"]}
+/>
+
+**Muster 3: Stöße im Dreier-Abstand.** Die Stöße liegen immer drei Zellen auseinander: auf der 1, auf dem „a" der 1, auf dem „+" der 2,
+auf dem „e" der 3, auf der 4 und auf dem „a" der 4. Das letzte „a" schiebt den Groove in den nächsten Takt.
+
+<RhythmusRaster
+  muster="DxxUxxDxxUxxDxxU"
+  zaehlzeiten={["1", "e", "+", "a", "2", "e", "+", "a", "3", "e", "+", "a", "4", "e", "+", "a"]}
+/>
+
+**Muster 4: mit Pausen.** Zwischen den Scratches liegen Leerschläge, die Hand fährt vorbei. Stoß auf der 1 und der 3, dazu
+ein Aufschlag-Stoß auf dem „a" der 2 und dem „a" der 4.
+
+<RhythmusRaster
+  muster="D-xxx-xUD-xxx-xU"
+  zaehlzeiten={["1", "e", "+", "a", "2", "e", "+", "a", "3", "e", "+", "a", "4", "e", "+", "a"]}
+/>
+
+<Handhaltung>
+Die Greifhand wechselt zwischen Druck und Berührung, ohne von den Saiten zu gehen. Der Daumen bleibt hinter dem Hals.
+Die Anschlagshand pendelt locker aus dem Handgelenk und schlägt dicht an den Saiten, mit flachem Pick. Der Stoß kommt vom
+Druck der Greifhand, nicht von einem stärkeren Anschlag.
+</Handhaltung>
+
+<Fehlerbild>
+Der Scratch klingt nach Ton, weil die Greifhand zu fest drückt. Oder die Hand hebt ganz ab, und es entsteht kein „tschk",
+sondern Stille. Auch der Stoß bleibt oft zu lang, weil der Druck nicht sofort nachlässt. Prüfe: Spiele nur Scratch und
+höre auf die Tonhöhe. Du darfst keine hören. Dann Stoß und Scratch im Wechsel: Der Stoß muss danach sofort verstummen.
+</Fehlerbild>
+
+<Merksatz>Der Druck der Greifhand macht den Klang. Die Anschlagshand läuft einfach weiter.</Merksatz>
+
+<Uebung bpm={60}>
+Metronom auf 60, ein Klick pro Zahl, laut in Sechzehnteln mitzählen.
+
+**Scratch allein.** Greife Am und spiele Muster 1 vier Takte lang. Kein Ton darf klingen.
+
+**Stöße.** Spiele die Muster 2, 3 und 4 je vier Takte über Am, danach dieselbe Reihe über D.
+
+**Wechsel.** Muster 3 alle vier Takte zwischen Am und D. Beim Wechsel rutscht die Hand auf die vier Saiten des neuen
+Akkords und bleibt auf den Saiten.
+
+Steigere das Tempo in kleinen Schritten. Gemeistert ist die Lektion bei 90 BPM.
+</Uebung>
+
+<Hinweis>Funk ist Präzision, keine Lautstärke. Spiele leise, bis Scratch und Stoß sauber getrennt sind.</Hinweis>
+
+<Checkpoint>Du spielst Muster 4 acht Takte lang bei 60 BPM über Am: Der Scratch klingt tonlos, der Stoß klingt kurz, die Hand stoppt nie.</Checkpoint>

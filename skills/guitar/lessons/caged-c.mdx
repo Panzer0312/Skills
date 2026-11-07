@@ -1,0 +1,42 @@
+export const meta = { id: "caged-c", title: "C-Form", order: 306, requires: null };
+
+import { Griffbild, GriffbrettBild } from "../game/visuals/index";
+
+<Ziel>Du erkennst das offene C als verschiebbare Form und findest ihren Grundton an der A-Saite. Dein Ziel: sauberer Wechsel bei 60 BPM.</Ziel>
+
+Die dritte Form ist das offene C-Dur. Sie ist die ungewöhnlichste: Der Grundton liegt auf dem höchsten Bund, die anderen Griffe liegen tiefer am Hals.
+
+<Griffbild akkorde={["C"]} />
+
+Der Grundton liegt auf der **A-Saite**. Beim offenen C ist das Bund 3. Verschiebst du die Form, bleibt dieser Finger auf dem Grundton, und die anderen Finger greifen relativ zu ihm: die D-Saite einen Bund tiefer, die G-Saite drei Bünde tiefer, die H-Saite zwei Bünde tiefer, die e-Saite drei Bünde tiefer als der Grundton.
+
+D-Dur als C-Form, Grundton auf der A-Saite Bund 5 (x54232):
+
+<GriffbrettBild
+  bis={6}
+  punkte={[
+    { saite: 5, bund: 5, text: "4" },
+    { saite: 4, bund: 4, text: "3" },
+    { saite: 3, bund: 2, text: "1" },
+    { saite: 2, bund: 3, text: "2" },
+    { saite: 1, bund: 2, text: "1" },
+  ]}
+/>
+
+Die Töne von unten nach oben: D, F#, A, D, F#. Der Ton auf der A-Saite verrät den Namen: Bund 3 C, Bund 5 D, Bund 7 E.
+
+<Handhaltung>
+Die Hand sitzt tief am Hals, der Daumen hinter dem Hals nahe der Mitte. Der Zeigefinger liegt flach über G- und e-Saite im zweiten Bund. Die H-Saite greift der Mittelfinger einen Bund höher. Der Ringfinger greift die D-Saite, der kleine Finger die A-Saite. Die Finger sind weit gespreizt, daher ist diese Form anfangs unbequem.
+</Handhaltung>
+
+<Fehlerbild>
+Du streichst die tiefe E-Saite mit an. Sie gehört nicht zur Form und klingt falsch. Das zweite Fehlerbild: der Finger auf der A-Saite wird vergessen oder zu leicht gespielt, und der Grundton fehlt.
+</Fehlerbild>
+
+<Merksatz>C-Form: Der Name steht auf der A-Saite, die tiefe E-Saite bleibt stumm, die Finger greifen nach unten.</Merksatz>
+
+<Uebung bpm={60}>
+Metronom auf 60. Vier Schläge offenes C, vier Schläge D (Bund 5), vier Schläge E (Bund 7), dann zurück. Stelle die Finger einzeln auf, bevor du anschlägst. Erst wenn die Form ruhig sitzt, wechsle im Takt.
+</Uebung>
+
+<Checkpoint>Du wechselst bei 60 BPM zwischen C, D und E in C-Form, alle fünf Saiten klingen, und du nennst jeden Namen von der A-Saite.</Checkpoint>

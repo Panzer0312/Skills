@@ -1,0 +1,73 @@
+export const meta = { id: "theorie-analyse", title: "Songs analysieren", order: 253, requires: null };
+
+import { Griffbild } from "../game/visuals/index";
+
+<Ziel>Du schreibst die Akkorde eines Songs als römische Stufen auf und erkennst, welche Folge sich wiederholt.</Ziel>
+
+Ein Akkordblatt zeigt dir Buchstaben: C, G, Am, F. Das sagt dir, was du greifen sollst, aber nicht,
+wie der Song gebaut ist. Mit Stufen siehst du den Bauplan, und derselbe Plan trägt dich in jede
+andere Tonart. Du analysierst hier nur die Akkorde, nicht die Melodie.
+
+**Schritt 1: Tonart bestimmen.** Wie in „Tonarten und Quintenzirkel" suchst du die Tonart, in der alle
+Akkorde des Songs zusammen vorkommen. Zur Hilfe die Stufenakkorde der häufigsten Gitarren-Tonarten
+(I, ii, iii, IV, V, vi, vii°):
+
+- C-Dur: C, Dm, Em, F, G, Am, Hdim
+- G-Dur: G, Am, Hm, C, D, Em, F#dim
+- D-Dur: D, Em, F#m, G, A, Hm, C#dim
+- A-Dur: A, Hm, C#m, D, E, F#m, G#dim
+
+Passen die Akkorde in mehrere Tonarten, zum Beispiel C, G, Am und Em in C-Dur und G-Dur, dann entscheidet,
+bei welchem Akkord der Song zur Ruhe kommt. Das ist die Stufe I.
+
+**Schritt 2: Stufen aufschreiben.** Schreibe unter jeden Akkord seine Stufe. Dur-Akkorde groß, Moll-Akkorde
+klein, wie in „Theorie am Griffbrett". Ein Beispiel in D-Dur:
+
+<Griffbild akkorde={["D", "A", "Bm", "G"]} />
+
+D ist I, A ist V, Hm ist vi und G ist IV. (Das Griffbild schreibt Hm englisch als Bm.) Die Folge heißt also I–V–vi–IV.
+
+**Schritt 3: Wiederholungen markieren.** Setze Klammern um Gruppen, die mehrfach vorkommen. Die meisten
+Songs bestehen aus zwei oder drei solchen Gruppen. Benenne sie: Strophe, Refrain, Zwischenspiel. Ein Song
+mit einer Folge in der Strophe und einer anderen im Refrain besitzt damit seinen Bauplan.
+
+**Schritt 4: Gegenprobe.** Übertrage die Folge in eine andere Tonart. I–V–vi–IV in C-Dur ist C – G – Am – F,
+in G-Dur ist es G – D – Em – C. Klingt es gleich, stimmt deine Analyse.
+
+**Passt ein Akkord nirgends?** Dann schreibe ein Fragezeichen statt einer Stufe. Das ist kein Fehler.
+Solche Akkorde sind Farben von außerhalb der Tonart und gehören zu den Dingen, die du später lernst.
+
+<Handhaltung>
+Spiele die Folge beim Analysieren immer mit. Greife jeden Akkord, sage laut seine Stufe und schlage
+ihn viermal an. Die Stufe muss sich mit dem Klang verbinden, nicht nur mit dem Buchstaben auf dem
+Papier.
+</Handhaltung>
+
+<Fehlerbild>
+Du bestimmst die Tonart nach dem ersten Akkord und nicht nach dem Ruhepunkt. Viele Songs beginnen
+nicht auf der Stufe I. Wer sich dann auf den ersten Akkord verlässt, bekommt alle Stufen falsch, und
+die Folgen sehen unlogisch aus. Prüfe: Auf welchem Akkord könnte der Song aufhören?
+</Fehlerbild>
+
+<Merksatz>Erst die Tonart, dann die Stufen, dann die Wiederholungen.</Merksatz>
+
+<Uebung>
+**Drei Folgen lesen.** Schreibe zu jeder Folge die Tonart und die Stufen auf, dann spiele sie:
+
+1. C – Am – F – G
+2. D – G – D – A
+3. A – F#m – D – E
+
+**Eigene Songs.** Nimm drei Songs aus deinem Liederbuch, die nur Dur-Akkorde oder Dur-Akkorde mit Moll-Akkorden
+der Tonart enthalten. Bestimme für jeden die Tonart, schreibe die Stufen unter jede Zeile und markiere die
+Wiederholungen. Welche Folge kommt in zwei Songs vor?
+
+**Gegenprobe.** Übertrage eine gefundene Folge in zwei andere Tonarten und spiele sie.
+
+Lösungen zur ersten Aufgabe: 1 ist C-Dur, I–vi–IV–V. 2 ist D-Dur, I–IV–I–V. 3 ist A-Dur, I–vi–IV–V.
+</Uebung>
+
+<Hinweis>Die Folge I–vi–IV–V und die Folge I–V–vi–IV stecken in sehr vielen Songs. Wer sie auf Anhieb
+erkennt, wird beim Heraushören neuer Songs deutlich schneller.</Hinweis>
+
+<Checkpoint>Du analysierst drei eigene Songs mit Tonart, Stufen und markierten Wiederholungen, und deine Gegenprobe in einer anderen Tonart klingt gleich.</Checkpoint>

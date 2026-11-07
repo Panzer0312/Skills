@@ -246,7 +246,7 @@ describe("game places", () => {
     serve({});
     renderGame("/taverne");
     expect(await screen.findByRole("heading", { name: "Empfehlungen" })).toBeInTheDocument();
-    const lesson = screen.getByRole("link", { name: "Power Chords" });
+    const lesson = screen.getByRole("link", { name: "Power Chords und Palm Mute" });
     expect(lesson).toHaveAttribute("href", "/vollbild/guitar/spiel/hafen/09-powerchords");
     const group = lesson.closest("li") as HTMLElement;
     expect(within(group).getByText(/Paranoid/)).toBeInTheDocument();

@@ -1,0 +1,62 @@
+export const meta = { id: "rhythmus-sechzehntel", title: "Sechzehntel-Grooves", order: 205, requires: null };
+
+import { RhythmusRaster } from "../game/visuals/index";
+
+<Ziel>Du zählst „1 e + a 2 e + a" laut mit, hältst die Hand in Sechzehnteln in Bewegung und spielst drei lockere Grooves. Gemeistert ist die Lektion bei 90 BPM.</Ziel>
+
+Sechzehntel teilen jeden Schlag in vier gleiche Teile. Gezählt: „1 e + a, 2 e + a, 3 e + a, 4 e + a". Das „+" kennst du schon, es liegt in
+der Mitte des Schlags. Neu sind das „e" und das „a" dazwischen. Ein Takt hat damit sechzehn Zellen.
+
+Die Hand folgt derselben Regel wie bei Achteln, nur doppelt so dicht: Auf der Zahl und auf dem „+" geht sie
+abwärts, auf dem „e" und dem „a" aufwärts. Das Pendel läuft einfach schneller, und der Ausschlag wird
+kleiner.
+
+**Muster 1: alle sechzehn.** Hier triffst du jede Zelle. So lernt die Hand das schnelle Pendel.
+
+<RhythmusRaster
+  muster="DUDUDUDUDUDUDUDU"
+  zaehlzeiten={["1", "e", "+", "a", "2", "e", "+", "a", "3", "e", "+", "a", "4", "e", "+", "a"]}
+/>
+
+**Muster 2: Zahl, „+" und „a".** Du lässt das „e" aus. Die Hand fährt dort leer aufwärts. Pro Schlag
+schlägst du dreimal an: abwärts, abwärts, aufwärts.
+
+<RhythmusRaster
+  muster="D-DUD-DUD-DUD-DU"
+  zaehlzeiten={["1", "e", "+", "a", "2", "e", "+", "a", "3", "e", "+", "a", "4", "e", "+", "a"]}
+/>
+
+**Muster 3: ein lockerer Groove.** Schlag 1 und 3 sind licht: Nur die Zahl und das „+" werden angeschlagen. Schlag 2 und 4
+sind voll, alle vier Sechzehntel klingen. Das gibt dem Takt Luft und Schub.
+
+<RhythmusRaster
+  muster="D-D-DUDUD-D-DUDU"
+  zaehlzeiten={["1", "e", "+", "a", "2", "e", "+", "a", "3", "e", "+", "a", "4", "e", "+", "a"]}
+/>
+
+<Handhaltung>
+Je schneller das Pendel, desto kleiner die Bewegung. Sie kommt aus dem lockeren Handgelenk, nicht aus dem
+Ellbogen. Der Pick streift die Saiten nur flach an, er taucht nicht tief ein. Die Zahlen schlägst du etwas
+kräftiger an als „e" und „a", die leise und leicht bleiben und oft nur die oberen Saiten treffen.
+</Handhaltung>
+
+<Fehlerbild>
+Der Arm verkrampft, weil der Ausschlag zu groß bleibt. Oder das Tempo kippt: Die Hand holt bei den Leerschlägen kurz Luft und
+kommt zu spät zurück. Prüfe: Zähle laut mit und achte darauf, dass jede Zahl abwärts fällt. Wenn der Unterarm
+hart wird, nimm das Tempo zurück und lockere die Schulter.
+</Fehlerbild>
+
+<Merksatz>Dasselbe Pendel, nur dichter. Die Hand läuft immer, die Muster entscheiden, wo sie trifft.</Merksatz>
+
+<Uebung bpm={60}>
+Metronom auf 60, ein Klick pro Zahl, laut mitzählen. Greife Em.
+
+Muster 1 vier Takte lang, dann Muster 2 vier Takte, dann Muster 3 vier Takte. Danach dieselbe Reihe über Am. Zum Schluss
+wechselst du Em → Am alle vier Takte, ohne dass die Hand stoppt.
+
+Steigere das Tempo in kleinen Schritten, wenn Zählen und Hand zusammen stimmen. Gemeistert ist die Lektion bei 90 BPM.
+</Uebung>
+
+<Hinweis>Sechzehntel ermüden den Unterarm schnell. Spiele in Runden von einer Minute und mach dazwischen 20 Sekunden Pause.</Hinweis>
+
+<Checkpoint>Du spielst Muster 3 acht Takte lang bei 60 BPM über Em, zählst laut mit, und die Hand stoppt kein einziges Mal.</Checkpoint>

@@ -332,11 +332,6 @@
   border-radius: 50%;
 }
 
-.map-swatch.is-planned {
-  background: #77756c;
-  border-style: dashed;
-}
-
 .map-swatch.is-chosen {
   background: #35592f;
   box-shadow: inset 0 0 0 2px #fff2c9;

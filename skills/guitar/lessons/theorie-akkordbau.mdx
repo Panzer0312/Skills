@@ -1,0 +1,71 @@
+export const meta = { id: "theorie-akkordbau", title: "Akkorde selbst bauen", order: 243, requires: null };
+
+import { Griffbild, GriffbrettBild } from "../game/visuals/index";
+
+<Ziel>Du baust Dur-, Moll- und verminderte Dreiklänge aus Terzen selbst zusammen und erklärst, warum ein Power Chord weder Dur noch Moll ist.</Ziel>
+
+Ein Dreiklang ist ein Grundton mit zwei Terzen darüber. Du schichtest also **Terz auf Terz**. Auf
+der C-Dur-Tonleiter heißt das: nimm C, lass D weg, nimm E, lass F weg, nimm G. Das ist C – E – G.
+
+Was den Akkord zu Dur oder Moll macht, sind die Größen der beiden Terzen. Zähle in Halbtönen
+(Bünden):
+
+- **Dur:** große Terz (4) plus kleine Terz (3). Die Quinte liegt dann bei 7. Beispiel C – E – G.
+- **Moll:** kleine Terz (3) plus große Terz (4). Die Quinte bleibt bei 7. Beispiel A – C – E.
+- **Vermindert:** kleine Terz (3) plus kleine Terz (3), also die Quinte bei nur 6. Beispiel H – D – F.
+
+Die mittlere Note, die Terz, entscheidet: ein Bund höher ist Dur (hell), ein Bund tiefer ist Moll
+(dunkel). Nur diese eine Note ändert sich.
+
+**Auf der Gitarre findest du es in Griffen, die du schon kennst.** E-Dur und E-Moll:
+die Terz ist Gis (E-Dur) oder G (E-Moll). Im Griff ist es die G-Saite, Bund 1 oder leer. A-Dur und A-Moll: die
+Terz ist Cis (A-Dur) oder C (A-Moll), auf der H-Saite im 2. oder im 1. Bund.
+
+<Griffbild akkorde={["E", "Em", "A", "Am"]} />
+
+Der verminderte Dreiklang H – D – F lässt sich auf drei Saiten greifen:
+
+<GriffbrettBild
+  bis={8}
+  punkte={[
+    { saite: 3, bund: 7, text: "D" },
+    { saite: 2, bund: 6, text: "F" },
+    { saite: 1, bund: 7, text: "H" },
+  ]}
+/>
+
+**Der Power Chord hat keine Terz.** Er besteht nur aus Grundton und Quinte (7 Halbtöne). Ohne Terz
+sagt er weder „Dur“ noch „Moll“. Darum passt derselbe Griff zu beiden und klingt verzerrt klar.
+C-Power-Chord: Grundton C auf der A-Saite im 3. Bund, Quinte G auf der D-Saite im 5. Bund.
+
+<GriffbrettBild
+  bis={5}
+  punkte={[
+    { saite: 5, bund: 3, text: "C" },
+    { saite: 4, bund: 5, text: "G" },
+  ]}
+/>
+
+<Handhaltung>
+Beim Wechsel von E auf Em oder von A auf Am bewegt sich nur ein Finger um einen Bund oder lässt ganz los.
+Alle anderen Finger bleiben liegen. Spüre diese eine Bewegung bewusst: sie ist der ganze Unterschied zwischen
+hell und dunkel.
+</Handhaltung>
+
+<Fehlerbild>
+Du lernst die Akkorde als Fingerbilder und weißt nicht, welcher Ton den Unterschied macht. Dann kannst du
+keinen neuen Akkord herleiten. Prüfe: kannst du für jeden Griff sagen, welche Saite die Terz spielt, und
+wie sie klingt, wenn du sie einen Bund verschiebst?
+</Fehlerbild>
+
+<Merksatz>Grundton und Quinte stehen fest. Die Terz macht den Akkord: groß ist Dur, klein ist Moll.</Merksatz>
+
+<Hinweis>Legst du noch eine dritte Terz obenauf, entsteht ein Vierklang. A – C – E plus G ergibt Am7.</Hinweis>
+
+<Uebung bpm={60}>
+**Terz tauschen.** Metronom auf 60, ein Akkord pro Takt, vier Anschläge. Spiele E, dann Em, dann E, dann Em,
+je viermal. Sage dabei laut, welche Terz du spielst: „Gis, hell“ bei E und „G, dunkel“ bei Em. Danach dasselbe mit A und Am. Zum Schluss: Spiele den Power Chord C auf A- und D-Saite und höre,
+dass er zu beiden passt.
+</Uebung>
+
+<Checkpoint>Du nennst für Dur, Moll und vermindert die Terzabfolge (4+3, 3+4, 3+3), baust C, Am und Hdim daraus selbst auf und wechselst E↔Em und A↔Am im Takt bei 80 BPM.</Checkpoint>

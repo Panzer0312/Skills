@@ -1,0 +1,78 @@
+export const meta = { id: "finger-akkordmelodie", title: "Akkordmelodie", order: 226, requires: null };
+
+import { Griffbild, Tab } from "../game/visuals/index";
+
+<Ziel>Du spielst eine kleine Melodie auf den hohen Saiten, während Bass und Akkord darunter klingen.</Ziel>
+
+Bisher hat die Anschlagshand Akkordtöne gezupft. Bei der Akkordmelodie legt sie eine Melodie auf die oberste Saite, und darunter trägt der Daumen den Bass. Das Stück klingt dann auch ohne Begleitung vollständig.
+
+Die Melodie ist eigen, vier Takte lang, und stammt aus keinem Lied. Sie liegt auf der hohen e-Saite und der H-Saite und passt zu den Griffen C, Am und G.
+
+<Griffbild akkorde={["C", "Am", "G"]} />
+
+**Wie die Töne entstehen.** Die Greifhand hält den Akkord. Die Melodietöne sind meist Töne des Akkords: leere Saiten oder Töne, die ein Finger ohnehin greift. Für den Rest nimmst du den kleinen Finger.
+
+- Hohe e-Saite leer: E. Bund 3: G.
+- H-Saite leer: H. Bund 1: C.
+- Über C und Am liegt der kleine Finger auf der hohen e-Saite, Bund 3. Das ist ein G.
+
+**Der Aufbau.** Pro Takt gibt es vier Melodietöne, einen pro Schlag. Auf Schlag 1 und 3 spielt der Daumen zusätzlich einen Basston, er klingt gleichzeitig mit der Melodie. Die Melodie spielt der Ringfinger auf der e-Saite und der Mittelfinger auf der H-Saite. Takt 4 hat nur drei Melodietöne und endet auf einer Pause.
+
+Die Melodie, Takt für Takt:
+
+- C: E, G, E, C
+- Am: C, E, G, E
+- G: H, G, H, G
+- C: G, E, C, Pause
+
+Die Basstöne unter den Takten:
+
+- C: A-Saite Bund 3, auf Schlag 3 D-Saite Bund 2.
+- Am: A-Saite leer, auf Schlag 3 D-Saite Bund 2.
+- G: tiefe E-Saite Bund 3, auf Schlag 3 A-Saite Bund 2.
+
+<Tab
+  titel="Akkordmelodie, Takte 1 und 2: C, Am"
+  zeilen={[
+    "0---3---0-------|----0---3---0---",
+    "------------1---|1---------------",
+    "----------------|----------------",
+    "--------2-------|--------2-------",
+    "3---------------|0---------------",
+    "----------------|----------------",
+  ]}
+/>
+
+<Tab
+  titel="Akkordmelodie, Takte 3 und 4: G, C"
+  zeilen={[
+    "----3-------3---|3---0-----------",
+    "0-------0-------|--------1-------",
+    "----------------|----------------",
+    "----------------|--------2-------",
+    "--------2-------|3---------------",
+    "3---------------|----------------",
+  ]}
+/>
+
+<Handhaltung>
+Die Greifhand hält den Akkord, der kleine Finger greift die Melodietöne zusätzlich. Das braucht Spreizung: Lass den Daumen hinter dem Hals locker und den Handballen vom Hals weg. Die Anschlagshand zupft die Melodie mit dem Finger deutlich lauter als den Bass. Der Daumen spielt leiser, damit die Melodie führt.
+</Handhaltung>
+
+<Fehlerbild>
+Der Bass übertönt die Melodie, oder der kleine Finger berührt die Nachbarsaite und dämpft sie. Ein dritter Fehler: Du spielst die Melodie gleichmäßig laut, und sie geht im Akkord unter. Prüfe: Spiele zuerst nur die Melodie, nur die Finger, ohne Bass. Hörst du sie als Tonfolge, kommt der Bass dazu, und er bleibt leiser.
+</Fehlerbild>
+
+<Merksatz>Die Melodie führt, der Bass trägt. Beide leise genug, damit der Akkord klingt.</Merksatz>
+
+<Uebung bpm={60}>
+Metronom auf 60, ein Klick pro Schlag, ein Schlag entspricht zwei Achteln.
+
+- Zwei Minuten: nur die Melodie, einstimmig, ohne Bass.
+- Zwei Minuten: Melodie und Bass auf Schlag 1 und 3.
+- Zwei Minuten: das ganze Stück, vier Takte, ohne Pause wiederholt.
+
+Steigere das Tempo erst, wenn die Melodie klar vor dem Bass steht.
+</Uebung>
+
+<Checkpoint>Du spielst alle vier Takte bei 70 BPM, und die Melodie ist klar lauter als der Bass.</Checkpoint>

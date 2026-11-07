@@ -86,14 +86,13 @@ test("a third side lesson asks which one to pause", async ({ page }) => {
   expect([...state.chosenLessons].sort()).toEqual(["11-pentatonik", "finger-daumen"]);
 });
 
-test("an unwritten lesson offers no way in", async ({ page }) => {
-  await reachMap(page);
-  await page.getByLabel("Lektion suchen").fill("Synkopen");
-  await page.getByRole("button", { name: /Synkopen/ }).first().click();
+test("a late lesson opens from the map", async ({ page }) => {
+  await reachMap(page, `${HARBOR}/jam-frei`);
   const lesson = page.getByRole("region", { name: "Lektion" });
-  await expect(lesson.getByText("In Vorbereitung")).toBeVisible();
-  await expect(lesson.getByRole("link", { name: "Lektion öffnen" })).toHaveCount(0);
-  await expect(lesson.getByRole("button", { name: "Als Quest annehmen" })).toHaveCount(0);
+  await expect(lesson.getByRole("heading", { name: "Free Jam" })).toBeVisible();
+  await lesson.getByRole("link", { name: "Lektion öffnen" }).click();
+  await expect(page).toHaveURL(/\/bibliothek\/jam-frei$/);
+  await expect(page.getByRole("heading", { level: 1 }).first()).toBeVisible();
 });
 
 test("zooming and Ganze Karte keep the map on screen", async ({ page }) => {

@@ -1,0 +1,86 @@
+export const meta = { id: "theorie-akkordfolgen", title: "Akkordfolgen hören", order: 251, requires: null };
+
+import { Griffbild, Tab } from "../game/visuals/index";
+
+<Ziel>Du hörst, ob ein Akkord Zuhause, Spannung oder Weite klingt, und erkennst die Folgen I–IV–V–I und I–V–vi–IV nach Gehör.</Ziel>
+
+Jeder Song hat einen Akkord, bei dem er sich zu Hause fühlt. Alle anderen Akkorde ziehen mehr oder
+weniger stark dorthin zurück. Wer dieses Ziehen hört, muss Akkorde nicht mehr suchen, sondern
+erkennt sie an ihrer Rolle.
+
+**Stufen.** In „Dur-Tonleiter" hast du die Tonleiter aufgebaut. Jeder Akkord bekommt die Nummer des
+Tons, auf dem er steht. In C-Dur ist C die Stufe I, F die Stufe IV, G die Stufe V und A die Stufe 6.
+Auf der sechsten Stufe steht ein Moll-Akkord, darum schreibt man ihn klein: Am ist vi.
+
+<Griffbild akkorde={["C", "F", "G", "Am"]} />
+
+**Vier Rollen in C-Dur:**
+
+- I (C) ist Zuhause. Hier fühlt sich alles abgeschlossen an.
+- IV (F) ist Weite. Du gehst einen Schritt vom Zuhause weg, aber ohne Druck.
+- V (G) ist Spannung. Er will zurück zum Zuhause, du hörst fast ein Fragezeichen.
+- vi (Am) ist die Moll-Seite. Sie klingt wehmütig, aber nicht fremd.
+
+G nach C klingt wie ein Ankommen. C nach F klingt wie ein Aufklaren. Probiere beides und achte
+darauf, wie sich dein Körper dabei anfühlt, bevor du es benennst.
+
+**Dieselben Stufen in jeder Tonart.** In G-Dur ist G die Stufe I, C die Stufe IV, D die Stufe V und
+Em die Stufe vi. Die Rollen bleiben gleich, nur die Akkorde ändern sich. Darum erkennst du eine Folge
+auch dann, wenn sie in einer anderen Tonart gespielt wird.
+
+<Griffbild akkorde={["G", "C", "D", "Em"]} />
+
+**Die Basslinie hilft.** Spiele nur den Grundton jedes Akkords. In C-Dur ist das C auf der A-Saite im
+3. Bund, F auf der tiefen E-Saite im 1. Bund und G auf der tiefen E-Saite im 3. Bund. Die Folge I–IV–V–I
+klingt dann so:
+
+<Tab
+  titel="I–IV–V–I in C-Dur, nur die Grundtöne"
+  zeilen={[
+    "----------------",
+    "----------------",
+    "----------------",
+    "----------------",
+    "3-----------3---",
+    "----1---3-------",
+  ]}
+/>
+
+Die beiden unteren Zeilen sind die A-Saite und die tiefe E-Saite. Du hörst, wie die Linie von C
+nach F absinkt, über G wieder steigt und mit dem Sprung hinauf zu C ankommt.
+
+<Handhaltung>
+Greife die vollen Akkorde locker und schlage jeden vier Mal ab. Lass die Hand beim Wechsel in ihrer
+Form, so wie bei „Akkordwechsel". Dein Kopf soll beim Zuhören frei sein, darum darf der Wechsel
+nicht mehr deine ganze Aufmerksamkeit brauchen.
+</Handhaltung>
+
+<Fehlerbild>
+Du hörst nur auf die Tonhöhe des Akkords und rätst. Dann klingt jeder Akkord einzeln richtig und
+trotzdem erkennst du die Folge nicht. Höre stattdessen auf den Wechsel: Wohin zieht der neue Akkord,
+weg vom Zuhause oder zurück? Prüfe das nach jedem Wechsel mit einem Wort: Weite, Spannung, Zuhause
+oder Moll.
+</Fehlerbild>
+
+<Merksatz>Du erkennst keine Akkorde, du erkennst Wege: weg vom Zuhause, hin zur Spannung, zurück nach Hause.</Merksatz>
+
+<Uebung bpm={60}>
+Metronom auf 60, jeder Akkord vier Schläge lang.
+
+**Rollen kennenlernen.** Spiele C als Zuhause. Spiele danach nacheinander F, G und Am, und gehe nach
+jedem zurück zu C. Sage laut, wie jeder Wechsel klingt. Wiederhole zweimal.
+
+**Zwei Folgen.** Spiele I–IV–V–I (C – F – G – C) und I–V–vi–IV (C – G – Am – F), je dreimal. Singe
+oder summe dabei den Grundton des jeweiligen Akkords.
+
+**Gegen die Aufnahme.** Wähle einen Song, den du magst. Finde den Akkord, bei dem er zur Ruhe
+kommt, das ist deine I. Spiele danach die Akkorde, die du für IV und V hältst, und prüfe, welcher
+passt. Wenn beide passen, höre noch einmal auf das Ziehen.
+
+**Andere Tonart.** Übertrage beide Folgen nach G-Dur (G – C – D – G und G – D – Em – C).
+</Uebung>
+
+<Hinweis>Viele Songs benutzen nur diese vier Akkorde. Wer ihre Rollen hört, begleitet einen
+neuen Song oft schon nach dem ersten Refrain.</Hinweis>
+
+<Checkpoint>Du spielst I–IV–V–I und I–V–vi–IV in C-Dur und G-Dur und nennst bei jedem Wechsel die richtige Rolle, ohne auf die Stufen zu schauen.</Checkpoint>

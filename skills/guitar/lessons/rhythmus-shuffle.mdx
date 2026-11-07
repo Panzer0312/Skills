@@ -1,0 +1,72 @@
+export const meta = { id: "rhythmus-shuffle", title: "Shuffle und Swing", order: 204, requires: null };
+
+import { Griffbild, RhythmusRaster } from "../game/visuals/index";
+
+<Ziel>Du spielst Achtel im Shuffle-Gefühl, wechselst bewusst zwischen gerade und geshuffelt und spielst einen Zwölftakter in A mit A, D und E. Gemeistert ist die Lektion bei 100 BPM.</Ziel>
+
+Gerade Achtel sind gleich lang: „eins-und, zwei-und". Beim Shuffle sind sie ungleich: Das erste ist lang, das zweite kurz, und das Ganze
+hüpft. Das nennt man auch Swing. Du erreichst das, indem du jeden Schlag in drei gleiche Teile teilst,
+eine Triole. Gezählt: „eins-trip-let, zwei-trip-let, drei-trip-let, vier-trip-let".
+
+Beim Shuffle spielst du die Zahl und das „let" und lässt das „trip" aus. Die Hand geht auf der Zahl
+abwärts und auf dem „let" aufwärts. Der Abschlag dauert zwei Drittel des Schlags, der Aufschlag ein
+Drittel. Das Pendel ist also ungleich.
+
+**Gerade.** Zum Vergleich: acht gleich lange Achtel.
+
+<RhythmusRaster muster="DUDUDUDU" />
+
+**Geshuffelt.** Zwölf Zellen pro Takt, drei pro Schlag. Das „trip" bleibt leer.
+
+<RhythmusRaster
+  muster="D-UD-UD-UD-U"
+  zaehlzeiten={["1", "trip", "let", "2", "trip", "let", "3", "trip", "let", "4", "trip", "let"]}
+/>
+
+**Der Zwölftakter.** Der Blues hat zwölf Takte und drei Akkorde. Du kennst D schon aus „Offene Akkorde". Dazu kommen A und E.
+
+- A: Zeige-, Mittel- und Ringfinger nebeneinander im 2. Bund, auf D-, G- und H-Saite. Die tiefe E-Saite bleibt stumm.
+- E: wie Em, dazu der Zeigefinger im 1. Bund der G-Saite. Alle sechs Saiten klingen.
+
+<Griffbild akkorde={["A", "D", "E"]} />
+
+So läuft der Zwölftakter in A, ein Akkord pro Takt:
+
+```
+A | A | A | A
+D | D | A | A
+E | D | A | E
+```
+
+Das ist die ganze Form. Im letzten Takt ruft E den Beginn wieder auf: Der Blues geht von vorn los.
+
+<Handhaltung>
+Die Hand pendelt ungleich: lang abwärts, kurz aufwärts. Locker bleiben, sonst wird das Pendel steif und
+klingt wie gerade Achtel. Beim Aufschlag nur die oberen Saiten anschlagen, das hält den Groove leicht. Bei den Akkorden
+D, A und E schlägst du erst ab der Saite an, die klingen soll.
+</Handhaltung>
+
+<Fehlerbild>
+Die Achtel sind zu gerade. Dann hört sich der Shuffle wie ein Marsch an. Oder du übertreibst das
+Hüpfen, bis es punktiert klingt, so als wäre der Aufschlag fast schon an der nächsten Zahl. Prüfe: Sprich
+„eins-trip-let" im Takt mit und schlage nur auf „eins" und „let" an. Der Aufschlag sitzt genau auf dem „let",
+nicht später und nicht früher.
+</Fehlerbild>
+
+<Merksatz>Zähle in Triolen, spiele Zahl und „let". Die Lücke macht den Shuffle.</Merksatz>
+
+<Uebung bpm={70}>
+Metronom auf 70, ein Klick pro Zahl, laut in Triolen mitzählen.
+
+**Gerade gegen Shuffle.** Spiele über A vier Takte gerade Achtel, danach vier Takte Shuffle, abwechselnd, ohne dass
+die Hand stoppt. Höre auf den Unterschied.
+
+**Der Zwölftakter.** Spiele die zwölf Takte in A mit dem Shuffle-Muster. Der Wechsel passiert in der Lücke auf dem „trip" des
+letzten Schlags.
+
+Steigere das Tempo in kleinen Schritten. Gemeistert ist die Lektion bei 100 BPM.
+</Uebung>
+
+<Hinweis>Zähle beim Zwölftakter die Takte mit, vor allem die vier A-Takte am Anfang. Wer sich verzählt, spielt ruhig weiter und steigt beim nächsten Akkordwechsel wieder ein.</Hinweis>
+
+<Checkpoint>Du spielst den Zwölftakter in A einmal ganz durch, bei 70 BPM, im Shuffle, ohne dass das Pendel stoppt.</Checkpoint>

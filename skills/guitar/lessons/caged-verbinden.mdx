@@ -1,0 +1,123 @@
+export const meta = { id: "caged-verbinden", title: "Formen verbinden", order: 310, requires: null };
+
+import { Griffbild, GriffbrettBild, Tab } from "../game/visuals/index";
+
+<Ziel>Du spielst C-Dur in allen fünf CAGED-Formen den Hals hinauf und legst in jede Form die passende Pentatonik-Box.</Ziel>
+
+Du kennst jetzt fünf Formen: E, D, C, A und G. Jede Form ist ein Akkord, den du den Hals hinauf
+verschieben kannst. Bisher hast du sie einzeln geübt. Hier verbindest du sie. Als Beispiel dient
+C-Dur, denn der Akkord besteht aus drei Tönen: C, E und G. In jeder Form liegen diese drei Töne an
+einer anderen Stelle, aber es bleiben dieselben drei Töne.
+
+Der Weg führt den Hals hinauf, in der Reihenfolge des Rings: C-Form, A-Form, G-Form, E-Form, D-Form.
+Danach käme die C-Form wieder, zwölf Bünde höher.
+
+**1. C-Form, offen, Bund 0 bis 3.** Der C-Griff aus den ersten Wochen.
+
+<Griffbild akkorde={["C"]} />
+
+**2. A-Form, Bund 3 bis 5.** Der A-Griff mit Barré im 3. Bund. Der Grundton C liegt auf der A-Saite.
+
+<GriffbrettBild
+  punkte={[
+    { saite: 5, bund: 3, text: "C" },
+    { saite: 4, bund: 5, text: "G" },
+    { saite: 3, bund: 5, text: "C" },
+    { saite: 2, bund: 5, text: "E" },
+    { saite: 1, bund: 3, text: "G" },
+  ]}
+  bis={5}
+/>
+
+**3. G-Form, Bund 5 bis 8.** Der Grundton C liegt auf der tiefen E-Saite im 8. Bund.
+
+<GriffbrettBild
+  punkte={[
+    { saite: 6, bund: 8, text: "C" },
+    { saite: 5, bund: 7, text: "E" },
+    { saite: 4, bund: 5, text: "G" },
+    { saite: 3, bund: 5, text: "C" },
+    { saite: 2, bund: 5, text: "E" },
+    { saite: 1, bund: 8, text: "C" },
+  ]}
+  bis={8}
+/>
+
+**4. E-Form, Bund 8 bis 10.** Dein Barré-Griff im 8. Bund.
+
+<GriffbrettBild
+  punkte={[
+    { saite: 6, bund: 8, text: "C" },
+    { saite: 5, bund: 10, text: "G" },
+    { saite: 4, bund: 10, text: "C" },
+    { saite: 3, bund: 9, text: "E" },
+    { saite: 2, bund: 8, text: "G" },
+    { saite: 1, bund: 8, text: "C" },
+  ]}
+  bis={10}
+/>
+
+**5. D-Form, Bund 10 bis 13.** Der Grundton C liegt auf der D-Saite im 10. Bund. Nur die vier hohen Saiten klingen.
+
+<GriffbrettBild
+  punkte={[
+    { saite: 4, bund: 10, text: "C" },
+    { saite: 3, bund: 12, text: "G" },
+    { saite: 2, bund: 13, text: "C" },
+    { saite: 1, bund: 12, text: "E" },
+  ]}
+  bis={13}
+/>
+
+Alle fünf Griffe in einer Tabulatur. Von links nach rechts steigen sie den Hals hinauf, jeder Griff
+ist ein Takt. Ein Strich ohne Zahl heißt: Diese Saite spielst du nicht.
+
+<Tab
+  titel="C in fünf Formen, ein Griff pro Takt"
+  zeilen={[
+    "-0---3---8---8---12--",
+    "-1---5---5---8---13--",
+    "-0---5---5---9---12--",
+    "-2---5---5---10--10--",
+    "-3---3---7---10------",
+    "---------8---8-------",
+  ]}
+/>
+
+**Die Pentatonik dazu.** Die Töne C, E und G stecken in der A-Moll-Pentatonik mit A, C, D, E und G.
+Jede Form hat deshalb ihre eigene Box, die sich um sie herumlegt. Die Nummern sind dieselben wie in
+„Fünf Pentatonik-Boxen":
+
+- C-Form, Bund 0 bis 3: Box 4, eine Oktave tiefer als sonst.
+- A-Form, Bund 3 bis 5: Box 5, hier Bund 2 bis 5.
+- G-Form, Bund 5 bis 8: Box 1.
+- E-Form, Bund 8 bis 10: Box 2, Bund 7 bis 10.
+- D-Form, Bund 10 bis 13: Box 3, Bund 9 bis 13.
+
+Der Griff sagt dir, wo die Akkordtöne liegen. Die Box sagt dir, wo du drumherum spielen darfst.
+
+<Handhaltung>
+Wechsle die Form mit der ganzen Hand, nicht mit einzelnen Fingern. Such erst den Grundton C auf der
+richtigen Saite, dann baue den Griff darum. Bei der G-Form und der D-Form ist die Spanne groß. Lass
+den Daumen hinter dem Hals locker und den Arm entspannt, damit die Hand nicht verkrampft.
+</Handhaltung>
+
+<Fehlerbild>
+Du suchst den Griff und nicht den Grundton, und die Hand tastet sich Bund für Bund hinauf. Oder eine
+Saite klingt nicht, weil ein Finger sie berührt. Prüfe: Weißt du vor dem Wechsel, wo das C liegt? Klingen
+alle gespielten Saiten sauber, wenn du sie einzeln anschlägst?
+</Fehlerbild>
+
+<Merksatz>Ein Akkord, fünf Orte: Such zuerst den Grundton, dann den Griff.</Merksatz>
+
+<Uebung bpm={60}>
+Metronom auf 60, ein Griff pro Takt.
+
+**Akkorde.** Spiele C in allen fünf Formen von unten nach oben und zurück. Pro Form ein Takt. Zähle
+vier Schläge, auf der 4 wanderst du in die nächste Form. Danach schlage jede Saite einzeln an.
+
+**Pentatonik.** Spiele zu jeder Form die Box, die dazugehört, auf und ab. Beginne mit der G-Form
+und Box 1, dann Box 2 mit der E-Form, bis du alle fünf durch hast.
+</Uebung>
+
+<Checkpoint>Du spielst C-Dur in allen fünf Formen hintereinander bei 70 BPM, ohne zu suchen, und kennst die passende Box zu jeder Form.</Checkpoint>

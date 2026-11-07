@@ -1,0 +1,43 @@
+export const meta = { id: "caged-e", title: "E-Form", order: 304, requires: null };
+
+import { Griffbild, GriffbrettBild } from "../game/visuals/index";
+
+<Ziel>Du erkennst deinen Barré-Griff als verschobene E-Form und liest den Akkordnamen an der tiefen E-Saite ab. Dein Ziel: sauberer Wechsel zwischen drei Positionen bei 70 BPM.</Ziel>
+
+Es gibt fünf Grundformen, nach den offenen Akkorden C, A, G, E und D benannt (CAGED). Jede lässt sich den Hals hinauf verschieben und bleibt dabei ein Dur-Akkord. Du beginnst mit der, die du schon kennst: dem offenen E-Dur.
+
+<Griffbild akkorde={["E"]} />
+
+Der Grundton der E-Form liegt auf der **tiefen E-Saite**. Beim offenen E ist das der leere Ton E. Schiebst du die ganze Form um Bünde hinauf, ersetzt der Zeigefinger als Barré den Sattel, und der Grundton rutscht mit. Die Form bleibt, der Name ändert sich: Bund 3 ist G, Bund 5 ist A.
+
+G-Dur als E-Form (355433), die Zahlen sind die Finger:
+
+<GriffbrettBild
+  bis={6}
+  punkte={[
+    { saite: 6, bund: 3, text: "1" },
+    { saite: 5, bund: 5, text: "3" },
+    { saite: 4, bund: 5, text: "4" },
+    { saite: 3, bund: 4, text: "2" },
+    { saite: 2, bund: 3, text: "1" },
+    { saite: 1, bund: 3, text: "1" },
+  ]}
+/>
+
+Die Töne von unten nach oben: G, D, G, H, D, G. Jeder Ton gehört zu G-Dur. Mit der Bundnummer der tiefen E-Saite weißt du den Namen: Bund 1 F, Bund 3 G, Bund 5 A, Bund 7 H, Bund 8 C, Bund 10 D, Bund 12 E.
+
+<Handhaltung>
+Wie beim F-Barré: Zeigefinger flach über alle sechs Saiten, auf der Seite des ersten Glieds. Ring- und kleiner Finger greifen die A- und D-Saite zwei Bünde über dem Barré, der Mittelfinger die G-Saite einen Bund darüber. Daumen hinter dem Hals, Ellbogen leicht nach innen.
+</Handhaltung>
+
+<Fehlerbild>
+Du suchst den Namen auf der falschen Saite. Bei der E-Form zählt nur die tiefe E-Saite, nicht der Ton unter dem Ringfinger. Das zweite Fehlerbild: der Barré rutscht beim Verschieben vom Hals. Hebe die Finger nicht ab, sondern gleite mit leichtem Druck.
+</Fehlerbild>
+
+<Merksatz>E-Form: Der Zeigefinger liegt auf dem Grundton der tiefen E-Saite. Dort liest du den Namen ab.</Merksatz>
+
+<Uebung bpm={60}>
+Metronom auf 60. Vier Schläge offenes E, vier Schläge G (Bund 3), vier Schläge A (Bund 5), dann zurück. Nach jedem Wechsel zeigt dein Zeigefinger auf einen Ton: Sage seinen Namen laut. Steigere in Fünferschritten, wenn drei Runden hintereinander sauber klingen.
+</Uebung>
+
+<Checkpoint>Du wechselst bei 70 BPM zwischen E, G und A in E-Form, alle sechs Saiten klingen, und du nennst den Namen jedes Akkords aus der Bundnummer.</Checkpoint>

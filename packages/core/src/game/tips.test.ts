@@ -40,9 +40,8 @@ describe("buildTips", () => {
     expect(tips({ statuses: { q1: "gemeistert", q2: "gemeistert" } }).quick?.node.id).not.toBe("q0");
   });
   it("follows the road for best next", () => expect(tips().best?.lessonId).toBe("r1"));
-  it("says more lessons are coming when only planned steps remain", () => {
-    expect(tips({ statuses: { r1: "gelernt" } })).toMatchObject({ best: null, moreComing: true });
-    expect(tips().moreComing).toBe(false);
+  it("has no best next once the road is finished", () => {
+    expect(tips({ statuses: { r1: "gelernt" } }).best).toBeNull();
   });
   it("changes the stay-on-track text with chosen lessons", () => {
     expect(tips({ chosen: ["a", "b"] }).stayOnTrack).toBe("Zwei Nebenwege reichen. Bring erst einen davon zu Ende.");

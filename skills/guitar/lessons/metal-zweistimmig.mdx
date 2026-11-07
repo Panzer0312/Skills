@@ -1,0 +1,104 @@
+export const meta = { id: "metal-zweistimmig", title: "Zweistimmige Riffs", order: 266, requires: null };
+
+import { GriffbrettBild, Tab } from "../game/visuals/index";
+
+<Ziel>Du spielst eine Melodie in A-Moll und danach eine zweite Stimme eine Terz darüber, eine nach der anderen oder als Loop übereinander.</Ziel>
+
+Viele Metal-Melodien laufen zweistimmig: Eine zweite Stimme wandert im gleichen Rhythmus parallel mit. Das klingt breiter als ein einzelner Ton. Mit einer Gitarre spielst du die Stimmen nacheinander oder nimmst die erste auf und spielst die zweite darüber.
+
+**Terz.** Eine Terz ist der Abstand, wenn du in der Tonleiter einen Ton überspringst. Aus A wird C, aus H wird D. A-Moll hat dieselben Töne wie C-Dur: A, H, C, D, E, F, G. Die Terz über jedem Ton nimmst du aus dieser Reihe, also immer zwei Töne weiter.
+
+**Auf zwei Saiten.** Die Melodie liegt auf der G-Saite, die zweite Stimme auf der H-Saite darüber. Die Saiten liegen nebeneinander, das macht es leicht. Weil die Abstände zwischen G- und H-Saite vier Halbtöne betragen, gilt:
+
+- Bei C, F und G liegt die Terz im gleichen Bund auf der H-Saite. Sie ist eine große Terz mit vier Halbtönen.
+- Bei A, H, D und E liegt sie einen Bund tiefer. Sie ist eine kleine Terz mit drei Halbtönen.
+
+Zwei Beispiele. A auf der G-Saite im 2. Bund hat C auf der H-Saite im 1. Bund über sich. C auf der G-Saite im 5. Bund hat E auf der H-Saite im 5. Bund über sich.
+
+<GriffbrettBild
+  punkte={[
+    { saite: 3, bund: 2, text: "A" },
+    { saite: 2, bund: 1, text: "C" },
+  ]}
+  bis={5}
+/>
+
+<GriffbrettBild
+  punkte={[
+    { saite: 3, bund: 5, text: "C" },
+    { saite: 2, bund: 5, text: "E" },
+  ]}
+  bis={5}
+/>
+
+Die Melodie in Achteln, zwei Takte, nur Abschläge, erst die untere Stimme allein:
+
+<Tab
+  titel="Untere Stimme auf der G-Saite"
+  zeilen={[
+    "----------------|----------------",
+    "----------------|----------------",
+    "2-5-4-2-5-7-5-4-|7-9-7-5-4-5-4-2-",
+    "----------------|----------------",
+    "----------------|----------------",
+    "----------------|----------------",
+  ]}
+/>
+
+Die Noten: A C H A C D C H | D E D C H C H A.
+
+Die obere Stimme in denselben Rhythmus, eine Terz höher:
+
+<Tab
+  titel="Obere Stimme auf der H-Saite"
+  zeilen={[
+    "----------------|----------------",
+    "1-5-3-1-5-6-5-3-|6-8-6-5-3-5-3-1-",
+    "----------------|----------------",
+    "----------------|----------------",
+    "----------------|----------------",
+    "----------------|----------------",
+  ]}
+/>
+
+Die Noten: C E D C E F E D | F G F E D E D C.
+
+Zusammen sieht es so aus. Jede Spalte ist ein Doppelton, beide Saiten klingen zugleich:
+
+<Tab
+  titel="Beide Stimmen zusammen"
+  zeilen={[
+    "----------------|----------------",
+    "1-5-3-1-5-6-5-3-|6-8-6-5-3-5-3-1-",
+    "2-5-4-2-5-7-5-4-|7-9-7-5-4-5-4-2-",
+    "----------------|----------------",
+    "----------------|----------------",
+    "----------------|----------------",
+  ]}
+/>
+
+<Handhaltung>
+Die Greifhand liegt für die Stimme auf ihrer Saite und lässt die Nachbarsaiten still: Bei der unteren Stimme berührt die Fingerspitze die tiefere Saite nicht, bei der oberen liegt der Handballen am Steg auf den tieferen Saiten. Für die Doppeltöne gleitet die Hand mit, der Zeigefinger nimmt die tieferen Bünde. Der Anschlag ist gleich laut für beide Stimmen.
+</Handhaltung>
+
+<Fehlerbild>
+Du spielst die zweite Stimme im selben Bund wie die erste. Dann stimmen nur die Terzen über C, F und G, alle anderen klingen schief. Oder die Stimmen sind rhythmisch nicht gleich, dann zieht eine davon. Prüfe: Spiele beide Stimmen zusammen und höre, ob an einer Stelle ein Ton scharf nach Reibung klingt. Dort ist ein Bund falsch.
+</Fehlerbild>
+
+<Merksatz>Zwei Stimmen im gleichen Rhythmus klingen wie ein Instrument. Der Bund auf der H-Saite ist gleich oder einen tiefer.</Merksatz>
+
+<Uebung bpm={70}>
+Metronom auf 70, ein Klick pro Zahl, zwei Achtel pro Klick.
+
+**Untere Stimme.** Spiele sie allein, bis sie sitzt.
+
+**Obere Stimme.** Dasselbe mit der oberen Stimme.
+
+**Nacheinander oder als Loop.** Nimm die untere Stimme mit dem Handy oder einem Looper auf, spiele sie als Schleife ab und spiele die obere dazu. Hast du keinen Looper, wechselst du alle zwei Takte: einmal unten, einmal oben.
+
+**Zusammen.** Schlage beide Saiten gleichzeitig an, mit Pick, ohne die anderen Saiten zu treffen.
+
+Steigere in kleinen Schritten, wenn alles sauber klingt.
+</Uebung>
+
+<Checkpoint>Du spielst beide Stimmen bei 70 BPM, einzeln und als Loop oder Doppelton, ohne dass eine Terz schief klingt.</Checkpoint>

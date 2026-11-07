@@ -1,0 +1,53 @@
+export const meta = { id: "griffbrett-oktaven", title: "Oktaven finden", order: 302, requires: null };
+
+import { GriffbrettBild } from "../game/visuals/index";
+
+<Ziel>Du greifst zu jedem Ton auf der tiefen E-, A-, D- und G-Saite dieselbe Note eine Oktave höher, in einem festen Muster. Dein Ziel: sauberes Tempo bis 80 BPM.</Ziel>
+
+Eine Oktave sind zwölf Halbtonschritte. Auf derselben Saite wären das zwölf Bünde, also weit weg. Besser: die Oktave liegt zwei Saiten höher, wenn du ein festes Muster greifst.
+
+**Muster 1: tiefe E-Saite zur D-Saite, und A-Saite zur G-Saite.** Die obere Note liegt zwei Bünde höher und zwei Saiten weiter. Dazwischen liegt eine Saite, die nicht klingen darf.
+
+Beispiel: G auf der tiefen E-Saite (Bund 3) und G auf der D-Saite (Bund 5). C auf der A-Saite (Bund 3) und C auf der G-Saite (Bund 5).
+
+<GriffbrettBild
+  bis={6}
+  punkte={[
+    { saite: 6, bund: 3, text: "G" },
+    { saite: 4, bund: 5, text: "G" },
+    { saite: 5, bund: 3, text: "C" },
+    { saite: 3, bund: 5, text: "C" },
+  ]}
+/>
+
+**Muster 2: D-Saite zur H-Saite, und G-Saite zur hohen e-Saite.** Weil zwischen G- und H-Saite nur vier Halbtöne statt fünf liegen, rutscht die obere Note einen Bund weiter: **drei Bünde** höher statt zwei.
+
+Beispiel: A auf der D-Saite (Bund 7) und A auf der H-Saite (Bund 10). C auf der G-Saite (Bund 5) und C auf der hohen e-Saite (Bund 8).
+
+<GriffbrettBild
+  bis={10}
+  punkte={[
+    { saite: 4, bund: 7, text: "A" },
+    { saite: 2, bund: 10, text: "A" },
+    { saite: 3, bund: 5, text: "C" },
+    { saite: 1, bund: 8, text: "C" },
+  ]}
+/>
+
+Zusammengefasst: E-Saite zu D-Saite plus 2 Bünde, A-Saite zu G-Saite plus 2 Bünde, D-Saite zu H-Saite plus 3 Bünde, G-Saite zu e-Saite plus 3 Bünde. Die Form bleibt gleich, wenn du sie über den Hals schiebst.
+
+<Handhaltung>
+Zeigefinger auf den tieferen Ton, Ringfinger auf den höheren bei plus 2, kleiner Finger bei plus 3. Die Saite dazwischen berührst du leicht mit der Unterseite des Zeigefingers, damit sie still bleibt. Die Hand hält ihre Position, nur der ganze Griff wandert.
+</Handhaltung>
+
+<Fehlerbild>
+Du nimmst bei Muster 2 auch plus 2 Bünde. Dann stimmt der Ton nicht: er liegt einen Halbton zu tief und klingt schief. Das passiert immer beim Wechsel über die G–H-Lücke. Die zweite Falle: die Zwischensaite klingt mit, weil der Finger sie nicht abdeckt.
+</Fehlerbild>
+
+<Merksatz>Zwei Saiten höher und zwei Bünde weiter, nur über die G–H-Lücke drei Bünde.</Merksatz>
+
+<Uebung bpm={60}>
+Metronom auf 60. Greife das Muster E-Saite und D-Saite ab Bund 1 und spiele beide Töne nacheinander, je einen pro Schlag, dann wandere einen Bund höher. Gehe bis Bund 12. Sage dabei den Namen jedes Tons laut, zum Beispiel „G, G". Danach dasselbe mit A-Saite und G-Saite, später mit den Mustern plus 3.
+</Uebung>
+
+<Checkpoint>Du spielst das Oktavmuster E- und D-Saite von Bund 1 bis 12 bei 80 BPM sauber und nennst jeden Ton richtig.</Checkpoint>

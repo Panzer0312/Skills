@@ -4,6 +4,8 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 
 const here = dirname(fileURLToPath(import.meta.url));
+// Listening, theory and whole-song lessons from stage 4 without a target tempo.
+const NO_TEMPO = ["griffbrett-alle-noten", "griffbrett-noten", "jam-frei", "metal-ganzer-song", "theorie-analyse"];
 const files = readdirSync(here).filter((name) => name.endsWith(".mdx")).sort();
 
 function meta(file: string) {
@@ -75,9 +77,10 @@ describe("guitar lessons", () => {
       const source = readFileSync(join(here, file), "utf8");
       return !/<Uebung\s+bpm=\{\d+\}/.test(source);
     });
-    // metal-sound is a listening lesson without a target tempo, once it exists.
+    // Listening, theory and whole-song lessons carry no target tempo.
     const expected = ["01-haltung.mdx", "03-saiten-buende.mdx", "13-theorie.mdx"];
     if (files.includes("metal-sound.mdx")) expected.push("metal-sound.mdx");
+    for (const id of NO_TEMPO) expected.push(`${id}.mdx`);
     expect(withoutTempo).toEqual(expected.sort());
   });
 });

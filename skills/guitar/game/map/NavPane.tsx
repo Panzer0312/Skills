@@ -64,10 +64,6 @@ function Legend() {
         </li>
       ))}
       <li>
-        <i className="map-swatch is-planned" />
-        In Vorbereitung
-      </li>
-      <li>
         <i className="map-swatch is-chosen" />
         Als Quest angenommen
       </li>
@@ -108,10 +104,7 @@ function RoadRow({
       >
         {isDone(status) ? "✓ " : ""}
         {node?.title ?? step.lessonId}
-        <small>
-          {monthsLabel(step.months)}
-          {step.questId === null ? " · in Vorbereitung" : ""}
-        </small>
+        <small>{monthsLabel(step.months)}</small>
       </button>
     </li>
   );

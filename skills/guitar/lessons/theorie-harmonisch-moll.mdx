@@ -1,0 +1,119 @@
+export const meta = { id: "theorie-harmonisch-moll", title: "Harmonisch Moll", order: 255, requires: null };
+
+import { Griffbild, GriffbrettBild, Tab } from "../game/visuals/index";
+
+<Ziel>Du erhöhst in A-Moll die siebte Stufe, greifst den V-Akkord E und spielst ein Lick, das den neoklassischen Klang trägt.</Ziel>
+
+Die natürliche Moll-Tonleiter aus „Moll und Parallelen" hat in A-Moll die Töne A – H – C – D – E – F – G.
+Die **harmonische Moll-Tonleiter** ändert genau einen davon: Die siebte Stufe wird einen Halbton höher,
+also Gis statt G. Alles andere bleibt gleich: A – H – C – D – E – F – Gis.
+
+**Warum das klingt.** G liegt einen ganzen Ton unter dem Grundton A. Gis liegt nur einen Halbton darunter
+und zieht stark nach oben zum A. Diesen Ton nennt man Leitton. Dazwischen entsteht ein neuer Schritt:
+Von F zu Gis sind es drei Halbtöne, also anderthalb Töne. Dieser große Sprung ist der Klang, den du aus
+neoklassischen Soli kennst.
+
+Das Gis findest du in A-Moll an diesen Stellen, im Bild zusammen mit dem Grundton A:
+
+<GriffbrettBild
+  bis={11}
+  punkte={[
+    { saite: 6, bund: 4, text: "G#" },
+    { saite: 6, bund: 5, text: "A" },
+    { saite: 5, bund: 0, text: "A" },
+    { saite: 4, bund: 6, text: "G#" },
+    { saite: 3, bund: 1, text: "G#" },
+    { saite: 2, bund: 9, text: "G#" },
+    { saite: 1, bund: 4, text: "G#" },
+    { saite: 5, bund: 11, text: "G#" },
+  ]}
+/>
+
+Auf der A-Saite siehst du den Unterschied direkt. Erst die natürliche, dann die harmonische Tonleiter, beide
+von A bis A:
+
+<Tab
+  titel="A-Moll natürlich auf der A-Saite"
+  zeilen={[
+    "------------------------",
+    "------------------------",
+    "------------------------",
+    "------------------------",
+    "0--2--3--5--7--8--10-12-",
+    "------------------------",
+  ]}
+/>
+
+<Tab
+  titel="A-Moll harmonisch auf der A-Saite"
+  zeilen={[
+    "------------------------",
+    "------------------------",
+    "------------------------",
+    "------------------------",
+    "0--2--3--5--7--8--11-12-",
+    "------------------------",
+  ]}
+/>
+
+**Der V-Akkord.** In natürlich Moll ist der Akkord auf der fünften Stufe ein Moll-Akkord: Em, mit den
+Tönen E – G – H. Mit dem erhöhten Gis wird daraus E-Dur mit E – Gis – H, oder E7 mit zusätzlichem D. Gegenüber
+Em verändert sich dafür nur ein Ton: Auf der G-Saite wandert der leere Ton G in den 1. Bund zu Gis.
+
+<Griffbild akkorde={["Em", "E", "E7", "Am"]} />
+
+Auf dem E-Dur hört man das Ziehen: Von E nach Am löst sich die Spannung, weil Gis nach A aufsteigt. Das ist
+der typische Schluss in Moll. Schreibe die Stufen so: Am ist i, Dm ist iv, und das E als großes V, weil es
+ein Dur-Akkord ist. Die Folge Am – Dm – E – Am ist also i–iv–V–i.
+
+**Im Metal.** Harmonisch Moll gibt Riffs und Soli einen klassischen, dramatischen Klang. Gitarristen
+spielen Läufe, die über dem F zum Gis springen und auf A landen, oder sie begleiten mit dem Wechsel von E
+zu Am. Der Sprung F–Gis ist das, woran du harmonisch Moll im Ohr erkennst.
+
+Ein kurzes Lick, das genau diesen Sprung benutzt:
+
+<Tab
+  titel="Lick in A harmonisch Moll (E–F–Gis–A–Gis–F–E–A)"
+  zeilen={[
+    "----------------",
+    "----------------",
+    "----------------",
+    "----6-7-6-------",
+    "7-8-------8-7-0-",
+    "----------------",
+  ]}
+/>
+
+<Handhaltung>
+Lege die Hand in die 6. Lage: Zeigefinger Bund 6, Mittelfinger Bund 7, Ringfinger Bund 8. Das Gis auf der
+D-Saite spielt der Zeigefinger, das A im 7. Bund der Mittelfinger. Das F im 8. Bund der A-Saite gehört
+dem Ringfinger. So gibt es keinen Sprung der Hand, nur einen Saitenwechsel.
+</Handhaltung>
+
+<Fehlerbild>
+Du spielst aus Gewohnheit das G statt des Gis. Das passiert in jedem Lick, in dem du die natürliche
+Moll-Leiter gut kennst. Der Klang verrät es: Fehlt der große Schritt vom F, hast du zu tief gegriffen.
+Prüfe jedes Mal: Ist der Ton unter dem A ein Halbton oder ein ganzer Ton entfernt?
+</Fehlerbild>
+
+<Merksatz>Harmonisch Moll ist natürliches Moll mit einem erhöhten siebten Ton. Der Leitton zieht zum Grundton.</Merksatz>
+
+<Uebung bpm={60}>
+Metronom auf 60, Achtel.
+
+**Tonleiter.** Spiele die A-Saite aufwärts und abwärts, einmal natürlich, einmal harmonisch. Achte darauf,
+dass nur der vorletzte Ton wechselt.
+
+**Zwei Akkorde.** Spiele Em, dann E, je vier Schläge, und höre das Gis im Akkord. Dann Am – Dm – E – Am,
+je vier Schläge.
+
+**Das Lick.** Spiele es sehr langsam und sprich den Sprung F nach Gis laut mit. Erst wenn es sauber ist,
+stelle das Metronom höher. Spiele es danach direkt vor dem Akkord E und lasse es auf Am enden.
+
+Gemeistert ist die Lektion, wenn das Lick bei 100 BPM sauber läuft.
+</Uebung>
+
+<Hinweis>Spiele das Lick dreimal hintereinander, dann E und danach Am. Du hörst, wie sich das Gis im
+Akkord E zum A im Akkord Am auflöst.</Hinweis>
+
+<Checkpoint>Du spielst die harmonische A-Moll-Tonleiter auf der A-Saite, greifst Em und E im Wechsel und spielst das Lick bei 100 BPM ohne einen Fehler.</Checkpoint>

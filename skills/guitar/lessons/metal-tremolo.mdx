@@ -1,0 +1,55 @@
+export const meta = { id: "metal-tremolo", title: "Tremolo Picking", order: 264, requires: null };
+
+import { RhythmusRaster, Tab } from "../game/visuals/index";
+
+<Ziel>Du spielst eine Note mit schnellen, gleichmäßigen Wechselschlägen, aus kleiner Handgelenkbewegung und ohne Verkrampfen, und danach eine kurze Melodie im Tremolo.</Ziel>
+
+Beim Tremolo Picking wiederholst du einen Ton so schnell, dass er wie ein flirrender Teppich klingt. Der Anschlag ist immer Wechselschlag: ab, auf, ab, auf. Das Tempo kommt nicht aus Kraft, sondern aus einer sehr kleinen Bewegung.
+
+**Vier Anschläge pro Schlag.** Das Metronom gibt den Schlag vor, du spielst vier Sechzehntel pro Klick. Das Raster zeigt einen Takt: sechzehn Anschläge, abwechselnd ab und auf, vier pro Klick.
+
+<RhythmusRaster muster="DUDUDUDUDUDUDUDU" zaehlzeiten={["1", "e", "+", "a"]} />
+
+Das Tempo liegt hoch. Bei 80 BPM sind das 320 Anschläge pro Minute, also gut fünf pro Sekunde. Bei 120 BPM sind es 480 und damit acht pro Sekunde. Das erreichst du nur mit einer winzigen Bewegung.
+
+**Wie bewegst du dich?** Die Bewegung kommt aus dem Handgelenk, nicht aus dem Ellbogen. Der Pick fährt nur wenige Millimeter durch die Saite und kommt direkt zurück. Du hältst ihn locker zwischen Daumen und Zeigefinger. Die Spitze zeigt kaum über die Saite hinaus.
+
+**Auf eine Melodie übertragen.** Wenn du eine Note sicher tremolierst, spielst du eine Melodie: Die Greifhand wechselt die Note, die Anschlagshand läuft durch. Jeder Ton der Melodie dauert hier einen Schlag und besteht aus vier Anschlägen. In der Tabulatur ist jede Zahl ein Schlag, die Striche dahinter halten den Ton. Die Melodie liegt auf der D-Saite. 
+
+<Tab
+  titel="Tremolo-Melodie auf der D-Saite, ein Ton pro Schlag"
+  zeilen={[
+    "----------------|----------------",
+    "----------------|----------------",
+    "----------------|----------------",
+    "2---5---7---5---|7---9---7---2---",
+    "----------------|----------------",
+    "----------------|----------------",
+  ]}
+/>
+
+Die Töne der Melodie: Takt 1 ist E, G, A, G. Takt 2 ist A, H, A, E.
+
+<Handhaltung>
+Das Handgelenk ist locker, der Unterarm ruht auf dem Korpus. Die Schultern bleiben unten. Der Pick sitzt locker. Hält ihn die Hand fest, krampft der ganze Arm. Der Handballen liegt leicht am Steg, wenn du gedämpft spielst.
+</Handhaltung>
+
+<Fehlerbild>
+Du spannst den Arm an, um schneller zu werden. Dann wird die Bewegung groß, die Schläge ungleich, und nach kurzer Zeit geht nichts mehr. Ein zweiter Fehler: Du spielst nicht vier, sondern fünf oder drei Anschläge pro Klick. Prüfe: Fällt der erste Anschlag jedes Klicks genau auf den Klick, und bleibt dein Arm locker?
+</Fehlerbild>
+
+<Hinweis>**Bei Schmerz sofort aufhören.** Müde Muskeln sind normal. Stechen, Ziehen, Kribbeln oder Taubheit sind es nicht. Übe in Runden von 20 bis 30 Sekunden mit Pausen. Kommt der Schmerz wieder, lass es ärztlich abklären.</Hinweis>
+
+<Merksatz>Tremolo ist keine Kraft, sondern eine kleine, lockere Bewegung, die du nicht bremst.</Merksatz>
+
+<Uebung bpm={80}>
+Metronom auf 80, ein Klick pro Zahl, vier Anschläge pro Klick.
+
+**Eine Note.** Spiele die leere D-Saite 20 Sekunden lang im Wechselschlag, dann 20 Sekunden Pause. Fünf Runden.
+
+**Melodie.** Spiele die Tabulatur, ohne die Anschlagshand zu bremsen. Die Greifhand wechselt rechtzeitig vor dem Klick.
+
+Läuft das locker, gehst du um 5 BPM höher. Gemeistert ist die Lektion bei 120 BPM. Das ist ein Fernziel über viele Wochen.
+</Uebung>
+
+<Checkpoint>Du spielst die Tabulatur bei 80 BPM mit vier gleichmäßigen Anschlägen pro Klick. Die Hand bleibt locker, und jeder Melodieton beginnt genau auf dem Klick.</Checkpoint>

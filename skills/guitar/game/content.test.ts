@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
@@ -9,6 +9,7 @@ import {
   isMastered,
   lessonMasteryTarget,
   parseGameContent,
+  parseStory,
   scaleQuest,
   type LessonStatus,
   type MapNode,
@@ -45,6 +46,66 @@ const WRITTEN_IN_STAGE_2 = [
   "song-bards-vorbereitung",
   "song-bards-ganz",
 ];
+const WRITTEN_IN_STAGE_4 = [
+  "caged-a",
+  "caged-c",
+  "caged-d",
+  "caged-e",
+  "caged-g",
+  "caged-verbinden",
+  "finger-akkordmelodie",
+  "finger-arrangement",
+  "finger-clean-intro",
+  "finger-flageolett",
+  "finger-hybrid",
+  "finger-stimmungen",
+  "finger-travis",
+  "finger-wechselbass",
+  "griffbrett-alle-noten",
+  "griffbrett-noten",
+  "griffbrett-oktaven",
+  "jam-akkordtoene",
+  "jam-frage-antwort",
+  "jam-frei",
+  "lead-bending",
+  "lead-boxen",
+  "lead-erstes-solo",
+  "lead-legato",
+  "lead-moll",
+  "lead-phrasen",
+  "lead-sweep",
+  "lead-tapping",
+  "lead-vibrato",
+  "lead-wechselschlag",
+  "metal-drop-d",
+  "metal-galopp",
+  "metal-ganzer-song",
+  "metal-synkopen",
+  "metal-thrash-boss",
+  "metal-tight",
+  "metal-tremolo",
+  "metal-zweistimmig",
+  "rhythmus-barre-songs",
+  "rhythmus-funk",
+  "rhythmus-moll-barre",
+  "rhythmus-sechzehntel",
+  "rhythmus-shuffle",
+  "rhythmus-sus-sept",
+  "rhythmus-synkopen",
+  "theorie-akkordbau",
+  "theorie-akkordfolgen",
+  "theorie-analyse",
+  "theorie-dur-tonleiter",
+  "theorie-harmonisch-moll",
+  "theorie-intervalle",
+  "theorie-modi",
+  "theorie-moll",
+  "theorie-riff-hoeren",
+  "theorie-tonarten",
+];
+const TITLE_CONFLICTS = "04-aufwaermen";
+const JOINED_FROM_TWO_TABS = ["thrash-riff"];
+const HIDDEN_FROM_LESSON = ["hoeren-riff-b", "hoeren-riff-c"];
 // A listening lesson: no tempo to scale, like its exemption in lessons.test.ts.
 const WITHOUT_SCALE = ["metal-sound"];
 
@@ -203,12 +264,6 @@ describe("skill map content", () => {
     expect(has("07-akkordwechsel", "song-bards-vorbereitung")).toBe(true);
     expect(has("caged-g", "caged-e")).toBe(true);
   });
-  it("covers every available lesson on the road or as a quick win", () => {
-    const onRoad = new Set(content.road.map((step) => step.lessonId));
-    for (const node of content.nodes.filter((n) => n.available)) {
-      expect(onRoad.has(node.id) || node.quick, node.id).toBe(true);
-    }
-  });
   it("opens every lesson written in stage 2, with a quest, on the road or as a quick win", () => {
     const onRoad = new Map(content.road.map((step) => [step.lessonId, step]));
     for (const id of WRITTEN_IN_STAGE_2) {
@@ -218,6 +273,52 @@ describe("skill map content", () => {
       expect(quest?.techniqueId, id).toBe(node?.techniqueId);
       if (!WITHOUT_SCALE.includes(id)) expect(Object.keys(quest?.scale ?? {}), id).not.toHaveLength(0);
       expect(node?.quick || onRoad.get(id)?.questId === quest?.id, id).toBe(true);
+    }
+  });
+  it("opens every lesson written in stage 4 with a quest, and uses it where the road reaches it", () => {
+    const onRoad = new Map(content.road.map((step) => [step.lessonId, step]));
+    for (const id of WRITTEN_IN_STAGE_4) {
+      const node = content.nodes.find((n) => n.id === id);
+      const quests = content.quests.filter((q) => q.lessonId === id);
+      expect(node?.available, id).toBe(true);
+      expect(quests.length, id).toBeGreaterThan(0);
+      expect(quests[0]?.techniqueId, id).toBe(node?.techniqueId);
+      // A lesson off the road is allowed, a road step must use a quest of its lesson.
+      const step = onRoad.get(id);
+      if (step) expect(quests.map((q) => q.id), id).toContain(step.questId);
+    }
+  });
+  it("makes every node available except the known songs", () => {
+    for (const node of content.nodes) expect(node.available, node.id).toBe(!node.knownSong);
+  });
+  it("resolves every chord of every Griffbild in the lessons", () => {
+    const lessons = readdirSync(join(here, "../lessons")).filter((name) => name.endsWith(".mdx"));
+    let found = 0;
+    for (const file of lessons) {
+      const source = readFileSync(join(here, "../lessons", file), "utf8");
+      for (const match of source.matchAll(/<Griffbild\s+akkorde=\{(\[[^\]]*\])\}/g)) {
+        for (const chord of JSON.parse(match[1]!) as string[]) {
+          found += 1;
+          expect(resolveChordShape(chord), `${file}: ${chord}`).not.toBeNull();
+        }
+      }
+    }
+    expect(found).toBeGreaterThan(0);
+    const own = JSON.parse(readFileSync(join(here, "../chords/eigene.json"), "utf8")) as { symbol: string }[];
+    for (const { symbol } of own) expect(resolveChordShape(symbol), `eigene.json: ${symbol}`).not.toBeNull();
+  });
+  it("gives every quest with a metric label a mastery target", () => {
+    for (const quest of content.quests.filter((q) => q.metricLabel && q.lessonId && WRITTEN_IN_STAGE_4.includes(q.lessonId))) {
+      expect(quest.masteryTarget, quest.id).toBeDefined();
+    }
+  });
+  it("titles every lesson like its map node", () => {
+    for (const node of content.nodes.filter((n) => n.available)) {
+      // The lesson title would make this label overlap 11-pentatonik; its mdx is for the coordinator to shorten.
+      if (node.id === TITLE_CONFLICTS) continue;
+      const source = readFileSync(join(here, "../lessons", `${node.id}.mdx`), "utf8");
+      const title = /export const meta = \{[^}]*?title:\s*"((?:[^"\\]|\\.)*)"/.exec(source)?.[1];
+      expect(title?.replace(/\\"/g, '"'), node.id).toBe(node.title);
     }
   });
   it("names The Bard's Song as target on both of its lessons", () => {
@@ -250,12 +351,11 @@ describe("skill map content", () => {
       if (node?.parent) expect(at.get(node.parent) ?? Infinity, step.lessonId).toBeLessThan(i);
     });
   });
-  it("gives every written road step a quest and every planned step none", () => {
+  it("gives every road step a quest of its lesson", () => {
     for (const step of content.road) {
       const quest = content.quests.find((q) => q.id === step.questId);
       expect(step.reason.trim(), step.lessonId).not.toBe("");
-      if (byId.get(step.lessonId)?.available) expect(quest?.lessonId, step.lessonId).toBe(step.lessonId);
-      else expect(step.questId, step.lessonId).toBeNull();
+      expect(quest?.lessonId, step.lessonId).toBe(step.lessonId);
     }
   });
   it("starts a placed stage-1 player at the first unfinished written step", () => {
@@ -272,7 +372,25 @@ describe("skill map content", () => {
 
     const finished = placed(written.map((step) => step.lessonId));
     expect(bestNext(content.road, finished)).toBeNull();
-    expect(buildTips(content, finished, []).moreComing).toBe(true);
+    expect(buildTips(content, finished, []).best).toBeNull();
+  });
+});
+
+describe("story content", () => {
+  const story = parseStory(read("story.json"), content);
+
+  it("passes the story checks with the real content", () => {
+    expect(story.chapters.length).toBeGreaterThan(0);
+    expect(story.beats.length).toBeGreaterThan(0);
+  });
+  it("seats every theory node in exactly one chapter", () => {
+    for (const node of content.nodes.filter((n) => n.path === "theorie")) {
+      const holders = story.chapters.filter((chapter) => chapter.theoryLessons.includes(node.id));
+      expect(holders.map((chapter) => chapter.id), node.id).toHaveLength(1);
+    }
+  });
+  it("lets no beat run past four lines", () => {
+    for (const beat of story.beats) expect(beat.lines.length, beat.id).toBeLessThanOrEqual(4);
   });
 });
 
@@ -357,8 +475,17 @@ describe("song recommendations", () => {
   it("takes every riff from its lesson", () => {
     expect(content.riffs.length).toBeGreaterThan(0);
     for (const riff of content.riffs) {
+      // The ear test hides these two riffs from their lesson on purpose.
+      if (HIDDEN_FROM_LESSON.includes(riff.id)) continue;
       const mdx = readFileSync(join(here, "../lessons", `${riff.lessonId}.mdx`), "utf8");
-      for (const line of riff.zeilen) expect(mdx, `${riff.id}: ${line}`).toContain(`"${line}"`);
+      for (const line of riff.zeilen) {
+        // The lesson shows this four-bar riff as two tabs, each within the 40 character limit.
+        const bars = line.split("|");
+        const parts = JOINED_FROM_TWO_TABS.includes(riff.id)
+          ? [bars.slice(0, 2).join("|"), bars.slice(2).join("|")]
+          : [line];
+        for (const part of parts) expect(mdx, `${riff.id}: ${part}`).toContain(`"${part}"`);
+      }
     }
   });
 });

@@ -1,0 +1,89 @@
+export const meta = { id: "finger-flageolett", title: "Flageoletts", order: 221, requires: null };
+
+import { GriffbrettBild, Tab } from "../game/visuals/index";
+
+<Ziel>Du bringst auf jeder Saite die Flageoletts am 12., 7. und 5. Bund klar zum Klingen, einen Ton pro Schlag bei 60 BPM.</Ziel>
+
+Ein Flageolett ist ein heller, glockenartiger Ton ohne Anschlaggeräusch. Du drückst die Saite dafür nicht auf den Bund. Du berührst sie nur leicht genau über dem Bundstäbchen und zupfst. Sobald der Ton da ist, nimmst du den Finger weg, und die Saite schwingt frei weiter.
+
+Die drei Stellen kennst du aus „Saiten, Bünde, Halbtonschritte": Bund 5, 7 und 12 tragen Punkte im Griffbrett. Was dort klingt:
+
+- **Bund 12:** der Ton der leeren Saite, eine Oktave höher.
+- **Bund 7:** eine Oktave plus eine Quinte höher als die leere Saite.
+- **Bund 5:** zwei Oktaven höher, also wieder der Name der leeren Saite.
+
+Die Tonnamen für alle sechs Saiten:
+
+- tiefe E-Saite: E, H, E
+- A-Saite: A, E, A
+- D-Saite: D, A, D
+- G-Saite: G, D, G
+- H-Saite: H, Fis, H
+- hohe e-Saite: E, H, E
+
+Die Reihenfolge ist immer Bund 12, Bund 7, Bund 5. Das Bild zeigt die drei Stellen auf der tiefen E-Saite und der hohen e-Saite. Die Beschriftung nennt den Klang des Flageoletts, nicht den Ton, der gegriffen dort läge (am 5. Bund wäre das A).
+
+<GriffbrettBild
+  bis={12}
+  punkte={[
+    { saite: 6, bund: 12, text: "E" },
+    { saite: 6, bund: 7, text: "H" },
+    { saite: 6, bund: 5, text: "E" },
+    { saite: 1, bund: 12, text: "E" },
+    { saite: 1, bund: 7, text: "H" },
+    { saite: 1, bund: 5, text: "E" },
+  ]}
+/>
+
+**Auf der E-Gitarre.** Stelle einen cleanen Sound ein und nimm den Hals-Tonabnehmer. Flageoletts sind leiser als normale Töne. Drehe den Verstärker ein Stück auf, statt fester zu zupfen. Mit Verzerrung werden die zarten Töne schnell unkontrolliert, lass sie also zum Üben weg.
+
+**Zum Stimmen.** Der Flageolett-Ton am 5. Bund der tiefen E-Saite ist dieselbe Tonhöhe wie der am 7. Bund der A-Saite. Das gilt auch für A und D, und für D und G. Hörst du ein Schwirren, liegt eine der beiden Saiten noch daneben.
+
+<Tab
+  titel="Tiefe Saiten: Bund 12, 7, 5"
+  zeilen={[
+    "---------------------------",
+    "---------------------------",
+    "---------------------------",
+    "------------------12-7--5--",
+    "---------12-7--5-----------",
+    "12-7--5--------------------",
+  ]}
+/>
+
+<Tab
+  titel="Hohe Saiten: Bund 12, 7, 5"
+  zeilen={[
+    "------------------12-7--5--",
+    "---------12-7--5-----------",
+    "12-7--5--------------------",
+    "---------------------------",
+    "---------------------------",
+    "---------------------------",
+  ]}
+/>
+
+In der Tabulatur steht die Zahl für den Bund, über dem du den Finger nur auflegst.
+
+<Handhaltung>
+Lege die Kuppe eines Fingers der Greifhand quer auf die Saite, genau über das Bundstäbchen, nicht dahinter wie bei einem Griff. Es ist die Stelle, wo das Metall liegt. Der Druck ist so leicht, dass die Saite den Bund nicht berührt. Die Anschlagshand zupft wie gewohnt mit dem Daumen oder dem Pick, nahe am Steg klingt es heller. Der Finger lässt im selben Moment los, in dem die Saite angezupft ist.
+</Handhaltung>
+
+<Fehlerbild>
+Es klingt dumpf und kurz, ein „Tock" statt einer Glocke. Dann liegt der Finger hinter dem Bundstäbchen und drückt, oder er bleibt nach dem Zupfen liegen und dämpft. Prüfe: Verschiebe den Finger millimeterweise, bis der Ton aufblüht, und hebe ihn dann sofort ab. Klingt es auch beim 12. Bund nicht, liegt der Finger zu hoch auf dem Griffbrett oder zu fest.
+</Fehlerbild>
+
+<Merksatz>Berühren, zupfen, loslassen. Die Saite macht den Rest.</Merksatz>
+
+<Uebung bpm={50}>
+Metronom auf 50, ein Ton pro Klick, die Greifhand nimmt für jeden Ton neu Ansatz.
+
+- Zwei Minuten: nur die Töne auf Bund 12 aller Saiten, von der tiefen E- zur hohen e-Saite und zurück.
+- Zwei Minuten: dasselbe mit Bund 7.
+- Zwei Minuten: dasselbe mit Bund 5.
+- Danach beide Tabulaturen oben, je Saite 12, 7, 5.
+
+Steigere das Tempo erst, wenn jeder Ton ohne Tock klingt. Gehe in kleinen Schritten.
+</Uebung>
+
+<Checkpoint>Du spielst die 18 Flageoletts aus den beiden Tabulaturen bei 60 BPM, einen Ton pro Schlag, und jeder Ton klingt klar.</Checkpoint>

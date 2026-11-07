@@ -1,0 +1,80 @@
+export const meta = { id: "theorie-intervalle", title: "Intervalle hören", order: 242, requires: null };
+
+import { GriffbrettBild } from "../game/visuals/index";
+
+<Ziel>Du erkennst Terz, Quinte und Oktave nach Gehör und findest sie von jedem Ton aus auf dem Griffbrett.</Ziel>
+
+Ein **Intervall** ist der Abstand zwischen zwei Tönen. Du kennst schon die Einheit dafür: den Bund
+als Halbtonschritt. Der Name zählt die Töne der Dur-Tonleiter ab dem Startton. In C-Dur ist D die
+Sekunde, E die Terz, F die Quarte, G die Quinte, A die Sexte, H die Septime und das hohe C die Oktave.
+
+- kleine Sekunde: 1 Halbton (1 Bund)
+- große Sekunde: 2 Halbtöne
+- kleine Terz: 3 Halbtöne
+- große Terz: 4 Halbtöne
+- Quarte: 5 Halbtöne
+- Quinte: 7 Halbtöne
+- große Sexte: 9 Halbtöne
+- große Septime: 11 Halbtöne
+- Oktave: 12 Halbtöne
+
+Für das Ohr hilft eine Erinnerung an eine Melodie, die mit dem Sprung beginnt. Singe sie leise
+mit, bevor du den Sprung spielst:
+
+- große Sekunde aufwärts: der Anfang von „Alle meine Entchen“ (die ersten zwei Töne)
+- kleine Terz abwärts: der Anfang von „Hänschen klein“ (der Sprung vom ersten zum zweiten Ton)
+- große Terz aufwärts: der Anfang von „When the Saints go marching in“ (C auf E)
+- Quarte aufwärts: der Auftakt von „O Tannenbaum“
+- Quinte aufwärts: der Sprung von „Morgen“ zu „kommt“ in „Morgen kommt der Weihnachtsmann“ (C auf G)
+- Oktave: ein Ton, den du einmal tief und einmal hoch singst. Er klingt wie derselbe Ton.
+
+**Auf dem Griffbrett** liegen die Strecken in Mustern. Zwischen A- und D-Saite (und ebenso zwischen
+E- und A- sowie D- und G-Saite) gilt von deinem Startton aus:
+
+- Quarte: dieselbe Bundnummer auf der nächsten Saite
+- kleine Terz: auf der nächsten Saite zwei Bünde tiefer
+- große Terz: auf der nächsten Saite ein Bund tiefer
+- Quinte: auf der nächsten Saite zwei Bünde höher
+- Oktave: zwei Saiten höher, zwei Bünde höher (so gilt es für Startsaiten E und A)
+
+Startton C auf der A-Saite im 3. Bund:
+
+<GriffbrettBild
+  bis={5}
+  punkte={[
+    { saite: 5, bund: 3, text: "C" },
+    { saite: 4, bund: 2, text: "E" },
+    { saite: 4, bund: 3, text: "F" },
+    { saite: 4, bund: 5, text: "G" },
+    { saite: 3, bund: 5, text: "C" },
+  ]}
+/>
+
+Die fünf Punkte sind: Startton C, große Terz E, Quarte F, Quinte G und die Oktave C.
+Warum nur ein Bund tiefer für die Terz? Von der A- zur D-Saite sind es fünf Halbtöne. Ein Bund
+tiefer ergibt vier, also die große Terz.
+
+<Handhaltung>
+Greife die beiden Töne nacheinander und danach zusammen. Der Zeigefinger bleibt am Startton liegen,
+der zweite Ton kommt mit dem passenden Finger dazu. Lass beide Töne ausklingen und höre, ob sie
+verschmelzen (Oktave, Quinte) oder sich reiben (kleine Sekunde).
+</Handhaltung>
+
+<Fehlerbild>
+Du rätst nur nach den Bünden und hörst nicht hin. Dann erkennst du die Intervalle nur im Kopf und nicht
+im Ohr. Spiele zuerst den Sprung, singe ihn nach und zähle danach erst die Bünde zur Kontrolle.
+Verwechselt werden meist kleine und große Terz (3 oder 4 Bünde): die kleine klingt dunkler, die
+große heller.
+</Fehlerbild>
+
+<Merksatz>Quinte ist 7 Bünde, Oktave 12, die große Terz 4. Wenn du die Zahl und den Klang zusammen kennst, hörst du die Strecke.</Merksatz>
+
+<Uebung bpm={60}>
+**Zwei Töne, ein Schlag, ein Name.** Metronom auf 60. Spiele einen Startton, auf Schlag 1 und 2 den
+Zielton, auf Schlag 3 und 4 sagst du den Namen des Intervalls laut. Reihenfolge: Oktave, Quinte, große
+Terz, kleine Terz, Quarte. Danach lässt du dir von jemandem oder von deinem eigenen Zufall (Würfel: 1
+bis 5 für die fünf Intervalle) eines nennen, und du suchst es vom Startton C im 3. Bund der A-Saite.
+Wiederhole das ab D im 5. Bund der A-Saite.
+</Uebung>
+
+<Checkpoint>Du spielst von jedem Startton auf der A-Saite Terz, Quinte und Oktave innerhalb von zwei Sekunden und erkennst sie bei 60 BPM mit geschlossenen Augen.</Checkpoint>

@@ -1,0 +1,130 @@
+export const meta = { id: "finger-stimmungen", title: "Offene Stimmungen", order: 227, requires: null };
+
+import { GriffbrettBild, Tab } from "../game/visuals/index";
+
+<Ziel>Du stimmst die Gitarre sicher nach Open G und Drop D um, findest dort klingende Griffe und stimmst am Ende zurück.</Ziel>
+
+In der Standardstimmung hat jede Saite einen festen Ton. Eine andere Stimmung verschiebt einzelne Saiten. Dadurch klingen Töne, die sonst nicht zusammenpassen, und manche Griffe werden einfach. Du lernst zwei Stimmungen.
+
+**Open G.** Die leeren Saiten ergeben einen G-Dur-Akkord. Von tief nach hoch: D, G, D, G, H, D. Gegenüber der Standardstimmung ändern sich drei Saiten, und alle gehen nach unten:
+
+- tiefe E-Saite: ein Ganzton tiefer, von E nach D
+- A-Saite: ein Ganzton tiefer, von A nach G
+- hohe e-Saite: ein Ganzton tiefer, von E nach D
+
+D-, G- und H-Saite bleiben. Dein Tuner hilft: Er zeigt dir bei jeder Saite den Ton.
+
+<GriffbrettBild
+  bis={7}
+  punkte={[
+    { saite: 6, bund: 0, text: "D" },
+    { saite: 5, bund: 0, text: "G" },
+    { saite: 4, bund: 0, text: "D" },
+    { saite: 3, bund: 0, text: "G" },
+    { saite: 2, bund: 0, text: "H" },
+    { saite: 1, bund: 0, text: "D" },
+  ]}
+/>
+
+**Sicher umstimmen.**
+
+- Stimme Saite für Saite mit dem Tuner. Drehe in kleinen Schritten.
+- Drehe die Saite zum Ziel-Ton hin und nicht darüber hinaus. Ist sie zu tief geraten, stimme von unten hoch an den Ton heran.
+- Die Hals-Spannung ändert sich mit. Stimme nach dem ersten Durchgang noch einmal durch.
+- Neue oder frisch gedehnte Saiten driften. Dehne sie ganz leicht und stimme nach.
+- Hat deine Gitarre eine Tremolo-Brücke, die auf den Saiten schwebt, bewegt sich die ganze Brücke mit. Stimme zweimal durch.
+- Zurück zur Standardstimmung stimmst du die dünne e-Saite von D nach E hoch. Gehe langsam und überhole den Ton nicht.
+
+**Zur Kontrolle nach Gehör.** Die tiefe D-Saite klingt eine Oktave unter der leeren D-Saite, die A-Saite jetzt eine Oktave unter der leeren G-Saite. Die hohe e-Saite klingt wie die G-Saite, gegriffen im 7. Bund.
+
+**Griffe in Open G.** Alle leeren Saiten sind G-Dur. Legst du den Zeigefinger als Barré quer über alle sechs Saiten, wandert der Akkord mit:
+
+- Bund 0: G-Dur
+- Bund 5: C-Dur (G, C, G, C, E, G)
+- Bund 7: D-Dur (A, D, A, D, Fis, A)
+- Bund 12: G-Dur, eine Oktave höher
+
+G, C und D sind die drei Hauptakkorde in G. Ein Finger genügt.
+
+<GriffbrettBild
+  bis={7}
+  punkte={[
+    { saite: 6, bund: 5 },
+    { saite: 5, bund: 5 },
+    { saite: 4, bund: 5 },
+    { saite: 3, bund: 5 },
+    { saite: 2, bund: 5 },
+    { saite: 1, bund: 5 },
+    { saite: 6, bund: 7 },
+    { saite: 5, bund: 7 },
+    { saite: 4, bund: 7 },
+    { saite: 3, bund: 7 },
+    { saite: 2, bund: 7 },
+    { saite: 1, bund: 7 },
+  ]}
+/>
+
+Der Daumenbass pendelt auf der A- und D-Saite, die Finger spielen darüber wie in „Travis Picking": Zeigefinger G-Saite, Mittelfinger H-Saite, Ringfinger hohe e-Saite. Die Tabulaturen zeigen die Töne bei Bund 0, 5, 7 und wieder 0.
+
+<Tab
+  titel="Open G: G, C"
+  zeilen={[
+    "--------------0-|--------------5-",
+    "------0---------|------5---------",
+    "--0-------0-----|--5-------5-----",
+    "----0-------0---|----5-------5---",
+    "0-------0-------|5-------5-------",
+    "----------------|----------------",
+  ]}
+/>
+
+<Tab
+  titel="Open G: D, G"
+  zeilen={[
+    "--------------7-|--------------0-",
+    "------7---------|------0---------",
+    "--7-------7-----|--0-------0-----",
+    "----7-------7---|----0-------0---",
+    "7-------7-------|0-------0-------",
+    "----------------|----------------",
+  ]}
+/>
+
+**Drop D.** Hier stimmst du nur die tiefe E-Saite einen Ganzton nach unten, von E nach D. Die Saiten von tief nach hoch sind D, A, D, G, H, E. Sie soll eine Oktave unter der leeren D-Saite klingen, vergleiche beide nach Gehör.
+
+Der D-Dur-Griff ist leicht: Die Saiten D, A und D bleiben leer, auf G-Saite Bund 2, H-Saite Bund 3 und e-Saite Bund 2 liegen die Finger.
+
+<Tab
+  titel="Drop D: D-Dur"
+  zeilen={[
+    "--------------2-",
+    "------3---------",
+    "--2-------2-----",
+    "----------------",
+    "----0-------0---",
+    "0-------0-------",
+  ]}
+/>
+
+<Handhaltung>
+Die Hände halten wie sonst. Neu ist die Umstimmung. Halte beim Drehen die Gitarre ruhig im Arm, stimme in kleinen Schritten und zupfe immer nur eine Saite. Hast du eine tiefere Stimmung gewählt, sind die Saiten lockerer. Zupfe vorsichtiger, damit sie nicht schnarren.
+</Handhaltung>
+
+<Fehlerbild>
+Du drehst in die falsche Richtung. Bei der hohen e-Saite zum Beispiel stimmst du sie nach oben statt nach unten, und die Saite wird gefährlich straff. Oder du stimmst nur eine Saite und lässt den Rest, dann klingt Open G schief. Ein dritter Fehler: Die Gitarre verstimmt sich nach wenigen Minuten wieder, weil du die Saiten nicht nachgestimmt hast. Prüfe: Zupfe nach dem Stimmen alle sechs leeren Saiten und höre, ob sie einen G-Dur-Akkord ergeben.
+</Fehlerbild>
+
+<Merksatz>Erst stimmen, dann nachstimmen. Immer in kleinen Schritten, immer mit dem Tuner.</Merksatz>
+
+<Uebung bpm={60}>
+Stimme nach Open G um. Metronom auf 60, ein Klick pro Schlag.
+
+- Zwei Minuten: leere Saiten zupfen, einzeln und als Akkord, bis alle sechs rein klingen.
+- Zwei Minuten: das Muster über G, C, D, G, ein Takt pro Akkord. Der Zeigefinger liegt als Barré auf Bund 5 und Bund 7.
+- Stimme dann nach Drop D um und spiele zwei Minuten das D-Dur-Muster.
+- Stimme am Ende zurück in die Standardstimmung und prüfe sie mit dem Tuner.
+
+Steigere das Tempo erst, wenn der Daumen sauber läuft.
+</Uebung>
+
+<Checkpoint>Du stimmst die Gitarre sicher nach Open G um und zurück, spielst G, C, D, G im Muster bei 70 BPM, und alle Saiten klingen rein.</Checkpoint>

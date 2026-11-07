@@ -4,7 +4,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { GAME_BASE, gameContent, questLevel, useGameState } from "./api.js";
 import { spriteUrl } from "./assets.js";
 import { MentorCard } from "./MentorCard.js";
-import { MORE_COMING } from "./map/TipsBoard.js";
 import { LevelPicker } from "./ResultDialog.js";
 import { DEFAULT_MINUTES, plannedSet, SESSION_LENGTHS, useTodaySet } from "./useTodaySet.js";
 import { QUEST_SPRITE } from "./Village.js";
@@ -86,7 +85,7 @@ function Board({ state, fetching }: { state: GameState; fetching: boolean }) {
   const busy = saving || writing;
 
   const navigate = useNavigate();
-  const { best: next, moreComing } = buildTips(gameContent, state.lessons, state.chosenLessons);
+  const { best: next } = buildTips(gameContent, state.lessons, state.chosenLessons);
   const nextQuest = gameContent.quests.find((quest) => (next ? quest.id === next.questId : quest.kind === "wechsel"));
   const chosen = new Set(quests.map((quest) => quest.id));
   const others = gameContent.quests.filter((quest) => !chosen.has(quest.id));
@@ -147,7 +146,7 @@ function Board({ state, fetching }: { state: GameState; fetching: boolean }) {
       <div className="quest-next">
         <h2>Bester nächster Schritt</h2>
         {nextQuest ? <p>{nextQuest.title}</p> : null}
-        <p>{next ? next.reason : moreComing ? MORE_COMING : ROAD_DONE_REASON}</p>
+        <p>{next ? next.reason : ROAD_DONE_REASON}</p>
         {nextQuest ? (
           <p>
             <Link

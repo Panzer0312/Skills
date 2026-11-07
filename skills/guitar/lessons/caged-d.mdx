@@ -1,0 +1,41 @@
+export const meta = { id: "caged-d", title: "D-Form", order: 305, requires: null };
+
+import { Griffbild, GriffbrettBild } from "../game/visuals/index";
+
+<Ziel>Du verschiebst den D-Griff auf den vier hohen Saiten und liest seinen Namen an der D-Saite ab. Dein Ziel: sauberer Wechsel bei 70 BPM.</Ziel>
+
+Die zweite Form ist das offene D-Dur. Es hat nur vier Saiten, die tiefe E- und A-Saite sind stumm.
+
+<Griffbild akkorde={["D"]} />
+
+Der Grundton liegt auf der **D-Saite**. Beim offenen D ist das der leere Ton D. Schiebst du die Form hinauf, rutscht der Grundton mit. D-Saite Bund 5 ist G, Bund 7 ist A, Bund 9 ist H.
+
+G-Dur als D-Form (nur vier Saiten, 5-7-8-7):
+
+<GriffbrettBild
+  bis={9}
+  punkte={[
+    { saite: 4, bund: 5, text: "1" },
+    { saite: 3, bund: 7, text: "3" },
+    { saite: 2, bund: 8, text: "4" },
+    { saite: 1, bund: 7, text: "3" },
+  ]}
+/>
+
+Die Töne von unten nach oben: G, D, G, H. Die Griffe auf G- und e-Saite liegen im selben Bund, die H-Saite einen Bund höher.
+
+<Handhaltung>
+Zeigefinger auf dem Grundton der D-Saite. Der Ringfinger liegt als kleiner Barré über der G- und der e-Saite zwei Bünde höher, der kleine Finger auf der H-Saite einen Bund darüber. Die tiefe E- und die A-Saite streichst du nicht an. Schlage nur die vier hohen Saiten an, ab der D-Saite.
+</Handhaltung>
+
+<Fehlerbild>
+Du schlägst die tiefen Saiten mit an. Dann klingt zwar etwas Dur-Ähnliches, aber der tiefste Ton ist falsch. Ziele mit dem Plektrum bewusst auf die D-Saite. Das zweite Fehlerbild: der Ringfinger kippt, und die e-Saite klingt gedämpft.
+</Fehlerbild>
+
+<Merksatz>D-Form: vier Saiten, der Name steht auf der D-Saite, tiefe E- und A-Saite bleiben stumm.</Merksatz>
+
+<Uebung bpm={60}>
+Metronom auf 60. Vier Schläge G (Bund 5), vier Schläge A (Bund 7), vier Schläge H (Bund 9), dann zurück. Gleite die ganze Form, ohne sie abzusetzen. Sage den Namen jedes Akkords laut, bevor du anschlägst.
+</Uebung>
+
+<Checkpoint>Du gleitest bei 70 BPM zwischen G, A und H in D-Form, die vier Saiten klingen klar, und du nennst jeden Namen von der D-Saite.</Checkpoint>

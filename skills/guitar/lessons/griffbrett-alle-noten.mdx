@@ -1,0 +1,49 @@
+export const meta = { id: "griffbrett-alle-noten", title: "Alle Noten finden", order: 303, requires: null };
+
+import { GriffbrettBild } from "../game/visuals/index";
+
+<Ziel>Du findest jeden Stammton auf allen sechs Saiten bis zum 12. Bund. Dein Ziel: 20 Treffer pro Minute im Notenspiel auf allen Saiten.</Ziel>
+
+Die tiefe E- und A-Saite kennst du, die hohe e-Saite ist identisch mit der tiefen E-Saite. Bleiben D, G und H. Mit den Oktavmustern holst du dir jeden Ton von den bekannten Saiten dazu: zwei Saiten höher und zwei Bünde weiter, über die G–H-Lücke drei Bünde.
+
+**Die Stammtöne auf jeder Saite** (Bundnummer in Klammern):
+
+- tiefe E-Saite und hohe e-Saite: E (0), F (1), G (3), A (5), H (7), C (8), D (10), E (12)
+- A-Saite: A (0), H (2), C (3), D (5), E (7), F (8), G (10), A (12)
+- D-Saite: D (0), E (2), F (3), G (5), A (7), H (9), C (10), D (12)
+- G-Saite: G (0), A (2), H (4), C (5), D (7), E (9), F (10), G (12)
+- H-Saite: H (0), C (1), D (3), E (5), F (6), G (8), A (10), H (12)
+
+Die Reihenfolge der Stammtöne ist auf jeder Saite gleich, nur der Start ist ein anderer. Die Halbtonpaare E–F und H–C liegen immer direkt nebeneinander.
+
+Der Ton C quer über das Griffbrett:
+
+<GriffbrettBild
+  bis={13}
+  punkte={[
+    { saite: 6, bund: 8, text: "C" },
+    { saite: 5, bund: 3, text: "C" },
+    { saite: 4, bund: 10, text: "C" },
+    { saite: 3, bund: 5, text: "C" },
+    { saite: 2, bund: 1, text: "C" },
+    { saite: 1, bund: 8, text: "C" },
+  ]}
+/>
+
+**So findest du jeden Ton schnell:** Suche ihn auf der tiefen E- oder A-Saite, die kennst du. Von dort holst du ihn mit dem Oktavmuster auf eine andere Saite. Die H-Saite hat einen Sonderanker: Bund 1 ist C, Bund 5 ist E, Bund 12 ist H.
+
+<Handhaltung>
+Beim Suchen bleibt die Greifhand locker am Hals, der Daumen hinter dem Hals. Zeige mit dem Finger, den du später spielen würdest. So lernen die Finger die Lage gleich mit.
+</Handhaltung>
+
+<Fehlerbild>
+Du lernst die Saiten stur nacheinander auswendig und kommst im Spiel doch ins Zählen. Besser: pro Ton die Oktavpaare einprägen, zum Beispiel C auf Bund 8 (E-Saite) und Bund 5 (G-Saite). Die zweite Falle: die H-Saite. Wer dort wie auf den anderen Saiten rechnet, trifft den Halbton daneben.
+</Fehlerbild>
+
+<Merksatz>Jeder Ton liegt an sechs Stellen. Finde zuerst die auf der E- oder A-Saite, dann spring mit dem Oktavmuster.</Merksatz>
+
+<Uebung>
+Nimm dir das Notenspiel im Quest mit allen sechs Saiten. Es fragt eine Note, du findest sie. Steigere dich: erst zwei Saiten (E und A), dann vier, dann alle sechs. Ohne Gitarre: Wähle einen Ton und nenne seine sechs Orte laut, von der tiefen E-Saite bis zur hohen e-Saite.
+</Uebung>
+
+<Checkpoint>Im Notenspiel mit allen sechs Saiten erreichst du 20 Treffer pro Minute. Du nennst die sechs Orte des Tons G ohne zu zögern.</Checkpoint>

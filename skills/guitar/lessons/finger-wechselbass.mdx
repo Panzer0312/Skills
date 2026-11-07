@@ -1,0 +1,66 @@
+export const meta = { id: "finger-wechselbass", title: "Wechselbass", order: 222, requires: null };
+
+import { Griffbild, Tab } from "../game/visuals/index";
+
+<Ziel>Du lässt den Daumen über C, G und Am gleichmäßig zwischen zwei Bass-Saiten pendeln, während die Finger darüber zupfen.</Ziel>
+
+Bisher hat der Daumen pro Akkord einen Basston gespielt. Beim Wechselbass spielt er auf jedem Schlag einen Ton, und zwar abwechselnd auf zwei Saiten. Der Daumen ist die Uhr, er läuft ohne Pause weiter. Die Finger setzen ihre Töne darauf.
+
+Die beiden Bass-Saiten pro Akkord:
+
+- C: A-Saite, Bund 3 (C), dann D-Saite, Bund 2 (E)
+- G: tiefe E-Saite, Bund 3 (G), dann D-Saite leer (D)
+- Am: A-Saite leer (A), dann D-Saite, Bund 2 (E)
+
+Die Griffe sind dieselben wie sonst. Du greifst den ganzen Akkord und nutzt den Daumen auf zwei seiner Saiten.
+
+<Griffbild akkorde={["C", "G", "Am"]} />
+
+**Das Muster.** Gezählt wird 1 + 2 + 3 + 4 +. Der Daumen spielt auf 1, 2, 3 und 4, also Bass A, dann Bass B, dann A, dann B. Auf dem „+" hinter der 2 und hinter der 4 zupfen Mittel- und Ringfinger gleichzeitig die H- und die hohe e-Saite. Hinter 1 und 3 bleibt Stille.
+
+**Schritt 1:** nur der Daumen, vier Schläge pro Takt. **Schritt 2:** die Finger kommen dazu.
+
+<Tab
+  titel="Wechselbass über C und G"
+  zeilen={[
+    "------0-------0-|------3-------3-",
+    "------1-------1-|------0-------0-",
+    "----------------|----------------",
+    "----2-------2---|----0-------0---",
+    "3-------3-------|----------------",
+    "----------------|3-------3-------",
+  ]}
+/>
+
+<Tab
+  titel="Wechselbass über Am und G"
+  zeilen={[
+    "------0-------0-|------3-------3-",
+    "------1-------1-|------0-------0-",
+    "----------------|----------------",
+    "----2-------2---|----0-------0---",
+    "0-------0-------|----------------",
+    "----------------|3-------3-------",
+  ]}
+/>
+
+<Handhaltung>
+Die Anschlagshand bleibt ruhig wie in „Daumen und Finger". Nur der Daumen wandert zwischen den beiden Bass-Saiten und trifft sie blind. Mittel- und Ringfinger liegen auf ihren Saiten bereit und ziehen die beiden Töne zusammen. Die Greifhand hält den Akkord den ganzen Takt, auch wenn der Daumen nur zwei Saiten davon spielt.
+</Handhaltung>
+
+<Fehlerbild>
+Der Daumen stolpert, sobald die Finger dazukommen: Er wird schneller oder bleibt hängen, weil er auf die Finger wartet. Oder er trifft die falsche Bass-Saite, bei G zum Beispiel die A-Saite statt der D-Saite. Prüfe: Spiele erst nur den Daumen, vier Schläge pro Takt, bis er ohne Nachdenken pendelt. Dann kommen die Finger auf der „+" dazu, und der Daumen darf sich nicht beirren lassen.
+</Fehlerbild>
+
+<Merksatz>Der Daumen läuft immer weiter. Die Finger kommen und gehen.</Merksatz>
+
+<Uebung bpm={60}>
+Metronom auf 60, ein Klick pro Schlag.
+
+- Eine Minute pro Akkord: nur der Daumen, C, G, Am.
+- Zwei Minuten: Daumen und Finger, Takt für Takt C, G, Am, G.
+
+Steigere das Tempo erst, wenn der Daumen im Wechsel ohne Lücke läuft.
+</Uebung>
+
+<Checkpoint>Du spielst die Runde C, G, Am, G zwei Minuten lang bei 70 BPM, der Daumen pendelt ohne Aussetzer, und die Finger kommen genau auf der „+".</Checkpoint>

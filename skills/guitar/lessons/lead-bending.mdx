@@ -1,0 +1,78 @@
+export const meta = { id: "lead-bending", title: "Bendings treffen", order: 281, requires: null };
+
+import { GriffbrettBild, Tab } from "../game/visuals/index";
+
+<Ziel>Du ziehst auf der G-Saite von Bund 7 einen Halbton (Bund 8) und einen Ganzton (Bund 9) und hörst selbst, ob der Zielton stimmt.</Ziel>
+
+Ein Bend ist kein Wackeln, er hat ein Ziel. Jeder Bend landet auf einem Ton, den du auch normal greifen
+könntest. Diesen Zielton hörst du vorher, dann ziehst du darauf.
+
+**Halbton und Ganzton.** Ein Bund höher ist ein Halbton, zwei Bünde höher ein Ganzton. Auf der G-Saite:
+
+- Bund 7 ist D, dein Startton.
+- Bund 8 ist Dis, ein Halbton höher.
+- Bund 9 ist E, ein Ganzton höher.
+
+<GriffbrettBild
+  bis={9}
+  punkte={[
+    { saite: 3, bund: 7, text: "D" },
+    { saite: 3, bund: 8, text: "Dis" },
+    { saite: 3, bund: 9, text: "E" },
+  ]}
+/>
+
+Der Ganzton-Bend auf E gehört zur A-Moll-Pentatonik und kommt in Soli ständig vor. Dis gehört nicht dazu.
+Den Halbton-Bend übst du fürs Gehör, auf Dis bleibst du nicht stehen.
+
+**Drei Finger.** Der Ringfinger greift Bund 7 und zieht. Mittelfinger und Zeigefinger liegen auf Bund 6
+und Bund 5 derselben Saite und schieben mit. Der Daumen bleibt als Gegenlager hinter dem Hals. Die Kraft
+kommt aus dem Unterarm: Du drehst das Handgelenk wie einen Türgriff, die Saite geht Richtung Decke.
+
+Die Tabulatur zeigt den Ablauf. Schlag 1: Zielton auf Bund 9 greifen und anschlagen. Schlag 3: Bund 7
+anschlagen und ziehen, bis er gleich hoch klingt. Der Bend läuft bis zum Taktende. Im zweiten Takt
+dasselbe mit dem Halbton auf Bund 8.
+
+<Tab
+  titel="Zielton hören, dann ziehen: Ganzton und Halbton"
+  zeilen={[
+    "----------------|----------------",
+    "----------------|----------------",
+    "9-------7b9-----|8-------7b8-----",
+    "----------------|----------------",
+    "----------------|----------------",
+    "----------------|----------------",
+  ]}
+/>
+
+<Handhaltung>
+Ringfinger vorn, Mittel- und Zeigefinger direkt dahinter auf derselben Saite. Die drei Finger bilden
+eine Kette und schieben gemeinsam. Der Zielton auf Bund 9 kommt mit dem kleinen Finger, die Hand rutscht
+dafür einen Bund höher.
+</Handhaltung>
+
+<Fehlerbild>
+Der Bend bleibt zu tief und klingt schief, oder er schießt über das Ziel. Meist zieht der Ringfinger
+allein, ohne die zwei Helfer, und nach dem Ziehen hört niemand mehr auf den Zielton. Prüfe bei jedem
+Bend: Klingt er genau so hoch wie der Zielton, den du vorher gegriffen hast? Wenn nicht, hör den
+Zielton noch einmal und zieh langsamer.
+</Fehlerbild>
+
+<Merksatz>Der Zielton ist der Maßstab, nicht das Gefühl. Erst hören, dann ziehen.</Merksatz>
+
+<Uebung bpm={60}>
+Metronom auf 60, vier Schläge pro Bend.
+
+**Ganzton.** Zielton Bund 9 anschlagen, dann Bund 7 greifen und auf Bund 9 ziehen. Zehn Wiederholungen.
+
+**Halbton.** Dasselbe mit Zielton Bund 8. Zehn Wiederholungen.
+
+**Ohne Hilfe.** Lass den Zielton weg und ziehe direkt. Prüfe danach mit dem Zielton, ob du getroffen hast.
+
+Steigere das Tempo in 5er-Schritten. Gemeistert ist die Lektion bei 80 BPM, wenn jeder Bend ohne
+vorherigen Zielton trifft.
+</Uebung>
+
+<Hinweis>Bends belasten die Fingerkuppen. Bei Schmerz machst du Pause.</Hinweis>
+
+<Checkpoint>Du ziehst bei 60 BPM zehnmal hintereinander Ganzton und Halbton, und jeder Bend klingt gleich hoch wie sein Zielton.</Checkpoint>

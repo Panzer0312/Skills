@@ -1,0 +1,87 @@
+export const meta = { id: "theorie-riff-hoeren", title: "Riff heraushören", order: 252, requires: null };
+
+import { GriffbrettBild, Tab } from "../game/visuals/index";
+
+<Ziel>Du holst ein kurzes Riff aus einer Aufnahme Ton für Ton aufs Griffbrett und schreibst es als Tabulatur auf.</Ziel>
+
+Riffs lernst du nicht aus Tabs, sondern aus Aufnahmen. Tabs sind oft falsch, und viele Riffs gibt es
+nirgends aufgeschrieben. Wer ein Riff heraushören kann, spielt in Minuten nach, wofür andere
+Stunden suchen. Dafür brauchst du ein Verfahren, das jedes Mal gleich abläuft.
+
+**Das Verfahren in sechs Schritten.**
+
+1. **Puls finden.** Höre das Riff dreimal und klopfe mit. Zähle, wie viele Töne auf einen Schlag
+   kommen. Noch keine Gitarre.
+2. **Grundton finden.** Das ist der Ton, zu dem das Riff immer zurückkehrt, meist der tiefste. Suche ihn
+   auf der tiefen E-Saite: Spiele Bund für Bund und summe mit, bis dein Summen und die Gitarre
+   verschmelzen.
+3. **In kleinen Stücken.** Nimm zwei bis vier Töne, nicht das ganze Riff. Stelle die Aufnahme auf
+   Wiederholung oder langsamer.
+4. **Richtung hören.** Geht der nächste Ton hinauf oder hinunter? Summe ihn, dann suche ihn.
+5. **Abstand prüfen.** Teste von deinem Grundton aus die Abstände, die du aus „Intervalle hören"
+   kennst: Terz (3 oder 4 Bünde), Quinte (7 Bünde), Oktave (12 Bünde). Meist liegt ein Ton nah dran.
+6. **Aufschreiben.** Notiere jeden gefundenen Bund sofort. Den Rhythmus schreibst du erst danach,
+   getrennt von den Tönen.
+
+**Beispiel mit Riff A.** Du hörst acht gleich lange Töne. Der Grundton ist die leere E-Saite, denn
+das Riff kehrt immer dorthin zurück. Der dritte Ton liegt höher. Du probierst Bund 1 bis 5: Erst
+beim 5. Bund passt er, das ist A, eine Quarte über E. Der vierte Ton ist wieder E. Dann kommt G im
+3. Bund (eine kleine Terz über E), danach E, A und G.
+
+<GriffbrettBild
+  bis={5}
+  punkte={[
+    { saite: 6, bund: 0, text: "E" },
+    { saite: 6, bund: 3, text: "G" },
+    { saite: 6, bund: 5, text: "A" },
+  ]}
+/>
+
+<Tab
+  titel="Riff A, das Beispiel (E–E–A–E–G–E–A–G)"
+  zeilen={[
+    "----------------",
+    "----------------",
+    "----------------",
+    "----------------",
+    "----------------",
+    "0-0-5-0-3-0-5-3-",
+  ]}
+/>
+
+So sieht das Ergebnis aus. Bei den Testriffs ist die Tabulatur dein Lösungsblatt am Ende, nicht
+dein Ausgangspunkt.
+
+<Handhaltung>
+Bleibe mit der Greifhand in der ersten Lage: Der Zeigefinger deckt Bund 1, der Mittelfinger Bund 2, der
+Ringfinger Bund 3 und der kleine Finger Bund 4. So findest du jeden Ton bis Bund 4 ohne Sprung. Für
+höhere Töne wandert die ganze Hand mit. Die Gitarre soll dabei so liegen, dass du die Aufnahme
+hörst und nicht gegen deine Verstärkung anspielst.
+</Handhaltung>
+
+<Fehlerbild>
+Du spielst das Riff schon beim ersten Anhören mit und rätst auf gut Glück. Dann geht es schnell,
+aber du hörst nichts. Spiele einen Ton erst, wenn du ihn gesummt hast und weißt, ob er höher
+oder tiefer liegt. Zweites Fehlerbild: Du suchst Töne und Rhythmus gleichzeitig. Trenne beides.
+</Fehlerbild>
+
+<Merksatz>Erst summen, dann suchen. Was du nicht singen kannst, findest du nur durch Raten.</Merksatz>
+
+<Uebung bpm={70}>
+**Testriffs B und C.** Beide Riffs sind original und stehen im Riffblatt der Aufgabe. Spiele jedes
+bei 70 BPM als Aufnahme ein (Handy genügt) und schaue danach nicht mehr auf das Blatt.
+
+**Heraushören.** Frühestens am nächsten Tag hörst du deine Aufnahme und holst das Riff nach dem
+Verfahren heraus: Puls, Grundton, kleine Stücke. Schreibe es als Tabulatur auf. Brauchst du mehr als
+zwanzig Minuten, mache Pause, der Gehörsinn ermüdet.
+
+**Vergleichen.** Lege deine Tabulatur neben das Riffblatt. Markiere die Stellen, an denen du daneben
+lagst, und höre sie noch einmal. Meist liegt der Fehler einen Bund daneben.
+
+**Danach.** Nimm ein kurzes Riff aus einem Song, den du magst, und gehe es genauso an.
+</Uebung>
+
+<Hinweis>Findest du einen Ton nicht, versuche dieselbe Tonhöhe auf einer anderen Saite. Der Klang
+ist anders, die Tonhöhe bleibt gleich. Oft erkennst du den Ton dort besser.</Hinweis>
+
+<Checkpoint>Du schreibst Testriff B allein nach deiner Aufnahme als Tabulatur auf, mit allen acht Tönen und dem richtigen Rhythmus.</Checkpoint>

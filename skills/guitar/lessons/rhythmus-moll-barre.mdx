@@ -1,0 +1,104 @@
+export const meta = { id: "rhythmus-moll-barre", title: "Moll-Barré und A-Form", order: 201, requires: null };
+
+import { Griffbild, GriffbrettBild } from "../game/visuals/index";
+
+<Ziel>Du greifst Hm und Cm als Barré mit dem Grundton auf der A-Saite, dazu das Dur-Gegenstück, und weißt, wo derselbe Akkord ein zweites Mal liegt. Gemeistert ist die Lektion, wenn du Hm und Cm bei 90 BPM sauber wechselst.</Ziel>
+
+In „Barré-Akkorde" hast du die E-Form kennengelernt: F-Dur mit dem Grundton auf der tiefen E-Saite.
+Dieselbe Idee funktioniert mit der Form des offenen A-Akkords, für Moll mit der Form des offenen Am. Der Zeigefinger ersetzt dann die
+leere A-Saite und die leere hohe E-Saite, und die Form wandert über das Griffbrett. Der Grundton
+liegt unter dem Zeigefinger auf der A-Saite. Die tiefe E-Saite bleibt stumm: Du schlägst erst ab der
+A-Saite an.
+
+Auf der A-Saite gilt: Bund 2 ist H, Bund 3 ist C, Bund 5 ist D. Wo dein Zeigefinger liegt, heißt der Akkord.
+
+**Hm in der A-Form (Bund 2).** Der Zeigefinger liegt flach über die fünf Saiten A bis hohe E im
+2. Bund. Dahinter greifst du auf D- und G-Saite je den 4. Bund (Ring- und kleiner Finger) und auf der
+H-Saite den 3. Bund (Mittelfinger).
+
+<GriffbrettBild
+  bis={5}
+  punkte={[
+    { saite: 5, bund: 2, text: "1" },
+    { saite: 4, bund: 4, text: "3" },
+    { saite: 3, bund: 4, text: "4" },
+    { saite: 2, bund: 3, text: "2" },
+    { saite: 1, bund: 2, text: "1" },
+  ]}
+/>
+
+**Cm in der A-Form (Bund 3).** Dieselbe Form, einen Bund höher. Du schiebst die ganze Hand und lässt dabei
+den Druck kurz locker, ohne abzuheben.
+
+<GriffbrettBild
+  bis={6}
+  punkte={[
+    { saite: 5, bund: 3, text: "1" },
+    { saite: 4, bund: 5, text: "3" },
+    { saite: 3, bund: 5, text: "4" },
+    { saite: 2, bund: 4, text: "2" },
+    { saite: 1, bund: 3, text: "1" },
+  ]}
+/>
+
+**Dur oder Moll.** Der Unterschied sitzt in einem einzigen Finger. Bei Moll liegt er auf der H-Saite
+einen Bund tiefer als bei Dur. Bei H-Dur greifst du D-, G- und H-Saite alle im 4. Bund, bei Hm die
+H-Saite im 3. Bund. Hörst du den Unterschied? Dur klingt hell, Moll klingt dunkler.
+
+Das Griffbild schreibt die Akkorde englisch: B ist H-Dur, Bm ist Hm.
+
+<Griffbild akkorde={["B", "Bm", "Cm"]} />
+
+**Derselbe Akkord an zwei Stellen.** Mit der E-Form aus „Barré-Akkorde" liegt Hm auch im 7. Bund der
+tiefen E-Saite, dort ist der Grundton H. Der Moll-Griff der E-Form ist die Form des offenen Em: Zeigefinger
+Barré über alle sechs Saiten im 7. Bund, Ring- und kleiner Finger auf A- und D-Saite im 9. Bund. Die
+Töne sind dieselben Buchstaben, nur in anderer Lage. So findest du jeden Akkord an zwei Stellen und
+wählst die, die zum nächsten Griff am nächsten liegt.
+
+<GriffbrettBild
+  bis={9}
+  punkte={[
+    { saite: 6, bund: 7, text: "1" },
+    { saite: 5, bund: 9, text: "3" },
+    { saite: 4, bund: 9, text: "4" },
+    { saite: 3, bund: 7, text: "1" },
+    { saite: 2, bund: 7, text: "1" },
+    { saite: 1, bund: 7, text: "1" },
+  ]}
+/>
+
+<Handhaltung>
+Der Zeigefinger liegt wie bei F-Dur auf der Seite des ersten Glieds. Für die drei Finger hinter dem
+Barré brauchst du Platz: Der Daumen steht hinter dem Hals etwa auf Höhe des Mittelfingers, die Finger
+stehen steil. Wenn Ring- und kleiner Finger nicht nebeneinander passen, nimm den Ringfinger leicht gekippt
+über D- und G-Saite, ohne die H-Saite zu berühren, und lass den kleinen Finger weg. Dann liegt er auf beiden Saiten im 4. Bund.
+</Handhaltung>
+
+<Fehlerbild>
+Die H-Saite klingt gedämpft, weil der Mittelfinger sie berührt oder der Ringfinger sie abdeckt. Oder die hohe
+E-Saite klingt tot, weil das Ende des Zeigefingers nicht fest genug aufliegt. Zupfe die fünf Saiten
+einzeln von unten nach oben und finde die tote Saite. Meist hilft es, den Finger steiler zu stellen oder
+den Zeigefinger ein winziges Stück zu drehen.
+</Fehlerbild>
+
+<Merksatz>Die A-Form ist die Form des offenen A-Akkords, nur verschoben. Wo der Zeigefinger liegt, heißt der Akkord.</Merksatz>
+
+<Uebung bpm={50}>
+Metronom auf 50, ein Abschlag pro Schlag, vier Schläge pro Akkord. Schlage in der A-Form nur die fünf Saiten ab der A-Saite an, in der E-Form alle sechs.
+
+**Halten.** Greife Hm, schlage viermal an, löse ganz, greife neu. Zehn Mal, danach die Hand kurz ausschütteln.
+
+**Gleiten.** Hm im 2. Bund, vier Schläge, dann den Barré mit Hand und Fingern einen Bund nach oben schieben
+auf Cm, vier Schläge, zurück. Eine Minute lang.
+
+**Dur gegen Moll.** H-Dur und Hm abwechselnd. Nur ein Finger wandert: der auf der H-Saite.
+
+**Zwei Stellen.** Hm im 2. Bund, dann Hm im 7. Bund (E-Form), je vier Schläge. Bei der Lage im
+7. Bund findest du den Weg mit der Hand, schau nicht auf die Bünde.
+
+Steigere das Tempo in kleinen Schritten, wenn ein Wechsel eine Minute lang sauber bleibt. Gemeistert ist die Lektion bei 90 BPM.
+</Uebung>
+
+<Hinweis>Barré kostet Kraft. Mach nach jeder Runde eine Pause von 30 Sekunden. Bei Schmerz hörst du sofort auf.</Hinweis>
+
+<Checkpoint>Du wechselst Hm und Cm eine Minute lang bei 50 BPM, und beim Einzelanzupfen klingen alle fünf Saiten beider Akkorde klar.</Checkpoint>

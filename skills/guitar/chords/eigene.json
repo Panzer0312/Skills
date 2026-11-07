@@ -2,22 +2,127 @@
   {
     "symbol": "G",
     "name": "G (alternativer Fingersatz)",
-    "frets": [3, 2, 0, 0, 3, 3],
-    "fingers": [2, 1, null, null, 3, 4],
+    "frets": [
+      3,
+      2,
+      0,
+      0,
+      3,
+      3
+    ],
+    "fingers": [
+      2,
+      1,
+      null,
+      null,
+      3,
+      4
+    ],
     "baseFret": 1
   },
   {
     "symbol": "Em7",
     "name": "Em7",
-    "frets": [0, 2, 2, 0, 3, 0],
-    "fingers": [null, 1, 2, null, 3, null],
+    "frets": [
+      0,
+      2,
+      2,
+      0,
+      3,
+      0
+    ],
+    "fingers": [
+      null,
+      1,
+      2,
+      null,
+      3,
+      null
+    ],
     "baseFret": 1
   },
   {
     "symbol": "Cadd9",
     "name": "Cadd9",
-    "frets": [null, 3, 2, 0, 3, 0],
-    "fingers": [null, 3, 2, null, 4, null],
+    "frets": [
+      null,
+      3,
+      2,
+      0,
+      3,
+      0
+    ],
+    "fingers": [
+      null,
+      3,
+      2,
+      null,
+      4,
+      null
+    ],
+    "baseFret": 1
+  },
+  {
+    "symbol": "Dsus4",
+    "name": "Dsus4",
+    "frets": [
+      null,
+      null,
+      0,
+      2,
+      3,
+      3
+    ],
+    "fingers": [
+      null,
+      null,
+      null,
+      1,
+      2,
+      3
+    ],
+    "baseFret": 1
+  },
+  {
+    "symbol": "Asus2",
+    "name": "Asus2",
+    "frets": [
+      null,
+      0,
+      2,
+      2,
+      0,
+      0
+    ],
+    "fingers": [
+      null,
+      null,
+      1,
+      2,
+      null,
+      null
+    ],
+    "baseFret": 1
+  },
+  {
+    "symbol": "Am7",
+    "name": "Am7",
+    "frets": [
+      null,
+      0,
+      2,
+      0,
+      1,
+      0
+    ],
+    "fingers": [
+      null,
+      null,
+      2,
+      null,
+      1,
+      null
+    ],
     "baseFret": 1
   }
 ]

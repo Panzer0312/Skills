@@ -94,7 +94,7 @@ describe("Placement", () => {
     expect(await screen.findByRole("heading", { name: "Was kannst du schon?" })).toBeInTheDocument();
     const listed = gameContent.nodes.filter((n) => n.available || n.knownSong);
     expect(screen.getAllByRole("checkbox")).toHaveLength(listed.length);
-    await userEvent.click(screen.getByRole("checkbox", { name: "Haltung" }));
+    await userEvent.click(screen.getByRole("checkbox", { name: "Instrument und Haltung" }));
     await userEvent.click(screen.getByRole("button", { name: "Weiter" }));
     expect(screen.getByRole("heading", { name: "Wie sicher fühlst du dich?" })).toBeInTheDocument();
     const tech = gameContent.techniques[0]!;
@@ -180,7 +180,7 @@ describe("Placement", () => {
     });
     renderPlacement([bundled]);
     expect(await screen.findByRole("checkbox", { name: /Anschlag/ })).toBeChecked();
-    expect(screen.getByRole("checkbox", { name: "Haltung" })).not.toBeChecked();
+    expect(screen.getByRole("checkbox", { name: "Instrument und Haltung" })).not.toBeChecked();
     await userEvent.click(screen.getByRole("button", { name: "Weiter" }));
     expect(screen.getByRole("slider", { name: tech.title })).toHaveValue("7");
     await userEvent.click(screen.getByRole("button", { name: "Weiter" }));

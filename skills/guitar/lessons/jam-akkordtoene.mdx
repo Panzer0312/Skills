@@ -1,0 +1,107 @@
+export const meta = { id: "jam-akkordtoene", title: "Akkordtöne treffen", order: 311, requires: null };
+
+import { Griffbild, GriffbrettBild, Tab } from "../game/visuals/index";
+
+<Ziel>Du landest im Jam Room auf jedem Akkordwechsel auf einem Ton des neuen Akkords, auf der 1 des Taktes.</Ziel>
+
+Die Pentatonik klingt fast überall gut. Trotzdem passt nicht jeder Ton gleich gut zu jedem Akkord. Wenn
+der Akkord wechselt, hört das Ohr genau hin. Landest du genau dann auf einem Ton des neuen Akkords,
+klingt dein Spiel gewollt statt zufällig.
+
+Ein Akkord besteht aus Grundton, Terz und Quinte. Das sind seine Akkordtöne. Der Jam Room läuft für
+diese Übung in der Tonart E, Stil Rock, Box 3. Die Akkordfolge ist Em, C, G, D, ein Akkord pro Takt.
+
+<Griffbild akkorde={["Em", "C", "G", "D"]} />
+
+Das sind die Töne der vier Akkorde. Die fettgedruckten liegen in der E-Moll-Pentatonik, die du über der
+ganzen Folge spielst:
+
+- Em: **E**, **G**, **H**
+- C: C, **E**, **G**. Das C selbst gehört nicht zur Pentatonik, E und G tragen den Akkord.
+- G: **G**, **H**, **D**
+- D: **D**, Fis, **A**. Das Fis gehört nicht zur Pentatonik, D und A tragen den Akkord.
+
+Die Box 3 mit den Notennamen. Hier findest du alle Ziele:
+
+<GriffbrettBild
+  punkte={[
+    { saite: 6, bund: 5, text: "A" },
+    { saite: 6, bund: 7, text: "H" },
+    { saite: 5, bund: 5, text: "D" },
+    { saite: 5, bund: 7, text: "E" },
+    { saite: 4, bund: 5, text: "G" },
+    { saite: 4, bund: 7, text: "A" },
+    { saite: 3, bund: 4, text: "H" },
+    { saite: 3, bund: 7, text: "D" },
+    { saite: 2, bund: 5, text: "E" },
+    { saite: 2, bund: 8, text: "G" },
+    { saite: 1, bund: 5, text: "A" },
+    { saite: 1, bund: 7, text: "H" },
+  ]}
+  bis={8}
+/>
+
+Zu jedem Akkord die Ziele in dieser Box, mit Saite und Bund:
+
+- Em: G auf der H-Saite, Bund 8. E auf der H-Saite, Bund 5. H auf der G-Saite, Bund 4.
+- C: E auf der H-Saite, Bund 5. G auf der H-Saite, Bund 8.
+- G: H auf der G-Saite, Bund 4. D auf der G-Saite, Bund 7. G auf der H-Saite, Bund 8.
+- D: A auf der D-Saite, Bund 7. D auf der G-Saite, Bund 7.
+
+Die Regel: Auf der 1 jedes Taktes landest du auf einem Ziel, lässt den Ton klingen und spielst danach
+frei weiter. Spiel den Ton lieber nah an dem, wo deine Hand schon ist. Hier ein Beispiel für einen
+Durchgang, die Ziele stehen jeweils am Taktanfang:
+
+<Tab
+  titel="Takt 1 und 2: Em, dann C"
+  zeilen={[
+    "----------------|----------------",
+    "8---5-----------|5---8-----------",
+    "--------7-------|--------7-------",
+    "----------------|----------------",
+    "----------------|----------------",
+    "----------------|----------------",
+  ]}
+/>
+
+<Tab
+  titel="Takt 3 und 4: G, dann D"
+  zeilen={[
+    "----------------|----------------",
+    "----------------|--------5-------",
+    "4---7---4-------|----7-----------",
+    "----------------|7---------------",
+    "----------------|----------------",
+    "----------------|----------------",
+  ]}
+/>
+
+Im Beispiel landest du auf G, E, H und A. Dazwischen gleitest du in kleinen Schritten zum nächsten Ziel.
+Ein Ton, der in beiden Akkorden vorkommt, verbindet sie besonders ruhig: E und G gehören zu Em und
+zu C.
+
+<Handhaltung>
+Die Hand bleibt in Box 3 und wandert nur bei Bedarf eine Saite höher oder tiefer. Der Zeigefinger
+liegt im 5. Bund, der Ringfinger im 7. und der kleine Finger im 8. Bund. Lass das Ziel immer ganz
+ausklingen, bevor du weiterspielst.
+</Handhaltung>
+
+<Fehlerbild>
+Du landest erst auf der 2 oder der 3, wenn der Akkord schon einen Schlag läuft. Oder du triffst
+einen Ton, der nicht im neuen Akkord liegt, und merkst es nicht, weil du nicht auf den Wechsel
+achtest. Prüfe: Weißt du schon im letzten Schlag des alten Takts, welches Ziel als Nächstes kommt?
+</Fehlerbild>
+
+<Merksatz>Der Wechsel ist der Moment, in dem man dich hört: Lande auf der 1 auf einem Ton des neuen Akkords.</Merksatz>
+
+<Uebung bpm={70}>
+Jam Room auf Tonart E, Stil Rock, Box 3, Tempo 70, dann Starten.
+
+**Nur Ziele.** Spiele pro Takt nur den Zielton auf der 1 und lass ihn vier Schläge klingen. Wähle
+dein Ziel selbst, aus der Liste oben. Vier Durchgänge.
+
+**Ziel und Phrase.** Lande auf der 1, spiele danach zwei bis vier freie Töne. Im letzten Schlag
+suchst du schon das Ziel für den nächsten Takt. Acht Durchgänge. Steigere das Tempo in Fünferschritten.
+</Uebung>
+
+<Checkpoint>Du spielst acht Durchgänge bei 80 BPM, und auf jeder 1 liegt ein Ton des gerade beginnenden Akkords.</Checkpoint>

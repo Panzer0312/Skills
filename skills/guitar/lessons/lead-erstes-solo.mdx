@@ -1,0 +1,96 @@
+export const meta = { id: "lead-erstes-solo", title: "Erstes Solo (Boss)", order: 285, requires: null };
+
+import { GriffbrettBild, Tab } from "../game/visuals/index";
+
+<Ziel>Du spielst ein eigenes Solo über zwölf Takte Begleitung im Jam Room: tief beginnen, steigern, oben den Höhepunkt setzen, auf A enden.</Ziel>
+
+Ein Solo ist eine Geschichte in drei Teilen. Am Anfang erzählst du ruhig und tief, in der Mitte wird es
+dichter, am Ende sitzt der Höhepunkt, und du kommst nach Hause. Alles, was du dafür brauchst, kennst du: die
+Boxen, Bends, Vibrato, Frage und Antwort.
+
+**Einrichten.** Öffne den Jam Room. Tonart A, Stil Blues, Tempo 80. Der Blues hat zwölf Takte, dann
+beginnt die Runde von vorn. Der Jam Room zählt nicht vor: Takt 1 beginnt sofort mit dem Start. Die Anzeige nennt den Akkord. In Takt 5 springt er von A7 auf D7, das ist dein
+Zähler.
+
+**Der Plan.** Du steigst von Box zu Box nach oben.
+
+- Takt 1 bis 4: Box 1, tief und ruhig. Frage und Antwort, viel Luft. Takt 4 endet auf dem C der hohen
+  E-Saite (Bund 8), das ist der Wechselton.
+- Takt 5 bis 8: Box 2, mehr Töne, dein erster Bend. Takt 8 endet auf dem D der hohen E-Saite (Bund 10).
+- Takt 9 bis 12: Box 3, der Höhepunkt. Hier steht dein bester Bend mit Vibrato. Takt 12 endet auf A
+  (H-Saite, Bund 10), lang gehalten.
+
+Mit der Auswahl Box im Jam Room siehst du die gerade gewählte Box im Griffbrett.
+
+Die zwei Wechseltöne und der Schlusston:
+
+<GriffbrettBild
+  bis={10}
+  punkte={[
+    { saite: 1, bund: 8, text: "C" },
+    { saite: 1, bund: 10, text: "D" },
+    { saite: 2, bund: 10, text: "A" },
+  ]}
+/>
+
+Zwei Beispiele aus dem Plan. Der Anfang bleibt tief:
+
+<Tab
+  titel="Takt 1 und 2: tief in Box 1, Rückkehr auf A"
+  zeilen={[
+    "----------------|----------------",
+    "----------------|----------------",
+    "----------------|----------------",
+    "----------------|----------------",
+    "--------5---7---|----------------",
+    "5---8-----------|5~~~~~~~~~~~~~~~",
+  ]}
+/>
+
+Das Ende steigert sich, der Bend landet auf E:
+
+<Tab
+  titel="Takt 11 und 12: hoch in Box 3, Bend, Ende auf A"
+  zeilen={[
+    "10b12~~~10------|----------------",
+    "------------13--|10~~~~~~~~~~~~~~",
+    "----------------|----------------",
+    "----------------|----------------",
+    "----------------|----------------",
+    "----------------|----------------",
+  ]}
+/>
+
+Das ist nur ein Beispiel. Die Takte dazwischen schreibst du selbst.
+
+<Handhaltung>
+Die Hand wandert mit dem Solo nach oben. Bei jedem Wechsel bleibt sie kurz auf dem gemeinsamen Ton
+stehen. Oben in Box 3 liegen die Bünde enger, also halte den Daumen locker hinter dem Hals und lass die
+Schultern unten.
+</Handhaltung>
+
+<Fehlerbild>
+Du spielst alle zwölf Takte gleich dicht und gleich laut, ohne Plan, oder du verlierst den Takt und landest
+mit dem Schluss im falschen Takt. Prüfe: Weißt du in jedem Takt, wo du bist? Zähle mit. Takt 5 beginnt, wenn
+der Akkord auf D7 springt, Takt 9 mit E7. Klingt der Höhepunkt wirklich höher und lauter als der Anfang?
+</Fehlerbild>
+
+<Merksatz>Tief anfangen, hoch steigern, auf A enden. Ein Solo ist eine Geschichte, kein Tempo-Test.</Merksatz>
+
+<Uebung bpm={80}>
+Metronom aus, der Jam Room läuft auf 80.
+
+**Drittel einzeln.** Spiele erst nur Takt 1 bis 4 und warte die übrigen Takte ab. Dann Takt 5 bis 8, dann
+Takt 9 bis 12.
+
+**Ganze Runde.** Spiele alle zwölf Takte durch. Falsche Töne sind normal. Geh ruhig zum nächsten Ton
+der Box weiter, ohne anzuhalten.
+
+**Drei Runden.** Spiele das Solo dreimal hintereinander, jedes Mal etwas anders. Gemeistert ist die
+Lektion, wenn drei ganze Runden ohne Stopp gelingen.
+</Uebung>
+
+<Hinweis>Wer Blues als Begleitung nicht mag, nimmt im Jam Room den Stil Rock in A. Dann spielst du dreimal
+die Vier-Takt-Runde und steigerst von Runde zu Runde.</Hinweis>
+
+<Checkpoint>Du spielst bei 80 BPM drei ganze Runden Solo im Jam Room ohne Stopp, tief beginnend, mit Bend und Vibrato am Höhepunkt, jedes Mal endend auf A.</Checkpoint>

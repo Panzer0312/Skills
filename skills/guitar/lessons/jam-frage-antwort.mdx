@@ -1,0 +1,91 @@
+export const meta = { id: "jam-frage-antwort", title: "Frage und Antwort", order: 309, requires: null };
+
+import { GriffbrettBild, Tab } from "../game/visuals/index";
+
+<Ziel>Du spielst im Jam Room zwei Takte Frage und zwei Takte Antwort. Die Frage endet offen, die Antwort landet auf dem Grundton A.</Ziel>
+
+Ein Gespräch besteht aus Frage und Antwort. Musik funktioniert genauso. Eine Frage hört auf einem Ton
+auf, der weiterwill. Eine Antwort endet auf dem Ton, der zu Hause ist. Über Am ist das der Ton A,
+denn nach ihm ist der Akkord benannt. In „Jam über einen Akkord" hast du das mit E schon geübt.
+
+Jetzt kommt eine echte Akkordfolge dazu. Stelle im Jam Room im Dorf ein: Tonart A, Stil Rock, Box 1,
+Tempo 70. Die Begleitung spielt vier Takte, jeder Takt hat einen Akkord: Am, F, C, G. Der Jam Room
+zeigt dir den Akkord, der gerade klingt, und den nächsten.
+
+- Takt 1 und 2 (Am und F): deine Frage.
+- Takt 3 und 4 (C und G): deine Antwort.
+- Der letzte Ton der Antwort fällt genau auf die 1 des nächsten Durchgangs. Dann beginnt Am von vorn.
+
+Du bleibst in Box 1 der A-Moll-Pentatonik, wie in „Pentatonik Box 1". Die Töne mit Namen:
+
+<GriffbrettBild
+  punkte={[
+    { saite: 6, bund: 5, text: "A" },
+    { saite: 6, bund: 8, text: "C" },
+    { saite: 5, bund: 5, text: "D" },
+    { saite: 5, bund: 7, text: "E" },
+    { saite: 4, bund: 5, text: "G" },
+    { saite: 4, bund: 7, text: "A" },
+    { saite: 3, bund: 5, text: "C" },
+    { saite: 3, bund: 7, text: "D" },
+    { saite: 2, bund: 5, text: "E" },
+    { saite: 2, bund: 8, text: "G" },
+    { saite: 1, bund: 5, text: "A" },
+    { saite: 1, bund: 8, text: "C" },
+  ]}
+  bis={8}
+/>
+
+Die Frage endet auf G (H-Saite, Bund 8). G klingt offen, weil es nicht der Grundton ist. Auch E klingt
+offen. Die Antwort endet auf A, tief auf der E-Saite, Bund 5. Das ist der Schlusspunkt.
+
+<Tab
+  titel="Frage: C A C, A, G (endet offen)"
+  zeilen={[
+    "8-5-8-----------|5---------------",
+    "----------------|----8-----------",
+    "----------------|----------------",
+    "----------------|----------------",
+    "----------------|----------------",
+    "----------------|----------------",
+  ]}
+/>
+
+<Tab
+  titel="Antwort: G E D C, E D, dann A"
+  zeilen={[
+    "----------------|----------------|----",
+    "8-5-------------|----------------|----",
+    "----7-5---------|----------------|----",
+    "----------------|----------------|----",
+    "----------------|7---5-----------|----",
+    "----------------|----------------|5---",
+  ]}
+/>
+
+<Handhaltung>
+Die Hand bleibt im 5. Bund: Zeigefinger für Bund 5, Ringfinger für Bund 7, kleiner Finger für Bund 8.
+Für den Schlusston A auf der tiefen E-Saite nimmst du den Zeigefinger. Das Handgelenk bleibt locker.
+Hör beim Spielen auf den Akkord, nicht auf deine Finger.
+</Handhaltung>
+
+<Fehlerbild>
+Die Frage endet auf A und klingt fertig, dann ist keine Antwort mehr nötig. Oder die Antwort kommt zu
+früh oder zu spät, und der Schlusston verfehlt die 1. Prüfe: Hört deine Frage auf G oder E auf?
+Fällt dein A genau mit dem Anfang von Am zusammen?
+</Fehlerbild>
+
+<Merksatz>Die Frage lässt die Tür offen, die Antwort macht sie zu.</Merksatz>
+
+<Uebung bpm={70}>
+Jam Room auf Tonart A, Stil Rock, Box 1, Tempo 70, dann Starten.
+
+**Beispiele.** Spiele Frage und Antwort aus den Tabs viermal im Durchgang. Erst die Frage allein in
+Takt 1 und 2, dann in Takt 3 und 4 die Antwort.
+
+**Eigene Version.** Denke dir eine Frage aus drei bis fünf Tönen aus, die auf G oder E endet. Dann
+antworte mit einer Phrase, die einen Teil deiner Frage aufgreift und auf A landet. Pausen sind erlaubt.
+Wiederhole acht Durchgänge. Steigere das Tempo in Fünferschritten, wenn es sauber klappt.
+</Uebung>
+
+<Checkpoint>Du spielst acht Durchgänge am Stück bei 80 BPM. Jede Frage endet offen, jede Antwort landet auf A auf der 1.</Checkpoint>

@@ -1,0 +1,66 @@
+export const meta = { id: "griffbrett-noten", title: "Noten auf E- und A-Saite", order: 301, requires: null };
+
+import { GriffbrettBild } from "../game/visuals/index";
+
+<Ziel>Du findest jeden Ton auf der tiefen E- und der A-Saite ohne Nachzählen. Dein Ziel: 25 Treffer pro Minute im Notenspiel auf beiden Saiten.</Ziel>
+
+Der Name eines Barré- oder Power-Chords ist der Ton, den du mit dem Zeigefinger auf der tiefen E- oder A-Saite greifst. Wer diese zwei Saiten kennt, benennt jeden Griff. Dieser Ton heißt **Grundton**.
+
+**Erst die Stammtöne.** Das sind die Töne ohne Vorzeichen: A, H, C, D, E, F, G. Auf der Gitarre liegen zwei Paare direkt nebeneinander, ohne Zwischenton: **E–F** und **H–C**. Alle anderen Stammtöne sind zwei Bünde voneinander entfernt.
+
+Tiefe E-Saite (Bund 0 ist E):
+
+<GriffbrettBild
+  bis={12}
+  punkte={[
+    { saite: 6, bund: 0, text: "E" },
+    { saite: 6, bund: 1, text: "F" },
+    { saite: 6, bund: 3, text: "G" },
+    { saite: 6, bund: 5, text: "A" },
+    { saite: 6, bund: 7, text: "H" },
+    { saite: 6, bund: 8, text: "C" },
+    { saite: 6, bund: 10, text: "D" },
+    { saite: 6, bund: 12, text: "E" },
+  ]}
+/>
+
+A-Saite (Bund 0 ist A):
+
+<GriffbrettBild
+  bis={12}
+  punkte={[
+    { saite: 5, bund: 0, text: "A" },
+    { saite: 5, bund: 2, text: "H" },
+    { saite: 5, bund: 3, text: "C" },
+    { saite: 5, bund: 5, text: "D" },
+    { saite: 5, bund: 7, text: "E" },
+    { saite: 5, bund: 8, text: "F" },
+    { saite: 5, bund: 10, text: "G" },
+    { saite: 5, bund: 12, text: "A" },
+  ]}
+/>
+
+**Merkanker, damit du nicht zählen musst:**
+
+- Bund 12 ist immer derselbe Ton wie die leere Saite, eine Oktave höher.
+- Bund 5 auf der E-Saite ist A, genau wie die leere Saite daneben. Bund 5 auf der A-Saite ist D, genau wie die leere Saite daneben.
+- Die Halbtonpaare E–F und H–C erkennst du an den Bünden: F liegt auf Bund 1 (E-Saite), C auf Bund 3 (A-Saite).
+- Bund 3 ist auf beiden Saiten ein Kreuzungspunkt: G auf der E-Saite, C auf der A-Saite. Dort liegen G-Dur und C-Dur als Barré.
+
+**Töne mit Vorzeichen.** Ein Kreuz (#) hebt den Ton um einen Bund an, ein b senkt ihn um einen Bund. Zwischen den Stammtönen liegt je ein Ton: auf der E-Saite F# auf Bund 2, G# auf Bund 4, A# auf Bund 6, C# auf Bund 9, D# auf Bund 11. Dieselben Töne heißen auch Gb, Ab, B (englisch B♭), Db, Eb. Das deutsche B liegt einen Halbton unter H, ist also dasselbe wie A#. Zwischen E und F sowie H und C gibt es keinen Zwischenton.
+
+<Handhaltung>
+Zum Finden darfst du mit dem Zeigefinger zeigen. Zum Spielen gilt: Handgelenk gerade, Daumen hinter dem Hals. Die Hand wandert als Ganzes zum Bund, der Arm führt, die Finger springen nicht.
+</Handhaltung>
+
+<Fehlerbild>
+Du suchst den Ton, indem du vom leeren Bund aus Bund für Bund zählst. Das dauert bei Bund 10 schon zu lang. Stattdessen: spring zum nächsten Anker (Bund 3, 5, 7, 12) und zähle von dort höchstens zwei Bünde. Das zweite Fehlerbild: du vergisst die Halbtonpaare E–F und H–C und rechnest immer zwei Bünde.
+</Fehlerbild>
+
+<Merksatz>Bund 5 ist der Nachbarton der leeren Saite, Bund 12 ist die Oktave, und nur E–F und H–C liegen direkt nebeneinander.</Merksatz>
+
+<Uebung>
+Nimm dir das Notenspiel im Quest. Es fragt eine Note, du zeigst sie auf der tiefen E- oder A-Saite. Reihenfolge: erst die Stammtöne, dann die Töne mit Vorzeichen. Beginne langsam, es zählen nur richtige Treffer. Ohne Gitarre: Sprich zu jedem Bund 0 bis 12 den Ton der E-Saite.
+</Uebung>
+
+<Checkpoint>Du erreichst im Notenspiel auf der E- und A-Saite 25 Treffer in einer Minute, ohne zwischendurch Bünde abzuzählen.</Checkpoint>

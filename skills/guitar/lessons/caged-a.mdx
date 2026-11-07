@@ -1,0 +1,44 @@
+export const meta = { id: "caged-a", title: "A-Form", order: 307, requires: null };
+
+import { Griffbild, GriffbrettBild } from "../game/visuals/index";
+
+<Ziel>Du verschiebst den A-Griff den Hals hinauf und liest seinen Namen an der A-Saite ab. Dein Ziel: sauberer Wechsel bei 70 BPM.</Ziel>
+
+Die vierte Form ist das offene A-Dur.
+
+<Griffbild akkorde={["A"]} />
+
+Der Grundton liegt auf der **A-Saite**, genau wie bei der C-Form. Beim offenen A ist das der leere Ton. Verschiebst du die Form, ersetzt der Zeigefinger wieder den Sattel als Barré über A- bis e-Saite. Die tiefe E-Saite bleibt stumm.
+
+C-Dur als A-Form, Grundton auf der A-Saite Bund 3 (x35553):
+
+<GriffbrettBild
+  bis={6}
+  punkte={[
+    { saite: 5, bund: 3, text: "1" },
+    { saite: 4, bund: 5, text: "3" },
+    { saite: 3, bund: 5, text: "3" },
+    { saite: 2, bund: 5, text: "3" },
+    { saite: 1, bund: 3, text: "1" },
+  ]}
+/>
+
+Die Töne von unten nach oben: C, G, C, E, G. Der Name steht auf der A-Saite: Bund 3 C, Bund 5 D, Bund 7 E, Bund 10 G.
+
+Die A-Form und die C-Form haben beide ihren Grundton auf der A-Saite. Für C-Dur liegen sie direkt nebeneinander: die C-Form im Bereich Bund 0 bis 3, die A-Form bei Bund 3 bis 5.
+
+<Handhaltung>
+Der Zeigefinger liegt als Barré im Bund des Grundtons über A- bis e-Saite. Der Ringfinger (oder alle drei Finger nebeneinander) greift D-, G- und H-Saite zwei Bünde höher.
+</Handhaltung>
+
+<Fehlerbild>
+Die hohe e-Saite wird vom Ringfinger gedämpft, weil er flach liegt und mit der Seite die Nachbarsaite berührt. Drücke die Finger auf der Spitze und halte die Handfläche weg vom Hals. Das zweite Fehlerbild: du schlägst die tiefe E-Saite mit an.
+</Fehlerbild>
+
+<Merksatz>A-Form: Der Name steht auf der A-Saite, die tiefe E-Saite bleibt stumm, der Barré geht bis zur e-Saite.</Merksatz>
+
+<Uebung bpm={60}>
+Metronom auf 60. Vier Schläge C (Bund 3), vier Schläge D (Bund 5), vier Schläge E (Bund 7), dann zurück. Nach jedem Wechsel sagst du den Namen und zeigst den Ton auf der A-Saite.
+</Uebung>
+
+<Checkpoint>Du wechselst bei 70 BPM zwischen C, D und E in A-Form, alle fünf Saiten klingen, und du nennst jeden Namen von der A-Saite.</Checkpoint>

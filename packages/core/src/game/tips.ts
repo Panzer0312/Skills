@@ -10,7 +10,6 @@ export interface Tips {
   best: RoadStep | null;
   quick: QuickTip | null;
   stayOnTrack: string;
-  moreComing: boolean;
 }
 
 /** An unfinished quick lesson first, else a learned one worth refining. */
@@ -35,6 +34,5 @@ export function buildTips(content: GameContent, statuses: Record<string, LessonS
     quick: quickWin(content.nodes, statuses),
     // The lesson on the gold road is the main way, not a side road.
     stayOnTrack: stayOnTrackText(chosen.filter((id) => id !== best?.lessonId).length),
-    moreComing: best === null && content.road.some((step) => step.questId === null),
   };
 }

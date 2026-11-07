@@ -1,0 +1,83 @@
+export const meta = { id: "lead-wechselschlag", title: "Wechselschlag-Tempo", order: 291, requires: null };
+
+import { RhythmusRaster, Tab } from "../game/visuals/index";
+
+<Ziel>Du spielst Läufe mit strengem Wechselschlag, jeder Abschlag auf dem Klick und jeder Aufschlag dazwischen, und erreichst sauber 90 BPM in Sechzehnteln.</Ziel>
+
+In „Erstes Solo (Boss)" hast du Töne ausgewählt und gesetzt. Hier wird die Anschlagshand schneller. Das geht
+nur, wenn sie nie anhält: Sie schwingt immer weiter ab, auf, ab, auf, auch wenn sie dabei eine Saite
+verfehlt.
+
+**Strenger Wechselschlag.** Auf jedem Klick und auf jeder „und"-Zählzeit schlägst du ab. Alle Töne
+dazwischen schlägst du auf. Die Regel gilt ohne Ausnahme, auch beim Saitenwechsel. Du denkst nie:
+„Hier mache ich zweimal ab." Die Hand läuft wie ein Pendel.
+
+Im Raster steht D für den Abschlag und U für den Aufschlag. Bei vier Tönen pro Klick sind das
+Sechzehntel, gezählt „1 e und a": ab, auf, ab, auf.
+
+<RhythmusRaster muster="DUDUDUDU" zaehlzeiten={["1", "e", "+", "a", "2", "e", "+", "a"]} />
+
+Die erste Tabulatur ist Box 1 der A-Moll-Pentatonik, zwei Töne pro Saite. Weil jede Saite genau zwei
+Töne hat, fällt der erste Ton jeder Saite immer auf einen Abschlag und der zweite auf einen
+Aufschlag. Das ist der leichteste Einstieg. Beim Zurückspielen kehrt sich das um: Dann ist der erste Ton jeder Saite ein Aufschlag.
+
+<Tab
+  titel="Box 1 aufwärts, zwei Töne pro Saite"
+  zeilen={[
+    "--------------------5-8-",
+    "----------------5-8-----",
+    "------------5-7---------",
+    "--------5-7-------------",
+    "----5-7-----------------",
+    "5-8---------------------",
+  ]}
+/>
+
+Die zweite Tabulatur ist ein Fingertraining. Auf jeder Saite spielst du die Bünde 5, 6, 7 und 8 mit
+den Fingern 1, 2, 3 und 4, je ein Finger pro Bund. Es sind vier Töne pro Saite, also fällt der Saitenwechsel
+immer auf einen Abschlag.
+
+<Tab
+  titel="Ein Finger pro Bund, vier Saiten"
+  zeilen={[
+    "--------------------------------",
+    "--------------------------------",
+    "------------------------5-6-7-8-",
+    "----------------5-6-7-8---------",
+    "--------5-6-7-8-----------------",
+    "5-6-7-8-------------------------",
+  ]}
+/>
+
+<Handhaltung>
+Der Anschlag kommt aus dem Handgelenk, nicht aus dem Ellbogen und nicht aus den Fingern. Das Plektrum
+steht leicht schräg und taucht nur wenig hinter die Saite ein. Je weniger Weg es zurücklegt, desto
+schneller kann es pendeln. Der Daumen hält das Plektrum locker, der Unterarm liegt ruhig auf.
+</Handhaltung>
+
+<Fehlerbild>
+Du spielst im langsamen Tempo sauber, aber sobald es schneller wird, wirst du unbemerkt zum Abkürzer:
+Auf manche Töne schlägst du zweimal ab, weil die Hand „kürzt". Das klingt zuerst nur ungleichmäßig und
+bleibt später als Tempobremse hängen. Prüfe mit dem Raster: Kannst du bei jedem Ton sagen, ob er ab
+oder auf kam? Wenn nicht, geh zehn BPM zurück.
+</Fehlerbild>
+
+<Merksatz>Die Hand pendelt immer. Der Klick sagt ab, das „und" sagt auf, ohne Ausnahme.</Merksatz>
+
+<Uebung bpm={60}>
+Metronom auf 60, vier Töne pro Klick, strikt ab und auf.
+
+**Box 1.** Spiele die erste Tabulatur aufwärts und ohne Pause wieder abwärts, zehn Durchgänge.
+
+**Vier Finger.** Spiele die zweite Tabulatur zehn Mal. Danach schiebst du den Griff um einen Bund
+nach oben (Bünde 6 bis 9) und spielst sie noch einmal.
+
+Steigere das Tempo in Fünferschritten, nur wenn zehn Durchgänge hintereinander sauber klingen.
+Gemeistert ist die Lektion bei 90 BPM.
+</Uebung>
+
+<Hinweis>Ein verkrampfter Unterarm bremst mehr als alles andere. Schüttle die Hand zwischen den Runden aus
+und höre bei Schmerz sofort auf.</Hinweis>
+
+<Checkpoint>Du spielst beide Tabulaturen bei 90 BPM in Sechzehnteln mit durchgehendem Wechselschlag, jeder Ton klingt gleich laut,
+und du weißt bei jedem Ton, ob er ab oder auf war.</Checkpoint>
