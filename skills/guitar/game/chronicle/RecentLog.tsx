@@ -5,7 +5,9 @@ import { gameApi, gameContent, useRecentLog } from "../api.js";
 const FREE_LABELS: Record<string, string> = {
   song: "Song (frei)",
   "frei-technik": "Technik (frei)",
-  jam: "Jam Room",
+  // The Jam Room and the free timer both log "jam"; the entry cannot tell them apart.
+  jam: "Jammen",
+  frei: "Sonstiges (frei)",
   akkordwechsel: "Akkordwechsel-Trainer",
   theorie: "Noten finden",
 };
@@ -15,6 +17,14 @@ function entryLabel(entry: RecentLogEntry): string {
     return gameContent.quests.find((q) => q.id === entry.questId)?.title ?? entry.questId ?? "Quest";
   }
   return FREE_LABELS[entry.techniqueId ?? ""] ?? "Freies Üben";
+}
+
+function metricText(entry: RecentLogEntry): string {
+  if (entry.metricValue == null) return "";
+  const key = entry.metricKey ?? "";
+  if (key.startsWith("wechsel:")) return ` · ${entry.metricValue} Wechsel`;
+  if (key.startsWith("notenfinder:")) return ` · ${entry.metricValue} Treffer`;
+  return ` · ${entry.metricValue}`;
 }
 
 const date = (day: string) => `${day.slice(8, 10)}.${day.slice(5, 7)}.${day.slice(2, 4)}`;
@@ -41,7 +51,7 @@ export function RecentLog() {
       <h2 className="mt-6 text-lg font-semibold">Letzte Einträge</h2>
       {failed ? <p role="alert">Der Eintrag konnte nicht gelöscht werden.</p> : null}
       {recent.isPending ? (
-        <p role="status">Wird geladen …</p>
+        <p role="status">Wird geladen…</p>
       ) : recent.isError ? (
         <div role="alert">
           <p>Die letzten Einträge konnten nicht geladen werden.</p>
@@ -57,7 +67,7 @@ export function RecentLog() {
             <li key={entry.id} className="flex flex-wrap items-center justify-between gap-x-4">
               <span>
                 {date(entry.day)} · {entryLabel(entry)} · {Math.round(entry.seconds / 60)} min
-                {entry.metricValue != null ? ` · ${entry.metricValue}` : ""}
+                {metricText(entry)}
               </span>
               <button
                 type="button"

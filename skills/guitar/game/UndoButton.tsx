@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import { ApiError } from "../../../packages/web/src/api/client.js";
 import { gameApi } from "./api.js";
 
 export function UndoButton({ logId, onUndone }: { logId: number; onUndone?: () => void }) {
@@ -13,7 +14,12 @@ export function UndoButton({ logId, onUndone }: { logId: number; onUndone?: () =
     setBusy(true);
     setFailed(false);
     try {
-      await gameApi.deleteLog(logId);
+      try {
+        await gameApi.deleteLog(logId);
+      } catch (error) {
+        // Already removed, e.g. from the chronicle or another tab: the goal is reached.
+        if (!(error instanceof ApiError && error.code === "not_found")) throw error;
+      }
       setUndone(true);
       onUndone?.();
     } catch {

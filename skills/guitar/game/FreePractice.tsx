@@ -257,7 +257,7 @@ export function FreePractice() {
           {note ? <p>{note}</p> : null}
           {failed ? (
             <p role="alert" className="game-error">
-              Das konnte nicht gespeichert werden.
+              Das Ergebnis konnte nicht gespeichert werden. Bitte später erneut versuchen.
             </p>
           ) : null}
           {saved ? (

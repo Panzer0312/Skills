@@ -1,4 +1,4 @@
-import { act, render, screen } from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { useMetronome } from "../../../packages/web/src/audio/useMetronome.js";
@@ -196,5 +196,21 @@ describe("MetronomePanel", () => {
       beatsPerBar: 3,
       accents: [true, true, false],
     });
+  });
+
+  it("one bad trainer field does not drop the stored setup", async () => {
+    const user = userEvent.setup();
+    render(<Harness />);
+    await openTrainer(user);
+    await user.selectOptions(screen.getByLabelText("Takt"), "3");
+    fireEvent.change(screen.getByLabelText("Plus"), { target: { value: "99" } });
+    fireEvent.change(screen.getByLabelText("Alle (Takte)"), { target: { value: "0" } });
+    expect(JSON.parse(localStorage.getItem("guitar.metronome")!)).toMatchObject({
+      beatsPerBar: 3,
+      stepBpm: 50,
+      everyBars: 1,
+    });
+    fireEvent.change(screen.getByLabelText("Alle (Takte)"), { target: { value: "8" } });
+    expect(JSON.parse(localStorage.getItem("guitar.metronome")!)).toMatchObject({ beatsPerBar: 3, stepBpm: 50, everyBars: 8 });
   });
 });

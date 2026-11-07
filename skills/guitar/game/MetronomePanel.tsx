@@ -40,6 +40,11 @@ function isStoredMetronome(raw: unknown): raw is StoredMetronome {
   );
 }
 
+function clamp(value: number, min: number, max: number, fallback: number): number {
+  if (!Number.isFinite(value)) return fallback;
+  return Math.min(max, Math.max(min, Math.round(value)));
+}
+
 export function MetronomePanel({
   metronome,
 }: {
@@ -71,15 +76,22 @@ export function MetronomePanel({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const remember = (patch: Partial<StoredMetronome>) =>
-    setStored({
+  // A half-typed trainer field must not make the whole stored setup invalid.
+  const remember = (patch: Partial<StoredMetronome>) => {
+    const next = {
       beatsPerBar: metronome.beatsPerBar,
       subdivision: metronome.subdivision,
       accents: metronome.accents,
       stepBpm,
       everyBars,
       ...patch,
+    };
+    setStored({
+      ...next,
+      stepBpm: clamp(next.stepBpm, 1, 50, stored.stepBpm),
+      everyBars: clamp(next.everyBars, 1, 32, stored.everyBars),
     });
+  };
   const setStepBpm = (value: number) => {
     setStepBpmRaw(value);
     remember({ stepBpm: value });

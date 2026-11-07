@@ -104,4 +104,37 @@ describe("usePracticeKeys", () => {
     link.remove();
     div.remove();
   });
+
+  it("practice keys fire letters on buttons but leave space and Enter to them", () => {
+    const p = vi.fn();
+    const space = vi.fn();
+    const enter = vi.fn();
+    renderHook(() => usePracticeKeys({ p, " ": space, Enter: enter }));
+    const button = document.createElement("button");
+    const link = document.createElement("a");
+    link.href = "/x";
+    document.body.append(button, link);
+    for (const el of [button, link]) {
+      el.dispatchEvent(new KeyboardEvent("keydown", { key: " ", bubbles: true }));
+      el.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+      el.dispatchEvent(new KeyboardEvent("keydown", { key: "p", bubbles: true }));
+    }
+    expect(space).not.toHaveBeenCalled();
+    expect(enter).not.toHaveBeenCalled();
+    expect(p).toHaveBeenCalledTimes(2);
+    button.remove();
+    link.remove();
+  });
+
+  it("practice keys ignore every key in text fields", () => {
+    const p = vi.fn();
+    renderHook(() => usePracticeKeys({ p }));
+    const fields = [document.createElement("input"), document.createElement("textarea"), document.createElement("select")];
+    const editable = document.createElement("div");
+    editable.setAttribute("contenteditable", "true");
+    document.body.append(...fields, editable);
+    for (const el of [...fields, editable]) el.dispatchEvent(new KeyboardEvent("keydown", { key: "p", bubbles: true }));
+    expect(p).not.toHaveBeenCalled();
+    for (const el of [...fields, editable]) el.remove();
+  });
 });

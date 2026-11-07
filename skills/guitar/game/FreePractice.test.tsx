@@ -66,6 +66,17 @@ describe("FreePractice", () => {
     expect(getFreeTimerRunning()).toBe(false);
   });
 
+  it("explains a failed save", async () => {
+    vi.spyOn(gameApi, "log").mockRejectedValue(new Error("offline"));
+    render(<FreePractice />);
+    open();
+    fireEvent.change(screen.getByLabelText("Minuten"), { target: { value: "20" } });
+    fireEvent.click(screen.getByRole("button", { name: "Eintragen" }));
+    expect((await screen.findByRole("alert")).textContent).toBe(
+      "Das Ergebnis konnte nicht gespeichert werden. Bitte später erneut versuchen.",
+    );
+  });
+
   it("uses the chosen kind", async () => {
     const log = vi.spyOn(gameApi, "log").mockResolvedValue(result as never);
     render(<FreePractice />);

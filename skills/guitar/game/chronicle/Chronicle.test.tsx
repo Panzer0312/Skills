@@ -225,12 +225,36 @@ describe("Chronicle", () => {
     vi.stubGlobal("confirm", confirm);
     renderIt();
     expect(await screen.findByRole("heading", { name: "Letzte Einträge" })).toBeTruthy();
-    expect(await screen.findByText(/Jam Room/)).toBeTruthy();
+    expect(await screen.findByText(/Jammen/)).toBeTruthy();
     fireEvent.click(screen.getByRole("button", { name: "Löschen" }));
     expect(confirm).toHaveBeenCalledWith("Diesen Eintrag löschen?");
     await vi.waitFor(() =>
       expect(mock.mock.calls.some(([u, init]) => String(u).endsWith("/log/7") && (init as RequestInit)?.method === "DELETE")).toBe(true),
     );
+  });
+
+  it("names free entries and gives metrics their unit", async () => {
+    const entry = (id: number, techniqueId: string, metricKey: string | null = null, metricValue: number | null = null): RecentLogEntry => ({
+      id, at: id, day: "2026-11-05", kind: "frei", questId: null, techniqueId, seconds: 600, metricKey, metricValue,
+    });
+    recent = [
+      entry(1, "song"),
+      entry(2, "frei-technik"),
+      entry(3, "jam"),
+      entry(4, "frei"),
+      entry(5, "akkordwechsel", "wechsel:Am-C", 31),
+      entry(6, "theorie", "notenfinder:0", 12),
+      entry(7, "jam", "jam:x", 4),
+    ];
+    serve({ days: [], metrics: [] });
+    renderIt();
+    expect(await screen.findByText("05.11.26 · Song (frei) · 10 min")).toBeTruthy();
+    expect(screen.getByText("05.11.26 · Technik (frei) · 10 min")).toBeTruthy();
+    expect(screen.getByText("05.11.26 · Jammen · 10 min")).toBeTruthy();
+    expect(screen.getByText("05.11.26 · Sonstiges (frei) · 10 min")).toBeTruthy();
+    expect(screen.getByText("05.11.26 · Akkordwechsel-Trainer · 10 min · 31 Wechsel")).toBeTruthy();
+    expect(screen.getByText("05.11.26 · Noten finden · 10 min · 12 Treffer")).toBeTruthy();
+    expect(screen.getByText("05.11.26 · Jammen · 10 min · 4")).toBeTruthy();
   });
 
   it("export link points at the export route", async () => {
@@ -245,6 +269,7 @@ describe("Chronicle", () => {
     recentFails = true;
     serve({ days: [], metrics: [] });
     renderIt();
+    expect(screen.getByText("Wird geladen…")).toBeTruthy();
     expect(screen.queryByText("Noch keine Einträge.")).toBeNull();
     expect(await screen.findByText("Die letzten Einträge konnten nicht geladen werden.")).toBeTruthy();
     expect(screen.queryByText("Noch keine Einträge.")).toBeNull();

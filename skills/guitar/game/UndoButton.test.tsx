@@ -60,4 +60,14 @@ describe("UndoButton", () => {
     await waitFor(() => expect(screen.getByText("Eintrag entfernt.")).toBeTruthy());
     expect(deletes(fetchMock)).toHaveLength(1);
   });
+
+  it("treats an entry that is already gone as undone", async () => {
+    vi.stubGlobal("fetch", vi.fn(async () => json({ error: { code: "not_found", message: "Eintrag nicht gefunden." } }, 404)));
+    const onUndone = vi.fn();
+    renderButton(onUndone);
+    fireEvent.click(screen.getByRole("button", { name: "Rückgängig" }));
+    expect(await screen.findByText("Eintrag entfernt.")).toBeTruthy();
+    expect(onUndone).toHaveBeenCalledTimes(1);
+    expect(screen.queryByRole("alert")).toBeNull();
+  });
 });

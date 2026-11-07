@@ -1,6 +1,9 @@
 import { useEffect, useRef } from "react";
 
-const IGNORED = "input, textarea, select, button, a, [role=button], [contenteditable]";
+// Text fields take every key; buttons and links only need space and Enter for themselves.
+const TEXT_FIELDS = "input, textarea, select, [contenteditable]";
+const ACTIVATORS = "button, a, [role=button]";
+const ACTIVATION_KEYS = new Set([" ", "Enter"]);
 
 export function usePracticeKeys(bindings: Record<string, () => void>, enabled = true): void {
   const ref = useRef(bindings);
@@ -11,7 +14,10 @@ export function usePracticeKeys(bindings: Record<string, () => void>, enabled = 
     const onKey = (e: KeyboardEvent) => {
       if (e.ctrlKey || e.metaKey || e.altKey || e.repeat) return;
       const target = e.target;
-      if (target instanceof Element && target.closest(IGNORED)) return;
+      if (target instanceof Element) {
+        if (target.closest(TEXT_FIELDS)) return;
+        if (ACTIVATION_KEYS.has(e.key) && target.closest(ACTIVATORS)) return;
+      }
       const current = ref.current;
       const handler =
         current[e.key] ?? (e.key.length === 1 ? current[e.key.toLowerCase()] : undefined);
