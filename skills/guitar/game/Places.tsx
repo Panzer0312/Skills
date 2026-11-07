@@ -9,6 +9,7 @@ import SongLibrary from "../widgets/SongLibrary.js";
 import Tuner from "../widgets/Tuner.js";
 import { ChordTrainer } from "./ChordTrainer.js";
 import { NoteFinder } from "./NoteFinder.js";
+import { DeviceCheck } from "./devices/DeviceCheck.js";
 import { StoryLog } from "./StoryLog.js";
 import { GAME_BASE, gameContent, useGameState } from "./api.js";
 
@@ -123,6 +124,7 @@ export function Shrine(props: WidgetProps) {
           Zurück zur Quest
         </Link>
       ) : null}
+      <DeviceCheck />
       <Tuner {...props} initialTuning={params.get("stimmung") ?? undefined} />
     </ToolFrame>
   );
