@@ -1,4 +1,4 @@
-import { previousDay, weekStartKey } from "./time.js";
+import { localDayKey, previousDay, weekStartKey } from "./time.js";
 import type { QuestDefinition } from "./quests.js";
 
 export interface History {
@@ -43,4 +43,30 @@ export function metricSeries(metrics: History["metrics"], key: string): { day: s
     .filter((m) => m.key === key)
     .map(({ day, value }) => ({ day, value }))
     .sort((a, b) => (a.day < b.day ? -1 : a.day > b.day ? 1 : 0));
+}
+
+/** Weeks (Monday start), oldest first, with minutes per day; days after `today` are left out. */
+export function dayGrid(
+  days: History["days"],
+  today: string,
+  weeks = 12,
+): { day: string; minutes: number }[][] {
+  const seconds = new Map<string, number>();
+  for (const { day, seconds: s } of days) seconds.set(day, (seconds.get(day) ?? 0) + s);
+  const starts: string[] = [];
+  let start = weekStartKey(today);
+  for (let i = 0; i < weeks; i++) {
+    starts.unshift(start);
+    start = weekStartKey(previousDay(start));
+  }
+  return starts.map((weekStart) => {
+    const row: { day: string; minutes: number }[] = [];
+    let day = weekStart;
+    for (let i = 0; i < 7; i++) {
+      if (day <= today) row.push({ day, minutes: Math.round((seconds.get(day) ?? 0) / 60) });
+      const d = new Date(Number(day.slice(0, 4)), Number(day.slice(5, 7)) - 1, Number(day.slice(8, 10)) + 1);
+      day = localDayKey(d.getTime());
+    }
+    return row;
+  });
 }

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { metricGroup, metricSeries, weeklyMinutes } from "./chronicle.js";
+import { dayGrid, metricGroup, metricSeries, weeklyMinutes } from "./chronicle.js";
 import type { QuestDefinition } from "./quests.js";
 
 const quest = (extra: object) => ({ id: "q", ...extra }) as unknown as QuestDefinition;
@@ -58,5 +58,18 @@ describe("metricSeries", () => {
       { day: "2026-11-01", value: 2 },
       { day: "2026-11-05", value: 3 },
     ]);
+  });
+});
+
+describe("dayGrid", () => {
+  it("groups by monday weeks and omits future days", () => {
+    const grid = dayGrid([{ day: "2026-11-03", seconds: 1500 }], "2026-11-04", 2);
+    expect(grid).toHaveLength(2);
+    expect(grid[0]!.map((d) => d.day)).toEqual([
+      "2026-10-26", "2026-10-27", "2026-10-28", "2026-10-29", "2026-10-30", "2026-10-31", "2026-11-01",
+    ]);
+    expect(grid[1]!.map((d) => d.day)).toEqual(["2026-11-02", "2026-11-03", "2026-11-04"]);
+    expect(grid[1]![1]).toEqual({ day: "2026-11-03", minutes: 25 });
+    expect(grid[0]![0]!.minutes).toBe(0);
   });
 });

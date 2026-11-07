@@ -1,9 +1,10 @@
-import type { GameState, History } from "@skills/core";
+import type { GameState, History, RecentLogEntry } from "@skills/core";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { queryClient } from "../../../../packages/web/src/app/queryClient.js";
+import { localDayKey } from "@skills/core";
 import { Chronicle } from "./Chronicle.js";
 
 const state: GameState = {
@@ -31,8 +32,11 @@ const state: GameState = {
 const json = (body: unknown, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: { "content-type": "application/json" } });
 
+let recent: RecentLogEntry[] = [];
+
 function serve(history: History | "error") {
   const mock = vi.fn(async (url: string) => {
+    if (String(url).includes("/log/recent")) return json({ entries: recent });
     if (String(url).includes("/history")) {
       return history === "error" ? json({ error: { code: "x", message: "kaputt" } }, 500) : json(history);
     }
@@ -61,7 +65,10 @@ const history: History = {
 };
 
 describe("Chronicle", () => {
-  beforeEach(() => queryClient.clear());
+  beforeEach(() => {
+    queryClient.clear();
+    recent = [];
+  });
   afterEach(() => {
     cleanup();
     vi.unstubAllGlobals();
@@ -152,5 +159,62 @@ describe("Chronicle", () => {
     expect(await screen.findByText(/Verlauf wird geladen/)).toBeTruthy();
     expect(screen.queryByRole("img")).toBeNull();
     expect(screen.queryByText("Noch keine Messwerte")).toBeNull();
+  });
+
+  it("calendar shades a 30 minute day darkest", async () => {
+    const today = localDayKey(Date.now());
+    serve({ days: [{ day: today, seconds: 1800 }], metrics: [] });
+    renderIt();
+    expect(await screen.findByRole("heading", { name: "Übungstage" })).toBeTruthy();
+    const cell = (await screen.findAllByTitle(/: 30 min$/))[0]!;
+    expect(cell.getAttribute("aria-label")).toMatch(/^\d+\. \S+ \d{4}: 30 min$/);
+    expect(cell.getAttribute("data-shade")).toBe("3");
+    expect(document.querySelector("[data-shade='0']")).toBeTruthy();
+  });
+
+  it("chart point shows tooltip on focus", async () => {
+    serve(history);
+    renderIt();
+    const chart = await screen.findByRole("img", { name: /Wechsel Am–C/ });
+    const point = chart.querySelectorAll("circle")[1]!;
+    expect(point.getAttribute("tabindex")).toBe("0");
+    fireEvent.focus(point);
+    expect(screen.getByRole("status").textContent).toContain("34 am 05.11.26");
+    fireEvent.blur(point);
+    fireEvent.pointerDown(chart.querySelectorAll("circle")[0]!);
+    expect(screen.getByRole("status").textContent).toContain("20 am 01.11.26");
+  });
+
+  it("x labels show the year", async () => {
+    serve(history);
+    renderIt();
+    const chart = await screen.findByRole("img", { name: /Wechsel Am–C/ });
+    expect(chart.textContent).toContain("01.11.26");
+    expect(chart.textContent).toContain("05.11.26");
+  });
+
+  it("recent entry delete calls the route after confirm", async () => {
+    recent = [
+      { id: 7, at: 1, day: "2026-11-05", kind: "frei", questId: null, techniqueId: "jam", seconds: 600, metricKey: null, metricValue: null },
+    ];
+    const mock = serve({ days: [], metrics: [] });
+    const confirm = vi.fn(() => true);
+    vi.stubGlobal("confirm", confirm);
+    renderIt();
+    expect(await screen.findByRole("heading", { name: "Letzte Einträge" })).toBeTruthy();
+    expect(await screen.findByText(/Jam Room/)).toBeTruthy();
+    fireEvent.click(screen.getByRole("button", { name: "Löschen" }));
+    expect(confirm).toHaveBeenCalledWith("Diesen Eintrag löschen?");
+    await vi.waitFor(() =>
+      expect(mock.mock.calls.some(([u, init]) => String(u).endsWith("/log/7") && (init as RequestInit)?.method === "DELETE")).toBe(true),
+    );
+  });
+
+  it("export link points at the export route", async () => {
+    serve({ days: [], metrics: [] });
+    renderIt();
+    const link = await screen.findByRole("link", { name: "Daten exportieren" });
+    expect(link.getAttribute("href")).toBe("/api/game/guitar/export");
+    expect(link.hasAttribute("download")).toBe(true);
   });
 });

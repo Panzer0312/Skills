@@ -50,6 +50,7 @@ export {
   type History,
   type MetricGroup,
   weeklyMinutes,
+  dayGrid,
   metricGroup,
   metricSeries,
   type LogBody,

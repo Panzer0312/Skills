@@ -4,8 +4,11 @@ import { Link } from "react-router-dom";
 import { GAME_BASE, gameContent, useGameHistory, useGameState } from "../api.js";
 import { ToolFrame } from "../Places.js";
 import { formatTime } from "../StatusBar.js";
+import { DayCalendar } from "./DayCalendar.js";
 import { LineChart, type LineSeries } from "./LineChart.js";
 import { MinutesBars } from "./MinutesBars.js";
+import { RecentLog } from "./RecentLog.js";
+import { gameApi } from "../api.js";
 
 const MAX_LINES = 4;
 
@@ -123,7 +126,8 @@ function Graphs({ history }: { history: History }) {
   const wechsel = inGroup("wechsel");
   const bpm = inGroup("bpm");
   const noten = inGroup("noten");
-  const weeks = weeklyMinutes(history.days, localDayKey(Date.now()));
+  const today = localDayKey(Date.now());
+  const weeks = weeklyMinutes(history.days, today);
   return (
     <>
       {wechsel.length > 0 ? <ChangeSection metrics={history.metrics} keys={wechsel} /> : null}
@@ -138,6 +142,7 @@ function Graphs({ history }: { history: History }) {
       ) : null}
       <h2 className="mt-6 text-lg font-semibold">Minuten pro Woche</h2>
       <MinutesBars weeks={weeks} />
+      <DayCalendar days={history.days} today={today} />
     </>
   );
 }
@@ -195,6 +200,10 @@ export function Chronicle() {
         <p role="status">Verlauf wird geladen …</p>
       )}
       {state ? <Totals state={state} /> : null}
+      <RecentLog />
+      <a href={gameApi.exportUrl} download className="mt-6 inline-block underline">
+        Daten exportieren
+      </a>
       <Link to={`${GAME_BASE}/einstufung`} className="mt-6 inline-block underline">
         Einstufung wiederholen
       </Link>

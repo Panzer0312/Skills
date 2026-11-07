@@ -15,7 +15,7 @@ const dayNumber = (day: string) => {
   const [y, m, d] = day.split("-").map(Number) as [number, number, number];
   return Date.UTC(y, m - 1, d) / DAY_MS;
 };
-const short = (day: string) => `${day.slice(8, 10)}.${day.slice(5, 7)}.`;
+const short = (day: string) => `${day.slice(8, 10)}.${day.slice(5, 7)}.${day.slice(2, 4)}`;
 
 /** Nice upper bound for the value axis. */
 function niceMax(max: number): number {
@@ -36,6 +36,9 @@ export function LineChart({ name, series }: { name: string; series: LineSeries[]
   const y = (v: number) => PAD.t + (1 - v / top) * (H - PAD.t - PAD.b);
   const firstDay = all.find((p) => dayNumber(p.day) === first)!.day;
   const lastDay = all.find((p) => dayNumber(p.day) === last)!.day;
+
+  const show = (label: string, p: { day: string; value: number }) => () =>
+    setHover({ x: x(p.day), y: y(p.value), text: `${label}: ${p.value} am ${short(p.day)}` });
 
   return (
     <div className="chronicle-chart" style={{ background: SURFACE, color: INK, position: "relative" }}>
@@ -90,9 +93,11 @@ export function LineChart({ name, series }: { name: string; series: LineSeries[]
                   fill={color}
                   stroke={SURFACE}
                   strokeWidth={2}
-                  onMouseEnter={() =>
-                    setHover({ x: x(p.day), y: y(p.value), text: `${s.label}: ${p.value} am ${short(p.day)}` })
-                  }
+                  tabIndex={0}
+                  onMouseEnter={show(s.label, p)}
+                  onFocus={show(s.label, p)}
+                  onPointerDown={show(s.label, p)}
+                  onBlur={() => setHover(null)}
                 />
               ))}
             </g>
