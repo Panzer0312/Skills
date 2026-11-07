@@ -60,6 +60,8 @@ export function SongView({ song, songKey }: { song: Song; songKey?: string }) {
   const [scrolling, setScrolling] = useState(false);
   const [scrollSpeed, setScrollSpeed] = usePersistentState<number>("songs.scrollSpeed", 30, isScrollSpeed);
   const [countingIn, setCountingIn] = useState(false);
+  const [bpmDraft, setBpmDraft] = useState<string | null>(null);
+  const startedByCountIn = useRef(false);
   const countInTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [editing, setEditing] = useState<string | null>(null);
   const [editError, setEditError] = useState<string | null>(null);
@@ -80,19 +82,30 @@ export function SongView({ song, songKey }: { song: Song; songKey?: string }) {
   }
   useEffect(() => clearCountIn, []);
 
+  function commitBpmDraft() {
+    if (bpmDraft === null) return;
+    const value = Number(bpmDraft);
+    if (bpmDraft.trim() !== "" && Number.isFinite(value)) metronome.setBpm(clampBpm(value));
+    setBpmDraft(null);
+  }
+
   function toggleScroll() {
     const wasCountingIn = countingIn;
     clearCountIn();
+    if (wasCountingIn && startedByCountIn.current) metronome.stop();
+    startedByCountIn.current = false;
     setScrolling((v) => (wasCountingIn ? false : !v));
   }
 
   function countInAndScroll() {
     clearCountIn();
+    startedByCountIn.current = !metronome.running;
     if (!metronome.running) metronome.start();
     setCountingIn(true);
     countInTimer.current = setTimeout(() => {
       countInTimer.current = null;
       setCountingIn(false);
+      startedByCountIn.current = false;
       setScrolling(true);
     }, (metronome.beatsPerBar * 60000) / metronome.bpm);
   }
@@ -196,7 +209,10 @@ export function SongView({ song, songKey }: { song: Song; songKey?: string }) {
         </button>
         <button
           type="button"
-          onClick={() => metronome.setBpm(clampBpm(metronome.bpm - 5))}
+          onClick={() => {
+            setBpmDraft(null);
+            metronome.setBpm(clampBpm(metronome.bpm - 5));
+          }}
           className="rounded border border-slate-300 px-3 py-1 dark:border-slate-700"
         >
           −5
@@ -205,17 +221,21 @@ export function SongView({ song, songKey }: { song: Song; songKey?: string }) {
           type="number"
           min={MIN_BPM}
           max={MAX_BPM}
-          value={metronome.bpm}
-          onChange={(e) => {
-            const value = Number(e.target.value);
-            if (Number.isFinite(value) && e.target.value !== "") metronome.setBpm(clampBpm(value));
+          value={bpmDraft ?? String(metronome.bpm)}
+          onChange={(e) => setBpmDraft(e.target.value)}
+          onBlur={commitBpmDraft}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") commitBpmDraft();
           }}
           aria-label="Metronom-BPM"
           className="w-20 rounded border border-slate-300 px-2 py-1 dark:border-slate-700 dark:bg-slate-900"
         />
         <button
           type="button"
-          onClick={() => metronome.setBpm(clampBpm(metronome.bpm + 5))}
+          onClick={() => {
+            setBpmDraft(null);
+            metronome.setBpm(clampBpm(metronome.bpm + 5));
+          }}
           className="rounded border border-slate-300 px-3 py-1 dark:border-slate-700"
         >
           +5

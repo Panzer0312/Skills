@@ -238,4 +238,26 @@ describe("SongView", () => {
     renderSong();
     expect(screen.getByLabelText("Scroll-Tempo")).toHaveValue("70");
   });
+
+  it("lets a tempo be typed and clamps on Enter", async () => {
+    renderSong();
+    const input = screen.getByLabelText("Metronom-BPM");
+    await userEvent.clear(input);
+    await userEvent.type(input, "90");
+    expect(input).toHaveValue(90);
+    expect(metro.setBpm).not.toHaveBeenCalled();
+    await userEvent.type(input, "{Enter}");
+    expect(metro.setBpm).toHaveBeenLastCalledWith(90);
+    await userEvent.clear(input);
+    await userEvent.type(input, "490{Enter}");
+    expect(metro.setBpm).toHaveBeenLastCalledWith(240);
+  });
+
+  it("stopping a count-in stops the metronome it started", () => {
+    vi.useFakeTimers();
+    renderSong();
+    fireEvent.click(screen.getByRole("button", { name: "Einzählen und scrollen" }));
+    fireEvent.click(screen.getByRole("button", { name: /Auto-Scroll stoppen/ }));
+    expect(metro.stop).toHaveBeenCalled();
+  });
 });
