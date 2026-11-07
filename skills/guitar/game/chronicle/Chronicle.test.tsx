@@ -1,6 +1,6 @@
 import { localDayKey, type GameState, type History, type RecentLogEntry } from "@skills/core";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { queryClient } from "../../../../packages/web/src/app/queryClient.js";
@@ -286,5 +286,78 @@ describe("Chronicle", () => {
     renderIt();
     fireEvent.click(await screen.findByRole("button", { name: "Löschen" }));
     expect(await screen.findByText("Der Eintrag konnte nicht gelöscht werden.")).toBeTruthy();
+  });
+
+  describe("Übungskalender", () => {
+    beforeEach(() => {
+      vi.useFakeTimers({ toFake: ["Date"] });
+      vi.setSystemTime(new Date(2026, 10, 7, 12));
+    });
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    it("calendar exposes a grid with weekday headers", async () => {
+      serve({ days: [], metrics: [] });
+      renderIt();
+      const grid = await screen.findByRole("grid", { name: "Übungstage" });
+      expect(within(grid).getAllByRole("rowheader").map((h) => h.textContent)).toEqual(["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"]);
+      expect(within(grid).getByRole("columnheader", { name: "Nov." })).toBeTruthy();
+      expect(within(grid).getAllByRole("gridcell")).toHaveLength(83);
+      expect(document.querySelectorAll("[role=gridcell][tabindex='0']")).toHaveLength(1);
+      expect(screen.getByRole("gridcell", { name: "7. Nov. 2026: 0 min" }).getAttribute("tabindex")).toBe("0");
+    });
+
+    it("arrow keys move the focused day", async () => {
+      serve({ days: [], metrics: [] });
+      renderIt();
+      const today = await screen.findByRole("gridcell", { name: "7. Nov. 2026: 0 min" });
+      fireEvent.keyDown(today, { key: "ArrowLeft" });
+      const weekBefore = screen.getByRole("gridcell", { name: "31. Okt. 2026: 0 min" });
+      expect(document.activeElement).toBe(weekBefore);
+      expect(weekBefore.getAttribute("tabindex")).toBe("0");
+      expect(today.getAttribute("tabindex")).toBe("-1");
+      fireEvent.keyDown(weekBefore, { key: "ArrowUp" });
+      expect(document.activeElement).toBe(screen.getByRole("gridcell", { name: "30. Okt. 2026: 0 min" }));
+      fireEvent.keyDown(document.activeElement!, { key: "ArrowDown" });
+      expect(document.activeElement).toBe(weekBefore);
+      fireEvent.keyDown(weekBefore, { key: "Home" });
+      expect(document.activeElement).toBe(screen.getByRole("gridcell", { name: "17. Aug. 2026: 0 min" }));
+      fireEvent.keyDown(document.activeElement!, { key: "End" });
+      expect(document.activeElement).toBe(today);
+    });
+
+    it("focused day shows its tooltip", async () => {
+      serve({ days: [{ day: "2026-11-03", seconds: 1500 }], metrics: [] });
+      renderIt();
+      const cell = await screen.findByRole("gridcell", { name: "3. Nov. 2026: 25 min" });
+      expect(screen.queryByText("3. Nov. 2026: 25 min")).toBeNull();
+      fireEvent.focus(cell);
+      expect(screen.getByText("3. Nov. 2026: 25 min")).toBeTruthy();
+      expect(cell.getAttribute("tabindex")).toBe("0");
+      fireEvent.blur(cell);
+      expect(screen.queryByText("3. Nov. 2026: 25 min")).toBeNull();
+    });
+
+    it("shades 1–14, 15–29 and 30+ differently", async () => {
+      serve({
+        days: [
+          { day: "2026-11-01", seconds: 60 },
+          { day: "2026-11-02", seconds: 840 },
+          { day: "2026-11-03", seconds: 900 },
+          { day: "2026-11-04", seconds: 1740 },
+          { day: "2026-11-05", seconds: 1800 },
+        ],
+        metrics: [],
+      });
+      renderIt();
+      const shadeOf = async (label: string) => (await screen.findByRole("gridcell", { name: label })).getAttribute("data-shade");
+      expect(await shadeOf("1. Nov. 2026: 1 min")).toBe("1");
+      expect(await shadeOf("2. Nov. 2026: 14 min")).toBe("1");
+      expect(await shadeOf("3. Nov. 2026: 15 min")).toBe("2");
+      expect(await shadeOf("4. Nov. 2026: 29 min")).toBe("2");
+      expect(await shadeOf("5. Nov. 2026: 30 min")).toBe("3");
+      expect(await shadeOf("6. Nov. 2026: 0 min")).toBe("0");
+    });
   });
 });
