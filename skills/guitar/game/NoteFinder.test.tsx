@@ -330,6 +330,13 @@ describe("NoteFinder", () => {
     expect(mic.start).not.toHaveBeenCalled();
   });
 
+  it("note finder in a quest does not repeat the device link", () => {
+    serve();
+    resetTestPrefs({ "geraete.gitarreAmMikro": "nein" });
+    renderFinder({ strings: [0], onResult: vi.fn() });
+    expect(screen.queryByRole("link", { name: "Gerät einrichten" })).toBeNull();
+  });
+
   it("spaeter asks once then remembers", () => {
     serve();
     renderFinder();

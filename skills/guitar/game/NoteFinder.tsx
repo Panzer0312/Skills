@@ -314,7 +314,7 @@ export function NoteFinder({
           >
             {micOn ? "Mikrofon aus" : "Mit Gitarre spielen"}
           </button>
-        ) : (
+        ) : onResult ? null : (
           <Link to={`${GAME_BASE}/studierstube?tab=geraete`} className="self-center text-sm underline">
             Gerät einrichten
           </Link>

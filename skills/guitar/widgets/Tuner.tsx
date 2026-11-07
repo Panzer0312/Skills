@@ -10,7 +10,10 @@ import { usePref } from "../game/usePref.js";
 import type { WidgetProps } from "../../../packages/web/src/skills/widgets.js";
 import { InputControls } from "../game/InputControls.js";
 
-export default function Tuner({ initialTuning }: WidgetProps & { initialTuning?: string }) {
+export default function Tuner({
+  initialTuning,
+  inQuest = false,
+}: WidgetProps & { initialTuning?: string; inQuest?: boolean }) {
   const [storedTuning, setStoredTuning] = usePref("werkzeuge.stimmgeraet.stimmung");
   const [guitar, setGuitar] = usePref("geraete.gitarreAmMikro");
   const { canUse } = useDevices();
@@ -154,9 +157,12 @@ export default function Tuner({ initialTuning }: WidgetProps & { initialTuning?:
           Stimmgerät stoppen
         </button>
       ) : !showMic ? (
-        <Link to={`${GAME_BASE}/studierstube?tab=geraete`} className="block text-center text-sm underline">
-          Gerät einrichten
-        </Link>
+        // In a quest the device check above the tuner already offers this.
+        inQuest ? null : (
+          <Link to={`${GAME_BASE}/studierstube?tab=geraete`} className="block text-center text-sm underline">
+            Gerät einrichten
+          </Link>
+        )
       ) : asking ? (
         <div className="flex flex-wrap items-center justify-center gap-2">
           <p>Spielst du mit Gitarre am Mikrofon?</p>

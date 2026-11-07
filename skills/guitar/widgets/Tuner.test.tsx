@@ -142,4 +142,54 @@ describe("Tuner", () => {
     await userEvent.selectOptions(screen.getByLabelText(/Stimmung/), "Drop D");
     expect(testPref("werkzeuge.stimmgeraet.stimmung")).toBe("Drop D");
   });
+
+  it("in a quest the device link is left to the check above", () => {
+    mocks.state = "idle";
+    mocks.error = null;
+    resetTestPrefs({ "geraete.gitarreAmMikro": "nein" });
+    render(
+      <MemoryRouter>
+        <Tuner data={[]} progress={progress} settings={{}} inQuest />
+      </MemoryRouter>,
+    );
+    expect(screen.queryByRole("link", { name: "Gerät einrichten" })).toBeNull();
+  });
+
+  it("Nein stores nein, starts no microphone and hides the mic parts", async () => {
+    mocks.state = "idle";
+    mocks.error = null;
+    mocks.start.mockClear();
+    render(
+      <MemoryRouter>
+        <Tuner data={[]} progress={progress} settings={{}} />
+      </MemoryRouter>,
+    );
+    await userEvent.click(screen.getByRole("button", { name: /Stimmgerät starten/ }));
+    await userEvent.click(screen.getByRole("button", { name: "Nein" }));
+    expect(prefWrites).toContainEqual({ key: "geraete.gitarreAmMikro", value: "nein" });
+    expect(mocks.start).not.toHaveBeenCalled();
+    expect(screen.queryByRole("button", { name: "Nein" })).toBeNull();
+    expect(screen.queryByRole("button", { name: /Stimmgerät starten/ })).toBeNull();
+    expect(screen.getByRole("link", { name: "Gerät einrichten" })).toBeInTheDocument();
+  });
+
+  it("remembers Ja and does not ask again", async () => {
+    Object.defineProperty(navigator, "mediaDevices", { value: { getUserMedia: vi.fn() }, configurable: true });
+    mocks.state = "idle";
+    mocks.error = null;
+    mocks.start.mockClear();
+    render(
+      <MemoryRouter>
+        <Tuner data={[]} progress={progress} settings={{}} />
+      </MemoryRouter>,
+    );
+    await userEvent.click(screen.getByRole("button", { name: /Stimmgerät starten/ }));
+    await userEvent.click(screen.getByRole("button", { name: "Ja" }));
+    expect(testPref("geraete.gitarreAmMikro")).toBe("ja");
+    mocks.start.mockClear();
+    await userEvent.click(screen.getByRole("button", { name: /Stimmgerät starten/ }));
+    expect(screen.queryByRole("button", { name: "Ja" })).toBeNull();
+    expect(mocks.start).toHaveBeenCalledTimes(1);
+    delete (navigator as { mediaDevices?: unknown }).mediaDevices;
+  });
 });

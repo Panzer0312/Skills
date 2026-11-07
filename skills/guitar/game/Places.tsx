@@ -146,7 +146,7 @@ export function Shrine(props: WidgetProps) {
         </Link>
       ) : null}
       <DeviceCheck />
-      <Tuner {...props} initialTuning={params.get("stimmung") ?? undefined} />
+      <Tuner {...props} initialTuning={params.get("stimmung") ?? undefined} inQuest={Boolean(questId)} />
     </ToolFrame>
   );
 }
