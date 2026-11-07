@@ -1053,3 +1053,102 @@ describe("result dialog", () => {
     expect(await screen.findByRole("heading", { name: "Quest Board" })).toBeInTheDocument();
   });
 });
+
+describe("pause and keys", () => {
+  const FAKE = { toFake: ["setInterval", "clearInterval", "Date"] } as const;
+
+  function stubAudio() {
+    vi.stubGlobal(
+      "AudioContext",
+      class {
+        currentTime = 0;
+        destination = {};
+        state = "running";
+        createOscillator = () => ({ frequency: { value: 0 }, connect: vi.fn(), start: vi.fn(), stop: vi.fn() });
+        createGain = () => ({
+          gain: { value: 0, setValueAtTime: vi.fn(), exponentialRampToValueAtTime: vi.fn() },
+          connect: vi.fn(),
+        });
+        close = vi.fn(async () => {});
+        resume = vi.fn(async () => {});
+      },
+    );
+  }
+
+  it("pause freezes the timer", async () => {
+    serve({});
+    renderGame("/quest/anschlag-takt");
+    await screen.findByRole("button", { name: "Pause" });
+    vi.useFakeTimers(FAKE);
+    try {
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(60_000);
+      });
+      fireEvent.click(screen.getByRole("button", { name: "Pause" }));
+      expect(screen.getByRole("timer")).toHaveTextContent("Pausiert");
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(60_000);
+      });
+      fireEvent.click(screen.getByRole("button", { name: "Fertig" }));
+    } finally {
+      vi.useRealTimers();
+    }
+    await screen.findByRole("dialog");
+    expect(screen.getByLabelText("Geübte Minuten")).toHaveValue(1);
+  });
+
+  it("paused state survives remount", async () => {
+    serve({});
+    sessionStorage.setItem(
+      ACTIVE,
+      JSON.stringify({
+        questId: "anschlag-takt",
+        startedAt: Date.now() - 600_000,
+        pausedAt: Date.now() - 300_000,
+        pausedMs: 0,
+      }),
+    );
+    renderGame("/quest/anschlag-takt");
+    expect(await screen.findByRole("button", { name: "Weiter" })).toBeInTheDocument();
+    expect(screen.getByRole("timer")).toHaveTextContent("Pausiert");
+    await finish();
+    expect(screen.getByLabelText("Geübte Minuten")).toHaveValue(5);
+  });
+
+  it("old stored entry without pause fields still resumes", async () => {
+    serve({});
+    startedMinutesAgo("anschlag-takt", 4);
+    renderGame("/quest/anschlag-takt");
+    expect(await screen.findByRole("button", { name: "Pause" })).toBeInTheDocument();
+    expect(screen.getByRole("timer")).toHaveTextContent(/^4:0\d$/);
+    await finish();
+    expect(screen.getByLabelText("Geübte Minuten")).toHaveValue(4);
+  });
+
+  it("space toggles the metronome and enter finishes", async () => {
+    serve({});
+    stubAudio();
+    renderGame("/quest/anschlag-takt");
+    await screen.findByRole("button", { name: "Metronom starten" });
+    fireEvent.keyDown(document.body, { key: " " });
+    expect(await screen.findByRole("button", { name: "Metronom stoppen" })).toBeInTheDocument();
+    fireEvent.keyDown(document.body, { key: " " });
+    expect(await screen.findByRole("button", { name: "Metronom starten" })).toBeInTheDocument();
+    fireEvent.keyDown(document.body, { key: "p" });
+    expect(await screen.findByRole("button", { name: "Weiter" })).toBeInTheDocument();
+    fireEvent.keyDown(document.body, { key: "Enter" });
+    expect(await screen.findByRole("dialog")).toBeInTheDocument();
+  });
+
+  it("keys do nothing while typing in the result minutes field", async () => {
+    serve({});
+    renderGame("/quest/anschlag-takt");
+    await finish();
+    const field = screen.getByLabelText("Geübte Minuten");
+    fireEvent.keyDown(field, { key: " " });
+    fireEvent.keyDown(field, { key: "p" });
+    fireEvent.keyDown(field, { key: "Enter" });
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Weiter" })).not.toBeInTheDocument();
+  });
+});

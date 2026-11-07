@@ -2,6 +2,8 @@ import { scaleQuest, type GameState, type MapNode, type QuestDefinition, type Sc
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { usePracticeKeys } from "../../../packages/web/src/app/usePracticeKeys.js";
+import { useWakeLock } from "../../../packages/web/src/app/useWakeLock.js";
 import { api } from "../../../packages/web/src/api/client.js";
 import { FretOverlay } from "./FretOverlay.js";
 import { MetronomePanel } from "./MetronomePanel.js";
@@ -17,48 +19,66 @@ import { Griffbild } from "./visuals/index.js";
 
 const ACTIVE_KEY = "game.activeQuest";
 
-function storedStart(questId: string): number | null {
+interface QuestClock {
+  startedAt: number;
+  pausedAt: number | null;
+  pausedMs: number;
+}
+
+function readClock(questId: string): QuestClock | null {
   try {
-    const active = JSON.parse(sessionStorage.getItem(ACTIVE_KEY) ?? "null") as {
-      questId?: unknown;
-      startedAt?: unknown;
-    } | null;
-    return active?.questId === questId && typeof active.startedAt === "number" ? active.startedAt : null;
+    const active = JSON.parse(sessionStorage.getItem(ACTIVE_KEY) ?? "null") as Record<string, unknown> | null;
+    if (active?.questId !== questId || typeof active.startedAt !== "number") return null;
+    return {
+      startedAt: active.startedAt,
+      pausedAt: typeof active.pausedAt === "number" ? active.pausedAt : null,
+      pausedMs: typeof active.pausedMs === "number" ? active.pausedMs : 0,
+    };
   } catch {
     return null;
   }
 }
 
+function writeClock(questId: string, clock: QuestClock) {
+  try {
+    sessionStorage.setItem(ACTIVE_KEY, JSON.stringify({ questId, ...clock }));
+  } catch {
+    // The timer still runs in memory.
+  }
+}
+
 /** Resumes the stored timer of this quest, or starts a new one. */
-function beginQuest(questId: string): number {
-  const stored = storedStart(questId);
-  if (stored !== null) return stored;
-  const startedAt = Date.now();
-  sessionStorage.setItem(ACTIVE_KEY, JSON.stringify({ questId, startedAt }));
-  return startedAt;
+function beginQuest(questId: string): QuestClock {
+  const stored = readClock(questId);
+  if (stored) return stored;
+  const clock = { startedAt: Date.now(), pausedAt: null, pausedMs: 0 };
+  writeClock(questId, clock);
+  return clock;
 }
 
 function clearQuest() {
   sessionStorage.removeItem(ACTIVE_KEY);
 }
 
-function secondsSince(startedAt: number): number {
-  return Math.max(0, Math.floor((Date.now() - startedAt) / 1000));
+function elapsedSeconds({ startedAt, pausedAt, pausedMs }: QuestClock, now = Date.now()): number {
+  return Math.max(0, Math.floor((now - startedAt - pausedMs - (pausedAt !== null ? now - pausedAt : 0)) / 1000));
 }
 
 function formatElapsed(seconds: number): string {
   return `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`;
 }
 
-function Elapsed({ startedAt }: { startedAt: number }) {
-  const [seconds, setSeconds] = useState(() => secondsSince(startedAt));
+function Elapsed({ clock }: { clock: QuestClock }) {
+  const [seconds, setSeconds] = useState(() => elapsedSeconds(clock));
   useEffect(() => {
-    const timer = setInterval(() => setSeconds(secondsSince(startedAt)), 1000);
+    setSeconds(elapsedSeconds(clock));
+    if (clock.pausedAt !== null) return;
+    const timer = setInterval(() => setSeconds(elapsedSeconds(clock)), 1000);
     return () => clearInterval(timer);
-  }, [startedAt]);
+  }, [clock]);
   return (
     <p role="timer" aria-label="Verstrichene Zeit" className="quest-timer">
-      {formatElapsed(seconds)}
+      {clock.pausedAt !== null ? "Pausiert" : formatElapsed(seconds)}
     </p>
   );
 }
@@ -161,8 +181,8 @@ interface Finished {
 function QuestRun({ quest, state, data }: { quest: QuestDefinition; state: GameState; data: unknown[] }) {
   const navigate = useNavigate();
   const metronome = useMetronome();
-  const { setBpm, stop } = metronome;
-  const [startedAt] = useState(() => beginQuest(quest.id));
+  const { setBpm, stop, start, running } = metronome;
+  const [clock, setClock] = useState(() => beginQuest(quest.id));
   const [trainerValue, setTrainerValue] = useState<number | null>(null);
   const [finished, setFinished] = useState<Finished | null>(null);
 
@@ -176,10 +196,24 @@ function QuestRun({ quest, state, data }: { quest: QuestDefinition; state: GameS
     if (scaled.bpm !== null) setBpm(scaled.bpm);
   }, [scaled.bpm, setBpm]);
 
+  const paused = clock.pausedAt !== null;
+  useWakeLock(finished === null && !paused);
+
+  function togglePause() {
+    const now = Date.now();
+    const next: QuestClock =
+      clock.pausedAt === null
+        ? { ...clock, pausedAt: now }
+        : { ...clock, pausedAt: null, pausedMs: clock.pausedMs + (now - clock.pausedAt) };
+    if (next.pausedAt !== null) stop();
+    writeClock(quest.id, next);
+    setClock(next);
+  }
+
   function finish() {
     stop();
     const metricKey = pair ? changeMetricKey(pair[0], pair[1]) : quest.metricLabel ? quest.id : undefined;
-    setFinished({ seconds: secondsSince(startedAt), level, metricKey });
+    setFinished({ seconds: elapsedSeconds(clock), level, metricKey });
   }
 
   function backToBoard() {
@@ -190,6 +224,15 @@ function QuestRun({ quest, state, data }: { quest: QuestDefinition; state: GameS
     clearQuest();
     backToBoard();
   }
+
+  usePracticeKeys(
+    {
+      " ": () => (running ? stop() : start()),
+      p: togglePause,
+      Enter: finish,
+    },
+    finished === null,
+  );
 
   if (finished) {
     return (
@@ -212,7 +255,7 @@ function QuestRun({ quest, state, data }: { quest: QuestDefinition; state: GameS
   return (
     <ToolFrame title={quest.title}>
       <div className="quest-view">
-        <Elapsed startedAt={startedAt} />
+        <Elapsed clock={clock} />
         <p>{quest.description}</p>
         <ul className="quest-values">
           <li>Stufe {level} von 10</li>
@@ -262,7 +305,7 @@ function QuestRun({ quest, state, data }: { quest: QuestDefinition; state: GameS
           />
         ) : null}
         {pair ? (
-          <ChordTrainer pair={pair} onResult={(n) => setTrainerValue((v) => Math.max(v ?? 0, n))} />
+          <ChordTrainer pair={pair} countInBpm={scaled.bpm ?? undefined} onResult={(n) => setTrainerValue((v) => Math.max(v ?? 0, n))} />
         ) : null}
         {quest.noteGame ? (
           <NoteFinder
@@ -275,6 +318,9 @@ function QuestRun({ quest, state, data }: { quest: QuestDefinition; state: GameS
         ) : null}
         <MetronomePanel metronome={metronome} />
         <div className="quest-buttons">
+          <button type="button" className="game-button" onClick={togglePause}>
+            {paused ? "Weiter" : "Pause"}
+          </button>
           <button type="button" className="game-button" onClick={finish}>
             Fertig
           </button>
@@ -282,6 +328,7 @@ function QuestRun({ quest, state, data }: { quest: QuestDefinition; state: GameS
             Abbrechen
           </button>
         </div>
+        <p className="quest-keys">Tasten: Leertaste Metronom · P Pause · Enter Fertig</p>
       </div>
     </ToolFrame>
   );
