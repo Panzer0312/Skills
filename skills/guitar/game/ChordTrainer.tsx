@@ -60,10 +60,14 @@ export function ChordTrainer({
   pair,
   onResult,
   countInBpm,
+  onRunningChange,
+  cancelSignal,
 }: {
   pair?: [string, string];
   onResult?: (changes: number) => void;
   countInBpm?: number;
+  onRunningChange?: (running: boolean) => void;
+  cancelSignal?: number;
 }) {
   const bpm =
     countInBpm !== undefined && Number.isFinite(countInBpm) && countInBpm > 0
@@ -190,6 +194,21 @@ export function ChordTrainer({
       : Math.ceil(remainingMs / 1000);
   const canStart = phase === "pick" || phase === "done";
   usePracticeKeys({ s: start }, canStart && chosenValid);
+
+  const runningChangeRef = useRef(onRunningChange);
+  runningChangeRef.current = onRunningChange;
+  useEffect(() => {
+    if (!running) return;
+    runningChangeRef.current?.(true);
+    return () => runningChangeRef.current?.(false);
+  }, [running]);
+
+  const seenCancel = useRef(cancelSignal);
+  useEffect(() => {
+    if (seenCancel.current === cancelSignal) return;
+    seenCancel.current = cancelSignal;
+    setPhase((current) => (current === "countin" || current === "run" ? "pick" : current));
+  }, [cancelSignal]);
 
   return (
     <div className="space-y-4">

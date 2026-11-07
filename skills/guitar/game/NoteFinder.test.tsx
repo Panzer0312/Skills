@@ -271,4 +271,32 @@ describe("NoteFinder", () => {
     expect(screen.queryByText("Neuer Rekord!")).toBeNull();
     expect(screen.getByText("Keine Treffer in dieser Runde. Beim nächsten Mal klappt es.")).toBeInTheDocument();
   });
+
+  it("onRunningChange reports start and end", async () => {
+    serve();
+    const onRunningChange = vi.fn();
+    const view = renderFinder({ strings: [0], onResult: vi.fn(), onRunningChange });
+    fireEvent.click(screen.getByRole("button", { name: "Start" }));
+    expect(onRunningChange).toHaveBeenLastCalledWith(true);
+    await tick(60_000);
+    expect(onRunningChange).toHaveBeenLastCalledWith(false);
+    fireEvent.click(screen.getByRole("button", { name: "Start" }));
+    expect(onRunningChange).toHaveBeenLastCalledWith(true);
+    view.unmount();
+    expect(onRunningChange).toHaveBeenLastCalledWith(false);
+  });
+
+  it("cancels the round when cancelSignal changes", () => {
+    serve();
+    const onRunningChange = vi.fn();
+    const view = renderFinder({ strings: [0], onRunningChange, cancelSignal: 0 });
+    fireEvent.click(screen.getByRole("button", { name: "Start" }));
+    view.rerender(
+      <QueryClientProvider client={queryClient}>
+        <NoteFinder strings={[0]} onRunningChange={onRunningChange} cancelSignal={1} />
+      </QueryClientProvider>,
+    );
+    expect(screen.getByRole("button", { name: "Start" })).toBeInTheDocument();
+    expect(onRunningChange).toHaveBeenLastCalledWith(false);
+  });
 });

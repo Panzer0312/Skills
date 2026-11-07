@@ -469,4 +469,38 @@ describe("ChordTrainer in a quest", () => {
     await playRound(14);
     expect(screen.getByText(/Beste Runde: 14/)).toBeInTheDocument();
   });
+
+  it("onRunningChange reports start and end", async () => {
+    serve();
+    const onRunningChange = vi.fn();
+    const view = renderTrainer({ pair: ["Am", "Em"], onRunningChange });
+    fireEvent.click(screen.getByRole("button", { name: "Start" }));
+    expect(onRunningChange).toHaveBeenLastCalledWith(true);
+    await tick(3000);
+    await tick(60_000);
+    expect(onRunningChange).toHaveBeenLastCalledWith(false);
+    fireEvent.change(screen.getByLabelText("Wie viele saubere Wechsel?"), { target: { value: "20" } });
+    fireEvent.click(screen.getByRole("button", { name: "Speichern" }));
+    await tick(0);
+    fireEvent.click(screen.getByRole("button", { name: "Start" }));
+    expect(onRunningChange).toHaveBeenLastCalledWith(true);
+    view.unmount();
+    expect(onRunningChange).toHaveBeenLastCalledWith(false);
+  });
+
+  it("cancels the round when cancelSignal changes", async () => {
+    serve();
+    const onRunningChange = vi.fn();
+    const props = { pair: ["Am", "Em"] as [string, string], onRunningChange };
+    const view = renderTrainer({ ...props, cancelSignal: 0 });
+    fireEvent.click(screen.getByRole("button", { name: "Start" }));
+    await tick(3000);
+    view.rerender(
+      <QueryClientProvider client={queryClient}>
+        <ChordTrainer {...props} cancelSignal={1} />
+      </QueryClientProvider>,
+    );
+    expect(screen.getByRole("button", { name: "Start" })).toBeInTheDocument();
+    expect(onRunningChange).toHaveBeenLastCalledWith(false);
+  });
 });

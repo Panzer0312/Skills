@@ -10,10 +10,29 @@ import { gameContent } from "./api.js";
 
 vi.mock("./ChordTrainer.js", async (original) => ({
   ...(await original<typeof import("./ChordTrainer.js")>()),
-  ChordTrainer: ({ pair, onResult }: { pair?: [string, string]; onResult?: (n: number) => void }) => (
-    <button type="button" onClick={() => onResult?.(23)}>
-      Trainer {pair?.join("-")}
-    </button>
+  ChordTrainer: ({
+    pair,
+    onResult,
+    onRunningChange,
+    cancelSignal,
+  }: {
+    pair?: [string, string];
+    onResult?: (n: number) => void;
+    onRunningChange?: (running: boolean) => void;
+    cancelSignal?: number;
+  }) => (
+    <div>
+      <button type="button" onClick={() => onResult?.(23)}>
+        Trainer {pair?.join("-")}
+      </button>
+      <button type="button" onClick={() => onRunningChange?.(true)}>
+        Runde starten
+      </button>
+      <button type="button" onClick={() => onRunningChange?.(false)}>
+        Runde enden
+      </button>
+      <p data-testid="cancel-signal">{cancelSignal ?? "none"}</p>
+    </div>
   ),
 }));
 
@@ -1199,5 +1218,38 @@ describe("pause and keys", () => {
     await screen.findByRole("button", { name: "Weiter" });
     fireEvent.keyDown(document.body, { key: " " });
     expect(screen.getByRole("button", { name: "Metronom starten" })).toBeInTheDocument();
+  });
+
+  it("enter does not finish the quest while a trainer round runs", async () => {
+    serve({});
+    renderGame("/quest/wechsel-minute");
+    await userEvent.click(await screen.findByRole("button", { name: "Runde starten" }));
+    fireEvent.keyDown(document.body, { key: "Enter" });
+    fireEvent.keyDown(document.body, { key: " " });
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    await userEvent.click(screen.getByRole("button", { name: "Runde enden" }));
+    fireEvent.keyDown(document.body, { key: "Enter" });
+    expect(await screen.findByRole("dialog")).toBeInTheDocument();
+  });
+
+  it("p during a round asks and cancels the round when confirmed", async () => {
+    serve({});
+    const confirm = vi.spyOn(window, "confirm").mockReturnValue(true);
+    renderGame("/quest/wechsel-minute");
+    await userEvent.click(await screen.findByRole("button", { name: "Runde starten" }));
+    fireEvent.keyDown(document.body, { key: "p" });
+    expect(confirm).toHaveBeenCalledWith("Laufende Runde abbrechen und pausieren?");
+    expect(screen.getByTestId("cancel-signal")).toHaveTextContent("1");
+    expect(await screen.findByRole("button", { name: "Weiter" })).toBeInTheDocument();
+  });
+
+  it("p during a round keeps the round when not confirmed", async () => {
+    serve({});
+    vi.spyOn(window, "confirm").mockReturnValue(false);
+    renderGame("/quest/wechsel-minute");
+    await userEvent.click(await screen.findByRole("button", { name: "Runde starten" }));
+    fireEvent.keyDown(document.body, { key: "p" });
+    expect(screen.getByTestId("cancel-signal")).toHaveTextContent("0");
+    expect(screen.getByRole("button", { name: "Pause" })).toBeInTheDocument();
   });
 });

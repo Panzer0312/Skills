@@ -59,14 +59,19 @@ export function NoteFinder({
   strings: fixedStrings,
   tuning: fixedTuning,
   onResult,
+  onRunningChange,
+  cancelSignal,
 }: {
   strings?: number[];
   tuning?: string;
   onResult?: (hits: number) => void;
+  onRunningChange?: (running: boolean) => void;
+  cancelSignal?: number;
 }) {
   const [choice, setChoice] = useState(0);
   const [storedTuning, setStoredTuning] = usePersistentState("guitar.notefinder.tuning", "Standard", isTuningName);
-  const tuningName = fixedTuning !== undefined && isTuningName(fixedTuning) ? fixedTuning : fixedTuning ? "Standard" : storedTuning;
+  const tuningName =
+    fixedTuning !== undefined ? (isTuningName(fixedTuning) ? fixedTuning : "Standard") : storedTuning;
   const tuning = tuningFor(tuningName);
   const tuningRef = useRef(tuning);
   tuningRef.current = tuning;
@@ -131,7 +136,6 @@ export function NoteFinder({
   async function finish() {
     phaseRef.current = "done";
     setPhase("done");
-    setLevel(0);
     beep("ende");
     const total = hitsRef.current;
     if (onResult) {
@@ -190,9 +194,26 @@ export function NoteFinder({
   function cancel() {
     phaseRef.current = "pick";
     setPhase("pick");
-    setLevel(0);
     showTarget(null);
   }
+  const cancelRef = useRef(cancel);
+  cancelRef.current = cancel;
+
+  const runningChangeRef = useRef(onRunningChange);
+  runningChangeRef.current = onRunningChange;
+  const running = phase === "run";
+  useEffect(() => {
+    if (!running) return;
+    runningChangeRef.current?.(true);
+    return () => runningChangeRef.current?.(false);
+  }, [running]);
+
+  const seenCancel = useRef(cancelSignal);
+  useEffect(() => {
+    if (seenCancel.current === cancelSignal) return;
+    seenCancel.current = cancelSignal;
+    if (phaseRef.current === "run") cancelRef.current();
+  }, [cancelSignal]);
 
   function click(stringIndex: number, fret: number) {
     if (phase !== "run" || !target) return;
@@ -200,7 +221,6 @@ export function NoteFinder({
     else setRevealed(true);
   }
 
-  const running = phase === "run";
   const micOn = mic.state === "running";
   const prompt = target
     ? `Finde ${displayNote(target.note.replace(/-?\d+$/, ""))} auf der ${stringLabel(tuning, target.stringIndex)}-Saite`

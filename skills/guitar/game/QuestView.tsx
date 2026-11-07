@@ -185,6 +185,8 @@ function QuestRun({ quest, state, data }: { quest: QuestDefinition; state: GameS
   const [clock, setClock] = useState(() => beginQuest(quest.id));
   const [trainerValue, setTrainerValue] = useState<number | null>(null);
   const [finished, setFinished] = useState<Finished | null>(null);
+  const [toolRunning, setToolRunning] = useState(false);
+  const [cancelSignal, setCancelSignal] = useState(0);
 
   const level = questLevel(state, quest);
   const scaled = scaleQuest(quest, level);
@@ -225,11 +227,21 @@ function QuestRun({ quest, state, data }: { quest: QuestDefinition; state: GameS
     backToBoard();
   }
 
+  function pauseKey() {
+    if (toolRunning) {
+      if (!window.confirm("Laufende Runde abbrechen und pausieren?")) return;
+      setCancelSignal((n) => n + 1);
+      if (!paused) togglePause();
+      return;
+    }
+    togglePause();
+  }
+
   usePracticeKeys(
     {
-      " ": () => (running ? stop() : paused ? undefined : start()),
-      p: togglePause,
-      Enter: finish,
+      " ": () => (toolRunning ? undefined : running ? stop() : paused ? undefined : start()),
+      p: pauseKey,
+      Enter: () => (toolRunning ? undefined : finish()),
     },
     finished === null,
   );
@@ -305,12 +317,14 @@ function QuestRun({ quest, state, data }: { quest: QuestDefinition; state: GameS
           />
         ) : null}
         {pair ? (
-          <ChordTrainer pair={pair} countInBpm={scaled.bpm ?? undefined} onResult={(n) => setTrainerValue((v) => Math.max(v ?? 0, n))} />
+          <ChordTrainer pair={pair} countInBpm={scaled.bpm ?? undefined} onRunningChange={setToolRunning} cancelSignal={cancelSignal} onResult={(n) => setTrainerValue((v) => Math.max(v ?? 0, n))} />
         ) : null}
         {quest.noteGame ? (
           <NoteFinder
             strings={quest.noteGame.strings}
             tuning={quest.tuning ?? "Standard"}
+            onRunningChange={setToolRunning}
+            cancelSignal={cancelSignal}
             onResult={(n) => setTrainerValue((v) => Math.max(v ?? 0, n))}
           />
         ) : null}
