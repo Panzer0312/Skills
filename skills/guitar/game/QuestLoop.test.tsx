@@ -647,6 +647,20 @@ describe("quest view", () => {
     });
   });
 
+  it("a note quest ignores the Note Finder's stored tuning", async () => {
+    localStorage.setItem("guitar.notefinder.tuning", JSON.stringify("Drop D"));
+    try {
+      serve({});
+      renderGame("/quest/noten-e-saite");
+      await screen.findByRole("button", { name: "Start", exact: true });
+      expect(screen.queryByLabelText(/Stimmung/)).toBeNull();
+      fireEvent.click(screen.getByRole("button", { name: "Start", exact: true }));
+      expect(screen.getByTestId("prompt").textContent).toMatch(/auf der E-Saite$/);
+    } finally {
+      localStorage.removeItem("guitar.notefinder.tuning");
+    }
+  });
+
   it("marks the scale on the quest's fretboard overlay", async () => {
     serve({});
     renderGame("/quest/pentatonik-box1");

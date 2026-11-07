@@ -310,6 +310,7 @@ function QuestRun({ quest, state, data }: { quest: QuestDefinition; state: GameS
         {quest.noteGame ? (
           <NoteFinder
             strings={quest.noteGame.strings}
+            tuning={quest.tuning ?? "Standard"}
             onResult={(n) => setTrainerValue((v) => Math.max(v ?? 0, n))}
           />
         ) : null}
