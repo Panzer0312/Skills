@@ -1,5 +1,8 @@
 import { expect, test } from "@playwright/test";
-import { reachBoard, weekMinutes } from "./guitar-helpers";
+import { reachBoard, skipIntro, weekMinutes } from "./guitar-helpers";
+test.beforeEach(async ({ request }) => {
+  await skipIntro(request);
+});
 
 test("free practice entry raises week time and can be undone", async ({ page }) => {
   await reachBoard(page);

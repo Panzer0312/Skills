@@ -1,4 +1,5 @@
 import { expect, type APIRequestContext, type Page, test } from "@playwright/test";
+import { skipIntro } from "./guitar-helpers.js";
 
 const API = "http://127.0.0.1:5174/api/game/guitar";
 const HARBOR = "/vollbild/guitar/spiel/hafen";
@@ -31,6 +32,7 @@ async function reachMap(page: Page, path = HARBOR) {
 }
 
 test.beforeEach(async ({ request }) => {
+  await skipIntro(request);
   await pauseChosen(request);
 });
 

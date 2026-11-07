@@ -1,4 +1,8 @@
 import { expect, type Page, test } from "@playwright/test";
+import { skipIntro } from "./guitar-helpers.js";
+test.beforeEach(async ({ request }) => {
+  await skipIntro(request);
+});
 
 const BASE = "/vollbild/guitar/spiel";
 const PLACES = ["", "quests", "taverne", "bibliothek", "chronik", "griffbrett", "jam", "riffs"];

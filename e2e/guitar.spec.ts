@@ -1,4 +1,8 @@
 import { expect, test } from "@playwright/test";
+import { skipIntro } from "./guitar-helpers.js";
+test.beforeEach(async ({ request }) => {
+  await skipIntro(request);
+});
 
 test("the fretboard switches from note names to intervals", async ({ page }) => {
   await page.goto("/skill/guitar/griffbrett");

@@ -1,5 +1,8 @@
 import { expect, test } from "@playwright/test";
-import { reachBoard, weekMinutes } from "./guitar-helpers";
+import { reachBoard, skipIntro, weekMinutes } from "./guitar-helpers";
+test.beforeEach(async ({ request }) => {
+  await skipIntro(request);
+});
 
 const BASE = "/vollbild/guitar/spiel";
 const API = "http://127.0.0.1:5174/api";

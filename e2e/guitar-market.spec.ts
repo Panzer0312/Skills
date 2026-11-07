@@ -1,5 +1,8 @@
 import { expect, test } from "@playwright/test";
-import { reachBoard } from "./guitar-helpers.js";
+import { reachBoard, skipIntro } from "./guitar-helpers.js";
+test.beforeEach(async ({ request }) => {
+  await skipIntro(request);
+});
 
 const GAME = "/vollbild/guitar/spiel";
 

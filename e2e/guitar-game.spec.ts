@@ -1,5 +1,8 @@
 import { expect, type Page, test } from "@playwright/test";
-import { reachBoard, weekMinutes } from "./guitar-helpers";
+import { reachBoard, skipIntro, weekMinutes } from "./guitar-helpers";
+test.beforeEach(async ({ request }) => {
+  await skipIntro(request);
+});
 
 const BOARD = "/vollbild/guitar/spiel/quests";
 

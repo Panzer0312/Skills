@@ -1,4 +1,17 @@
-import { expect, type Page } from "@playwright/test";
+import { expect, type APIRequestContext, type Page } from "@playwright/test";
+
+const PREFS = "http://127.0.0.1:5174/api/game/guitar/prefs";
+
+/** Marks the first-launch intro tour as seen, so it does not cover the page under test. */
+export async function skipIntro(request: APIRequestContext) {
+  const res = await request.put(PREFS, { data: { key: "intro.gesehen", value: true } });
+  expect(res.ok()).toBe(true);
+}
+
+/** Back to defaults: every pref unset, so the intro shows again. */
+export async function resetPrefs(request: APIRequestContext) {
+  expect((await request.delete(PREFS)).ok()).toBe(true);
+}
 
 const BOARD = "/vollbild/guitar/spiel/quests";
 
