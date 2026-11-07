@@ -1,10 +1,18 @@
 import { useEffect, useRef, useState } from "react";
-import { playSignal } from "../../../packages/web/src/audio/signalTone.js";
+import { chordShape } from "@skills/core";
+import { usePersistentState } from "../../../packages/web/src/app/usePersistentState.js";
+import { usePracticeKeys } from "../../../packages/web/src/app/usePracticeKeys.js";
+import {
+  playClick,
+  playSignal,
+} from "../../../packages/web/src/audio/signalTone.js";
 import { ChordDiagramSingle } from "../../../packages/web/src/music/ChordDiagramSingle.js";
 import { useChordOverrides } from "../../../packages/web/src/music/useChordOverrides.js";
 import { gameApi, gameContent, useGameState, type LogResult } from "./api.js";
 
-const COUNT_IN_MS = 3000;
+const COUNT_IN_BEATS = 4;
+const DEFAULT_COUNT_IN_BPM = 80;
+const CUSTOM = "custom";
 const ROUND_MS = 60_000;
 const TICK_MS = 100;
 
@@ -14,6 +22,23 @@ function beep(kind: "start" | "ende") {
   } catch {
     // A failed beep must not stop the round.
   }
+}
+
+function click(accent: boolean) {
+  try {
+    playClick(accent);
+  } catch {
+    // A failed click must not stop the count-in.
+  }
+}
+
+function isPairOfStrings(raw: unknown): raw is [string, string] {
+  return (
+    Array.isArray(raw) &&
+    raw.length === 2 &&
+    typeof raw[0] === "string" &&
+    typeof raw[1] === "string"
+  );
 }
 
 type Pair = [string, string];
@@ -33,21 +58,39 @@ function pairsFromContent(): Pair[] {
 export function ChordTrainer({
   pair,
   onResult,
+  countInBpm,
 }: {
   pair?: [string, string];
   onResult?: (changes: number) => void;
+  countInBpm?: number;
 }) {
+  const bpm =
+    countInBpm !== undefined && Number.isFinite(countInBpm) && countInBpm > 0
+      ? countInBpm
+      : DEFAULT_COUNT_IN_BPM;
+  const beatMs = 60_000 / bpm;
+  const countInMs = COUNT_IN_BEATS * beatMs;
   const pairs = pairsFromContent();
   const [index, setIndex] = useState(0);
-  const chosen: Pair = pair ?? pairs[index] ?? ["Am", "Em"];
+  const [custom, setCustom] = useState(false);
+  const [customPair, setCustomPair] = usePersistentState<Pair>(
+    "guitar.trainer.customPair",
+    ["C", "G"],
+    isPairOfStrings,
+  );
+  const useCustom = !pair && custom;
+  const chosen: Pair =
+    pair ?? (custom ? customPair : (pairs[index] ?? ["Am", "Em"]));
+  const chosenValid = chosen.every((name) => chordShape(name.trim()) !== null);
   const [phase, setPhase] = useState<Phase>("pick");
-  const [remainingMs, setRemainingMs] = useState(COUNT_IN_MS);
+  const [remainingMs, setRemainingMs] = useState(countInMs);
   const [count, setCount] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<LogResult | null>(null);
   const [saving, setSaving] = useState(false);
   const savingRef = useRef(false);
   const deadline = useRef(0);
+  const clicked = useRef(0);
   const { overrides } = useChordOverrides();
   const { data: state } = useGameState();
 
@@ -58,6 +101,16 @@ export function ChordTrainer({
     if (phase !== "countin" && phase !== "run") return;
     const timer = setInterval(() => {
       const left = deadline.current - Date.now();
+      if (phase === "countin") {
+        const beat = Math.min(
+          COUNT_IN_BEATS,
+          Math.floor((countInMs - left) / beatMs) + 1,
+        );
+        while (clicked.current < beat) {
+          clicked.current += 1;
+          click(clicked.current === 1);
+        }
+      }
       if (left > 0) {
         setRemainingMs(left);
         return;
@@ -73,11 +126,14 @@ export function ChordTrainer({
       }
     }, TICK_MS);
     return () => clearInterval(timer);
-  }, [phase]);
+  }, [phase, countInMs, beatMs]);
 
   function start() {
-    deadline.current = Date.now() + COUNT_IN_MS;
-    setRemainingMs(COUNT_IN_MS);
+    if (!chosenValid) return;
+    deadline.current = Date.now() + countInMs;
+    clicked.current = 1;
+    click(true);
+    setRemainingMs(countInMs);
     setCount("");
     setError(null);
     setResult(null);
@@ -112,7 +168,9 @@ export function ChordTrainer({
       );
       setPhase("done");
     } catch {
-      setError("Das Ergebnis konnte nicht gespeichert werden. Bitte später erneut versuchen.");
+      setError(
+        "Das Ergebnis konnte nicht gespeichert werden. Bitte später erneut versuchen.",
+      );
     } finally {
       savingRef.current = false;
       setSaving(false);
@@ -120,7 +178,12 @@ export function ChordTrainer({
   }
 
   const running = phase === "countin" || phase === "run";
-  const seconds = Math.ceil(remainingMs / 1000);
+  const shown =
+    phase === "countin"
+      ? Math.max(1, Math.ceil(remainingMs / beatMs))
+      : Math.ceil(remainingMs / 1000);
+  const canStart = phase === "pick" || phase === "done";
+  usePracticeKeys({ s: start }, canStart && chosenValid);
 
   return (
     <div className="space-y-4">
@@ -128,8 +191,15 @@ export function ChordTrainer({
         <label className="block">
           Akkordpaar{" "}
           <select
-            value={index}
-            onChange={(event) => setIndex(Number(event.target.value))}
+            value={custom ? CUSTOM : index}
+            onChange={(event) => {
+              if (event.target.value === CUSTOM) {
+                setCustom(true);
+              } else {
+                setCustom(false);
+                setIndex(Number(event.target.value));
+              }
+            }}
             className="rounded border border-slate-300 bg-white px-2 py-1 dark:border-slate-700 dark:bg-slate-900"
           >
             {pairs.map(([a, b], i) => (
@@ -137,33 +207,72 @@ export function ChordTrainer({
                 {a} – {b}
               </option>
             ))}
+            <option value={CUSTOM}>Eigenes Paar…</option>
           </select>
         </label>
       ) : null}
 
-      <p>{record === undefined ? "Noch kein Rekord für dieses Paar." : `Rekord: ${record}`}</p>
+      {useCustom && canStart ? (
+        <div className="flex flex-wrap gap-2">
+          {[0, 1].map((i) => (
+            <input
+              key={i}
+              type="text"
+              aria-label={i === 0 ? "Erster Akkord" : "Zweiter Akkord"}
+              value={customPair[i]}
+              onChange={(event) => {
+                const next: Pair = [customPair[0], customPair[1]];
+                next[i] = event.target.value;
+                setCustomPair(next);
+              }}
+              className="w-24 rounded border border-slate-300 px-2 py-1 dark:border-slate-700 dark:bg-slate-900"
+            />
+          ))}
+        </div>
+      ) : null}
+
+      <p>
+        {record === undefined
+          ? "Noch kein Rekord für dieses Paar."
+          : `Rekord: ${record}`}
+      </p>
 
       <div className="flex flex-wrap gap-4">
-        {chosen.map((name) => (
-          <div key={name} className={running ? "scale-125 p-4" : ""}>
-            <ChordDiagramSingle name={name} overrides={overrides} />
-          </div>
-        ))}
+        {chosen.map((name, i) =>
+          chordShape(name.trim()) === null ? null : (
+            <div
+              key={`${i}-${name}`}
+              className={running ? "scale-125 p-4" : ""}
+            >
+              <ChordDiagramSingle name={name} overrides={overrides} />
+            </div>
+          ),
+        )}
       </div>
 
       {running ? (
         <p role="timer" className="text-4xl font-bold">
-          {seconds}
+          {shown}
         </p>
       ) : null}
 
       {phase === "pick" || phase === "done" ? (
-        <button type="button" onClick={start} className="rounded border px-3 py-1">
+        <button
+          type="button"
+          onClick={start}
+          disabled={!chosenValid}
+          className="rounded border px-3 py-1 disabled:opacity-50"
+        >
           Start
         </button>
       ) : null}
+      {canStart && !chosenValid ? <p>Unbekannter Akkord</p> : null}
       {running ? (
-        <button type="button" onClick={() => setPhase("pick")} className="rounded border px-3 py-1">
+        <button
+          type="button"
+          onClick={() => setPhase("pick")}
+          className="rounded border px-3 py-1"
+        >
           Abbrechen
         </button>
       ) : null}
@@ -187,7 +296,11 @@ export function ChordTrainer({
               className="ml-2 w-24 rounded border border-slate-300 px-2 py-1 dark:border-slate-700 dark:bg-slate-900"
             />
           </label>
-          <button type="submit" disabled={saving} className="rounded border px-3 py-1">
+          <button
+            type="submit"
+            disabled={saving}
+            className="rounded border px-3 py-1"
+          >
             Speichern
           </button>
         </form>

@@ -5,12 +5,13 @@ import { act, fireEvent, render, screen } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { queryClient } from "../../../packages/web/src/app/queryClient.js";
-import { playSignal } from "../../../packages/web/src/audio/signalTone.js";
+import { playClick, playSignal } from "../../../packages/web/src/audio/signalTone.js";
 import GameApp from "../widgets/GameApp.js";
 import { changeMetricKey, ChordTrainer } from "./ChordTrainer.js";
 
 vi.mock("../../../packages/web/src/audio/signalTone.js", () => ({
   playSignal: vi.fn(),
+  playClick: vi.fn(),
 }));
 
 const base: GameState = {
@@ -83,6 +84,12 @@ beforeEach(() => {
   queryClient.clear();
   queryClient.setDefaultOptions({ queries: { retry: false } });
   vi.mocked(playSignal).mockClear();
+  vi.mocked(playClick).mockClear();
+  try {
+    localStorage.clear();
+  } catch {
+    // ignore
+  }
 });
 afterEach(() => {
   vi.useRealTimers();
@@ -99,9 +106,9 @@ describe("ChordTrainer", () => {
     serve();
     renderTrainer({ pair: ["Am", "Em"] });
     fireEvent.click(screen.getByRole("button", { name: "Start" }));
-    expect(screen.getByRole("timer")).toHaveTextContent("3");
+    expect(screen.getByRole("timer")).toHaveTextContent("4");
     await tick(1000);
-    expect(screen.getByRole("timer")).toHaveTextContent("2");
+    expect(screen.getByRole("timer")).toHaveTextContent("3");
     await tick(2000);
     expect(playSignal).toHaveBeenLastCalledWith("start");
     expect(screen.getByRole("timer")).toHaveTextContent("60");
@@ -256,6 +263,66 @@ describe("ChordTrainer", () => {
       screen.getByLabelText("Wie viele saubere Wechsel?"),
     ).toBeInTheDocument();
     vi.mocked(playSignal).mockReset();
+  });
+});
+
+describe("ChordTrainer count-in and custom pair", () => {
+  it("count-in clicks four times before the start signal", async () => {
+    serve();
+    renderTrainer({ pair: ["Am", "Em"] });
+    fireEvent.click(screen.getByRole("button", { name: "Start" }));
+    await tick(3000);
+    const calls = vi.mocked(playClick).mock.calls;
+    expect(calls).toEqual([[true], [false], [false], [false]]);
+    expect(playSignal).toHaveBeenLastCalledWith("start");
+  });
+
+  it("count-in follows countInBpm", async () => {
+    serve();
+    renderTrainer({ pair: ["Am", "Em"], countInBpm: 120 });
+    fireEvent.click(screen.getByRole("button", { name: "Start" }));
+    await tick(1800);
+    expect(playSignal).not.toHaveBeenCalledWith("start");
+    await tick(300);
+    expect(playSignal).toHaveBeenCalledWith("start");
+    expect(playClick).toHaveBeenCalledTimes(4);
+  });
+
+  async function pickCustom(a: string, b: string) {
+    fireEvent.change(screen.getByLabelText("Akkordpaar"), {
+      target: { value: "custom" },
+    });
+    fireEvent.change(screen.getByLabelText("Erster Akkord"), { target: { value: a } });
+    fireEvent.change(screen.getByLabelText("Zweiter Akkord"), { target: { value: b } });
+  }
+
+  it("custom pair logs its metric key", async () => {
+    const fetchMock = serve();
+    renderTrainer();
+    await pickCustom("C", "G7");
+    await runRound();
+    fireEvent.change(screen.getByLabelText("Wie viele saubere Wechsel?"), {
+      target: { value: "12" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "Speichern" }));
+    await tick(0);
+    const calls = logCalls(fetchMock);
+    expect(JSON.parse(String(calls[0]![1]?.body)).metricKey).toBe("wechsel:C-G7");
+  });
+
+  it("unknown custom chord disables start", async () => {
+    serve();
+    renderTrainer();
+    await pickCustom("C", "Qx9");
+    expect(screen.getByRole("button", { name: "Start" })).toBeDisabled();
+    expect(screen.getByText("Unbekannter Akkord")).toBeInTheDocument();
+  });
+
+  it("s key starts a round", async () => {
+    serve();
+    renderTrainer({ pair: ["Am", "Em"] });
+    fireEvent.keyDown(window, { key: "s" });
+    expect(screen.getByRole("timer")).toBeInTheDocument();
   });
 });
 
