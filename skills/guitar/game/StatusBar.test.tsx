@@ -1,7 +1,9 @@
 import type { GameState } from "@skills/core";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it, vi } from "vitest";
+import { queryClient } from "../../../packages/web/src/app/queryClient.js";
 import { StatusBar } from "./StatusBar.js";
 
 vi.mock("./sound/SoundToggle.js", () => ({ SoundToggle: () => <button type="button">Ton</button> }));
@@ -21,18 +23,22 @@ const state = {
 
 function bar(overrides: Partial<GameState> = {}) {
   return render(
-    <MemoryRouter>
-      <StatusBar state={{ ...state, ...overrides }} />
-    </MemoryRouter>,
+    <QueryClientProvider client={queryClient}>
+      <MemoryRouter>
+        <StatusBar state={{ ...state, ...overrides }} />
+      </MemoryRouter>
+    </QueryClientProvider>,
   );
 }
 
 describe("StatusBar", () => {
   it("links back to the app", () => {
     render(
-      <MemoryRouter>
-        <StatusBar state={undefined} />
-      </MemoryRouter>,
+      <QueryClientProvider client={queryClient}>
+        <MemoryRouter>
+          <StatusBar state={undefined} />
+        </MemoryRouter>
+      </QueryClientProvider>,
     );
     expect(screen.getByRole("link", { name: "Zur App" })).toHaveAttribute("href", "/");
   });
