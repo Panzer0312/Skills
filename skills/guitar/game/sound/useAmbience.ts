@@ -1,0 +1,81 @@
+import { useEffect, useRef, useState } from "react";
+import { useLocation } from "react-router-dom";
+import { useGameState } from "../api.js";
+import { ambienceAllowed, startAmbience } from "./ambience.js";
+import { setSoundEnabled } from "./effects.js";
+
+export function useAmbience(): void {
+  const sound = useGameState().data?.sound === true;
+  const { pathname } = useLocation();
+  const allowed = sound && ambienceAllowed(pathname);
+  const [visible, setVisible] = useState(() => document.visibilityState === "visible");
+  const ctxRef = useRef<AudioContext | null>(null);
+
+  useEffect(() => {
+    setSoundEnabled(allowed);
+  }, [allowed]);
+
+  useEffect(() => {
+    const onChange = () => setVisible(document.visibilityState === "visible");
+    document.addEventListener("visibilitychange", onChange);
+    return () => document.removeEventListener("visibilitychange", onChange);
+  }, []);
+
+  // One lazily created context for the whole shell, closed on unmount.
+  useEffect(
+    () => () => {
+      setSoundEnabled(false);
+      const ctx = ctxRef.current;
+      ctxRef.current = null;
+      if (!ctx) return;
+      // Let a running 0.3 s fade finish first.
+      setTimeout(() => {
+        try {
+          void Promise.resolve(ctx.close()).catch(() => undefined);
+        } catch {
+          /* already closed */
+        }
+      }, 400);
+    },
+    [],
+  );
+
+  const running = allowed && visible;
+  useEffect(() => {
+    if (!running) return;
+    const Ctor = (globalThis as { AudioContext?: typeof AudioContext }).AudioContext;
+    if (!Ctor) return;
+    let ctx = ctxRef.current;
+    if (!ctx) {
+      try {
+        ctx = new Ctor();
+      } catch {
+        return;
+      }
+      ctxRef.current = ctx;
+    }
+    const live = ctx;
+    const resume = () => {
+      try {
+        void Promise.resolve(live.resume()).catch(() => undefined);
+      } catch {
+        /* still blocked */
+      }
+    };
+    const onPointer = () => {
+      resume();
+      document.removeEventListener("pointerdown", onPointer);
+    };
+    if (live.state === "suspended") document.addEventListener("pointerdown", onPointer);
+    let stop: (() => void) | undefined;
+    try {
+      stop = startAmbience(live);
+    } catch {
+      /* ambience is optional */
+    }
+    return () => {
+      document.removeEventListener("pointerdown", onPointer);
+      stop?.();
+    };
+  }, [running]);
+}

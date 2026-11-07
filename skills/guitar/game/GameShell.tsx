@@ -1,9 +1,11 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { GAME_BASE, useGameState } from "./api.js";
 import { StatusBar } from "./StatusBar.js";
+import { useAmbience } from "./sound/useAmbience.js";
 
 export function GameShell() {
   const state = useGameState();
+  useAmbience();
   return (
     <>
       <StatusBar state={state.data} />
