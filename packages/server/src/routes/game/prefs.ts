@@ -21,6 +21,14 @@ router.get("/api/game/:skillId/prefs", (c) => {
       // A damaged row falls back to the default.
     }
   }
+  // Before the klang.an pref existed the toggle lived in game_settings.sound.
+  if (!("klang.an" in stored)) {
+    const old = c
+      .get("database")
+      .raw.prepare("SELECT sound FROM game_settings WHERE skill_id = ?")
+      .get(c.req.param("skillId")) as { sound: number } | undefined;
+    if (old?.sound === 1) stored["klang.an"] = true;
+  }
   return c.json({ prefs: resolvePrefs(stored) });
 });
 
@@ -52,13 +60,17 @@ router.put("/api/game/:skillId/prefs", async (c) => {
 });
 
 router.delete("/api/game/:skillId/prefs", (c) => {
-  c.get("database").raw.prepare("DELETE FROM game_prefs WHERE skill_id = ?").run(c.req.param("skillId"));
+  const raw = c.get("database").raw;
+  raw.prepare("DELETE FROM game_prefs WHERE skill_id = ?").run(c.req.param("skillId"));
+  raw.prepare("UPDATE game_settings SET sound = 0 WHERE skill_id = ?").run(c.req.param("skillId"));
   return c.json({ ok: true });
 });
 
 router.delete("/api/game/:skillId/prefs/:key", (c) => {
-  c.get("database")
-    .raw.prepare("DELETE FROM game_prefs WHERE skill_id = ? AND key = ?")
-    .run(c.req.param("skillId"), c.req.param("key"));
+  const raw = c.get("database").raw;
+  raw.prepare("DELETE FROM game_prefs WHERE skill_id = ? AND key = ?").run(c.req.param("skillId"), c.req.param("key"));
+  if (c.req.param("key") === "klang.an") {
+    raw.prepare("UPDATE game_settings SET sound = 0 WHERE skill_id = ?").run(c.req.param("skillId"));
+  }
   return c.json({ ok: true });
 });
