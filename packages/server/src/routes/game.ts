@@ -22,6 +22,7 @@ import {
   type History,
   type LessonStatus,
   type PracticeRating,
+  type RecentLogEntry,
   type SongMeta,
 } from "@skills/core";
 import type { AppEnv } from "../app.js";
@@ -270,7 +271,7 @@ gameRoutes.post("/api/game/:skillId/log", async (c) => {
       body.metricValue !== undefined && body.metricKey !== undefined && // A first value of 0 (nothing hit) is no record worth celebrating.
       (previousMax === null ? body.metricValue > 0 : body.metricValue > previousMax);
 
-    raw
+    const inserted = raw
       .prepare(
         `INSERT INTO game_log (skill_id, day, at, kind, quest_id, lesson_id, technique_id, seconds, level, rating, metric_key, metric_value)
          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
@@ -325,9 +326,9 @@ gameRoutes.post("/api/game/:skillId/log", async (c) => {
       if (RANK[next] > RANK[status]) setLesson(raw, skillId, body.lessonId, next);
     }
 
-    return { suggestion, isRecord };
+    return { suggestion, isRecord, logId: Number(inserted.lastInsertRowid) };
   });
-  const { suggestion, isRecord } = run();
+  const { suggestion, isRecord, logId } = run();
 
   const xpGained = xpForEntry({
     kind: body.kind,
@@ -341,7 +342,57 @@ gameRoutes.post("/api/game/:skillId/log", async (c) => {
     level: body.level,
     rating: body.rating ?? null,
   });
-  return c.json({ xpGained, goldGained, suggestion, isRecord });
+  return c.json({ xpGained, goldGained, suggestion, isRecord, logId });
+});
+
+gameRoutes.get("/api/game/:skillId/log/recent", (c) => {
+  const rows = c
+    .get("database")
+    .raw.prepare(
+      `SELECT id, at, day, kind, quest_id AS questId, technique_id AS techniqueId, seconds,
+              metric_key AS metricKey, metric_value AS metricValue
+       FROM game_log WHERE skill_id = ? ORDER BY at DESC, id DESC LIMIT 20`,
+    )
+    .all(c.req.param("skillId")) as RecentLogEntry[];
+  return c.json({ entries: rows });
+});
+
+// Lesson statuses the deleted entry already raised stay: a status never goes down.
+gameRoutes.delete("/api/game/:skillId/log/:id", (c) => {
+  const id = Number(c.req.param("id"));
+  const result = Number.isInteger(id)
+    ? c.get("database").raw.prepare("DELETE FROM game_log WHERE id = ? AND skill_id = ?").run(id, c.req.param("skillId"))
+    : { changes: 0 };
+  if (result.changes === 0) {
+    return c.json({ error: { code: "not_found", message: "Eintrag nicht gefunden." } }, 404);
+  }
+  return c.json({ ok: true });
+});
+
+const EXPORT_TABLES = [
+  "game_log",
+  "game_levels",
+  "game_today",
+  "game_profile",
+  "game_chosen",
+  "game_songs",
+  "game_story_seen",
+  "game_inventory",
+  "game_equipped",
+  "game_settings",
+  "lesson_progress",
+] as const;
+
+gameRoutes.get("/api/game/:skillId/export", (c) => {
+  const raw = c.get("database").raw;
+  const skillId = c.req.param("skillId");
+  const tables: Record<string, unknown[]> = {};
+  for (const table of EXPORT_TABLES) {
+    tables[table] = raw.prepare(`SELECT * FROM ${table} WHERE skill_id = ?`).all(skillId);
+  }
+  const now = Date.now();
+  c.header("content-disposition", `attachment; filename="guitar-export-${localDayKey(now)}.json"`);
+  return c.json({ exportedAt: now, skillId, tables });
 });
 
 function setLesson(raw: import("better-sqlite3").Database, skillId: string, lessonId: string, status: LessonStatus) {

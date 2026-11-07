@@ -7,7 +7,9 @@ import {
   type History,
   type LessonStatus,
   type LogBody,
+  type LogResult,
   type QuestDefinition,
+  type RecentLogEntry,
   type SongMeta,
   type SongMetaPatch,
   type Story,
@@ -73,6 +75,15 @@ export function useGameHistory(): UseQueryResult<History> {
   });
 }
 
+export function useRecentLog(): UseQueryResult<{ entries: RecentLogEntry[] }> {
+  return useQuery({
+    queryKey: [...GAME_KEY, "recent"],
+    queryFn: gameApi.recentLog,
+    retry: false,
+    refetchOnWindowFocus: "always",
+  });
+}
+
 async function refreshing<T>(write: Promise<T>): Promise<T> {
   const result = await write;
   // Lesson statuses live in both views, and the library reads the progress one.
@@ -83,12 +94,7 @@ async function refreshing<T>(write: Promise<T>): Promise<T> {
   return result;
 }
 
-export interface LogResult {
-  xpGained: number;
-  suggestion: number | null;
-  isRecord: boolean;
-  goldGained: number;
-}
+export type { LogResult };
 
 export interface PlacementBody {
   knownLessonIds: string[];
@@ -108,6 +114,10 @@ async function refreshingOnError<T>(write: Promise<T>): Promise<T> {
 
 export const gameApi = {
   history: () => api.get<History>(`/api/game/${SKILL}/history`),
+  recentLog: () => api.get<{ entries: RecentLogEntry[] }>(`/api/game/${SKILL}/log/recent`),
+  // The GAME_KEY prefix also invalidates the history and recent views.
+  deleteLog: (id: number) => refreshing(api.del<{ ok: true }>(`/api/game/${SKILL}/log/${id}`)),
+  exportUrl: `/api/game/${SKILL}/export`,
   log: (body: LogBody) => refreshing(api.post<LogResult>(`/api/game/${SKILL}/log`, body)),
   setLevel: (techniqueId: string, level: number) =>
     refreshing(api.put<{ ok: true }>(`/api/game/${SKILL}/level/${techniqueId}`, { level })),

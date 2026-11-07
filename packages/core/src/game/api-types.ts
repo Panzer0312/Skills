@@ -59,3 +59,24 @@ export interface SongMetaPatch {
   tags?: string[];
   played?: true;
 }
+
+export interface LogResult {
+  xpGained: number;
+  suggestion: number | null;
+  isRecord: boolean;
+  goldGained: number;
+  /** The id of the stored log row, for undoing it. */
+  logId: number;
+}
+
+export interface RecentLogEntry {
+  id: number;
+  at: number;
+  day: string;
+  kind: "quest" | "frei";
+  questId: string | null;
+  techniqueId: string | null;
+  seconds: number;
+  metricKey: string | null;
+  metricValue: number | null;
+}

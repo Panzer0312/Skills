@@ -53,6 +53,8 @@ export {
   metricGroup,
   metricSeries,
   type LogBody,
+  type LogResult,
+  type RecentLogEntry,
   type SongMeta,
   type SongMetaPatch,
   type Rating as PracticeRating,

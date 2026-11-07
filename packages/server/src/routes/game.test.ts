@@ -493,3 +493,76 @@ describe("game gear api", () => {
     expect((await send("PUT", "/api/game/guitar/settings", { sound: "ja" })).status).toBe(400);
   });
 });
+
+describe("game log undo and export", () => {
+  let database: AppDatabase;
+  let app: ReturnType<typeof createApp>;
+  const send = (method: string, path: string, body?: unknown) =>
+    app.request(path, {
+      method,
+      headers: { "content-type": "application/json" },
+      body: body === undefined ? undefined : JSON.stringify(body),
+    });
+  const state = async () => (await (await app.request("/api/game/guitar/state")).json()) as GameState;
+  const log = async (body: object, skill = "guitar") =>
+    (await (await send("POST", `/api/game/${skill}/log`, body)).json()) as { logId: number };
+
+  beforeEach(() => {
+    database = openDatabase(":memory:");
+    app = createApp(database);
+  });
+
+  it("log returns logId and recent lists it first", async () => {
+    const first = await log({ kind: "frei", seconds: 60, level: 1 });
+    const second = await log({ kind: "frei", seconds: 120, level: 1 });
+    expect(second.logId).toBeGreaterThan(first.logId);
+    const recent = (await (await app.request("/api/game/guitar/log/recent")).json()) as {
+      entries: { id: number; seconds: number; kind: string }[];
+    };
+    expect(recent.entries).toHaveLength(2);
+    expect(recent.entries[0]?.id).toBe(second.logId);
+    expect(recent.entries[0]?.seconds).toBe(120);
+  });
+
+  it("delete removes the entry from state totals", async () => {
+    const { logId } = await log({ kind: "frei", seconds: 600, level: 1 });
+    const res = await send("DELETE", `/api/game/guitar/log/${logId}`);
+    expect(res.status).toBe(200);
+    expect(await res.json()).toEqual({ ok: true });
+    const s = await state();
+    expect(s.totalSeconds).toBe(0);
+    expect(s.xp).toBe(0);
+  });
+
+  it("delete of unknown id is 404", async () => {
+    const res = await send("DELETE", "/api/game/guitar/log/9999");
+    expect(res.status).toBe(404);
+    expect(await res.json()).toEqual({ error: { code: "not_found", message: "Eintrag nicht gefunden." } });
+  });
+
+  it("delete of another skill's id is 404", async () => {
+    const { logId } = await log({ kind: "frei", seconds: 60, level: 1 }, "other");
+    expect((await send("DELETE", `/api/game/guitar/log/${logId}`)).status).toBe(404);
+    expect((await send("DELETE", `/api/game/other/log/${logId}`)).status).toBe(200);
+  });
+
+  it("delete after spending gold keeps state loading", async () => {
+    const { logId } = await log({ kind: "frei", seconds: 75 * 40, level: 1 }); // 40 gold
+    expect((await send("POST", "/api/game/guitar/market/buy", { itemId: "wanderdolch" })).status).toBe(200);
+    await send("DELETE", `/api/game/guitar/log/${logId}`);
+    const res = await app.request("/api/game/guitar/state");
+    expect(res.status).toBe(200);
+    expect(((await res.json()) as GameState).gold).toBe(0);
+  });
+
+  it("export contains the log rows", async () => {
+    await log({ kind: "frei", seconds: 60, level: 1 });
+    const res = await app.request("/api/game/guitar/export");
+    expect(res.status).toBe(200);
+    expect(res.headers.get("content-disposition")).toContain("guitar-export-");
+    const body = (await res.json()) as { skillId: string; tables: Record<string, unknown[]> };
+    expect(body.skillId).toBe("guitar");
+    expect(body.tables.game_log).toHaveLength(1);
+    expect(body.tables.lesson_progress).toEqual([]);
+  });
+});
